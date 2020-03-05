@@ -17,19 +17,19 @@
         <Button
             android:id="@+id/voteButton"
             style="@style/menuButtons"
-            android:text="@string/menu_vote"/>
+            android:text="@string/menu_vote" />
 
         <Button
             android:id="@+id/listButton"
             style="@style/menuButtons"
             android:layout_below="@+id/voteButton"
-            android:text="@string/menu_lists"/>
+            android:text="@string/menu_lists" />
 
         <Button
             android:id="@+id/settingsButton"
             style="@style/menuButtons"
             android:layout_below="@+id/listButton"
-            android:text="@string/menu_settings"/>
+            android:text="@string/menu_settings" />
     </RelativeLayout>
 
     <View
