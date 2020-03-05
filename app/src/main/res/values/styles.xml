@@ -9,11 +9,12 @@
     </style>
 
     <style name="menuButtons">
-        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">200dp</item>
         <item name="android:layout_margin">20dp</item>
+        <item name="android:layout_weight">0.33</item>
+        <item name="android:layout_gravity">center</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:layout_centerHorizontal">true</item>
         <item name="android:onClick">menuButtonClicked</item>
     </style>
 
