@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -18,19 +17,19 @@
         <Button
             android:id="@+id/voteButton"
             style="@style/menuButtons"
-            android:text="Vote"/>
+            android:text="@string/menu_vote"/>
 
         <Button
             android:id="@+id/listButton"
             style="@style/menuButtons"
             android:layout_below="@+id/voteButton"
-            android:text="Lists"/>
+            android:text="@string/menu_lists"/>
 
         <Button
             android:id="@+id/settingsButton"
             style="@style/menuButtons"
             android:layout_below="@+id/listButton"
-            android:text="Settings"/>
+            android:text="@string/menu_settings"/>
     </RelativeLayout>
 
     <View
