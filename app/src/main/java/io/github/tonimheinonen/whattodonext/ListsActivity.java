@@ -25,19 +25,19 @@ public class ListsActivity extends AppCompatActivity {
 
     private void setupListItemElements() {
         final ListView list = findViewById(R.id.list);
-        ArrayList<String> items = new ArrayList<>();
-        items.add("Abyss Odyssey");
-        items.add("Pacman");
-        items.add("Kingdom Come");
-        items.add("Super Smash Bros. Melee");
-        items.add("Rocket League");
-        items.add("Party Panic");
-        items.add("Batman: Arkham City");
-        items.add("Super Mario");
-        items.add("Flappy Birds");
-        items.add("Angry Birds");
-        items.add("Think of the Children");
-        items.add("Wii Sports");
+        ArrayList<ListItem> items = new ArrayList<>();
+        items.add(new ListItem("Abyss Odyssey", 1, 0));
+        items.add(new ListItem("Pacman", 3, 0));
+        items.add(new ListItem("Kingdom Come", 3, 0));
+        items.add(new ListItem("Super Smash Bros. Melee", 3, 0));
+        items.add(new ListItem("Rocket League", 3, 0));
+        items.add(new ListItem("Party Panic", 3, 0));
+        items.add(new ListItem("Batman: Arkham City", 3, 0));
+        items.add(new ListItem("Super Mario", 3, 0));
+        items.add(new ListItem("Flappy Birds", 3, 0));
+        items.add(new ListItem("Angry Birds", 3, 0));
+        items.add(new ListItem("Think of the Children", 3, 0));
+        items.add(new ListItem("Wii Sports", 3, 0));
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
                 R.layout.list_item, items);
