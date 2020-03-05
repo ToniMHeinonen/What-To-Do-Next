@@ -15,4 +15,12 @@
         <item name="android:onClick">menuButtonClicked</item>
     </style>
 
+    <style name="listsButtons">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_weight">0.25</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
 </resources>
