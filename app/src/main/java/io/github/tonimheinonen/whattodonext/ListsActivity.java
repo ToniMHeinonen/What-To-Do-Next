@@ -39,14 +39,12 @@ public class ListsActivity extends AppCompatActivity {
         items.add(new ListItem("Think of the Children", 3, 0));
         items.add(new ListItem("Wii Sports", 3, 0));
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this,
-                R.layout.list_item, items);
-        list.setAdapter(arrayAdapter);
+        list.setAdapter(new ListItemAdapter(this, items));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String clickedItem=(String) list.getItemAtPosition(position);
-                System.out.println(clickedItem);
+                ListItem item = (ListItem) list.getItemAtPosition(position);
+                System.out.println(item.toString());
             }
         });
     }
