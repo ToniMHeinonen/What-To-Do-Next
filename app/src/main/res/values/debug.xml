@@ -1,0 +1,3 @@
+<resources>
+    <integer name="debug_level">2</integer>
+</resources>
