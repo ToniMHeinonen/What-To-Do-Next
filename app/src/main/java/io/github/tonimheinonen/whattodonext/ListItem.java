@@ -16,8 +16,15 @@ public class ListItem {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public boolean setName(String name) {
+        System.out.println("name: " + name);
+        // Don't allow empty names
+        if (name.equals("") || Character.isWhitespace(name.charAt(0)))
+            return false;
+        else {
+            this.name = name;
+            return true;
+        }
     }
 
     public int getBonus() {

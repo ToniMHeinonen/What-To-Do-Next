@@ -3,12 +3,10 @@ package io.github.tonimheinonen.whattodonext;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class ListItemDialog extends Dialog implements
         android.view.View.OnClickListener {
@@ -48,9 +46,6 @@ public class ListItemDialog extends Dialog implements
     }
 
     private void getValuesFromEditTexts() {
-        String name = this.name.getText().toString();
-        item.setName(name);
-
         // If text is "", set value to 0, else get value from text
         String bonus = bonusAmount.getText().toString();
         item.setBonus(bonus.equals("") ? 0 : Integer.parseInt(bonus));
