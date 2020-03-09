@@ -5,10 +5,12 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class ListsActivity extends AppCompatActivity {
 
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
-    private boolean ascending;
+    private boolean ascending = true;
     private TextView vName, vTotal, vBonus, vPeril;
     private int originalTextColor;
 
@@ -40,24 +42,24 @@ public class ListsActivity extends AppCompatActivity {
 
         setupTestItems();
 
-        sortList(curSort);
+        sortList(curSort, false);
 
         showListItems();
     }
 
     private void setupTestItems() {
         items.add(new ListItem("Abyss Odyssey", 1, 0));
-        items.add(new ListItem("Pacman", 3, 0));
-        items.add(new ListItem("Kingdom Come", 3, 0));
+        items.add(new ListItem("Pacman", 2, 0));
+        items.add(new ListItem("Kingdom Come", 10, 6));
         items.add(new ListItem("Super Smash Bros. Melee", 3, 0));
-        items.add(new ListItem("Rocket League", 3, 0));
-        items.add(new ListItem("Party Panic", 3, 0));
+        items.add(new ListItem("Rocket League", 1, 9));
+        items.add(new ListItem("Party Panic", 6, 0));
         items.add(new ListItem("Batman: Arkham City", 3, 0));
-        items.add(new ListItem("Super Mario", 3, 0));
+        items.add(new ListItem("Super Mario", 7, 0));
         items.add(new ListItem("Flappy Birds", 3, 0));
-        items.add(new ListItem("Angry Birds", 3, 0));
+        items.add(new ListItem("Angry Birds", 1, 5));
         items.add(new ListItem("Think of the Children", 3, 0));
-        items.add(new ListItem("Wii Sports", 3, 0));
+        items.add(new ListItem("Wii Sports", 0, 2));
     }
 
     public void showListItems() {
@@ -68,8 +70,32 @@ public class ListsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListItem item = (ListItem) list.getItemAtPosition(position);
-                ListItemDialog cdd = new ListItemDialog(_this, item);
-                cdd.show();
+                ListItemDialog dialog = new ListItemDialog(_this, item);
+                dialog.show();
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        showListItems();
+                    }
+                });
+            }
+        });
+    }
+
+    public void dialogConfirmed() {
+        sortList(curSort, false);
+        showListItems();
+    }
+
+    public void addClicked(View v) {
+        final ListItem item = new ListItem("", 0, 0);
+        items.add(item);
+        ListItemDialog dialog = new ListItemDialog(this, item);
+        dialog.show();
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                items.remove(item);
             }
         });
     }
@@ -92,7 +118,7 @@ public class ListsActivity extends AppCompatActivity {
                 break;
         }
 
-        sortList(sort);
+        sortList(sort, true);
     }
 
     private void changeColor(int selected) {
@@ -113,11 +139,11 @@ public class ListsActivity extends AppCompatActivity {
                 originalTextColor);
     }
 
-    private void sortList(final int sort) {
+    private void sortList(final int sort, boolean topicClicked) {
         changeColor(sort);
 
         // If new sort is same as current, reverse order
-        if (sort == curSort) {
+        if (sort == curSort && topicClicked) {
             ascending = !ascending;
         }
 

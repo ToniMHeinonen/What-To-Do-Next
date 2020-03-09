@@ -14,7 +14,8 @@
         <Button
             android:id="@+id/addButton"
             style="@style/listsButtons"
-            android:text="@string/lists_add"/>
+            android:text="@string/lists_add"
+            android:onClick="addClicked"/>
 
         <Button
             android:id="@+id/listButton"

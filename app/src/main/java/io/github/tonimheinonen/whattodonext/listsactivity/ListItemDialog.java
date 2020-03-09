@@ -85,10 +85,9 @@ public class ListItemDialog extends Dialog implements
                 break;
             case R.id.confirm:
                 confirmChanges();
-                dismiss();
                 break;
             case R.id.cancel:
-                dismiss();
+                cancel();
                 break;
             default:
                 break;
@@ -103,6 +102,8 @@ public class ListItemDialog extends Dialog implements
         item.setBonus(points[BONUS_INDEX]);
         item.setPeril(points[PERIL_INDEX]);
 
-        activity.showListItems();
+        activity.dialogConfirmed();
+
+        dismiss();
     }
 }
