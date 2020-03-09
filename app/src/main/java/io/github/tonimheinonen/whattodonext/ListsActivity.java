@@ -16,19 +16,20 @@ import java.util.List;
 
 public class ListsActivity extends AppCompatActivity {
 
-    private Activity _this = this;
+    private ListsActivity _this = this;
+    private ArrayList<ListItem> items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists);
 
-        setupListItemElements();
+        setupTestItems();
+
+        showListItems();
     }
 
-    private void setupListItemElements() {
-        final ListView list = findViewById(R.id.list);
-        ArrayList<ListItem> items = new ArrayList<>();
+    private void setupTestItems() {
         items.add(new ListItem("Abyss Odyssey", 1, 0));
         items.add(new ListItem("Pacman", 3, 0));
         items.add(new ListItem("Kingdom Come", 3, 0));
@@ -41,13 +42,17 @@ public class ListsActivity extends AppCompatActivity {
         items.add(new ListItem("Angry Birds", 3, 0));
         items.add(new ListItem("Think of the Children", 3, 0));
         items.add(new ListItem("Wii Sports", 3, 0));
+    }
+
+    public void showListItems() {
+        final ListView list = findViewById(R.id.list);
 
         list.setAdapter(new ListItemAdapter(this, items));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListItem item = (ListItem) list.getItemAtPosition(position);
-                ListItemDialog cdd=new ListItemDialog(_this, item);
+                ListItemDialog cdd = new ListItemDialog(_this, item);
                 cdd.show();
             }
         });

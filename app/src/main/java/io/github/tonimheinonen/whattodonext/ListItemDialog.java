@@ -11,12 +11,12 @@ import android.widget.EditText;
 public class ListItemDialog extends Dialog implements
         android.view.View.OnClickListener {
 
-    private Activity activity;
+    private ListsActivity activity;
     private ListItem item;
     private EditText name, bonusAmount, perilAmount;
     private final int BONUS_INDEX = 0, PERIL_INDEX = 1;
 
-    public ListItemDialog(Activity a, ListItem item) {
+    public ListItemDialog(ListsActivity a, ListItem item) {
         super(a);
         this.activity = a;
         this.item = item;
@@ -101,5 +101,7 @@ public class ListItemDialog extends Dialog implements
         int[] points = getPointsFromEditTexts();
         item.setBonus(points[BONUS_INDEX]);
         item.setPeril(points[PERIL_INDEX]);
+
+        activity.showListItems();
     }
 }
