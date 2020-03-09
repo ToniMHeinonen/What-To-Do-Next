@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
+import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -20,7 +21,7 @@ import java.util.Comparator;
 public class ListsActivity extends AppCompatActivity {
 
     private ListsActivity _this = this;
-    private ArrayList<ListItem> items = new ArrayList<>();
+    private ListOfItems<ListItem> curList = new ListOfItems("Test");
 
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
@@ -48,24 +49,24 @@ public class ListsActivity extends AppCompatActivity {
     }
 
     private void setupTestItems() {
-        items.add(new ListItem("Abyss Odyssey", 1, 0));
-        items.add(new ListItem("Pacman", 2, 0));
-        items.add(new ListItem("Kingdom Come", 10, 6));
-        items.add(new ListItem("Super Smash Bros. Melee", 3, 0));
-        items.add(new ListItem("Rocket League", 1, 9));
-        items.add(new ListItem("Party Panic", 6, 0));
-        items.add(new ListItem("Batman: Arkham City", 3, 0));
-        items.add(new ListItem("Super Mario", 7, 0));
-        items.add(new ListItem("Flappy Birds", 3, 0));
-        items.add(new ListItem("Angry Birds", 1, 5));
-        items.add(new ListItem("Think of the Children", 3, 0));
-        items.add(new ListItem("Wii Sports", 0, 2));
+        curList.add(new ListItem("Abyss Odyssey", 1, 0));
+        curList.add(new ListItem("Pacman", 2, 0));
+        curList.add(new ListItem("Kingdom Come", 10, 6));
+        curList.add(new ListItem("Super Smash Bros. Melee", 3, 0));
+        curList.add(new ListItem("Rocket League", 1, 9));
+        curList.add(new ListItem("Party Panic", 6, 0));
+        curList.add(new ListItem("Batman: Arkham City", 3, 0));
+        curList.add(new ListItem("Super Mario", 7, 0));
+        curList.add(new ListItem("Flappy Birds", 3, 0));
+        curList.add(new ListItem("Angry Birds", 1, 5));
+        curList.add(new ListItem("Think of the Children", 3, 0));
+        curList.add(new ListItem("Wii Sports", 0, 2));
     }
 
     public void showListItems() {
         final ListView list = findViewById(R.id.list);
 
-        list.setAdapter(new ListItemAdapter(this, items));
+        list.setAdapter(new ListItemAdapter(this, curList));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -89,13 +90,13 @@ public class ListsActivity extends AppCompatActivity {
 
     public void addClicked(View v) {
         final ListItem item = new ListItem("", 0, 0);
-        items.add(item);
+        curList.add(item);
         ListItemDialog dialog = new ListItemDialog(this, item);
         dialog.show();
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                items.remove(item);
+                curList.remove(item);
             }
         });
     }
@@ -149,7 +150,7 @@ public class ListsActivity extends AppCompatActivity {
 
         switch (sort) {
             case NAME:
-                Collections.sort(items, new Comparator<ListItem>() {
+                Collections.sort(curList, new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
                         return ascending ?
                                 o1.getName().compareTo(o2.getName()) :
@@ -158,7 +159,7 @@ public class ListsActivity extends AppCompatActivity {
                 });
                 break;
             case TOTAL:
-                Collections.sort(items, new Comparator<ListItem>() {
+                Collections.sort(curList, new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
                         return ascending ?
                                 ((Integer)o1.getTotal()).compareTo(o2.getTotal()) :
@@ -167,7 +168,7 @@ public class ListsActivity extends AppCompatActivity {
                 });
                 break;
             case BONUS:
-                Collections.sort(items, new Comparator<ListItem>() {
+                Collections.sort(curList, new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
                         return ascending ?
                                 ((Integer)o1.getBonus()).compareTo(o2.getBonus()) :
@@ -176,7 +177,7 @@ public class ListsActivity extends AppCompatActivity {
                 });
                 break;
             case PERIL:
-                Collections.sort(items, new Comparator<ListItem>() {
+                Collections.sort(curList, new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
                         return ascending ?
                                 ((Integer)o1.getPeril()).compareTo(o2.getPeril()) :

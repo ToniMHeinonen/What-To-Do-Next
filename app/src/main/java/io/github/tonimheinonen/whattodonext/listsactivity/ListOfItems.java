@@ -2,22 +2,18 @@ package io.github.tonimheinonen.whattodonext.listsactivity;
 
 import java.util.ArrayList;
 
-public class ListOfItems {
+public class ListOfItems<E> extends ArrayList<E> {
 
     private String name;
-    private ArrayList<ListItem> items = new ArrayList<>();
+    private ArrayList<E> items = new ArrayList<>();
 
     public ListOfItems(String name) {
         this.name = name;
     }
 
-    public ListOfItems(String name, ArrayList<ListItem> items) {
+    public ListOfItems(String name, ArrayList<E> items) {
         this.name = name;
         this.items = items;
-    }
-
-    public void addItem(ListItem item) {
-        items.add(item);
     }
 
     public String getName() {
@@ -28,11 +24,11 @@ public class ListOfItems {
         this.name = name;
     }
 
-    public ArrayList<ListItem> getItems() {
+    public ArrayList<E> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<ListItem> items) {
+    public void setItems(ArrayList<E> items) {
         this.items = items;
     }
 
