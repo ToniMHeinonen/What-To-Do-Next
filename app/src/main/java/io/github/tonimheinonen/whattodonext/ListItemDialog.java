@@ -14,6 +14,7 @@ public class ListItemDialog extends Dialog implements
     private Activity activity;
     private ListItem item;
     private EditText name, bonusAmount, perilAmount;
+    private final int BONUS_INDEX = 0, PERIL_INDEX = 1;
 
     public ListItemDialog(Activity a, ListItem item) {
         super(a);
@@ -31,55 +32,74 @@ public class ListItemDialog extends Dialog implements
         name = findViewById(R.id.itemName);
         name.setText(item.getName());
         bonusAmount = findViewById(R.id.bonusPoints);
+        bonusAmount.setText(String.valueOf(item.getBonus()));
         perilAmount = findViewById(R.id.perilPoints);
-        updatePointTexts();
+        perilAmount.setText(String.valueOf(item.getPeril()));
 
         // Set listeners for + and - signs
-        Button bonusMinus = findViewById(R.id.bonusMinus);
-        Button bonusPlus = findViewById(R.id.bonusPlus);
-        Button perilMinus = findViewById(R.id.perilMinus);
-        Button perilPlus = findViewById(R.id.perilPlus);
-        bonusMinus.setOnClickListener(this);
-        bonusPlus.setOnClickListener(this);
-        perilMinus.setOnClickListener(this);
-        perilPlus.setOnClickListener(this);
+        findViewById(R.id.bonusMinus).setOnClickListener(this);
+        findViewById(R.id.bonusPlus).setOnClickListener(this);
+        findViewById(R.id.perilMinus).setOnClickListener(this);
+        findViewById(R.id.perilPlus).setOnClickListener(this);
+
+        // Set listeners for confirm and cancel
+        findViewById(R.id.confirm).setOnClickListener(this);
+        findViewById(R.id.cancel).setOnClickListener(this);
     }
 
-    private void getValuesFromEditTexts() {
+    private int[] getPointsFromEditTexts() {
+        int[] points = new int[2];
+
         // If text is "", set value to 0, else get value from text
-        String bonus = bonusAmount.getText().toString();
-        item.setBonus(bonus.equals("") ? 0 : Integer.parseInt(bonus));
+        String bonusStr = bonusAmount.getText().toString();
+        int bonus = bonusStr.equals("") ? 0 : Integer.parseInt(bonusStr);
 
-        String peril = perilAmount.getText().toString();
-        item.setPeril(peril.equals("") ? 0 : Integer.parseInt(peril));
-    }
+        String perilStr = perilAmount.getText().toString();
+        int peril = perilStr.equals("") ? 0 : Integer.parseInt(perilStr);
 
-    private void updatePointTexts() {
-        bonusAmount.setText(String.valueOf(item.getBonus()));
-        perilAmount.setText(String.valueOf(item.getPeril()));
+        points[BONUS_INDEX] = bonus;
+        points[PERIL_INDEX] = peril;
+
+        return points;
     }
 
     @Override
     public void onClick(View v) {
-        getValuesFromEditTexts();
+        int[] points = getPointsFromEditTexts();
+        int bonus = points[BONUS_INDEX];
+        int peril = points[PERIL_INDEX];
 
         switch (v.getId()) {
             case R.id.bonusMinus:
-                item.setBonus(item.getBonus() - 1);
+                bonusAmount.setText(String.valueOf(bonus - 1));
                 break;
             case R.id.bonusPlus:
-                item.setBonus(item.getBonus() + 1);
+                bonusAmount.setText(String.valueOf(bonus + 1));
                 break;
             case R.id.perilMinus:
-                item.setPeril(item.getPeril() - 1);
+                perilAmount.setText(String.valueOf(peril - 1));
                 break;
             case R.id.perilPlus:
-                item.setPeril(item.getPeril() + 1);
+                perilAmount.setText(String.valueOf(peril + 1));
+                break;
+            case R.id.confirm:
+                confirmChanges();
+                dismiss();
+                break;
+            case R.id.cancel:
+                dismiss();
                 break;
             default:
                 break;
         }
-        updatePointTexts();
-        //dismiss();
+    }
+
+    private void confirmChanges() {
+        String n = name.getText().toString();
+        item.setName(n); // if empty, does not apply (check LisItem setName())
+
+        int[] points = getPointsFromEditTexts();
+        item.setBonus(points[BONUS_INDEX]);
+        item.setPeril(points[PERIL_INDEX]);
     }
 }

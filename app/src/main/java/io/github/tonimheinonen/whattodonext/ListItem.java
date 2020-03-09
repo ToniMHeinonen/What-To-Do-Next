@@ -17,7 +17,6 @@ public class ListItem {
     }
 
     public boolean setName(String name) {
-        System.out.println("name: " + name);
         // Don't allow empty names
         if (name.equals("") || Character.isWhitespace(name.charAt(0)))
             return false;
