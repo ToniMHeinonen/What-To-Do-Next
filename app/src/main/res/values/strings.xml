@@ -7,7 +7,6 @@
 
     <!-- ListsActivity -->
     <string name="lists_add">Add</string>
-    <string name="lists_sort">Sort</string>
     <string name="lists_list">List</string>
     <string name="lists_back">Back</string>
 

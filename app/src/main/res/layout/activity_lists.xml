@@ -17,11 +17,6 @@
             android:text="@string/lists_add"/>
 
         <Button
-            android:id="@+id/sortButton"
-            style="@style/listsButtons"
-            android:text="@string/lists_sort"/>
-
-        <Button
             android:id="@+id/listButton"
             style="@style/listsButtons"
             android:text="@string/lists_list"/>
@@ -36,17 +31,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView style="@style/listsTopicsName" />
+        <TextView
+            android:id="@+id/name"
+            style="@style/listsTopicsName"/>
 
         <TextView
+            android:id="@+id/total"
             style="@style/listsTopicsPoints"
             android:text="@string/lists_total"/>
 
         <TextView
+            android:id="@+id/bonus"
             style="@style/listsTopicsPoints"
             android:text="@string/lists_bonus"/>
 
         <TextView
+            android:id="@+id/peril"
             style="@style/listsTopicsPoints"
             android:text="@string/lists_peril"/>
 

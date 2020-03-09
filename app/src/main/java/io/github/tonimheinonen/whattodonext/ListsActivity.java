@@ -12,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListsActivity extends AppCompatActivity {
@@ -19,12 +21,18 @@ public class ListsActivity extends AppCompatActivity {
     private ListsActivity _this = this;
     private ArrayList<ListItem> items = new ArrayList<>();
 
+    private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
+    private int curSort = NAME;
+    private boolean ascending;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists);
 
         setupTestItems();
+
+        sortList(curSort);
 
         showListItems();
     }
@@ -56,5 +64,75 @@ public class ListsActivity extends AppCompatActivity {
                 cdd.show();
             }
         });
+    }
+
+    public void topicClicked(View v) {
+        int sort = -1;
+
+        switch (v.getId()) {
+            case R.id.name:
+                sort = NAME;
+                break;
+            case R.id.total:
+                sort = TOTAL;
+                break;
+            case R.id.bonus:
+                sort = BONUS;
+                break;
+            case R.id.peril:
+                sort = PERIL;
+                break;
+        }
+
+        sortList(sort);
+    }
+
+    private void sortList(final int sort) {
+        // If new sort is same as current, reverse order
+        if (sort == curSort) {
+            ascending = !ascending;
+        }
+
+        switch (sort) {
+            case NAME:
+                Collections.sort(items, new Comparator<ListItem>() {
+                    public int compare(ListItem o1, ListItem o2) {
+                        return ascending ?
+                                o1.getName().compareTo(o2.getName()) :
+                                o2.getName().compareTo(o1.getName());
+                    }
+                });
+                break;
+            case TOTAL:
+                Collections.sort(items, new Comparator<ListItem>() {
+                    public int compare(ListItem o1, ListItem o2) {
+                        return ascending ?
+                                ((Integer)o1.getTotal()).compareTo(o2.getTotal()) :
+                                ((Integer)o2.getTotal()).compareTo(o1.getTotal());
+                    }
+                });
+                break;
+            case BONUS:
+                Collections.sort(items, new Comparator<ListItem>() {
+                    public int compare(ListItem o1, ListItem o2) {
+                        return ascending ?
+                                ((Integer)o1.getBonus()).compareTo(o2.getBonus()) :
+                                ((Integer)o2.getBonus()).compareTo(o1.getBonus());
+                    }
+                });
+                break;
+            case PERIL:
+                Collections.sort(items, new Comparator<ListItem>() {
+                    public int compare(ListItem o1, ListItem o2) {
+                        return ascending ?
+                                ((Integer)o1.getPeril()).compareTo(o2.getPeril()) :
+                                ((Integer)o2.getPeril()).compareTo(o1.getPeril());
+                    }
+                });
+                break;
+        }
+
+        curSort = sort;
+        showListItems();
     }
 }
