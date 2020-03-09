@@ -6,11 +6,10 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.6"
+        android:layout_weight="@dimen/list_name_weight"
         android:padding="10dp"
         android:id="@+id/name"
-        android:textSize="20sp"
-        android:textAlignment="center">
+        android:textSize="20sp">
     </TextView>
 
     <TextView
