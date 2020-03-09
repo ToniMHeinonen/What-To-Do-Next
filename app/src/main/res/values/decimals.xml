@@ -1,4 +1,4 @@
 <resources>
-    <item name="list_name_weight" format="float" type="dimen">0.6</item>
-    <item name="list_points_weight" format="float" type="dimen">0.13</item>
+    <item name="list_name_weight" format="float" type="dimen">0.5</item>
+    <item name="list_points_weight" format="float" type="dimen">0.166</item>
 </resources>

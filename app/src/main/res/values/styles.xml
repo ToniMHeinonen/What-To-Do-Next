@@ -23,4 +23,21 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <!-- LISTS_ACTIVITY-->
+    <style name="listsTopics">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">@dimen/list_points_weight</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="listsTopicsName" parent="listsTopics">
+        <item name="android:text">@string/lists_name</item>
+        <item name="android:layout_weight">@dimen/list_name_weight</item>
+    </style>
+
+    <style name="listsTopicsPoints" parent="listsTopics">
+        <item name="android:layout_weight">@dimen/list_points_weight</item>
+    </style>
+
 </resources>

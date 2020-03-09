@@ -4,27 +4,23 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="@dimen/list_name_weight"
-        android:padding="10dp"
         android:id="@+id/name"
-        android:textSize="20sp">
+        style="@style/listItemName">
     </TextView>
 
     <TextView
         android:id="@+id/total"
-        style="@style/listItemPointValues">
+        style="@style/listItemPoints">
     </TextView>
 
     <TextView
         android:id="@+id/bonus"
-        style="@style/listItemPointValues">
+        style="@style/listItemPoints">
     </TextView>
 
     <TextView
         android:id="@+id/peril"
-        style="@style/listItemPointValues">
+        style="@style/listItemPoints">
     </TextView>
 
 </LinearLayout>
