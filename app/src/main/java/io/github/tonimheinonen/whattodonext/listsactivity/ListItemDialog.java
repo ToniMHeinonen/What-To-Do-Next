@@ -1,12 +1,13 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.listsactivity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
+
+import io.github.tonimheinonen.whattodonext.ListsActivity;
+import io.github.tonimheinonen.whattodonext.R;
 
 public class ListItemDialog extends Dialog implements
         android.view.View.OnClickListener {

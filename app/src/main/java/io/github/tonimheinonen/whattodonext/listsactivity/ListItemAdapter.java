@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.listsactivity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import io.github.tonimheinonen.whattodonext.R;
 
 public class ListItemAdapter extends BaseAdapter {
 

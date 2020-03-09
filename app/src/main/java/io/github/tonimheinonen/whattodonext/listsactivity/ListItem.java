@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.listsactivity;
 
 public class ListItem {
 
