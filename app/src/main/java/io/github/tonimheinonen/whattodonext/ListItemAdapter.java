@@ -40,6 +40,7 @@ public class ListItemAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.list_item, null);
             holder = new ViewHolder();
             holder.txtItemName = convertView.findViewById(R.id.name);
+            holder.txtItemTotal = convertView.findViewById(R.id.total);
             holder.txtItemBonus = convertView.findViewById(R.id.bonus);
             holder.txtItemPeril = convertView.findViewById(R.id.peril);
             convertView.setTag(holder);
@@ -47,6 +48,7 @@ public class ListItemAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.txtItemName.setText(listData.get(position).getName());
+        holder.txtItemTotal.setText(String.valueOf(listData.get(position).getTotal()));
         holder.txtItemBonus.setText(String.valueOf(listData.get(position).getBonus()));
         holder.txtItemPeril.setText(String.valueOf(listData.get(position).getPeril()));
 
@@ -55,6 +57,7 @@ public class ListItemAdapter extends BaseAdapter {
 
     static class ViewHolder {
         TextView txtItemName;
+        TextView txtItemTotal;
         TextView txtItemBonus;
         TextView txtItemPeril;
     }
