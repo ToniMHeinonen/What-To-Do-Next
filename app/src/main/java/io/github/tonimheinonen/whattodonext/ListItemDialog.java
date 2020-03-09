@@ -34,7 +34,7 @@ public class ListItemDialog extends Dialog implements
         name.setText(item.getName());
         bonusAmount = findViewById(R.id.bonusPoints);
         perilAmount = findViewById(R.id.perilPoints);
-        updatePoints();
+        updatePointTexts();
 
         // Set listeners for + and - signs
         Button bonusMinus = findViewById(R.id.bonusMinus);
@@ -51,14 +51,15 @@ public class ListItemDialog extends Dialog implements
         String name = this.name.getText().toString();
         item.setName(name);
 
-        int bonus = Integer.parseInt(bonusAmount.getText().toString());
-        item.setBonus(bonus);
+        // If text is "", set value to 0, else get value from text
+        String bonus = bonusAmount.getText().toString();
+        item.setBonus(bonus.equals("") ? 0 : Integer.parseInt(bonus));
 
-        int peril = Integer.parseInt(perilAmount.getText().toString());
-        item.setPeril(peril);
+        String peril = perilAmount.getText().toString();
+        item.setPeril(peril.equals("") ? 0 : Integer.parseInt(peril));
     }
 
-    private void updatePoints() {
+    private void updatePointTexts() {
         bonusAmount.setText(String.valueOf(item.getBonus()));
         perilAmount.setText(String.valueOf(item.getPeril()));
     }
@@ -83,7 +84,7 @@ public class ListItemDialog extends Dialog implements
             default:
                 break;
         }
-        updatePoints();
+        updatePointTexts();
         //dismiss();
     }
 }
