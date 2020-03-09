@@ -18,14 +18,8 @@ public class ListItem {
         return name;
     }
 
-    public boolean setName(String name) {
-        // Don't allow empty names
-        if (name.equals("") || Character.isWhitespace(name.charAt(0)))
-            return false;
-        else {
-            this.name = name;
-            return true;
-        }
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getTotal() {

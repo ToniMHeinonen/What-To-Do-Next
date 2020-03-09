@@ -96,7 +96,7 @@ public class ListItemDialog extends Dialog implements
 
     private void confirmChanges() {
         String n = name.getText().toString();
-        item.setName(n); // if empty, does not apply (check LisItem setName())
+        item.setName(n);
 
         int[] points = getPointsFromEditTexts();
         item.setBonus(points[BONUS_INDEX]);
