@@ -1,13 +1,17 @@
 package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.database.LoginActivity;
+import io.github.tonimheinonen.whattodonext.database.UpdatePasswordActivity;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,8 +25,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Toast.makeText(this, "Already logged in", Toast.LENGTH_LONG).show();
+        }
+
         // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        /*FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("message");
 
         myRef.setValue("Hello, World!");
@@ -43,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 // Failed to read value
                 Log.w("MainActivity", "Failed to read value.", error.toException());
             }
-        });
+        });*/
     }
 
     /**
@@ -59,6 +73,11 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, ListsActivity.class);
         } else if (v.getId() == R.id.settingsButton) {
             intent = new Intent(this, SettingsActivity.class);
+        } else if (v.getId() == R.id.updatePassWordButton) {
+            FirebaseAuth.getInstance().signOut();
+            intent = new Intent(this, UpdatePasswordActivity.class);
+        } else if (v.getId() == R.id.logOutButton) {
+            intent = new Intent(this, LoginActivity.class);
         } else {
             // Add else statement to fix possibility for null intent
             return;
