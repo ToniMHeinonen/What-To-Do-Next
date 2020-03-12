@@ -1,6 +1,7 @@
 package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
@@ -83,9 +84,19 @@ public class ListsActivity extends AppCompatActivity {
         });
     }
 
-    public void dialogConfirmed() {
+    public void itemDialogConfirmed() {
         sortList(curSort, false);
         showListItems();
+    }
+
+    public void addList(String name) {
+        ListOfItems<ListItem> list = new ListOfItems<>(name);
+        curList = list;
+        showListItems();
+    }
+
+    public void loadList(String name) {
+
     }
 
     public void addClicked(View v) {
@@ -99,6 +110,11 @@ public class ListsActivity extends AppCompatActivity {
                 curList.remove(item);
             }
         });
+    }
+
+    public void listClicked(View v) {
+        ListDialog dialog = new ListDialog(this);
+        dialog.show();
     }
 
     public void topicClicked(View v) {

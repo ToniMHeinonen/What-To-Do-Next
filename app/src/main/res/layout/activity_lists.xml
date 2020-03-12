@@ -20,7 +20,8 @@
         <Button
             android:id="@+id/listButton"
             style="@style/listsButtons"
-            android:text="@string/lists_list"/>
+            android:text="@string/lists_list"
+            android:onClick="listClicked"/>
 
         <Button
             android:id="@+id/backButton"

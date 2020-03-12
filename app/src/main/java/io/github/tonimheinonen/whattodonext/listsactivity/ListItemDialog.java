@@ -102,7 +102,7 @@ public class ListItemDialog extends Dialog implements
         item.setBonus(points[BONUS_INDEX]);
         item.setPeril(points[PERIL_INDEX]);
 
-        activity.dialogConfirmed();
+        activity.itemDialogConfirmed();
 
         dismiss();
     }
