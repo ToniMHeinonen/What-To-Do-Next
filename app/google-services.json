@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "53219177456",
-    "firebase_url": "https://what-to-do-next-a0892.firebaseio.com",
-    "project_id": "what-to-do-next-a0892",
-    "storage_bucket": "what-to-do-next-a0892.appspot.com"
+    "project_number": "8313857437",
+    "firebase_url": "https://what-to-do-next-9986d.firebaseio.com",
+    "project_id": "what-to-do-next-9986d",
+    "storage_bucket": "what-to-do-next-9986d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:53219177456:android:96d50d150f0f5983be6335",
+        "mobilesdk_app_id": "1:8313857437:android:60e13f59d9d69c2e8c7b74",
         "android_client_info": {
           "package_name": "io.github.tonimheinonen.whattodonext"
         }
       },
       "oauth_client": [
         {
-          "client_id": "53219177456-145nb3onj2m547i33nj35t47jjf1tqhp.apps.googleusercontent.com",
+          "client_id": "8313857437-dlhiagqlenthq631qk8ntttn3jbdbavd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.github.tonimheinonen.whattodonext",
+            "certificate_hash": "808343d90b53596f240a0a559e2a606f1a6aa5f6"
+          }
+        },
+        {
+          "client_id": "8313857437-iifp9n60jbf2rn1ph2jmuicuna2lpa4i.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDTKPrZQcpX42147HwoYwnkwK8ESIJmFLM"
+          "current_key": "AIzaSyD3MOqXY1H-bx0otJvX37Z4j6wwqPrHTfA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "53219177456-145nb3onj2m547i33nj35t47jjf1tqhp.apps.googleusercontent.com",
+              "client_id": "8313857437-iifp9n60jbf2rn1ph2jmuicuna2lpa4i.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

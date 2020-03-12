@@ -20,4 +20,8 @@
     <string name="list_item_dialog_peril">Peril</string>
     <string name="list_item_dialog_confirm">Confirm</string>
     <string name="list_item_dialog_cancel">Cancel</string>
+
+    <!-- Email login -->
+    <string name="signup_btn">Sign up</string>
+    <string name="login_btn">Login</string>
 </resources>
