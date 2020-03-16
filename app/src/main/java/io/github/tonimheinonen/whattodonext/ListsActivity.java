@@ -1,5 +1,6 @@
 package io.github.tonimheinonen.whattodonext;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
@@ -9,20 +10,36 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseError;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ListsActivity extends AppCompatActivity {
 
     private ListsActivity _this = this;
-    private ListOfItems<ListItem> curList = new ListOfItems("Test");
+    private ListOfItems curList = new ListOfItems("Test");
 
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
@@ -47,27 +64,49 @@ public class ListsActivity extends AppCompatActivity {
         sortList(curSort, false);
 
         showListItems();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").
+                child(user.getUid()).child("lists");
+        db.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("ListsActivity", "onDataChange",
+                        "Count: " + snapshot.getChildrenCount(), 1);
+
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    ListOfItems list = postSnapshot.getValue(ListOfItems.class);
+                    Debug.print("ListsActivity", "onDataChange",
+                            "Get Data: " + list.getName(), 1);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("ListsActivity", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
     }
 
     private void setupTestItems() {
-        curList.add(new ListItem("Abyss Odyssey", 1, 0));
-        curList.add(new ListItem("Pacman", 2, 0));
-        curList.add(new ListItem("Kingdom Come", 10, 6));
-        curList.add(new ListItem("Super Smash Bros. Melee", 3, 0));
-        curList.add(new ListItem("Rocket League", 1, 9));
-        curList.add(new ListItem("Party Panic", 6, 0));
-        curList.add(new ListItem("Batman: Arkham City", 3, 0));
-        curList.add(new ListItem("Super Mario", 7, 0));
-        curList.add(new ListItem("Flappy Birds", 3, 0));
-        curList.add(new ListItem("Angry Birds", 1, 5));
-        curList.add(new ListItem("Think of the Children", 3, 0));
-        curList.add(new ListItem("Wii Sports", 0, 2));
+        curList.getItems().add(new ListItem("Abyss Odyssey", 1, 0));
+        curList.getItems().add(new ListItem("Pacman", 2, 0));
+        curList.getItems().add(new ListItem("Kingdom Come", 10, 6));
+        curList.getItems().add(new ListItem("Super Smash Bros. Melee", 3, 0));
+        curList.getItems().add(new ListItem("Rocket League", 1, 9));
+        curList.getItems().add(new ListItem("Party Panic", 6, 0));
+        curList.getItems().add(new ListItem("Batman: Arkham City", 3, 0));
+        curList.getItems().add(new ListItem("Super Mario", 7, 0));
+        curList.getItems().add(new ListItem("Flappy Birds", 3, 0));
+        curList.getItems().add(new ListItem("Angry Birds", 1, 5));
+        curList.getItems().add(new ListItem("Think of the Children", 3, 0));
+        curList.getItems().add(new ListItem("Wii Sports", 0, 2));
     }
 
     public void showListItems() {
         final ListView list = findViewById(R.id.list);
 
-        list.setAdapter(new ListItemAdapter(this, curList));
+        list.setAdapter(new ListItemAdapter(this, curList.getItems()));
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -90,9 +129,21 @@ public class ListsActivity extends AppCompatActivity {
     }
 
     public void addList(String name) {
-        ListOfItems<ListItem> list = new ListOfItems<>(name);
+        ListOfItems list = new ListOfItems(name);
         curList = list;
         showListItems();
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        String key = db.child("users").child(user.getUid()).child("lists").push().getKey();
+
+        Map<String, Object> listValues = list.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/users/" + user.getUid() + "/lists/" + key, listValues);
+
+        db.updateChildren(childUpdates);
     }
 
     public void loadList(String name) {
@@ -101,13 +152,13 @@ public class ListsActivity extends AppCompatActivity {
 
     public void addClicked(View v) {
         final ListItem item = new ListItem("", 0, 0);
-        curList.add(item);
+        curList.getItems().add(item);
         ListItemDialog dialog = new ListItemDialog(this, item);
         dialog.show();
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                curList.remove(item);
+                curList.getItems().remove(item);
             }
         });
     }
@@ -166,7 +217,7 @@ public class ListsActivity extends AppCompatActivity {
 
         switch (sort) {
             case NAME:
-                Collections.sort(curList, new Comparator<ListItem>() {
+                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
                         return ascending ?
                                 o1.getName().compareTo(o2.getName()) :
@@ -175,7 +226,7 @@ public class ListsActivity extends AppCompatActivity {
                 });
                 break;
             case TOTAL:
-                Collections.sort(curList, new Comparator<ListItem>() {
+                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
                         return ascending ?
                                 ((Integer)o1.getTotal()).compareTo(o2.getTotal()) :
@@ -184,7 +235,7 @@ public class ListsActivity extends AppCompatActivity {
                 });
                 break;
             case BONUS:
-                Collections.sort(curList, new Comparator<ListItem>() {
+                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
                         return ascending ?
                                 ((Integer)o1.getBonus()).compareTo(o2.getBonus()) :
@@ -193,7 +244,7 @@ public class ListsActivity extends AppCompatActivity {
                 });
                 break;
             case PERIL:
-                Collections.sort(curList, new Comparator<ListItem>() {
+                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
                         return ascending ?
                                 ((Integer)o1.getPeril()).compareTo(o2.getPeril()) :

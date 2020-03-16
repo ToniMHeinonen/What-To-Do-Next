@@ -1,17 +1,27 @@
 package io.github.tonimheinonen.whattodonext.listsactivity;
 
-import java.util.ArrayList;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 
-public class ListOfItems<E> extends ArrayList<E> {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+@IgnoreExtraProperties
+public class ListOfItems {
 
     private String name;
-    private ArrayList<E> items = new ArrayList<>();
+    private ArrayList<ListItem> items = new ArrayList<>();
+
+    public ListOfItems() {
+        // Default constructor required for calls to DataSnapshot.getValue(ListOfItems.class)
+    }
 
     public ListOfItems(String name) {
         this.name = name;
     }
 
-    public ListOfItems(String name, ArrayList<E> items) {
+    public ListOfItems(String name, ArrayList<ListItem> items) {
         this.name = name;
         this.items = items;
     }
@@ -24,19 +34,20 @@ public class ListOfItems<E> extends ArrayList<E> {
         this.name = name;
     }
 
-    public ArrayList<E> getItems() {
+    public ArrayList<ListItem> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<E> items) {
+    public void setItems(ArrayList<ListItem> items) {
         this.items = items;
     }
 
-    @Override
-    public String toString() {
-        return "ListOfItems{" +
-                "name='" + name + '\'' +
-                ", items=" + items +
-                '}';
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("name", name);
+        result.put("items", items);
+
+        return result;
     }
 }
