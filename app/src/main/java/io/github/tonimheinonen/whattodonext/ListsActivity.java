@@ -133,17 +133,7 @@ public class ListsActivity extends AppCompatActivity {
         curList = list;
         showListItems();
 
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        String key = db.child("users").child(user.getUid()).child("lists").push().getKey();
-
-        Map<String, Object> listValues = list.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/users/" + user.getUid() + "/lists/" + key, listValues);
-
-        db.updateChildren(childUpdates);
+        DatabaseHandler.addList(list);
     }
 
     public void loadList(String name) {

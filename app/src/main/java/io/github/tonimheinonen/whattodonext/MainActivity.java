@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(this, "Already logged in", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show();
+            DatabaseHandler.initialize();
         }
 
         // Write a message to the database
