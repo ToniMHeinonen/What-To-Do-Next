@@ -29,6 +29,6 @@
     <string name="new_password">New password</string>
     <string name="update_password">Update password</string>
     <string name="logout">Log out</string>
-    <string name="email_hint">example@hotmail.com</string>
-    <string name="password_hint">PassWord123</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
 </resources>

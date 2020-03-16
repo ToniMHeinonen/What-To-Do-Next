@@ -9,12 +9,18 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import io.github.tonimheinonen.whattodonext.MainActivity
 import io.github.tonimheinonen.whattodonext.R
 
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     private lateinit var emailEt: EditText
     private lateinit var passwordEt: EditText
@@ -27,6 +33,7 @@ class SignupActivity : AppCompatActivity() {
         setContentView(R.layout.activity_signup)
 
         auth = FirebaseAuth.getInstance()
+        database = Firebase.database.reference
 
         emailEt = findViewById(R.id.email_edt_text)
         passwordEt = findViewById(R.id.pass_edt_text)
@@ -44,9 +51,7 @@ class SignupActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
                         Toast.makeText(this, "Successfully Registered", Toast.LENGTH_LONG).show()
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
+                        onAuthSuccess(task.result?.user!!)
                     }else {
                         Toast.makeText(this, "Registration Failed", Toast.LENGTH_LONG).show()
                     }
@@ -59,5 +64,29 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun onAuthSuccess(user: FirebaseUser) {
+        val username = usernameFromEmail(user.email!!)
+
+        // Write new user
+        writeNewUser(user.uid, username, user.email)
+
+        // Go to MainActivity
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    private fun usernameFromEmail(email: String): String {
+        return if (email.contains("@")) {
+            email.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
+        } else {
+            email
+        }
+    }
+
+    private fun writeNewUser(userId: String, name: String, email: String?) {
+        val user = User(name, email)
+        database.child("users").child(userId).setValue(user)
     }
 }
