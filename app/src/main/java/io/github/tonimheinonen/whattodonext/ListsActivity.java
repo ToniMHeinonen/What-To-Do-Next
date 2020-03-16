@@ -1,6 +1,5 @@
 package io.github.tonimheinonen.whattodonext;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
@@ -10,36 +9,25 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseError;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
-public class ListsActivity extends AppCompatActivity {
+public class ListsActivity extends AppCompatActivity implements OnGetDataListener {
 
     private ListsActivity _this = this;
     private ListOfItems curList = new ListOfItems("Test");
+
+    private ArrayList<String> listKeys = new ArrayList<>();
+    private ArrayList<ListOfItems> listValues = new ArrayList<>();
 
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
@@ -64,28 +52,20 @@ public class ListsActivity extends AppCompatActivity {
         sortList(curSort, false);
 
         showListItems();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        final DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("users").
-                child(user.getUid()).child("lists");
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Debug.print("ListsActivity", "onDataChange",
-                        "Count: " + snapshot.getChildrenCount(), 1);
+        DatabaseHandler.getLists(this);
+    }
 
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    ListOfItems list = postSnapshot.getValue(ListOfItems.class);
-                    Debug.print("ListsActivity", "onDataChange",
-                            "Get Data: " + list.getName(), 1);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Debug.print("ListsActivity", "onCancelled", "", 1);
-                databaseError.toException().printStackTrace();
-            }
-        });
+    @Override
+    public void onDataGetSuccess(HashMap<String, ListOfItems> lists) {
+        Iterator it = lists.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            listKeys.add((String) pair.getKey());
+            listValues.add((ListOfItems) pair.getValue());
+            Debug.print(this, "onDataGetSuccess",
+                    pair.getKey() + " = " + pair.getValue(), 1);
+            it.remove(); // avoids a ConcurrentModificationException
+        }
     }
 
     private void setupTestItems() {
