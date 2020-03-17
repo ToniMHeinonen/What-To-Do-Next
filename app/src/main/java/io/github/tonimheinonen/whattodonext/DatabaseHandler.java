@@ -94,6 +94,10 @@ public abstract class DatabaseHandler {
         dbItems.updateChildren(childUpdates);
     }
 
+    public static void removeItem(ListItem item) {
+        dbItems.child(item.getDbID()).removeValue();
+    }
+
     public static void getItems(final OnGetDataListener listener, final ListOfItems list) {
         dbItems.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

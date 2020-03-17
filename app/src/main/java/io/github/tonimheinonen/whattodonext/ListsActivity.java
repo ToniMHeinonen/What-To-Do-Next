@@ -9,7 +9,6 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -19,9 +18,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 public class ListsActivity extends AppCompatActivity implements OnGetDataListener {
 
@@ -70,21 +66,6 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         sortList(curSort, false);
 
         showListItems();
-    }
-
-    private void setupTestItems() {
-        curList.getItems().add(new ListItem("Abyss Odyssey", 1, 0));
-        curList.getItems().add(new ListItem("Pacman", 2, 0));
-        curList.getItems().add(new ListItem("Kingdom Come", 10, 6));
-        curList.getItems().add(new ListItem("Super Smash Bros. Melee", 3, 0));
-        curList.getItems().add(new ListItem("Rocket League", 1, 9));
-        curList.getItems().add(new ListItem("Party Panic", 6, 0));
-        curList.getItems().add(new ListItem("Batman: Arkham City", 3, 0));
-        curList.getItems().add(new ListItem("Super Mario", 7, 0));
-        curList.getItems().add(new ListItem("Flappy Birds", 3, 0));
-        curList.getItems().add(new ListItem("Angry Birds", 1, 5));
-        curList.getItems().add(new ListItem("Think of the Children", 3, 0));
-        curList.getItems().add(new ListItem("Wii Sports", 0, 2));
     }
 
     public void showListItems() {
@@ -139,9 +120,14 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                curList.getItems().remove(item);
+                deleteItem(item);
             }
         });
+    }
+
+    private void deleteItem(ListItem item) {
+        curList.getItems().remove(item);
+        DatabaseHandler.removeItem(item);
     }
 
     public void listClicked(View v) {
