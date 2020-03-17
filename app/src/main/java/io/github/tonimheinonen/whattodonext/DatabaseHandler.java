@@ -8,27 +8,33 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 public abstract class DatabaseHandler {
 
     private static FirebaseUser user;
     private static DatabaseReference dbLists;
+    private static DatabaseReference dbItems;
 
 
     public static void initialize() {
         user = FirebaseAuth.getInstance().getCurrentUser();
         dbLists = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("lists");
+        dbItems = FirebaseDatabase.getInstance().getReference().child("users").
+                child(user.getUid()).child("items");
     }
 
     public static void addList(ListOfItems list) {
         String key = dbLists.push().getKey();
 
+        list.setDbID(key);
         Map<String, Object> listValues = list.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
@@ -42,17 +48,71 @@ public abstract class DatabaseHandler {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Debug.print("DatabaseHandler", "onDataChange",
-                        "Count: " + snapshot.getChildrenCount(), 1);
+                        "Lists count: " + snapshot.getChildrenCount(), 1);
 
-                HashMap<String, ListOfItems> lists = new HashMap<>();
+                ArrayList<ListOfItems> lists = new ArrayList<>();
 
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     String key = dataSnapshot.getKey();
+                    Debug.print("DatabaseHandler", "onDataChange",
+                            "Snapshot: " + snapshot.toString(), 1);
                     ListOfItems list = dataSnapshot.getValue(ListOfItems.class);
-                    lists.put(key, list);
+                    list.setDbID(key);
+                    lists.add(list);
                 }
 
-                listener.onDataGetSuccess(lists);
+                listener.onDataGetLists(lists);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    public static void addItem(ListOfItems list, ListItem item) {
+        String key = dbItems.push().getKey();
+
+        item.setDbID(key);
+        item.setListID(list.getDbID());
+        Map<String, Object> listValues = item.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, listValues);
+
+        dbItems.updateChildren(childUpdates);
+    }
+
+    public static void modifyItem(ListItem item) {
+        Map<String, Object> listValues = item.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(item.getDbID(), listValues);
+
+        dbItems.updateChildren(childUpdates);
+    }
+
+    public static void getItems(final OnGetDataListener listener, final ListOfItems list) {
+        dbItems.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "onDataChange",
+                        "Items count: " + snapshot.getChildrenCount(), 1);
+
+                ArrayList<ListItem> items = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    ListItem item = dataSnapshot.getValue(ListItem.class);
+                    item.setDbID(key);
+                    if (item.getListID().equals(list.getDbID())) {
+                        items.add(item);
+                    }
+                }
+
+                listener.onDataGetItems(items);
             }
 
             @Override

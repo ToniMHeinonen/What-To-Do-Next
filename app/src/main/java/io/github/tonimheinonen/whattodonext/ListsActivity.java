@@ -9,10 +9,12 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,10 +26,11 @@ import java.util.Map;
 public class ListsActivity extends AppCompatActivity implements OnGetDataListener {
 
     private ListsActivity _this = this;
-    private ListOfItems curList = new ListOfItems("Test");
 
-    private ArrayList<String> listKeys = new ArrayList<>();
-    private ArrayList<ListOfItems> listValues = new ArrayList<>();
+    private ListOfItems curList;
+    private int curListIndex = 0;
+
+    private ArrayList<ListOfItems> lists = new ArrayList<>();
 
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
@@ -47,25 +50,26 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         vPeril = findViewById(R.id.peril);
         originalTextColor = vName.getCurrentTextColor();
 
-        setupTestItems();
-
-        sortList(curSort, false);
-
-        showListItems();
         DatabaseHandler.getLists(this);
     }
 
     @Override
-    public void onDataGetSuccess(HashMap<String, ListOfItems> lists) {
-        Iterator it = lists.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            listKeys.add((String) pair.getKey());
-            listValues.add((ListOfItems) pair.getValue());
-            Debug.print(this, "onDataGetSuccess",
-                    pair.getKey() + " = " + pair.getValue(), 1);
-            it.remove(); // avoids a ConcurrentModificationException
+    public void onDataGetLists(ArrayList<ListOfItems> lists) {
+        this.lists = lists;
+
+        if (lists.size() >= curListIndex + 1) {
+            curList = lists.get(curListIndex);
+            DatabaseHandler.getItems(this, curList);
         }
+    }
+
+    @Override
+    public void onDataGetItems(ArrayList<ListItem> items) {
+        curList.setItems(items);
+
+        sortList(curSort, false);
+
+        showListItems();
     }
 
     private void setupTestItems() {
@@ -103,7 +107,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         });
     }
 
-    public void itemDialogConfirmed() {
+    public void itemDialogConfirmed(ListItem item) {
+        DatabaseHandler.modifyItem(item);
         sortList(curSort, false);
         showListItems();
     }
@@ -121,8 +126,14 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     }
 
     public void addClicked(View v) {
+        if (curList == null) {
+            Toast.makeText(this, "First create new list", Toast.LENGTH_LONG);
+            return;
+        }
+
         final ListItem item = new ListItem("", 0, 0);
         curList.getItems().add(item);
+        DatabaseHandler.addItem(curList, item);
         ListItemDialog dialog = new ListItemDialog(this, item);
         dialog.show();
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {

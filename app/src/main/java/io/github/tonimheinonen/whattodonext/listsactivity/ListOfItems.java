@@ -13,6 +13,9 @@ public class ListOfItems {
     private String name;
     private ArrayList<ListItem> items = new ArrayList<>();
 
+    @Exclude
+    private String dbID;
+
     public ListOfItems() {
         // Default constructor required for calls to DataSnapshot.getValue(ListOfItems.class)
     }
@@ -40,6 +43,14 @@ public class ListOfItems {
 
     public void setItems(ArrayList<ListItem> items) {
         this.items = items;
+    }
+
+    public String getDbID() {
+        return dbID;
+    }
+
+    public void setDbID(String dbID) {
+        this.dbID = dbID;
     }
 
     @Exclude

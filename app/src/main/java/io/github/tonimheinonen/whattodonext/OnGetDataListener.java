@@ -1,9 +1,11 @@
 package io.github.tonimheinonen.whattodonext;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
+import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 public interface OnGetDataListener {
-    public void onDataGetSuccess(HashMap<String, ListOfItems> lists);
+    void onDataGetLists(ArrayList<ListOfItems> lists);
+    void onDataGetItems(ArrayList<ListItem> items);
 }

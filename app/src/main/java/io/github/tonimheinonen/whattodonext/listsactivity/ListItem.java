@@ -9,10 +9,15 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class ListItem {
 
+    private String listID;
     private String name;
-    private int total;
     private int bonus;
     private int peril;
+
+    @Exclude
+    private String dbID;
+    @Exclude
+    private int total;
 
     public ListItem() {
         // Default constructor required for calls to DataSnapshot.getValue(ListItem.class)
@@ -55,13 +60,29 @@ public class ListItem {
         this.total = this.bonus + this.peril;
     }
 
+    public String getListID() {
+        return listID;
+    }
+
+    public void setListID(String listID) {
+        this.listID = listID;
+    }
+
+    public String getDbID() {
+        return dbID;
+    }
+
+    public void setDbID(String dbID) {
+        this.dbID = dbID;
+    }
+
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("listID", listID);
         result.put("name", name);
-        result.put("total", total);
         result.put("bonus", bonus);
-        result.put("perik", peril);
+        result.put("peril", peril);
 
         return result;
     }
