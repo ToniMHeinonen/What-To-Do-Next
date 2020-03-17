@@ -1,34 +1,25 @@
-package io.github.tonimheinonen.whattodonext.listsactivity;
+package io.github.tonimheinonen.whattodonext;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class ListOfItems {
+public class Profile {
 
     private String name;
 
     @Exclude
     private String dbID;
 
-    @Exclude
-    private ArrayList<ListItem> items = new ArrayList<>();
-
-    public ListOfItems() {
+    public Profile() {
         // Default constructor required for calls to DataSnapshot.getValue(ListOfItems.class)
     }
 
-    public ListOfItems(String name) {
+    public Profile(String name) {
         this.name = name;
-    }
-
-    public ListOfItems(String name, ArrayList<ListItem> items) {
-        this.name = name;
-        this.items = items;
     }
 
     public String getName() {
@@ -37,14 +28,6 @@ public class ListOfItems {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ArrayList<ListItem> getItems() {
-        return items;
-    }
-
-    public void setItems(ArrayList<ListItem> items) {
-        this.items = items;
     }
 
     public String getDbID() {

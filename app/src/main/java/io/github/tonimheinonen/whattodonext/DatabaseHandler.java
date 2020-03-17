@@ -21,7 +21,7 @@ public abstract class DatabaseHandler {
     private static FirebaseUser user;
     private static DatabaseReference dbLists;
     private static DatabaseReference dbItems;
-
+    private static DatabaseReference dbProfiles;
 
     public static void initialize() {
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -29,7 +29,11 @@ public abstract class DatabaseHandler {
                 child(user.getUid()).child("lists");
         dbItems = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("items");
+        dbProfiles = FirebaseDatabase.getInstance().getReference().child("users").
+                child(user.getUid()).child("profiles");
     }
+
+    /////////////////////* LISTS *////////////////////
 
     public static void addList(ListOfItems list) {
         String key = dbLists.push().getKey();
@@ -71,6 +75,8 @@ public abstract class DatabaseHandler {
             }
         });
     }
+
+    /////////////////////* ITEMS *////////////////////
 
     public static void addItem(ListOfItems list, ListItem item) {
         String key = dbItems.push().getKey();
@@ -117,6 +123,49 @@ public abstract class DatabaseHandler {
                 }
 
                 listener.onDataGetItems(items);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    /////////////////////* PROFILES *////////////////////
+
+    public static void addProfile(Profile profile) {
+        String key = dbProfiles.push().getKey();
+
+        profile.setDbID(key);
+        Map<String, Object> listValues = profile.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, listValues);
+
+        dbProfiles.updateChildren(childUpdates);
+    }
+
+    public static void getProfiles(final OnGetDataListener listener) {
+        dbLists.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "onDataChange",
+                        "Profiles count: " + snapshot.getChildrenCount(), 1);
+
+                ArrayList<Profile> profiles = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    Debug.print("DatabaseHandler", "onDataChange",
+                            "Snapshot: " + snapshot.toString(), 1);
+                    Profile profile = dataSnapshot.getValue(Profile.class);
+                    profile.setDbID(key);
+                    profiles.add(profile);
+                }
+
+                listener.onDataGetProfiles(profiles);
             }
 
             @Override

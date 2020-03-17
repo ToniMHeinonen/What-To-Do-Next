@@ -68,6 +68,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         showListItems();
     }
 
+    @Override
+    public void onDataGetProfiles(ArrayList<Profile> profiles) {}
+
     public void showListItems() {
         final ListView list = findViewById(R.id.list);
 
