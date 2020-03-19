@@ -24,7 +24,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private ListsActivity _this = this;
 
     private ListOfItems curList;
-    private int curListIndex = 0;
+    private String curListId = "";
 
     private ArrayList<ListOfItems> lists = new ArrayList<>();
 
@@ -52,10 +52,16 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     @Override
     public void onDataGetLists(ArrayList<ListOfItems> lists) {
         this.lists = lists;
+        curListId = GlobalPrefs.loadCurrentList();
 
-        if (lists.size() >= curListIndex + 1) {
-            curList = lists.get(curListIndex);
-            DatabaseHandler.getItems(this, curList);
+        if (!lists.isEmpty()) {
+            for (ListOfItems list : lists) {
+                if (curListId.equals(list.getDbID())) {
+                    curList = list;
+                    DatabaseHandler.getItems(this, curList);
+                    break;
+                }
+            }
         }
     }
 
@@ -91,42 +97,49 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         });
     }
 
-    public void itemDialogConfirmed(ListItem item) {
-        DatabaseHandler.modifyItem(item);
-        sortList(curSort, false);
-        showListItems();
+    private void hideListItems() {
+        final ListView list = findViewById(R.id.list);
+        list.setAdapter(null);
     }
+
+
+    /*//////////////////// LIST DIALOG ////////////////////*/
 
     public void addList(String name) {
         ListOfItems list = new ListOfItems(name);
         curList = list;
         showListItems();
 
-        DatabaseHandler.addList(list);
+        lists.add(list);
+        DatabaseHandler.addList(curList);
     }
 
-    public void loadList(ListOfItems list) {
-        curList = list;
-        DatabaseHandler.getItems(this, curList);
-    }
-
-    public void addClicked(View v) {
-        if (curList == null) {
-            Toast.makeText(this, "First create new list", Toast.LENGTH_LONG);
-            return;
+    public void loadList(int listIndex) {
+        if (curList != lists.get(listIndex)) {
+            curList = lists.get(listIndex);
+            GlobalPrefs.saveCurrentList(curList.getDbID());
+            DatabaseHandler.getItems(this, curList);
         }
+    }
 
-        final ListItem item = new ListItem("", 0, 0);
-        curList.getItems().add(item);
-        DatabaseHandler.addItem(curList, item);
-        ListItemDialog dialog = new ListItemDialog(this, item);
-        dialog.show();
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                deleteItem(item);
-            }
-        });
+    public void deleteList(int listIndex) {
+        ListOfItems list = lists.get(listIndex);
+        lists.remove(list);
+        DatabaseHandler.removeList(list);
+
+        if (curList == list) {
+            curList = null;
+            GlobalPrefs.saveCurrentList("");
+            hideListItems();
+        }
+    }
+
+    /*//////////////////// ITEM DIALOG ////////////////////*/
+
+    public void modifyItem(ListItem item) {
+        DatabaseHandler.modifyItem(item);
+        sortList(curSort, false);
+        showListItems();
     }
 
     private void deleteItem(ListItem item) {
@@ -134,10 +147,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         DatabaseHandler.removeItem(item);
     }
 
-    public void listClicked(View v) {
-        ListDialog dialog = new ListDialog(this, lists);
-        dialog.show();
-    }
+    /*//////////////////// SORTING ////////////////////*/
 
     public void topicClicked(View v) {
         int sort = -1;
@@ -227,5 +237,31 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
         curSort = sort;
         showListItems();
+    }
+
+    /*//////////////////// TOP BAR BUTTONS ////////////////////*/
+
+    public void addClicked(View v) {
+        if (curList == null) {
+            Toast.makeText(this, "First select list", Toast.LENGTH_LONG);
+            return;
+        }
+
+        final ListItem item = new ListItem("", 0, 0);
+        curList.getItems().add(item);
+        DatabaseHandler.addItem(curList, item);
+        ListItemDialog dialog = new ListItemDialog(this, item);
+        dialog.show();
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                deleteItem(item);
+            }
+        });
+    }
+
+    public void listClicked(View v) {
+        ListDialog dialog = new ListDialog(this, lists);
+        dialog.show();
     }
 }

@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show();
             DatabaseHandler.initialize();
+            GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
         }
 
         // Write a message to the database

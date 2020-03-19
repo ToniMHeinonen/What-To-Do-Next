@@ -45,6 +45,7 @@ public abstract class DatabaseHandler {
 
     public static void addList(ListOfItems list) {
         String key = dbLists.push().getKey();
+        GlobalPrefs.saveCurrentList(key);
 
         list.setDbID(key);
         Map<String, Object> listValues = list.toMap();
@@ -53,6 +54,10 @@ public abstract class DatabaseHandler {
         childUpdates.put(key, listValues);
 
         dbLists.updateChildren(childUpdates);
+    }
+
+    public static void removeList(ListOfItems list) {
+        dbLists.child(list.getDbID()).removeValue();
     }
 
     public static void getLists(final OnGetDataListener listener) {

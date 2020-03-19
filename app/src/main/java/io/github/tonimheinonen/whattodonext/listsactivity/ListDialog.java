@@ -84,12 +84,13 @@ public class ListDialog extends Dialog implements
 
     private void loadList(View v) {
         Debug.print("ListDialog", "loadList", "", 1);
-        ListOfItems list = lists.get((int) v.getTag());
-        activity.loadList(list);
+        activity.loadList((int) v.getTag());
         dismiss();
     }
 
     private void deleteList(View v) {
         Debug.print("ListDialog", "deleteList", "", 1);
+        activity.deleteList((int) v.getTag());
+        dismiss();
     }
 }
