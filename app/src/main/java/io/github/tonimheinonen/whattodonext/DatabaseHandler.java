@@ -58,6 +58,11 @@ public abstract class DatabaseHandler {
 
     public static void removeList(ListOfItems list) {
         dbLists.child(list.getDbID()).removeValue();
+
+        // Remove all items from database connected to this list
+        for (ListItem item : list.getItems()) {
+            removeItem(item);
+        }
     }
 
     public static void getLists(final OnGetDataListener listener) {
