@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show();
             DatabaseHandler.initialize();
         }
