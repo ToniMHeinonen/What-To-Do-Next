@@ -243,7 +243,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     public void addClicked(View v) {
         if (curList == null) {
-            Toast.makeText(this, "First select list", Toast.LENGTH_LONG);
+            Toast.makeText(this, "First select list", Toast.LENGTH_LONG).show();
             return;
         }
 

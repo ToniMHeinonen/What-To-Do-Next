@@ -35,10 +35,13 @@ public abstract class DatabaseHandler {
         user = FirebaseAuth.getInstance().getCurrentUser();
         dbLists = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("lists");
+        dbLists.keepSynced(true);
         dbItems = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("items");
+        dbItems.keepSynced(true);
         dbProfiles = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("profiles");
+        dbProfiles.keepSynced(true);
     }
 
     /////////////////////* LISTS *////////////////////
@@ -134,6 +137,8 @@ public abstract class DatabaseHandler {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     String key = dataSnapshot.getKey();
                     ListItem item = dataSnapshot.getValue(ListItem.class);
+                    Debug.print("DatabaseHandler", "onDataChange",
+                            "Item name: " + item.getName(), 1);
                     item.setDbID(key);
                     if (item.getListID().equals(list.getDbID())) {
                         items.add(item);
