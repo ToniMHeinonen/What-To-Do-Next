@@ -22,8 +22,16 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbLists;
     private static DatabaseReference dbItems;
     private static DatabaseReference dbProfiles;
+    private static boolean offlinePersistenceEnabled = false;
 
     public static void initialize() {
+
+        if (!offlinePersistenceEnabled) {
+            offlinePersistenceEnabled = true;
+            // This only needs to be called once, otherwise app crashes
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        }
+
         user = FirebaseAuth.getInstance().getCurrentUser();
         dbLists = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("lists");
