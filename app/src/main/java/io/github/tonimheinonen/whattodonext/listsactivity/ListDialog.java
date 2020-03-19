@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import io.github.tonimheinonen.whattodonext.Debug;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
 
@@ -18,10 +19,12 @@ public class ListDialog extends Dialog implements
         android.view.View.OnClickListener {
 
     private ListsActivity activity;
+    private ArrayList<ListOfItems> lists;
 
-    public ListDialog(ListsActivity a) {
+    public ListDialog(ListsActivity a, ArrayList<ListOfItems> lists) {
         super(a);
         this.activity = a;
+        this.lists = lists;
     }
 
     @Override
@@ -34,19 +37,21 @@ public class ListDialog extends Dialog implements
         findViewById(R.id.back).setOnClickListener(this);
         findViewById(R.id.addList).setOnClickListener(this);
 
-        // Load saves lists and inflate them to linear layout
-        ArrayList<String> listNames = new ArrayList<>();
-        listNames.add("Lista 1");
-        listNames.add("Lista 2");
-        listNames.add("Lista 3");
-
-        LinearLayout lists = findViewById(R.id.savedLists);
-        for (String name : listNames) {
+        // Inflate saved lists to linear layout
+        LinearLayout listLayout = findViewById(R.id.savedLists);
+        for (int i = 0; i < lists.size(); i++) {
+            String name = lists.get(i).getName();
             View view = getLayoutInflater().inflate(R.layout.saved_list, null);
-            TextView listName = view.findViewById(R.id.savedListName);
+            listLayout.addView(view);
+            // Init savedListName values
+            Button listName = view.findViewById(R.id.savedListName);
             listName.setText(name);
-            lists.addView(view);
-            view.setOnClickListener(this);
+            listName.setTag(i);
+            listName.setOnClickListener(this);
+            // Init savedListDelete values
+            Button listDelete = view.findViewById(R.id.savedListDelete);
+            listDelete.setTag(i);
+            listDelete.setOnClickListener(this);
         }
     }
 
@@ -78,12 +83,13 @@ public class ListDialog extends Dialog implements
     }
 
     private void loadList(View v) {
-        Button btn = (Button) v;
-        activity.loadList(btn.getText().toString());
+        Debug.print("ListDialog", "loadList", "", 1);
+        ListOfItems list = lists.get((int) v.getTag());
+        activity.loadList(list);
         dismiss();
     }
 
     private void deleteList(View v) {
-
+        Debug.print("ListDialog", "deleteList", "", 1);
     }
 }

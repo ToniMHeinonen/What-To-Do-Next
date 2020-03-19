@@ -105,8 +105,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         DatabaseHandler.addList(list);
     }
 
-    public void loadList(String name) {
-
+    public void loadList(ListOfItems list) {
+        curList = list;
+        DatabaseHandler.getItems(this, curList);
     }
 
     public void addClicked(View v) {
@@ -134,7 +135,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     }
 
     public void listClicked(View v) {
-        ListDialog dialog = new ListDialog(this);
+        ListDialog dialog = new ListDialog(this, lists);
         dialog.show();
     }
 
