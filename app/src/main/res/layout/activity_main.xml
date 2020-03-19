@@ -16,10 +16,6 @@
             style="@style/menuButtons"
             android:text="@string/logout" />
 
-        <Button
-            android:id="@+id/updatePassWordButton"
-            style="@style/menuButtons"
-            android:text="@string/update_password" />
 
     </LinearLayout>
     <LinearLayout

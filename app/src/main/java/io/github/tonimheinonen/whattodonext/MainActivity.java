@@ -2,7 +2,6 @@ package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.LoginActivity;
-import io.github.tonimheinonen.whattodonext.database.UpdatePasswordActivity;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -75,9 +74,6 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, ListsActivity.class);
         } else if (v.getId() == R.id.settingsButton) {
             intent = new Intent(this, SettingsActivity.class);
-        } else if (v.getId() == R.id.updatePassWordButton) {
-            FirebaseAuth.getInstance().signOut();
-            intent = new Intent(this, UpdatePasswordActivity.class);
         } else if (v.getId() == R.id.logOutButton) {
             intent = new Intent(this, LoginActivity.class);
         } else {

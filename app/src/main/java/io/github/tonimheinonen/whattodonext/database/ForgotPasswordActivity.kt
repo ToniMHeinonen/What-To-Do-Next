@@ -1,5 +1,6 @@
 package io.github.tonimheinonen.whattodonext.database
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
@@ -44,6 +45,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                             if (task.isSuccessful) {
                                 Toast.makeText(this, "Reset link sent to your email", Toast.LENGTH_LONG)
                                         .show()
+                                startActivity(Intent(this, LoginActivity::class.java));
                             } else {
                                 Toast.makeText(this, "Unable to send reset mail", Toast.LENGTH_LONG)
                                         .show()
