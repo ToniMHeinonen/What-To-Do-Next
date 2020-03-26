@@ -3,6 +3,7 @@ package io.github.tonimheinonen.whattodonext.voteactivity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -32,8 +33,10 @@ public class StartVoteDialog extends ClickListenerDialog implements
     private VoteActivity activity;
     private ArrayList<ListOfItems> lists;
     private ArrayList<Profile> profiles;
+    private ArrayList<Profile> selectedProfiles = new ArrayList<>();
 
     private ListAndProfileAdapter profileListAdapter;
+    private int profileTextDefaultColor = -1;
 
     public StartVoteDialog(VoteActivity a, ArrayList<ListOfItems> lists, ArrayList<Profile> profiles) {
         super(a);
@@ -71,6 +74,12 @@ public class StartVoteDialog extends ClickListenerDialog implements
             case R.id.addProfile:
                 addNewProfile();
                 break;
+            case R.id.savedName:
+                profileClicked(v);
+                break;
+            case R.id.savedDelete:
+                deleteProfile(v);
+                break;
             default:
                 break;
         }
@@ -88,5 +97,27 @@ public class StartVoteDialog extends ClickListenerDialog implements
         DatabaseHandler.addProfile(profile);
         profiles.add(profile);
         profileListAdapter.notifyDataSetChanged();
+    }
+
+    private void profileClicked(View v) {
+        Profile selected = profiles.get((int) v.getTag());
+
+        Button btn = (Button) v;
+
+        if (profileTextDefaultColor == -1) {
+            profileTextDefaultColor = btn.getCurrentTextColor();
+        }
+
+        if (selectedProfiles.contains(selected)) {
+            selectedProfiles.remove(selected);
+            btn.setTextColor(profileTextDefaultColor);
+        } else {
+            selectedProfiles.add(selected);
+            btn.setTextColor(activity.getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    private void deleteProfile(View v) {
+
     }
 }
