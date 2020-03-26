@@ -170,6 +170,10 @@ public abstract class DatabaseHandler {
         dbProfiles.updateChildren(childUpdates);
     }
 
+    public static void removeProfile(Profile profile) {
+        dbProfiles.child(profile.getDbID()).removeValue();
+    }
+
     public static void getProfiles(final OnGetDataListener listener) {
         dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

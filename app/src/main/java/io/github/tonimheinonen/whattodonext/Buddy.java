@@ -3,6 +3,7 @@ package io.github.tonimheinonen.whattodonext;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public abstract class Buddy {
 
@@ -24,5 +25,13 @@ public abstract class Buddy {
         editTextView.setText("");
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
+    }
+
+    public static void showToast(String text) {
+        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+    }
+
+    public static String getString(int stringID) {
+        return context.getResources().getString(stringID);
     }
 }

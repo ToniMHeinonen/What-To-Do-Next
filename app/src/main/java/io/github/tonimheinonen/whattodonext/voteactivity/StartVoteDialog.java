@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -88,8 +89,10 @@ public class StartVoteDialog extends ClickListenerDialog implements
     private void addNewProfile() {
         EditText profileTextView = findViewById(R.id.newProfile);
         String name = profileTextView.getText().toString();
-        if (name.isEmpty())
+        if (name.isEmpty()) {
+            Buddy.showToast(Buddy.getString(R.string.toast_profile_empty));
             return;
+        }
 
         Buddy.hideKeyboardAndClear(profileTextView);
 
@@ -118,6 +121,17 @@ public class StartVoteDialog extends ClickListenerDialog implements
     }
 
     private void deleteProfile(View v) {
+        Profile selected = profiles.get((int) v.getTag());
 
+        if (selectedProfiles.contains(selected)) {
+            Buddy.showToast(Buddy.getString(R.string.toast_cant_delete_selected));
+            return;
+        }
+
+        DatabaseHandler.removeProfile(selected);
+
+        profiles.remove(selected);
+
+        profileListAdapter.notifyDataSetChanged();
     }
 }

@@ -15,6 +15,8 @@
     <string name="select_voters">Select Voters</string>
     <string name="new_profile">New Profile</string>
     <string name="start_vote">Start</string>
+    <string name="toast_profile_empty">New profile name is empty!</string>
+    <string name="toast_cant_delete_selected">Selected profiles can\'t be deleted!</string>
 
     <!-- ListsActivity -->
     <string name="lists_add">Add</string>
