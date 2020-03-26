@@ -1,20 +1,16 @@
 package io.github.tonimheinonen.whattodonext.listsactivity;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import io.github.tonimheinonen.whattodonext.Debug;
+import io.github.tonimheinonen.whattodonext.ListAndProfileAdapter;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
 
@@ -42,7 +38,7 @@ public class ListDialog extends Dialog implements
 
         final ListView list = findViewById(R.id.savedLists);
 
-        list.setAdapter(new ListAdapter(activity, lists, this));
+        list.setAdapter(new ListAndProfileAdapter(activity, lists, this));
     }
 
     @Override
@@ -54,10 +50,10 @@ public class ListDialog extends Dialog implements
             case R.id.back:
                 cancel();
                 break;
-            case R.id.savedListName:
+            case R.id.savedName:
                 loadList(v);
                 break;
-            case R.id.savedListDelete:
+            case R.id.savedDelete:
                 deleteList(v);
                 break;
             default:

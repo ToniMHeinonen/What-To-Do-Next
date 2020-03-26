@@ -7,8 +7,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.tonimheinonen.whattodonext.DatabaseValue;
+
 @IgnoreExtraProperties
-public class ListOfItems {
+public class ListOfItems implements DatabaseValue {
 
     private String name;
 

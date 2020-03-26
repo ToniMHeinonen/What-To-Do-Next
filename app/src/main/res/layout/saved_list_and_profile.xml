@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
     <Button
-        android:id="@+id/savedListName"
+        android:id="@+id/savedName"
         android:layout_weight="0.7"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -14,12 +14,12 @@
         android:textStyle="bold"/>
 
     <Button
-        android:id="@+id/savedListDelete"
+        android:id="@+id/savedDelete"
         android:layout_weight="0.3"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="Delete"
+        android:text="@string/delete"
         android:textSize="15sp"
         android:textStyle="bold"/>
 

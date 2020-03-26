@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext.listsactivity;
+package io.github.tonimheinonen.whattodonext;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,19 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
+import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
-public class ListAdapter extends BaseAdapter {
+public class ListAndProfileAdapter extends BaseAdapter {
 
-    private ArrayList<ListOfItems> listData;
+    private ArrayList<? extends DatabaseValue> listData;
     private LayoutInflater layoutInflater;
     private ListDialog dialog;
 
-    public ListAdapter(Context aContext, ArrayList<ListOfItems> listData, ListDialog dialog) {
+    public ListAndProfileAdapter(Context aContext, ArrayList<? extends DatabaseValue> listData, ListDialog dialog) {
         this.listData = listData;
         this.dialog = dialog;
         layoutInflater = LayoutInflater.from(aContext);
@@ -42,10 +43,10 @@ public class ListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.saved_list, null);
+            convertView = layoutInflater.inflate(R.layout.saved_list_and_profile, null);
             holder = new ViewHolder();
-            holder.listName = convertView.findViewById(R.id.savedListName);
-            holder.listDelete = convertView.findViewById(R.id.savedListDelete);
+            holder.listName = convertView.findViewById(R.id.savedName);
+            holder.listDelete = convertView.findViewById(R.id.savedDelete);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

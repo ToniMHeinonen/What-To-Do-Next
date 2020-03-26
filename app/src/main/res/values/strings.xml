@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">What To Do Next</string>
+    <!-- Global -->
+    <string name="delete">Delete</string>
+
     <!-- MainActivity -->
     <string name="menu_vote">Vote</string>
     <string name="menu_lists">Lists</string>

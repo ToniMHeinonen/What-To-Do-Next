@@ -72,7 +72,7 @@ public class VoteActivity extends AppCompatActivity implements OnGetDataListener
     public void onDataGetProfiles(ArrayList<Profile> profiles) {
         this.profiles = profiles;
 
-        StartVoteDialog dialog = new StartVoteDialog(this, lists, profiles);
+        StartVoteDialog dialog = new StartVoteDialog(this, lists, this.profiles);
         dialog.show();
     }
 }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class Profile {
+public class Profile implements DatabaseValue {
 
     private String name;
 
