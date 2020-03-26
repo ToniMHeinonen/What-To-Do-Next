@@ -42,28 +42,24 @@ public class ListAndProfileAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.saved_list_and_profile, null);
-            holder = new ViewHolder();
-            holder.listName = convertView.findViewById(R.id.savedName);
-            holder.listDelete = convertView.findViewById(R.id.savedDelete);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
+        View view = convertView;
+        if (view == null) {
+            view = layoutInflater.inflate(R.layout.saved_list_and_profile, null);
         }
-        holder.listName.setText(listData.get(position).getName());
-        holder.listName.setOnClickListener(dialog);
-        holder.listName.setTag(position);
 
-        holder.listDelete.setOnClickListener(dialog);
-        holder.listDelete.setTag(position);
+        DatabaseValue item = (DatabaseValue) getItem(position);
 
-        return convertView;
-    }
+        if (item != null) {
+            Button listName = view.findViewById(R.id.savedName);
+            listName.setText(listData.get(position).getName());
+            listName.setOnClickListener(dialog);
+            listName.setTag(position);
 
-    static class ViewHolder {
-        Button listName;
-        Button listDelete;
+            Button listDelete = view.findViewById(R.id.savedDelete);
+            listDelete.setOnClickListener(dialog);
+            listDelete.setTag(position);
+        }
+
+        return view;
     }
 }

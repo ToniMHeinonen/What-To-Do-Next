@@ -171,7 +171,7 @@ public abstract class DatabaseHandler {
     }
 
     public static void getProfiles(final OnGetDataListener listener) {
-        dbLists.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Debug.print("DatabaseHandler", "onDataChange",
