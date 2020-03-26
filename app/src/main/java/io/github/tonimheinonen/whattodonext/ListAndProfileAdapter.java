@@ -1,5 +1,6 @@
 package io.github.tonimheinonen.whattodonext;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +18,9 @@ public class ListAndProfileAdapter extends BaseAdapter {
 
     private ArrayList<? extends DatabaseValue> listData;
     private LayoutInflater layoutInflater;
-    private ListDialog dialog;
+    private ClickListenerDialog dialog;
 
-    public ListAndProfileAdapter(Context aContext, ArrayList<? extends DatabaseValue> listData, ListDialog dialog) {
+    public ListAndProfileAdapter(Context aContext, ArrayList<? extends DatabaseValue> listData, ClickListenerDialog dialog) {
         this.listData = listData;
         this.dialog = dialog;
         layoutInflater = LayoutInflater.from(aContext);

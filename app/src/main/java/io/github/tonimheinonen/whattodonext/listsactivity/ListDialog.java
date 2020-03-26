@@ -9,12 +9,13 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import io.github.tonimheinonen.whattodonext.ClickListenerDialog;
 import io.github.tonimheinonen.whattodonext.Debug;
 import io.github.tonimheinonen.whattodonext.ListAndProfileAdapter;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
 
-public class ListDialog extends Dialog implements
+public class ListDialog extends ClickListenerDialog implements
         android.view.View.OnClickListener {
 
     private ListsActivity activity;
@@ -36,8 +37,8 @@ public class ListDialog extends Dialog implements
         findViewById(R.id.back).setOnClickListener(this);
         findViewById(R.id.addList).setOnClickListener(this);
 
+        // Add lists to ListView
         final ListView list = findViewById(R.id.savedLists);
-
         list.setAdapter(new ListAndProfileAdapter(activity, lists, this));
     }
 
