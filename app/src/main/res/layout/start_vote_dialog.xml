@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:minHeight="500dp"
-    android:background="#DDD">
+    android:background="#DDD"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <!-- LIST -->
     <LinearLayout

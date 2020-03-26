@@ -3,20 +3,12 @@ package io.github.tonimheinonen.whattodonext;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.LoginActivity;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         } else {
             Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show();
+            Buddy.initialize(this);
             DatabaseHandler.initialize();
             GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
         }

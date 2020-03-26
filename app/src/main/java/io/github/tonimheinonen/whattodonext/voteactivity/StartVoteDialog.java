@@ -1,10 +1,12 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -12,6 +14,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import io.github.tonimheinonen.whattodonext.Buddy;
 import io.github.tonimheinonen.whattodonext.ClickListenerDialog;
 import io.github.tonimheinonen.whattodonext.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.Debug;
@@ -79,8 +82,9 @@ public class StartVoteDialog extends ClickListenerDialog implements
         if (name.isEmpty())
             return;
 
-        Profile profile = new Profile(name);
+        Buddy.hideKeyboardAndClear(profileTextView);
 
+        Profile profile = new Profile(name);
         DatabaseHandler.addProfile(profile);
         profiles.add(profile);
         profileListAdapter.notifyDataSetChanged();
