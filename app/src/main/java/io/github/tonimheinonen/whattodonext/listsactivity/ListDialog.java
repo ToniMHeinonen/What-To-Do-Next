@@ -1,12 +1,15 @@
 package io.github.tonimheinonen.whattodonext.listsactivity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -37,22 +40,9 @@ public class ListDialog extends Dialog implements
         findViewById(R.id.back).setOnClickListener(this);
         findViewById(R.id.addList).setOnClickListener(this);
 
-        // Inflate saved lists to linear layout
-        LinearLayout listLayout = findViewById(R.id.savedLists);
-        for (int i = 0; i < lists.size(); i++) {
-            String name = lists.get(i).getName();
-            View view = getLayoutInflater().inflate(R.layout.saved_list, null);
-            listLayout.addView(view);
-            // Init savedListName values
-            Button listName = view.findViewById(R.id.savedListName);
-            listName.setText(name);
-            listName.setTag(i);
-            listName.setOnClickListener(this);
-            // Init savedListDelete values
-            Button listDelete = view.findViewById(R.id.savedListDelete);
-            listDelete.setTag(i);
-            listDelete.setOnClickListener(this);
-        }
+        final ListView list = findViewById(R.id.savedLists);
+
+        list.setAdapter(new ListAdapter(activity, lists, this));
     }
 
     @Override
