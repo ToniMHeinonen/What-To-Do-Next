@@ -8,6 +8,7 @@ public abstract class GlobalPrefs {
 
     private static String keyPrefs;
     private static String keyCurrentList = "current_list";
+    private static String keyListVoteSize = "list_vote_size";
 
     /**
      * Loads the saved values from file.
@@ -23,8 +24,14 @@ public abstract class GlobalPrefs {
     }
 
     public static void saveCurrentList(String listID) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(keyCurrentList, listID);
-        editor.commit();
+        prefs.edit().putString(keyCurrentList, listID).commit();
+    }
+
+    public static int loadListVoteSize() {
+        return prefs.getInt(keyListVoteSize, 7);
+    }
+
+    public static void saveListVoteSize(int listVoteSize) {
+        prefs.edit().putInt(keyListVoteSize, listVoteSize).commit();
     }
 }

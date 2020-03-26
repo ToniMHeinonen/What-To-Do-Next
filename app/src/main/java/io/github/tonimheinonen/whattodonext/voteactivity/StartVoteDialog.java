@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,6 +23,7 @@ import io.github.tonimheinonen.whattodonext.Buddy;
 import io.github.tonimheinonen.whattodonext.ClickListenerDialog;
 import io.github.tonimheinonen.whattodonext.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.Debug;
+import io.github.tonimheinonen.whattodonext.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.ListAndProfileAdapter;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.MainActivity;
@@ -32,7 +36,12 @@ public class StartVoteDialog extends ClickListenerDialog implements
         View.OnClickListener {
 
     private VoteActivity activity;
+
     private ArrayList<ListOfItems> lists;
+    private ArrayList<String> listNames = new ArrayList<>();
+    private int startingListPosition;
+    private ListOfItems selectedList;
+
     private ArrayList<Profile> profiles;
     private ArrayList<Profile> selectedProfiles = new ArrayList<>();
 
@@ -44,6 +53,16 @@ public class StartVoteDialog extends ClickListenerDialog implements
         this.activity = a;
         this.lists = lists;
         this.profiles = profiles;
+
+        String currentListId = GlobalPrefs.loadCurrentList();
+        for (int i = 0; i < lists.size(); i++) {
+            ListOfItems list = lists.get(i);
+            listNames.add(list.getName());
+
+            if (list.getDbID().equals(currentListId)) {
+                startingListPosition = i;
+            }
+        }
     }
 
     @Override
@@ -51,6 +70,24 @@ public class StartVoteDialog extends ClickListenerDialog implements
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.start_vote_dialog);
+
+        // Setup saved lists spinner
+        Spinner spinner = findViewById(R.id.listsSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
+                android.R.layout.simple_spinner_item, listNames);
+
+        spinner.setAdapter(adapter);
+        spinner.setSelection(startingListPosition);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedList = lists.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
         // Set listeners for confirm and cancel
         findViewById(R.id.back).setOnClickListener(this);
@@ -71,6 +108,7 @@ public class StartVoteDialog extends ClickListenerDialog implements
                 dismiss();
                 break;
             case R.id.start:
+                startVoting();
                 break;
             case R.id.addProfile:
                 addNewProfile();
@@ -133,5 +171,15 @@ public class StartVoteDialog extends ClickListenerDialog implements
         profiles.remove(selected);
 
         profileListAdapter.notifyDataSetChanged();
+    }
+
+    private void startVoting() {
+        if (selectedProfiles.isEmpty()) {
+            Buddy.showToast(Buddy.getString(R.string.toast_selected_profiles_empty));
+            return;
+        }
+
+        DatabaseHandler.getItems(activity, selectedList);
+        dismiss();
     }
 }

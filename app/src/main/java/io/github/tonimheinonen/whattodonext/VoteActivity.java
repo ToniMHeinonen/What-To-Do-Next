@@ -64,15 +64,26 @@ public class VoteActivity extends AppCompatActivity implements OnGetDataListener
     }
 
     @Override
-    public void onDataGetItems(ArrayList<ListItem> items) {
-
-    }
-
-    @Override
     public void onDataGetProfiles(ArrayList<Profile> profiles) {
         this.profiles = profiles;
 
-        StartVoteDialog dialog = new StartVoteDialog(this, lists, this.profiles);
+        showStartVoteDialog();
+    }
+
+    @Override
+    public void onDataGetItems(ArrayList<ListItem> items) {
+        if (items.size() < GlobalPrefs.loadListVoteSize()) {
+            Buddy.showToast(Buddy.getString(R.string.toast_not_enough_activities));
+
+            showStartVoteDialog();
+            return;
+        }
+
+        // Start voting
+    }
+
+    private void showStartVoteDialog() {
+        StartVoteDialog dialog = new StartVoteDialog(this, lists, profiles);
         dialog.show();
     }
 }
