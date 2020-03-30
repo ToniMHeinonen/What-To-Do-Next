@@ -10,4 +10,12 @@
     android:layout_marginEnd="50dp"
     tools:context=".VoteActivity">
 
+    <RelativeLayout
+        style="@style/GenericProgressBackground"
+        android:id="@+id/loadingPanel">
+
+        <ProgressBar
+            style="@style/GenericProgressIndicator"/>
+    </RelativeLayout>
+
 </LinearLayout>

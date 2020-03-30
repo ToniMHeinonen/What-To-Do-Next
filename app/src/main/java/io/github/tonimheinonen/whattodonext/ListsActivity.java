@@ -71,6 +71,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
         sortList(curSort, false);
 
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
         showListItems();
     }
 
@@ -118,6 +119,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         if (curList != lists.get(listIndex)) {
             curList = lists.get(listIndex);
             GlobalPrefs.saveCurrentList(curList.getDbID());
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
             DatabaseHandler.getItems(this, curList);
         }
     }
