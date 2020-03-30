@@ -18,10 +18,10 @@ import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
-public class VoteActivity extends AppCompatActivity implements OnGetDataListener,
+public class StartVoteActivity extends AppCompatActivity implements OnGetDataListener,
         View.OnClickListener {
 
-    private VoteActivity _this = this;
+    private StartVoteActivity _this = this;
 
     private ArrayList<ListOfItems> lists = new ArrayList<>();
     private ArrayList<Profile> profiles = new ArrayList<>();
@@ -35,7 +35,7 @@ public class VoteActivity extends AppCompatActivity implements OnGetDataListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vote);
+        setContentView(R.layout.activity_start_vote);
     }
 
     //////////////////////// LOAD DATA FROM FIREBASE ////////////////////////

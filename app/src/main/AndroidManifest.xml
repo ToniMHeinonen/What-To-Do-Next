@@ -15,7 +15,7 @@
         <activity android:name=".database.LoginActivity" />
         <activity android:name=".database.SignupActivity" />
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".VoteActivity" />
+        <activity android:name=".StartVoteActivity" />
         <activity android:name=".ListsActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

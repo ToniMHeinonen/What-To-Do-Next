@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_margin="50dp"
-    tools:context=".VoteActivity"
+    tools:context=".StartVoteActivity"
     android:focusable="true"
     android:focusableInTouchMode="true">
 

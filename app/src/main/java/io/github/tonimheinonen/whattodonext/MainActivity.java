@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent;
 
         if (v.getId() == R.id.voteButton) {
-            intent = new Intent(this, VoteActivity.class);
+            intent = new Intent(this, StartVoteActivity.class);
         } else if (v.getId() == R.id.listButton) {
             intent = new Intent(this, ListsActivity.class);
         } else if (v.getId() == R.id.settingsButton) {
