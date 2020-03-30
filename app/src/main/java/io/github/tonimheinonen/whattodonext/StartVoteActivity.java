@@ -94,8 +94,6 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
 
         if (items.size() < firstTopAmount) {
             Buddy.showToast(Buddy.getString(R.string.toast_not_enough_activities));
-
-            //showStartVoteDialog();
             return;
         }
 
