@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".voteactivity.VoteTopActivity"></activity>
         <activity android:name=".database.ForgotPasswordActivity" />
         <activity android:name=".database.LoginActivity" />
         <activity android:name=".database.SignupActivity" />

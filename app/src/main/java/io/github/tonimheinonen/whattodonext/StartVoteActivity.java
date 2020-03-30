@@ -4,6 +4,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
+import io.github.tonimheinonen.whattodonext.voteactivity.VoteMaster;
+import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -89,14 +91,25 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
 
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
-        if (items.size() < GlobalPrefs.loadListVoteSize()) {
+        int firstTopAmount = GlobalPrefs.loadListVoteSizeFirst();
+
+        if (items.size() < firstTopAmount) {
             Buddy.showToast(Buddy.getString(R.string.toast_not_enough_activities));
 
             //showStartVoteDialog();
             return;
         }
 
-        // Start voting
+        selectedList.setItems(items); // Put loaded items to selected list
+
+        // Pass selected list and profiles to master class
+        VoteMaster.setSelectedList(selectedList);
+        VoteMaster.setSelectedProfiles(selectedProfiles);
+
+        // Move to voting top list
+        Intent intent = new Intent(this, VoteTopActivity.class);
+        intent.putExtra("amount", firstTopAmount);
+        startActivity(intent);
     }
 
     //////////////////////// INITIALIZE VIEWS ////////////////////////

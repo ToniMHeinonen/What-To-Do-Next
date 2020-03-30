@@ -8,7 +8,8 @@ public abstract class GlobalPrefs {
 
     private static String keyPrefs;
     private static String keyCurrentList = "current_list";
-    private static String keyListVoteSize = "list_vote_size";
+    private static String keyListVoteSizeFirst = "list_vote_size_first";
+    private static String keyListVoteSizeSecond = "list_vote_size_second";
 
     /**
      * Loads the saved values from file.
@@ -27,11 +28,19 @@ public abstract class GlobalPrefs {
         prefs.edit().putString(keyCurrentList, listID).commit();
     }
 
-    public static int loadListVoteSize() {
-        return prefs.getInt(keyListVoteSize, 7);
+    public static int loadListVoteSizeFirst() {
+        return prefs.getInt(keyListVoteSizeFirst, 7);
     }
 
-    public static void saveListVoteSize(int listVoteSize) {
-        prefs.edit().putInt(keyListVoteSize, listVoteSize).commit();
+    public static void saveListVoteSizeFirst(int listVoteSize) {
+        prefs.edit().putInt(keyListVoteSizeFirst, listVoteSize).apply();
+    }
+
+    public static int loadListVoteSizeSecond() {
+        return prefs.getInt(keyListVoteSizeSecond, 5);
+    }
+
+    public static void saveListVoteSizeSecond(int listVoteSize) {
+        prefs.edit().putInt(keyListVoteSizeSecond, listVoteSize).apply();
     }
 }
