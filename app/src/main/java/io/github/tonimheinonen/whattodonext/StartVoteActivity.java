@@ -4,7 +4,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
-import io.github.tonimheinonen.whattodonext.voteactivity.VoteMaster;
 import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
 
 import android.content.DialogInterface;
@@ -102,13 +101,11 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
 
         selectedList.setItems(items); // Put loaded items to selected list
 
-        // Pass selected list and profiles to master class
-        VoteMaster.setSelectedList(selectedList);
-        VoteMaster.setSelectedProfiles(selectedProfiles);
-
         // Move to voting top list
         Intent intent = new Intent(this, VoteTopActivity.class);
-        intent.putExtra("amount", firstTopAmount);
+        intent.putExtra("topAmount", firstTopAmount);
+        intent.putExtra("selectedList", selectedList);
+        intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
         startActivity(intent);
     }
 

@@ -1,5 +1,8 @@
 package io.github.tonimheinonen.whattodonext.listsactivity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -7,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class ListItem {
+public class ListItem implements Parcelable {
 
     private String listID;
     private String name;
@@ -86,4 +89,52 @@ public class ListItem {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ListItem{" +
+                "listID='" + listID + '\'' +
+                ", name='" + name + '\'' +
+                ", bonus=" + bonus +
+                ", peril=" + peril +
+                ", dbID='" + dbID + '\'' +
+                ", total=" + total +
+                '}';
+    }
+
+    ////////////////////////// PARCELABLE //////////////////////////
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(dbID);
+        dest.writeString(listID);
+        dest.writeString(name);
+        dest.writeInt(bonus);
+        dest.writeInt(peril);
+        dest.writeInt(total);
+    }
+
+    public ListItem(Parcel in) {
+        dbID = in.readString();
+        listID = in.readString();
+        name = in.readString();
+        bonus = in.readInt();
+        peril = in.readInt();
+        total = in.readInt();
+    }
+
+    public static final Parcelable.Creator<ListItem> CREATOR = new Parcelable.Creator<ListItem>() {
+        public ListItem createFromParcel(Parcel in) {
+            return new ListItem(in);
+        }
+
+        public ListItem[] newArray(int size) {
+            return new ListItem[size];
+        }
+    };
 }

@@ -1,5 +1,8 @@
 package io.github.tonimheinonen.whattodonext.listsactivity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -10,7 +13,7 @@ import java.util.Map;
 import io.github.tonimheinonen.whattodonext.DatabaseValue;
 
 @IgnoreExtraProperties
-public class ListOfItems implements DatabaseValue {
+public class ListOfItems implements DatabaseValue, Parcelable {
 
     private String name;
 
@@ -64,4 +67,42 @@ public class ListOfItems implements DatabaseValue {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "ListOfItems{" +
+                "name='" + name + '\'' +
+                ", dbID='" + dbID + '\'' +
+                '}';
+    }
+
+    ////////////////////////// PARCELABLE //////////////////////////
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(dbID);
+        dest.writeString(name);
+        dest.writeList(items);
+    }
+
+    public ListOfItems(Parcel in) {
+        dbID = in.readString();
+        name = in.readString();
+        items = in.readArrayList(ListItem.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<ListOfItems> CREATOR = new Parcelable.Creator<ListOfItems>() {
+        public ListOfItems createFromParcel(Parcel in) {
+            return new ListOfItems(in);
+        }
+
+        public ListOfItems[] newArray(int size) {
+            return new ListOfItems[size];
+        }
+    };
 }
