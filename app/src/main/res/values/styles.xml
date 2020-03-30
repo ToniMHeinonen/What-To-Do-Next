@@ -29,11 +29,12 @@
         <item name="android:textSize">15sp</item>
     </style>
 
-    <!-- Loading icon -->
+    <!-- LOADING ICON -->
     <style name="GenericProgressBackground" parent="android:Theme">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:gravity">center</item>
+        <item name="android:visibility">gone</item>
     </style>
     <style name="GenericProgressIndicator" parent="@android:style/Widget.ProgressBar">
         <item name="android:layout_width">wrap_content</item>
@@ -41,7 +42,7 @@
         <item name="android:indeterminate">true</item>
     </style>
 
-    <!-- LISTS_ACTIVITY-->
+    <!-- LISTS ACTIVITY -->
     <style name="listsTopics">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">0dp</item>
@@ -59,7 +60,15 @@
 
     <style name="listsTopicsPoints" parent="listsTopics">
         <item name="android:layout_weight">@dimen/list_points_weight</item>
+    </style>
 
+    <!-- VOTE ACTIVITY -->
+    <style name="voteButtons">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

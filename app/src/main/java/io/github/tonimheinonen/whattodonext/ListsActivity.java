@@ -46,6 +46,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         vPeril = findViewById(R.id.peril);
         originalTextColor = vName.getCurrentTextColor();
 
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
         DatabaseHandler.getLists(this);
     }
 

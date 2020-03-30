@@ -4,11 +4,10 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_marginTop="100dp"
-    android:layout_marginBottom="100dp"
-    android:layout_marginStart="50dp"
-    android:layout_marginEnd="50dp"
-    tools:context=".VoteActivity">
+    android:layout_margin="50dp"
+    tools:context=".VoteActivity"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         style="@style/GenericProgressBackground"
@@ -17,5 +16,101 @@
         <ProgressBar
             style="@style/GenericProgressIndicator"/>
     </RelativeLayout>
+
+    <!-- LIST -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/select_list"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <Spinner
+            android:id="@+id/listsSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:spinnerMode="dropdown"/>
+
+    </LinearLayout>
+
+    <!-- VOTERS -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/select_voters"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/newProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:hint="@string/new_profile"
+                android:textSize="25sp"
+                android:maxLength="15"/>
+
+            <Button
+                android:id="@+id/addProfile"
+                style="@style/voteButtons"
+                android:text="@string/lists_add"
+                android:background="#0F0"/>
+
+        </LinearLayout>
+
+        <ListView
+            android:id = "@+id/savedProfiles"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            android:divider="#000"
+            android:dividerHeight="1dp"/>
+
+    </LinearLayout>
+
+    <!-- START & BACK -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_vertical">
+
+        <Button
+            android:id="@+id/back"
+            style="@style/voteButtons"
+            android:text="@string/lists_back"
+            android:background="#F00" />
+
+        <Button
+            android:id="@+id/start"
+            style="@style/voteButtons"
+            android:text="@string/start_vote"
+            android:background="@color/colorPrimary"/>
+    </LinearLayout>
 
 </LinearLayout>

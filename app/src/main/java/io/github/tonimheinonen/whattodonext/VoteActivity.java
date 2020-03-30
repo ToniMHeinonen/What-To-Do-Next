@@ -4,22 +4,33 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
-import io.github.tonimheinonen.whattodonext.voteactivity.StartVoteDialog;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
-public class VoteActivity extends AppCompatActivity implements OnGetDataListener {
+public class VoteActivity extends AppCompatActivity implements OnGetDataListener,
+        View.OnClickListener {
 
     private VoteActivity _this = this;
 
     private ArrayList<ListOfItems> lists = new ArrayList<>();
     private ArrayList<Profile> profiles = new ArrayList<>();
+
+    // Setup voting options
+    private ListOfItems selectedList;
+    private ListAndProfileAdapter profileListAdapter;
+    private int profileTextDefaultColor = -1;
+    private ArrayList<Profile> selectedProfiles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +38,12 @@ public class VoteActivity extends AppCompatActivity implements OnGetDataListener
         setContentView(R.layout.activity_vote);
     }
 
+    //////////////////////// LOAD DATA FROM FIREBASE ////////////////////////
+
     @Override
     protected void onStart() {
         super.onStart();
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
         DatabaseHandler.getLists(this);
     }
 
@@ -70,7 +84,7 @@ public class VoteActivity extends AppCompatActivity implements OnGetDataListener
         this.profiles = profiles;
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
-        showStartVoteDialog();
+        initializeVotingSetup();
     }
 
     @Override
@@ -78,15 +92,136 @@ public class VoteActivity extends AppCompatActivity implements OnGetDataListener
         if (items.size() < GlobalPrefs.loadListVoteSize()) {
             Buddy.showToast(Buddy.getString(R.string.toast_not_enough_activities));
 
-            showStartVoteDialog();
+            //showStartVoteDialog();
             return;
         }
 
         // Start voting
     }
 
-    private void showStartVoteDialog() {
-        StartVoteDialog dialog = new StartVoteDialog(this, lists, profiles);
-        dialog.show();
+    //////////////////////// INITIALIZE VIEWS ////////////////////////
+
+    private void initializeVotingSetup() {
+        // Setup saved lists spinner
+        ArrayList<String> listNames = new ArrayList<>();
+        int startingListPosition = -1;
+
+        String currentListId = GlobalPrefs.loadCurrentList();
+        for (int i = 0; i < lists.size(); i++) {
+            ListOfItems list = lists.get(i);
+            listNames.add(list.getName());
+
+            if (list.getDbID().equals(currentListId)) {
+                startingListPosition = i;
+            }
+        }
+
+        Spinner spinner = findViewById(R.id.listsSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner, listNames);
+
+        spinner.setAdapter(adapter);
+        spinner.setSelection(startingListPosition);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedList = lists.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // Set listeners for confirm and cancel
+        findViewById(R.id.back).setOnClickListener(this);
+        findViewById(R.id.start).setOnClickListener(this);
+        findViewById(R.id.addProfile).setOnClickListener(this);
+
+        // Add profiles to ListView
+        final ListView profileListView = findViewById(R.id.savedProfiles);
+        profileListAdapter = new ListAndProfileAdapter(this, profiles, this);
+        profileListView.setAdapter(profileListAdapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                startActivity(new Intent(this, MainActivity.class));
+                break;
+            case R.id.start:
+                startVoting();
+                break;
+            case R.id.addProfile:
+                addNewProfile();
+                break;
+            case R.id.savedName:
+                profileClicked(v);
+                break;
+            case R.id.savedDelete:
+                deleteProfile(v);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void addNewProfile() {
+        EditText profileTextView = findViewById(R.id.newProfile);
+        String name = profileTextView.getText().toString();
+        if (name.isEmpty()) {
+            Buddy.showToast(Buddy.getString(R.string.toast_profile_empty));
+            return;
+        }
+
+        Buddy.hideKeyboardAndClear(profileTextView);
+
+        Profile profile = new Profile(name);
+        DatabaseHandler.addProfile(profile);
+        profiles.add(profile);
+        profileListAdapter.notifyDataSetChanged();
+    }
+
+    private void profileClicked(View v) {
+        Profile selected = profiles.get((int) v.getTag());
+
+        Button btn = (Button) v;
+
+        if (profileTextDefaultColor == -1) {
+            profileTextDefaultColor = btn.getCurrentTextColor();
+        }
+
+        if (selectedProfiles.contains(selected)) {
+            selectedProfiles.remove(selected);
+            btn.setTextColor(profileTextDefaultColor);
+        } else {
+            selectedProfiles.add(selected);
+            btn.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    private void deleteProfile(View v) {
+        Profile selected = profiles.get((int) v.getTag());
+
+        if (selectedProfiles.contains(selected)) {
+            Buddy.showToast(Buddy.getString(R.string.toast_cant_delete_selected));
+            return;
+        }
+
+        DatabaseHandler.removeProfile(selected);
+
+        profiles.remove(selected);
+
+        profileListAdapter.notifyDataSetChanged();
+    }
+
+    private void startVoting() {
+        if (selectedProfiles.isEmpty()) {
+            Buddy.showToast(Buddy.getString(R.string.toast_selected_profiles_empty));
+            return;
+        }
+
+        DatabaseHandler.getItems(this, selectedList);
     }
 }
