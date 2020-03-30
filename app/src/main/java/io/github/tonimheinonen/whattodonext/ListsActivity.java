@@ -7,7 +7,6 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListItemAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +26,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private String curListId = "";
 
     private ArrayList<ListOfItems> lists = new ArrayList<>();
+    private ListView list;
+    private ListItemAdapter adapter;
 
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
@@ -70,37 +71,42 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     public void onDataGetItems(ArrayList<ListItem> items) {
         curList.setItems(items);
 
-        sortList(curSort, false);
-
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
-        showListItems();
+        createListItems();
+        updateListItems();
     }
 
     @Override
     public void onDataGetProfiles(ArrayList<Profile> profiles) {}
 
-    public void showListItems() {
-        final ListView list = findViewById(R.id.list);
+    public void createListItems() {
+        list = findViewById(R.id.list);
+        adapter = new ListItemAdapter(this, curList.getItems());
 
-        list.setAdapter(new ListItemAdapter(this, curList.getItems()));
+        list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListItem item = (ListItem) list.getItemAtPosition(position);
                 ListItemDialog dialog = new ListItemDialog(_this, item);
                 dialog.show();
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        showListItems();
-                    }
-                });
             }
         });
     }
 
+    private void updateListItems() {
+        if (list == null)
+            return;
+
+        sortList();
+
+        if (list.getAdapter() != null)
+            adapter.notifyDataSetChanged();
+        else
+            createListItems();
+    }
+
     private void hideListItems() {
-        final ListView list = findViewById(R.id.list);
         list.setAdapter(null);
     }
 
@@ -109,8 +115,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     public void addList(String name) {
         ListOfItems list = new ListOfItems(name);
-        curList = list;
-        showListItems();
+        updateListItems();
 
         lists.add(list);
         DatabaseHandler.addList(curList);
@@ -139,10 +144,21 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     /*//////////////////// ITEM DIALOG ////////////////////*/
 
+    public void addItem(ListItem item) {
+        curList.getItems().add(item);
+        DatabaseHandler.addItem(curList, item);
+
+        updateListItems();
+    }
+
     public void modifyItem(ListItem item) {
+        if (!curList.getItems().contains(item)) {
+            addItem(item);
+            return;
+        }
+
         DatabaseHandler.modifyItem(item);
-        sortList(curSort, false);
-        showListItems();
+        updateListItems();
     }
 
     private void deleteItem(ListItem item) {
@@ -170,7 +186,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
                 break;
         }
 
-        sortList(sort, true);
+        invertSortOrder(sort);
+        curSort = sort;
+        updateListItems();
     }
 
     private void changeColor(int selected) {
@@ -191,15 +209,17 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
                 originalTextColor);
     }
 
-    private void sortList(final int sort, boolean topicClicked) {
-        changeColor(sort);
-
+    private void invertSortOrder(int sort) {
         // If new sort is same as current, reverse order
-        if (sort == curSort && topicClicked) {
+        if (sort == curSort) {
             ascending = !ascending;
         }
+    }
 
-        switch (sort) {
+    private void sortList() {
+        changeColor(curSort);
+
+        switch (curSort) {
             case NAME:
                 Collections.sort(curList.getItems(), new Comparator<ListItem>() {
                     public int compare(ListItem o1, ListItem o2) {
@@ -237,9 +257,6 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
                 });
                 break;
         }
-
-        curSort = sort;
-        showListItems();
     }
 
     /*//////////////////// TOP BAR BUTTONS ////////////////////*/
@@ -251,20 +268,16 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
 
         final ListItem item = new ListItem("", 0, 0);
-        curList.getItems().add(item);
-        DatabaseHandler.addItem(curList, item);
         ListItemDialog dialog = new ListItemDialog(this, item);
         dialog.show();
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                deleteItem(item);
-            }
-        });
     }
 
     public void listClicked(View v) {
         ListDialog dialog = new ListDialog(this, lists);
         dialog.show();
+    }
+
+    public void backClicked(View v) {
+        super.onBackPressed();
     }
 }

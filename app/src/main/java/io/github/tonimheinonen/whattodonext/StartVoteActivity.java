@@ -158,7 +158,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                startActivity(new Intent(this, MainActivity.class));
+                super.onBackPressed();
                 break;
             case R.id.start:
                 startVoting();
