@@ -74,7 +74,7 @@ public class StartVoteDialog extends ClickListenerDialog implements
         // Setup saved lists spinner
         Spinner spinner = findViewById(R.id.listsSpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
-                android.R.layout.simple_spinner_item, listNames);
+                R.layout.custom_spinner, listNames);
 
         spinner.setAdapter(adapter);
         spinner.setSelection(startingListPosition);
