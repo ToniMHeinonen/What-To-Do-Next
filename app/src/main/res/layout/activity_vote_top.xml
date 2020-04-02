@@ -7,6 +7,30 @@
     android:layout_margin="50dp"
     tools:context=".voteactivity.VoteTopActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="@string/vote_back"
+            android:onClick="backPressed"/>
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/vote_next"
+            android:visibility="invisible"
+            android:onClick="nextPressed"/>
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/profileName"
         android:layout_width="wrap_content"

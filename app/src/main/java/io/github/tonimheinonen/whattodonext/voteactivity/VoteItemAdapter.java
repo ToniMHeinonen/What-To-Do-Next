@@ -52,7 +52,8 @@ public class VoteItemAdapter extends BaseAdapter {
             itemName.setText(data.get(position).getName());
 
             TextView itemVoteAmount = view.findViewById(R.id.voteAmount);
-            itemVoteAmount.setText(String.valueOf(data.get(position).getCurrentVotePoints()));
+            int points = data.get(position).getCurrentVotePoints();
+            itemVoteAmount.setText(points == 0 ? "" : String.valueOf(points));
         }
 
         return view;

@@ -18,6 +18,12 @@
     <string name="toast_selected_profiles_empty">You need to select at least 1 profile!</string>
     <string name="toast_not_enough_activities">Current list does not have enough activities!</string>
 
+    <!-- VoteTopActivity -->
+    <string name="vote_next">Next</string>
+    <string name="vote_back">Back</string>
+    <string name="give_points_to">Give %1$d points to?</string>
+    <string name="vote_ready">Tap %1$s to continue</string>
+
     <!-- ListsActivity -->
     <string name="lists_add">Add</string>
     <string name="lists_list">List</string>

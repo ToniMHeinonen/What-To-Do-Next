@@ -125,6 +125,10 @@ public class ListItem implements Parcelable {
         return currentVotePoints;
     }
 
+    public void clearVotePoints() {
+        currentVotePoints = 0;
+    }
+
 ////////////////////////// PARCELABLE //////////////////////////
 
     @Override

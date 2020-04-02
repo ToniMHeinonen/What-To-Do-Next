@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,6 +28,7 @@ public class VoteTopActivity extends AppCompatActivity {
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
 
+    private Button nextButton;
     private TextView profileView, infoView;
     private VoteItemAdapter adapter;
 
@@ -44,16 +46,13 @@ public class VoteTopActivity extends AppCompatActivity {
         selectedList = intent.getExtras().getParcelable("selectedList");
         selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
 
-        for (int i = topAmount; i > 0; i--) {
-            votePoints.add(i);
-        }
-
         profileView = findViewById(R.id.profileName);
         infoView = findViewById(R.id.voteInfoText);
+        nextButton = findViewById(R.id.nextButton);
 
         setupVoteItems();
 
-        //startVoting();
+        startVoting();
     }
 
     private void setupVoteItems() {
@@ -88,25 +87,57 @@ public class VoteTopActivity extends AppCompatActivity {
     }
 
     private void removeVotePoint() {
-        votePoints.remove(Integer.valueOf(currentVotePoint));
-        updateVoteItems();
+        votePoints.remove(0);
 
-        if (votePoints.isEmpty()) {
-            // Show next buttons
-        } else {
+        if (!votePoints.isEmpty()) {
             currentVotePoint = votePoints.get(0);
         }
+
+        updateVoteItems();
     }
 
     private void updateVoteItems() {
+        if (!votePoints.isEmpty()) {
+            infoView.setText(getString(R.string.give_points_to, currentVotePoint));
+            nextButton.setVisibility(View.INVISIBLE);
+        } else {
+            nextButton.setVisibility(View.VISIBLE);
+            infoView.setText(getString(R.string.vote_ready, getString(R.string.vote_next)));
+        }
         adapter.notifyDataSetChanged();
     }
 
     private void startVoting() {
-        int curProfileIndex = 0;
+        profileView.setText(selectedProfiles.get(currentProfileIndex).getName());
 
-        while (curProfileIndex < selectedProfiles.size()) {
+        for (int i = topAmount; i > 0; i--) {
+            votePoints.add(i);
+        }
 
+        currentVotePoint = votePoints.get(0);
+
+        for (ListItem item : selectedList.getItems()) {
+            item.clearVotePoints();
+        }
+
+        updateVoteItems();
+    }
+
+    public void backPressed(View v) {
+        currentProfileIndex--;
+
+        if (currentProfileIndex == -1) {
+            super.onBackPressed();
+        }
+    }
+
+    public void nextPressed(View v) {
+        currentProfileIndex++;
+
+        if (currentProfileIndex == selectedProfiles.size()) {
+            // Move to next acitivity
+        } else {
+            startVoting();
         }
     }
 }
