@@ -2,8 +2,11 @@ package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.Buddy;
+import io.github.tonimheinonen.whattodonext.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.Debug;
 import io.github.tonimheinonen.whattodonext.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.MainActivity;
+import io.github.tonimheinonen.whattodonext.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.Profile;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
@@ -13,6 +16,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
 import java.lang.reflect.Array;
@@ -20,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class VoteResultsActivity extends AppCompatActivity {
+public class VoteResultsActivity extends AppCompatActivity implements OnGetDataListener {
 
     private boolean lastResults;
     private int topAmount;
@@ -38,6 +42,11 @@ public class VoteResultsActivity extends AppCompatActivity {
         selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
 
         lastResults = topAmount == GlobalPrefs.loadListVoteSizeSecond();
+
+        if (lastResults) {
+            Button next = findViewById(R.id.nextButton);
+            next.setText(getString(R.string.save_and_exit));
+        }
 
         calculateVotePoints();
         setupItemList();
@@ -112,10 +121,45 @@ public class VoteResultsActivity extends AppCompatActivity {
     }
 
     public void nextPressed(View v) {
-
+        if (lastResults) {
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+            DatabaseHandler.getItems(this, selectedList);
+        } else {
+            // Proceed to next voting
+            Intent intent = new Intent(this, VoteTopActivity.class);
+            intent.putExtra("topAmount", GlobalPrefs.loadListVoteSizeSecond());
+            intent.putExtra("selectedList", selectedList);
+            intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
+            startActivity(intent);
+        }
     }
 
     public void exitPressed(View v) {
         Buddy.exitVoting(this);
     }
+
+    @Override
+    public void onDataGetItems(ArrayList<ListItem> items) {
+        ArrayList<ListItem> itemsLeft = selectedList.getItems();
+
+        // NOT WORKING SINCE ITEMS ARE NOT EQUAL
+        for (ListItem item : items) {
+            if (itemsLeft.contains(item)) {
+                item.setBonus(item.getBonus() + 1);
+            } else {
+                item.setPeril(item.getPeril() + 1);
+            }
+
+            DatabaseHandler.modifyItem(item);
+        }
+
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    @Override
+    public void onDataGetLists(ArrayList<ListOfItems> lists) {}
+
+    @Override
+    public void onDataGetProfiles(ArrayList<Profile> profiles) {}
 }
