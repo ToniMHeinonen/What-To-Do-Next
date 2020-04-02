@@ -16,6 +16,7 @@ public class ListItem implements Parcelable {
     private String name;
     private int bonus;
     private int peril;
+    private boolean fallen;
 
     @Exclude
     private String dbID;
@@ -66,6 +67,14 @@ public class ListItem implements Parcelable {
         this.total = this.bonus + this.peril;
     }
 
+    public boolean isFallen() {
+        return fallen;
+    }
+
+    public void setFallen(boolean fallen) {
+        this.fallen = fallen;
+    }
+
     public String getListID() {
         return listID;
     }
@@ -89,6 +98,7 @@ public class ListItem implements Parcelable {
         result.put("name", name);
         result.put("bonus", bonus);
         result.put("peril", peril);
+        result.put("fallen", fallen);
 
         return result;
     }

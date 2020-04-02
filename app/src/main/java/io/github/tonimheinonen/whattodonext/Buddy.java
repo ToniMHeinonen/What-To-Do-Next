@@ -11,6 +11,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
@@ -53,6 +55,17 @@ public abstract class Buddy {
                         o2.getName().compareTo(o1.getName());
             }
         });
+    }
+
+    public static void filterListByFallen(ArrayList<ListItem> items, boolean getFallen) {
+        Iterator<ListItem> i = items.iterator();
+        while (i.hasNext()) {
+            ListItem item = i.next();
+
+            // If item fallen is not same as parameter fallen, remove from list
+            if (item.isFallen() != getFallen)
+                i.remove();
+        }
     }
 
     public static void exitVoting(final Activity activity) {

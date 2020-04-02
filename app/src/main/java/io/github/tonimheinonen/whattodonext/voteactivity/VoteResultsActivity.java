@@ -142,12 +142,33 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
     public void onDataGetItems(ArrayList<ListItem> items) {
         ArrayList<ListItem> itemsLeft = selectedList.getItems();
 
-        // NOT WORKING SINCE ITEMS ARE NOT EQUAL
+        // Loop through all items and calculate bonus and peril
         for (ListItem item : items) {
-            if (itemsLeft.contains(item)) {
+            boolean contains = false;
+
+            // If item is inside itemsLeft
+            for (ListItem itemLeft : itemsLeft) {
+                if (item.getDbID().equals(itemLeft.getDbID())) {
+                    contains = true;
+                    itemsLeft.remove(itemLeft);
+                    break;
+                }
+            }
+
+            Debug.print(this, "onDataGetItems", item.toString(), 1);
+
+            // If item made it to final results, add bonus point
+            if (contains) {
                 item.setBonus(item.getBonus() + 1);
+                Debug.print(this, "true","", 1);
             } else {
                 item.setPeril(item.getPeril() + 1);
+                Debug.print(this, "false","", 1);
+
+                if (item.getPeril() > GlobalPrefs.loadMaxPerilPoints()) {
+                    item.setPeril(0);
+                    item.setFallen(true);
+                }
             }
 
             DatabaseHandler.modifyItem(item);

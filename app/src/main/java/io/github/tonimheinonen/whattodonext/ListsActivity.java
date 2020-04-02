@@ -70,6 +70,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
         curList.setItems(items);
+        Buddy.filterListByFallen(curList.getItems(), false);
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
         createListItems();
@@ -95,7 +96,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     }
 
     private void updateListItems() {
-        if (list == null)
+        if (list == null || curList == null)
             return;
 
         sortList();
@@ -115,15 +116,17 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     public void addList(String name) {
         ListOfItems list = new ListOfItems(name);
+        curList = list;
         updateListItems();
 
         lists.add(list);
-        DatabaseHandler.addList(curList);
+        DatabaseHandler.addList(list);
     }
 
     public void loadList(int listIndex) {
         if (curList != lists.get(listIndex)) {
             curList = lists.get(listIndex);
+            Buddy.filterListByFallen(curList.getItems(), false);
             GlobalPrefs.saveCurrentList(curList.getDbID());
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
             DatabaseHandler.getItems(this, curList);

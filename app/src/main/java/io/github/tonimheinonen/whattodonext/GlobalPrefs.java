@@ -8,6 +8,7 @@ public abstract class GlobalPrefs {
 
     private static String keyPrefs;
     private static String keyCurrentList = "current_list";
+    private static String keyMaxPerilPoints = "max_peril_points";
     private static String keyListVoteSizeFirst = "list_vote_size_first";
     private static String keyListVoteSizeSecond = "list_vote_size_second";
 
@@ -42,5 +43,13 @@ public abstract class GlobalPrefs {
 
     public static void saveListVoteSizeSecond(int listVoteSize) {
         prefs.edit().putInt(keyListVoteSizeSecond, listVoteSize).apply();
+    }
+
+    public static int loadMaxPerilPoints() {
+        return prefs.getInt(keyMaxPerilPoints, 5);
+    }
+
+    public static void saveMaxPerilPoints(int maxPerilPoints) {
+        prefs.edit().putInt(keyMaxPerilPoints, maxPerilPoints).apply();
     }
 }
