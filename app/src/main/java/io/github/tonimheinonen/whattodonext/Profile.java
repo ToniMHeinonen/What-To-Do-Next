@@ -19,6 +19,9 @@ public class Profile implements DatabaseValue, Parcelable {
     @Exclude
     private String dbID;
 
+    @Exclude
+    private ListItem[] votedItems;
+
     public Profile() {
         // Default constructor required for calls to DataSnapshot.getValue(ListOfItems.class)
     }
@@ -57,6 +60,20 @@ public class Profile implements DatabaseValue, Parcelable {
                 "name='" + name + '\'' +
                 ", dbID='" + dbID + '\'' +
                 '}';
+    }
+
+    ////////////////////////// VOTING //////////////////////////
+
+    public void initVoteSize(int amount) {
+        votedItems = new ListItem[amount];
+    }
+
+    public void addVoteItem(int index, ListItem item) {
+        votedItems[index] = item;
+    }
+
+    public void removeVoteItem(int index) {
+        votedItems[index] = null;
     }
 
     ////////////////////////// PARCELABLE //////////////////////////

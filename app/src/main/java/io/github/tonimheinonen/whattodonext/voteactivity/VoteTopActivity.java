@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.Debug;
 import io.github.tonimheinonen.whattodonext.Profile;
 import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.StartVoteActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
@@ -32,9 +33,9 @@ public class VoteTopActivity extends AppCompatActivity {
     private TextView profileView, infoView;
     private VoteItemAdapter adapter;
 
-    private HashMap<String, ListItem> votedItems = new HashMap<>();
     private ArrayList<Integer> votePoints = new ArrayList<>();
     private int currentVotePoint, currentProfileIndex;
+    private Profile currentProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +68,13 @@ public class VoteTopActivity extends AppCompatActivity {
 
                 int value = item.modifyVotePoint(currentVotePoint);
 
-                if (value == -1)
+                if (value == -1) {
+                    currentProfile.addVoteItem(currentVotePoint - 1, item);
                     removeVotePoint();
-                else
+                } else {
+                    currentProfile.removeVoteItem(value - 1);
                     addVotePoint(value);
+                }
             }
         });
     }
@@ -108,7 +112,10 @@ public class VoteTopActivity extends AppCompatActivity {
     }
 
     private void startVoting() {
-        profileView.setText(selectedProfiles.get(currentProfileIndex).getName());
+        currentProfile = selectedProfiles.get(currentProfileIndex);
+        currentProfile.initVoteSize(topAmount);
+
+        profileView.setText(currentProfile.getName());
 
         for (int i = topAmount; i > 0; i--) {
             votePoints.add(i);
@@ -124,18 +131,21 @@ public class VoteTopActivity extends AppCompatActivity {
     }
 
     public void backPressed(View v) {
-        currentProfileIndex--;
-
-        if (currentProfileIndex == -1) {
-            super.onBackPressed();
-        }
+        finish();
+        startActivity(new Intent(this, StartVoteActivity.class));
     }
 
     public void nextPressed(View v) {
         currentProfileIndex++;
 
         if (currentProfileIndex == selectedProfiles.size()) {
-            // Move to next acitivity
+            finish();
+            // Move to results screen
+            Intent intent = new Intent(this, VoteTopActivity.class);
+            intent.putExtra("topAmount", topAmount);
+            intent.putExtra("selectedList", selectedList);
+            intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
+            startActivity(intent);
         } else {
             startVoting();
         }
