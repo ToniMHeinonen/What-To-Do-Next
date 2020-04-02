@@ -56,19 +56,19 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         if (lists.isEmpty()) {
             Debug.print(this, "onDataGetLists", "isEmpty", 1);
             new AlertDialog.Builder(this)
-                    .setTitle("No lists found!")
-                    .setMessage("Create a new list before voting.")
+                    .setTitle(getString(R.string.alert_no_lists_title))
+                    .setMessage(getString(R.string.alert_no_lists_message))
 
                     // Specifying a listener allows you to take an action before dismissing the dialog.
                     // The dialog is automatically dismissed when a dialog button is clicked.
-                    .setPositiveButton("Move to lists view", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(getString(R.string.alert_no_lists_move), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             startActivity(new Intent(_this, ListsActivity.class));
                         }
                     })
 
                     // A null listener allows the button to dismiss the dialog and take no further action.
-                    .setNegativeButton("Go back",  new DialogInterface.OnClickListener() {
+                    .setNegativeButton(getString(R.string.alert_no_lists_back),  new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             startActivity(new Intent(_this, MainActivity.class));
                         }
@@ -156,7 +156,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                super.onBackPressed();
+                onBackPressed();
                 break;
             case R.id.start:
                 startVoting();
@@ -173,6 +173,12 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     private void addNewProfile() {

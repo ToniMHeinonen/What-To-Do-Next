@@ -52,7 +52,7 @@ public class VoteTopActivity extends AppCompatActivity {
         infoView = findViewById(R.id.voteInfoText);
         nextButton = findViewById(R.id.nextButton);
 
-        Buddy.sortItemsByName(selectedList.getItems());
+        Buddy.sortItemsByName(selectedList.getItems(), true);
 
         setupVoteItems();
 
@@ -139,8 +139,7 @@ public class VoteTopActivity extends AppCompatActivity {
     }
 
     public void exitPressed(View v) {
-        finish();
-        startActivity(new Intent(this, StartVoteActivity.class));
+        Buddy.exitVoting(this);
     }
 
     public void nextPressed(View v) {

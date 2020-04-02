@@ -13,10 +13,20 @@
     <string name="select_voters">Select Voters</string>
     <string name="new_profile">New Profile</string>
     <string name="start_vote">Start</string>
+    <string name="alert_no_lists_title">No lists found!</string>
+    <string name="alert_no_lists_message">Create a new list before voting.</string>
+    <string name="alert_no_lists_move">Move to lists view</string>
+    <string name="alert_no_lists_back">Go back</string>
     <string name="toast_profile_empty">New profile name is empty!</string>
     <string name="toast_cant_delete_selected">Selected profiles can\'t be deleted!</string>
     <string name="toast_selected_profiles_empty">You need to select at least 1 profile!</string>
     <string name="toast_not_enough_activities">Current list does not have enough activities!</string>
+
+    <!-- Voting -->
+    <string name="alert_exit_title">Exit</string>
+    <string name="alert_exit_message">Are you sure you want to exit?</string>
+    <string name="alert_exit_yes">Exit</string>
+    <string name="alert_exit_no">Cancel</string>
 
     <!-- VoteTopActivity -->
     <string name="vote_next">Next</string>

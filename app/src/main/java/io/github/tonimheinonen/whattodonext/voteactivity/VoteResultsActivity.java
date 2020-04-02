@@ -1,6 +1,7 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.Buddy;
 import io.github.tonimheinonen.whattodonext.Debug;
 import io.github.tonimheinonen.whattodonext.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.Profile;
@@ -115,6 +116,6 @@ public class VoteResultsActivity extends AppCompatActivity {
     }
 
     public void exitPressed(View v) {
-
+        Buddy.exitVoting(this);
     }
 }

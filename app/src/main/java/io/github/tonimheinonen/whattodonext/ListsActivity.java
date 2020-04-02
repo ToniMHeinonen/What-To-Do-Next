@@ -221,13 +221,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
         switch (curSort) {
             case NAME:
-                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
-                    public int compare(ListItem o1, ListItem o2) {
-                        return ascending ?
-                                o1.getName().compareTo(o2.getName()) :
-                                o2.getName().compareTo(o1.getName());
-                    }
-                });
+                Buddy.sortItemsByName(curList.getItems(), ascending);
                 break;
             case TOTAL:
                 Collections.sort(curList.getItems(), new Comparator<ListItem>() {

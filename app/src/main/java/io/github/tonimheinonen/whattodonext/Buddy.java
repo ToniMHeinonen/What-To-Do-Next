@@ -1,6 +1,9 @@
 package io.github.tonimheinonen.whattodonext;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -9,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import androidx.appcompat.app.AlertDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 
 public abstract class Buddy {
@@ -41,11 +45,33 @@ public abstract class Buddy {
         return context.getResources().getString(stringID);
     }
 
-    public static void sortItemsByName(ArrayList<ListItem> items) {
+    public static void sortItemsByName(ArrayList<ListItem> items, final boolean ascending) {
         Collections.sort(items, new Comparator<ListItem>() {
             public int compare(ListItem o1, ListItem o2) {
-                return o1.getName().compareTo(o2.getName());
+                return ascending ?
+                        o1.getName().compareTo(o2.getName()) :
+                        o2.getName().compareTo(o1.getName());
             }
         });
+    }
+
+    public static void exitVoting(final Activity activity) {
+        new AlertDialog.Builder(activity)
+                .setTitle(getString(R.string.alert_exit_title))
+                .setMessage(getString(R.string.alert_exit_message))
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(getString(R.string.alert_exit_yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.startActivity(new Intent(activity, StartVoteActivity.class));
+                        activity.finish();
+                    }
+                })
+
+                // A null listener allows the button to dismiss the dialog and take no further action.
+                .setNegativeButton(getString(R.string.alert_exit_no),  null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
