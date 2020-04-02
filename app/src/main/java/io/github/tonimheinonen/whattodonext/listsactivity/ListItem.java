@@ -23,7 +23,7 @@ public class ListItem implements Parcelable {
     private int total;
 
     @Exclude
-    private int currentVotePoints;
+    private int votePoints;
 
     public ListItem() {
         // Default constructor required for calls to DataSnapshot.getValue(ListItem.class)
@@ -108,25 +108,32 @@ public class ListItem implements Parcelable {
     ////////////////////////// VOTING //////////////////////////
 
     public int modifyVotePoint(int points) {
-        int previous = currentVotePoints;
+        int previous = votePoints;
 
-        // If current voter has not yet voted this, add points
+        // If current voter has not yet voted this
         if (previous == 0) {
-            currentVotePoints = points;
+            // If all points has not been given yet, add points
+            if (points != -1)
+                votePoints = points;
+
             return -1;
         }
 
         // Else reset value and return previously voted amount back
-        currentVotePoints = 0;
+        votePoints = 0;
         return previous;
     }
 
-    public int getCurrentVotePoints() {
-        return currentVotePoints;
+    public void addVotePoints(int amount) {
+        votePoints += amount;
+    }
+
+    public int getVotePoints() {
+        return votePoints;
     }
 
     public void clearVotePoints() {
-        currentVotePoints = 0;
+        votePoints = 0;
     }
 
 ////////////////////////// PARCELABLE //////////////////////////

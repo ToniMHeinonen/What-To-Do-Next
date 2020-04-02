@@ -17,8 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:text="@string/vote_back"
-            android:onClick="backPressed"/>
+            android:text="@string/vote_exit"
+            android:onClick="exitPressed"/>
 
         <Button
             android:id="@+id/nextButton"
@@ -31,7 +31,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/profileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -70,7 +69,7 @@
     </LinearLayout>
 
     <ListView
-        android:id = "@+id/voteItems"
+        android:id = "@+id/resultItems"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"
         android:divider="#000"

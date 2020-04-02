@@ -1,6 +1,7 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.Buddy;
 import io.github.tonimheinonen.whattodonext.Debug;
 import io.github.tonimheinonen.whattodonext.Profile;
 import io.github.tonimheinonen.whattodonext.R;
@@ -51,6 +52,8 @@ public class VoteTopActivity extends AppCompatActivity {
         infoView = findViewById(R.id.voteInfoText);
         nextButton = findViewById(R.id.nextButton);
 
+        Buddy.sortItemsByName(selectedList.getItems());
+
         setupVoteItems();
 
         startVoting();
@@ -69,8 +72,11 @@ public class VoteTopActivity extends AppCompatActivity {
                 int value = item.modifyVotePoint(currentVotePoint);
 
                 if (value == -1) {
-                    currentProfile.addVoteItem(currentVotePoint - 1, item);
-                    removeVotePoint();
+                    // If all points have not been given
+                    if (!votePoints.isEmpty()) {
+                        currentProfile.addVoteItem(currentVotePoint - 1, position);
+                        removeVotePoint();
+                    }
                 } else {
                     currentProfile.removeVoteItem(value - 1);
                     addVotePoint(value);
@@ -95,6 +101,8 @@ public class VoteTopActivity extends AppCompatActivity {
 
         if (!votePoints.isEmpty()) {
             currentVotePoint = votePoints.get(0);
+        } else {
+            currentVotePoint = -1;
         }
 
         updateVoteItems();
@@ -130,7 +138,7 @@ public class VoteTopActivity extends AppCompatActivity {
         updateVoteItems();
     }
 
-    public void backPressed(View v) {
+    public void exitPressed(View v) {
         finish();
         startActivity(new Intent(this, StartVoteActivity.class));
     }
@@ -141,7 +149,7 @@ public class VoteTopActivity extends AppCompatActivity {
         if (currentProfileIndex == selectedProfiles.size()) {
             finish();
             // Move to results screen
-            Intent intent = new Intent(this, VoteTopActivity.class);
+            Intent intent = new Intent(this, VoteResultsActivity.class);
             intent.putExtra("topAmount", topAmount);
             intent.putExtra("selectedList", selectedList);
             intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);

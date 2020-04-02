@@ -5,21 +5,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import io.github.tonimheinonen.whattodonext.DatabaseValue;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 
-public class VoteItemAdapter extends BaseAdapter {
+public class VoteResultsAdapter extends BaseAdapter {
 
     private ArrayList<ListItem> data;
     private LayoutInflater layoutInflater;
 
-    public VoteItemAdapter(Context aContext, ArrayList<ListItem> data) {
+    public VoteResultsAdapter(Context aContext, ArrayList<ListItem> data) {
         this.data = data;
         layoutInflater = LayoutInflater.from(aContext);
     }
@@ -42,18 +40,20 @@ public class VoteItemAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            view = layoutInflater.inflate(R.layout.vote_item, null);
+            view = layoutInflater.inflate(R.layout.results_item, null);
         }
 
         ListItem item = (ListItem) getItem(position);
 
         if (item != null) {
-            TextView itemName = view.findViewById(R.id.voteName);
+            TextView itemName = view.findViewById(R.id.resultsName);
             itemName.setText(data.get(position).getName());
 
-            TextView itemVoteAmount = view.findViewById(R.id.voteAmount);
-            int points = data.get(position).getVotePoints();
-            itemVoteAmount.setText(points == 0 ? "" : String.valueOf(points));
+            TextView itemBonus = view.findViewById(R.id.resultsBonus);
+            itemBonus.setText(String.valueOf(data.get(position).getTotal()));
+
+            TextView itemPoints = view.findViewById(R.id.resultsVotePoints);
+            itemPoints.setText(String.valueOf(data.get(position).getVotePoints()));
         }
 
         return view;

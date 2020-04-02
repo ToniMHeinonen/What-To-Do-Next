@@ -5,6 +5,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
+
 public abstract class Buddy {
 
     private static Context context;
@@ -33,5 +39,13 @@ public abstract class Buddy {
 
     public static String getString(int stringID) {
         return context.getResources().getString(stringID);
+    }
+
+    public static void sortItemsByName(ArrayList<ListItem> items) {
+        Collections.sort(items, new Comparator<ListItem>() {
+            public int compare(ListItem o1, ListItem o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
     }
 }

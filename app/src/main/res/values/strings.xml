@@ -20,7 +20,7 @@
 
     <!-- VoteTopActivity -->
     <string name="vote_next">Next</string>
-    <string name="vote_back">Back</string>
+    <string name="vote_exit">Exit</string>
     <string name="give_points_to">Give %1$d points to?</string>
     <string name="vote_ready">Tap %1$s to continue</string>
 
