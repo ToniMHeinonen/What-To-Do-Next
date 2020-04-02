@@ -24,6 +24,12 @@
     <string name="give_points_to">Give %1$d points to?</string>
     <string name="vote_ready">Tap %1$s to continue</string>
 
+    <!-- VoteResultsActivity -->
+    <string name="results">Results</string>
+    <string name="results_name">Name</string>
+    <string name="results_bonus">Bonus</string>
+    <string name="results_total">Total</string>
+
     <!-- ListsActivity -->
     <string name="lists_add">Add</string>
     <string name="lists_list">List</string>
