@@ -32,7 +32,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
     private boolean ascending = true;
-    private TextView vName, vTotal, vBonus, vPeril;
+    private TextView vName, vTotal, vBonus, vPeril, vSelectedList;
     private int originalTextColor;
 
     @Override
@@ -45,6 +45,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         vTotal = findViewById(R.id.total);
         vBonus = findViewById(R.id.bonus);
         vPeril = findViewById(R.id.peril);
+        vSelectedList = findViewById(R.id.selected_list);
         originalTextColor = vName.getCurrentTextColor();
 
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
@@ -60,7 +61,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         if (!lists.isEmpty()) {
             for (ListOfItems list : lists) {
                 if (curListId.equals(list.getDbID())) {
-                    curList = list;
+                    setCurrentList(list);
                     findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
                     DatabaseHandler.getItems(this, curList);
                     break;
@@ -81,6 +82,15 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     @Override
     public void onDataGetProfiles(ArrayList<Profile> profiles) {}
+
+    private void setCurrentList(ListOfItems list) {
+        curList = list;
+
+        if (list != null)
+            vSelectedList.setText(list.getName());
+        else
+            vSelectedList.setText(getString(R.string.no_list_selected));
+    }
 
     public void createListItems() {
         list = findViewById(R.id.list);
@@ -118,7 +128,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     public void addList(String name) {
         ListOfItems list = new ListOfItems(name);
-        curList = list;
+        setCurrentList(list);
         createListItems();
 
         lists.add(list);
@@ -127,7 +137,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     public void loadList(int listIndex) {
         if (curList != lists.get(listIndex)) {
-            curList = lists.get(listIndex);
+            setCurrentList(lists.get(listIndex));
             Buddy.filterListByFallen(curList.getItems(), false);
             GlobalPrefs.saveCurrentList(curList.getDbID());
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
@@ -141,7 +151,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         DatabaseHandler.removeList(list);
 
         if (curList == list) {
-            curList = null;
+            setCurrentList(null);
             GlobalPrefs.saveCurrentList("");
             hideListItems();
         }
