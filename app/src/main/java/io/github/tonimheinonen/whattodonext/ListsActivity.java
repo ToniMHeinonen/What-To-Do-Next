@@ -55,11 +55,13 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     public void onDataGetLists(ArrayList<ListOfItems> lists) {
         this.lists = lists;
         curListId = GlobalPrefs.loadCurrentList();
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
 
         if (!lists.isEmpty()) {
             for (ListOfItems list : lists) {
                 if (curListId.equals(list.getDbID())) {
                     curList = list;
+                    findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
                     DatabaseHandler.getItems(this, curList);
                     break;
                 }
@@ -117,7 +119,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     public void addList(String name) {
         ListOfItems list = new ListOfItems(name);
         curList = list;
-        updateListItems();
+        createListItems();
 
         lists.add(list);
         DatabaseHandler.addList(list);
