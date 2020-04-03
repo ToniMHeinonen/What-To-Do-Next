@@ -12,6 +12,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Initializes necessary values.
+     * @param savedInstanceState previous Activity state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +56,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         startActivity(intent);
-    }
-
-    @Override
-    public void onBackPressed() {
-        finish();
-        System.exit(0);
     }
 }

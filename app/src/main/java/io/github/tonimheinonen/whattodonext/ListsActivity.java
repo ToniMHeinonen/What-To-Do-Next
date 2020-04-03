@@ -35,6 +35,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private TextView vName, vTotal, vBonus, vPeril, vSelectedList;
     private int originalTextColor;
 
+    /**
+     * Initializes necessary values.
+     * @param savedInstanceState previous Activity state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,14 +56,21 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         DatabaseHandler.getLists(this);
     }
 
+    /**
+     * Loads all lists and select's previously chosen list.
+     * @param lists database lists
+     */
     @Override
     public void onDataGetLists(ArrayList<ListOfItems> lists) {
         this.lists = lists;
         curListId = GlobalPrefs.loadCurrentList();
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
 
+        // If there are at least 1 saved list
         if (!lists.isEmpty()) {
+            // Loop through all available lists
             for (ListOfItems list : lists) {
+                // If list has same id as saved previously used list, select that
                 if (curListId.equals(list.getDbID())) {
                     setCurrentList(list);
                     findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
@@ -70,6 +81,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
     }
 
+    /**
+     * Loads items for current list.
+     * @param items database items in list
+     */
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
         curList.setItems(items);
@@ -80,18 +95,30 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         updateListItems();
     }
 
+    /**
+     * Loads profiles from database.
+     * @param profiles database profiles
+     */
     @Override
     public void onDataGetProfiles(ArrayList<Profile> profiles) {}
 
+    /**
+     * Sets current list.
+     * @param list list to set to
+     */
     private void setCurrentList(ListOfItems list) {
         curList = list;
 
+        // Update list text on top of the screen
         if (list != null)
             vSelectedList.setText(list.getName());
         else
             vSelectedList.setText(getString(R.string.no_list_selected));
     }
 
+    /**
+     * Creates ListView with correct adapter and data.
+     */
     public void createListItems() {
         list = findViewById(R.id.list);
         adapter = new ListItemAdapter(this, curList.getItems());
@@ -107,6 +134,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         });
     }
 
+    /**
+     * Sorts list correctly and adjusts changes to list.
+     */
     private void updateListItems() {
         if (list == null || curList == null)
             return;
@@ -119,6 +149,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
             createListItems();
     }
 
+    /**
+     * Hides list items when current list is deleted.
+     */
     private void hideListItems() {
         list.setAdapter(null);
     }
@@ -126,6 +159,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     /*//////////////////// LIST DIALOG ////////////////////*/
 
+    /**
+     * Adds new list.
+     * @param name name of the list
+     */
     public void addList(String name) {
         ListOfItems list = new ListOfItems(name);
         setCurrentList(list);
@@ -135,21 +172,32 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         DatabaseHandler.addList(list);
     }
 
+    /**
+     * Loads selected list.
+     * @param listIndex selected list
+     */
     public void loadList(int listIndex) {
+        // If selection is not the same as current list
         if (curList != lists.get(listIndex)) {
             setCurrentList(lists.get(listIndex));
             Buddy.filterListByFallen(curList.getItems(), false);
+
             GlobalPrefs.saveCurrentList(curList.getDbID());
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
             DatabaseHandler.getItems(this, curList);
         }
     }
 
+    /**
+     * Deletes selected list.
+     * @param listIndex selected list
+     */
     public void deleteList(int listIndex) {
         ListOfItems list = lists.get(listIndex);
         lists.remove(list);
         DatabaseHandler.removeList(list);
 
+        // If current list is the deleted one
         if (curList == list) {
             setCurrentList(null);
             GlobalPrefs.saveCurrentList("");
@@ -159,6 +207,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     /*//////////////////// ITEM DIALOG ////////////////////*/
 
+    /**
+     * Adds new item.
+     * @param item item to add
+     */
     public void addItem(ListItem item) {
         curList.getItems().add(item);
         DatabaseHandler.addItem(curList, item);
@@ -166,7 +218,12 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         updateListItems();
     }
 
+    /**
+     * Modifies selected item.
+     * @param item selected item
+     */
     public void modifyItem(ListItem item) {
+        // If item is new item, add it
         if (!curList.getItems().contains(item)) {
             addItem(item);
             return;
@@ -176,6 +233,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         updateListItems();
     }
 
+    /**
+     * Deletes selected item.
+     * @param item selected item
+     */
     private void deleteItem(ListItem item) {
         curList.getItems().remove(item);
         DatabaseHandler.removeItem(item);
@@ -183,6 +244,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     /*//////////////////// SORTING ////////////////////*/
 
+    /**
+     * Sorts list correctly when some of the topic texts are touched.
+     * @param v topic value
+     */
     public void topicClicked(View v) {
         int sort = -1;
 
@@ -206,6 +271,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         updateListItems();
     }
 
+    /**
+     * Changes currently sorted text color.
+     * @param selected currently selected sort type
+     */
     private void changeColor(int selected) {
         vName.setTextColor(selected == NAME ?
                 getResources().getColor(R.color.textColorPrimary) :
@@ -224,6 +293,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
                 originalTextColor);
     }
 
+    /**
+     * Inverts sorting order.
+     * @param sort selected sorting type
+     */
     private void invertSortOrder(int sort) {
         // If new sort is same as current, reverse order
         if (sort == curSort) {
@@ -231,6 +304,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
     }
 
+    /**
+     * Sorts list.
+     */
     private void sortList() {
         changeColor(curSort);
 
@@ -270,6 +346,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     /*//////////////////// TOP BAR BUTTONS ////////////////////*/
 
+    /**
+     * Handles adding of new item.
+     * @param v add button
+     */
     public void addClicked(View v) {
         if (curList == null) {
             Toast.makeText(this, "First select list", Toast.LENGTH_LONG).show();
@@ -281,11 +361,19 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         dialog.show();
     }
 
+    /**
+     * Handles choosing list.
+     * @param v list button
+     */
     public void listClicked(View v) {
         ListDialog dialog = new ListDialog(this, lists);
         dialog.show();
     }
 
+    /**
+     * Handles going back.
+     * @param v back button
+     */
     public void backClicked(View v) {
         super.onBackPressed();
     }

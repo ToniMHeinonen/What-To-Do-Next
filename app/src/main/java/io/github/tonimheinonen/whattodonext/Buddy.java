@@ -21,6 +21,10 @@ public abstract class Buddy {
 
     private static Context context;
 
+    /**
+     * Gets application context.
+     * @param host context
+     */
     public static void initialize(Context host) {
         context = host;
     }
@@ -39,14 +43,28 @@ public abstract class Buddy {
         imm.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
     }
 
+    /**
+     * Shows long toast text.
+     * @param text message to show
+     */
     public static void showToast(String text) {
         Toast.makeText(context, text, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Return saved string from strings.xml.
+     * @param stringID id of the string
+     * @return saved string
+     */
     public static String getString(int stringID) {
         return context.getResources().getString(stringID);
     }
 
+    /**
+     * Sorts ListItem items by name.
+     * @param items items to sort
+     * @param ascending sort ascending or descending
+     */
     public static void sortItemsByName(ArrayList<ListItem> items, final boolean ascending) {
         Collections.sort(items, new Comparator<ListItem>() {
             public int compare(ListItem o1, ListItem o2) {
@@ -57,6 +75,11 @@ public abstract class Buddy {
         });
     }
 
+    /**
+     * Filters ListItem list by fallen status.
+     * @param items items to filter
+     * @param getFallen whether to get fallen or not fallen
+     */
     public static void filterListByFallen(ArrayList<ListItem> items, boolean getFallen) {
         Iterator<ListItem> i = items.iterator();
         while (i.hasNext()) {
@@ -68,6 +91,10 @@ public abstract class Buddy {
         }
     }
 
+    /**
+     * Creates Alert Dialog when exiting voting.
+     * @param activity
+     */
     public static void exitVoting(final Activity activity) {
         new AlertDialog.Builder(activity)
                 .setTitle(getString(R.string.alert_exit_title))
