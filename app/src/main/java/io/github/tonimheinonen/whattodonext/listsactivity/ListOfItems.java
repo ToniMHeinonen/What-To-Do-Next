@@ -23,43 +23,73 @@ public class ListOfItems implements DatabaseValue, Parcelable {
     @Exclude
     private ArrayList<ListItem> items = new ArrayList<>();
 
+    /**
+     * Default constructor.
+     */
     public ListOfItems() {
         // Default constructor required for calls to DataSnapshot.getValue(ListOfItems.class)
     }
 
+    /**
+     * Initializes necessary values.
+     * @param name name of the list
+     */
     public ListOfItems(String name) {
         this.name = name;
     }
 
-    public ListOfItems(String name, ArrayList<ListItem> items) {
-        this.name = name;
-        this.items = items;
-    }
-
+    /**
+     * Return name.
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name
+     * @param name name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns items.
+     * @return items
+     */
     public ArrayList<ListItem> getItems() {
         return items;
     }
 
+    /**
+     * Sets items
+     * @param items items
+     */
     public void setItems(ArrayList<ListItem> items) {
         this.items = items;
     }
 
+    /**
+     * Return database ID for list.
+     * @return database ID
+     */
     public String getDbID() {
         return dbID;
     }
 
+    /**
+     * Sets database ID for list.
+     * @param dbID database ID
+     */
     public void setDbID(String dbID) {
         this.dbID = dbID;
     }
 
+    /**
+     * Maps values for database handling.
+     * @return mapped values
+     */
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -68,6 +98,10 @@ public class ListOfItems implements DatabaseValue, Parcelable {
         return result;
     }
 
+    /**
+     * Prints this instead of pointer.
+     * @return string to print
+     */
     @Override
     public String toString() {
         return "ListOfItems{" +
@@ -78,11 +112,20 @@ public class ListOfItems implements DatabaseValue, Parcelable {
 
     ////////////////////////// PARCELABLE //////////////////////////
 
+    /**
+     * Describes contents
+     * @return value
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Writes necessary values to parcel.
+     * @param dest destination
+     * @param flags flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
@@ -90,17 +133,34 @@ public class ListOfItems implements DatabaseValue, Parcelable {
         dest.writeList(items);
     }
 
+    /**
+     * Creates list from parcel info.
+     * @param in given parcel
+     */
     public ListOfItems(Parcel in) {
         dbID = in.readString();
         name = in.readString();
         items = in.readArrayList(ListItem.class.getClassLoader());
     }
 
+    /**
+     * Creator object for list.
+     */
     public static final Parcelable.Creator<ListOfItems> CREATOR = new Parcelable.Creator<ListOfItems>() {
+        /**
+         * Creates from parcel.
+         * @param in given parcel
+         * @return list
+         */
         public ListOfItems createFromParcel(Parcel in) {
             return new ListOfItems(in);
         }
 
+        /**
+         * Creates new list array.
+         * @param size size of array
+         * @return list array
+         */
         public ListOfItems[] newArray(int size) {
             return new ListOfItems[size];
         }

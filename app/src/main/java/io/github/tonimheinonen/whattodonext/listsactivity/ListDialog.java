@@ -20,12 +20,21 @@ public class ListDialog extends Dialog implements
     private ListsActivity activity;
     private ArrayList<ListOfItems> lists;
 
+    /**
+     * Initializes necessary values.
+     * @param a current activity
+     * @param lists selected list
+     */
     public ListDialog(ListsActivity a, ArrayList<ListOfItems> lists) {
         super(a);
         this.activity = a;
         this.lists = lists;
     }
 
+    /**
+     * Initializes views.
+     * @param savedInstanceState previous Activity state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +50,10 @@ public class ListDialog extends Dialog implements
         list.setAdapter(new ListAndProfileAdapter(activity, lists, this));
     }
 
+    /**
+     * Listends for view clicks.
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -61,6 +74,9 @@ public class ListDialog extends Dialog implements
         }
     }
 
+    /**
+     * Adds new list.
+     */
     private void addList() {
         EditText view = findViewById(R.id.newList);
         String name = view.getText().toString();
@@ -68,12 +84,20 @@ public class ListDialog extends Dialog implements
         dismiss();
     }
 
+    /**
+     * Loads list.
+     * @param v selected list
+     */
     private void loadList(View v) {
         Debug.print("ListDialog", "loadList", "", 1);
         activity.loadList((int) v.getTag());
         dismiss();
     }
 
+    /**
+     * Deletes list.
+     * @param v selected list
+     */
     private void deleteList(View v) {
         Debug.print("ListDialog", "deleteList", "", 1);
         activity.deleteList((int) v.getTag());
