@@ -24,8 +24,10 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbProfiles;
     private static boolean offlinePersistenceEnabled = false;
 
+    /**
+     * Initializes necessary values.
+     */
     public static void initialize() {
-
         if (!offlinePersistenceEnabled) {
             offlinePersistenceEnabled = true;
             // This only needs to be called once, otherwise app crashes
@@ -33,6 +35,8 @@ public abstract class DatabaseHandler {
         }
 
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Init database paths and keep them synced when coming from offline to online
         dbLists = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("lists");
         dbLists.keepSynced(true);
@@ -46,9 +50,13 @@ public abstract class DatabaseHandler {
 
     /////////////////////* LISTS *////////////////////
 
+    /**
+     * Adds new list.
+     * @param list list to add
+     */
     public static void addList(ListOfItems list) {
-        String key = dbLists.push().getKey();
-        GlobalPrefs.saveCurrentList(key);
+        String key = dbLists.push().getKey();   // Add new key to lists
+        GlobalPrefs.saveCurrentList(key);       // Save this list to be latest used
 
         list.setDbID(key);
         Map<String, Object> listValues = list.toMap();
@@ -59,6 +67,10 @@ public abstract class DatabaseHandler {
         dbLists.updateChildren(childUpdates);
     }
 
+    /**
+     * Removes list.
+     * @param list list to remove
+     */
     public static void removeList(final ListOfItems list) {
         dbLists.child(list.getDbID()).removeValue();
 
@@ -90,6 +102,10 @@ public abstract class DatabaseHandler {
         });
     }
 
+    /**
+     * Loads lists from database.
+     * @param listener listener to send data to
+     */
     public static void getLists(final OnGetDataListener listener) {
         dbLists.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -121,8 +137,13 @@ public abstract class DatabaseHandler {
 
     /////////////////////* ITEMS *////////////////////
 
+    /**
+     * Adds new item.
+     * @param list list to add item to
+     * @param item item to add
+     */
     public static void addItem(ListOfItems list, ListItem item) {
-        String key = dbItems.push().getKey();
+        String key = dbItems.push().getKey();   // Add new key to path
 
         item.setDbID(key);
         item.setListID(list.getDbID());
@@ -134,6 +155,10 @@ public abstract class DatabaseHandler {
         dbItems.updateChildren(childUpdates);
     }
 
+    /**
+     * Modifies item values.
+     * @param item item to modify
+     */
     public static void modifyItem(ListItem item) {
         Map<String, Object> listValues = item.toMap();
 
@@ -143,12 +168,21 @@ public abstract class DatabaseHandler {
         dbItems.updateChildren(childUpdates);
     }
 
+    /**
+     * Removes item.
+     * @param item item to remove
+     */
     public static void removeItem(ListItem item) {
         Debug.print("DatabaseHandler", "removeItem",
                 "Removed: " + item.getName(), 1);
         dbItems.child(item.getDbID()).removeValue();
     }
 
+    /**
+     * Loads items which are part of the given list from database.
+     * @param listener listener to send data to
+     * @param list list where items must belong to
+     */
     public static void getItems(final OnGetDataListener listener, final ListOfItems list) {
         dbItems.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -182,6 +216,10 @@ public abstract class DatabaseHandler {
 
     /////////////////////* PROFILES *////////////////////
 
+    /**
+     * Adds new profile.
+     * @param profile profile to add
+     */
     public static void addProfile(Profile profile) {
         String key = dbProfiles.push().getKey();
 
@@ -194,10 +232,18 @@ public abstract class DatabaseHandler {
         dbProfiles.updateChildren(childUpdates);
     }
 
+    /**
+     * Removes profile.
+     * @param profile profile to remove
+     */
     public static void removeProfile(Profile profile) {
         dbProfiles.child(profile.getDbID()).removeValue();
     }
 
+    /**
+     * Loads all profiles from database.
+     * @param listener listener to send data to
+     */
     public static void getProfiles(final OnGetDataListener listener) {
         dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
