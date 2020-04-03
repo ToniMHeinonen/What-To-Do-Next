@@ -59,13 +59,35 @@ public abstract class DatabaseHandler {
         dbLists.updateChildren(childUpdates);
     }
 
-    public static void removeList(ListOfItems list) {
+    public static void removeList(final ListOfItems list) {
         dbLists.child(list.getDbID()).removeValue();
 
         // Remove all items from database connected to this list
-        for (ListItem item : list.getItems()) {
-            removeItem(item);
-        }
+        dbItems.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<ListItem> items = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    ListItem item = dataSnapshot.getValue(ListItem.class);
+                    item.setDbID(key);
+                    if (item.getListID().equals(list.getDbID())) {
+                        removeItem(item);
+                    }
+                }
+
+                for(ListItem item : items) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
     }
 
     public static void getLists(final OnGetDataListener listener) {
@@ -122,6 +144,8 @@ public abstract class DatabaseHandler {
     }
 
     public static void removeItem(ListItem item) {
+        Debug.print("DatabaseHandler", "removeItem",
+                "Removed: " + item.getName(), 1);
         dbItems.child(item.getDbID()).removeValue();
     }
 
