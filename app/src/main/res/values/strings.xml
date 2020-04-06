@@ -53,6 +53,11 @@
     <string name="lists_bonus">Bonus</string>
     <string name="lists_peril">Peril</string>
 
+    <string name="alert_delete_topic">Delete %1$s</string>
+    <string name="alert_delete_message">Are you sure you want to delete? There is no going back.</string>
+    <string name="alert_delete_confirm">Delete</string>
+    <string name="alert_delete_cancel">Cancel</string>
+
     <!-- ListItemDialog-->
     <string name="list_item_dialog_bonus">Bonus</string>
     <string name="list_item_dialog_peril">Peril</string>

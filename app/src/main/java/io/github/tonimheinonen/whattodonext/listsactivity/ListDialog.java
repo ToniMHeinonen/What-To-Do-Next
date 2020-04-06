@@ -1,6 +1,7 @@
 package io.github.tonimheinonen.whattodonext.listsactivity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -9,6 +10,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.app.AlertDialog;
 import io.github.tonimheinonen.whattodonext.Debug;
 import io.github.tonimheinonen.whattodonext.ListAndProfileAdapter;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
@@ -107,7 +109,21 @@ public class ListDialog extends Dialog implements
      */
     private void deleteList(View v) {
         Debug.print("ListDialog", "deleteList", "", 1);
-        activity.deleteList((int) v.getTag());
-        dismiss();
+        final int index = (int) v.getTag();
+        String name = lists.get(index).getName();
+        new AlertDialog.Builder(activity)
+                .setTitle(activity.getString(R.string.alert_delete_topic, name))
+                .setMessage(activity.getString(R.string.alert_delete_message))
+
+                .setPositiveButton(activity.getString(R.string.alert_delete_confirm), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.deleteList(index);
+                        dismiss();
+                    }
+                })
+
+                .setNegativeButton(activity.getString(R.string.alert_delete_cancel),  null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }
