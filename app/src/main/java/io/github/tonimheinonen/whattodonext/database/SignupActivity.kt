@@ -17,6 +17,13 @@ import com.google.firebase.ktx.Firebase
 import io.github.tonimheinonen.whattodonext.MainActivity
 import io.github.tonimheinonen.whattodonext.R
 
+/**
+ * Handles signing up to Firebase database.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -28,6 +35,10 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var signUpBtn: Button
     private lateinit var loginBtn: Button
 
+    /**
+     * Initializes SignupActivity.
+     * @param savedInstanceState previous instance state
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
@@ -66,6 +77,10 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Creates new user.
+     * @param user new user
+     */
     private fun onAuthSuccess(user: FirebaseUser) {
         val username = usernameFromEmail(user.email!!)
 
@@ -77,6 +92,10 @@ class SignupActivity : AppCompatActivity() {
         finish()
     }
 
+    /**
+     * Creates user name from email.
+     * @param email user's email
+     */
     private fun usernameFromEmail(email: String): String {
         return if (email.contains("@")) {
             email.split("@".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
@@ -85,6 +104,12 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Writes new user to database.
+     * @param userId id of the user
+     * @param name name of the user
+     * @param email email of the user
+     */
     private fun writeNewUser(userId: String, name: String, email: String?) {
         val user = User(name, email)
         database.child("users").child(userId).setValue(user)

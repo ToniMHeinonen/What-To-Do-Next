@@ -13,6 +13,13 @@ import com.google.firebase.auth.FirebaseAuth
 import io.github.tonimheinonen.whattodonext.MainActivity
 import io.github.tonimheinonen.whattodonext.R
 
+/**
+ * Handles logging in to Firebase database.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
@@ -25,6 +32,10 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var resetPasswordTv: TextView
 
+    /**
+     * Initializes LoginActivity.
+     * @param savedInstanceState previous instance state
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
