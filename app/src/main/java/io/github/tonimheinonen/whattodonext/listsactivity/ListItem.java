@@ -206,29 +206,9 @@ public class ListItem implements Parcelable {
     ////////////////////////// VOTING //////////////////////////
 
     /**
-     * Modifies given vote points to item.
-     * @param points points to be added
-     * @return -1 if added successfully, else return previous points
-     */
-    public int modifyVotePoint(int points) {
-        int previous = votePoints;
-
-        // If current voter has not yet voted this
-        if (previous == 0) {
-            // If all points has not been given yet, add points
-            if (points != -1)
-                votePoints = points;
-
-            return -1;
-        }
-
-        // Else reset value and return previously voted amount back
-        votePoints = 0;
-        return previous;
-    }
-
-    /**
      * Adds vote points.
+     *
+     * Used when calculating overall vote points in VoteResultsActivity.
      * @param amount vote points
      */
     public void addVotePoints(int amount) {
@@ -236,7 +216,22 @@ public class ListItem implements Parcelable {
     }
 
     /**
+     * Returns vote points and resets value.
+     *
+     * Used in VoteTopActivity.
+     * @return vote points
+     */
+    public int retrieveVotePoints() {
+        int points = votePoints;
+        votePoints = 0;
+
+        return points;
+    }
+
+    /**
      * Returns vote points.
+     *
+     * Used in VoteItemAdapter.
      * @return vote points
      */
     public int getVotePoints() {
@@ -244,10 +239,13 @@ public class ListItem implements Parcelable {
     }
 
     /**
-     * Clears vote points.
+     * Sets vote points.
+     *
+     * Used in VoteTopActivity.
+     * @param points
      */
-    public void clearVotePoints() {
-        votePoints = 0;
+    public void setVotePoints(int points) {
+        votePoints = points;
     }
 
 ////////////////////////// PARCELABLE //////////////////////////

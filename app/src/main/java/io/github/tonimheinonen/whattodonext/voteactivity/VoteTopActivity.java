@@ -40,6 +40,7 @@ public class VoteTopActivity extends AppCompatActivity {
     private VoteItemAdapter adapter;
 
     private ArrayList<Integer> votePoints = new ArrayList<>();
+    private ArrayList<ListItem> votedItems = new ArrayList<>();
     private int currentVotePoint, currentProfileIndex;
     private Profile currentProfile;
 
@@ -81,17 +82,21 @@ public class VoteTopActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListItem item = (ListItem) list.getItemAtPosition(position);
 
-                int value = item.modifyVotePoint(currentVotePoint);
-
-                if (value == -1) {
+                if (votedItems.contains(item)) {
+                    votedItems.remove(item);
+                    int points = item.retrieveVotePoints();
+                    addVotePoint(points);
+                    // Index -1 since index starts at 0, vote points start at 1
+                    currentProfile.removeVoteItem(points - 1);
+                } else {
                     // If all points have not been given
                     if (!votePoints.isEmpty()) {
+                        votedItems.add(item);
+                        item.setVotePoints(currentVotePoint);
+                        // Index -1 since index starts at 0, vote points start at 1
                         currentProfile.addVoteItem(currentVotePoint - 1, position);
                         removeVotePoint();
                     }
-                } else {
-                    currentProfile.removeVoteItem(value - 1);
-                    addVotePoint(value);
                 }
             }
         });
@@ -163,7 +168,7 @@ public class VoteTopActivity extends AppCompatActivity {
 
         // Clear previous vote points from items
         for (ListItem item : selectedList.getItems()) {
-            item.clearVotePoints();
+            item.setVotePoints(0);
         }
 
         updateVoteItems();
