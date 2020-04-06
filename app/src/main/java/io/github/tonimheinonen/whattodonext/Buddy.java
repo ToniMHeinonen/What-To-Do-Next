@@ -12,11 +12,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 
 import androidx.appcompat.app.AlertDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 
+/**
+ * Handles often used helpful methods.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public abstract class Buddy {
 
     private static Context context;

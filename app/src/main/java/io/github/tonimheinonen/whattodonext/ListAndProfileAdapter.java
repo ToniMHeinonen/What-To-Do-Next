@@ -9,6 +9,13 @@ import android.widget.Button;
 
 import java.util.ArrayList;
 
+/**
+ * Handles ListView with ListOfView and Profile.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class ListAndProfileAdapter extends BaseAdapter {
 
     private ArrayList<? extends DatabaseValue> listData;

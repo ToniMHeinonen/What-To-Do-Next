@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
+/**
+ * Listens data retrieval from Firebase database.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public interface OnGetDataListener {
     /**
      * Sends loaded lists from database.

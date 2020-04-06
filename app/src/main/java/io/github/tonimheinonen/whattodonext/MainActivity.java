@@ -10,6 +10,13 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * Handles moving from one activity to another.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class MainActivity extends AppCompatActivity {
 
     /**

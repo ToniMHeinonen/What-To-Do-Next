@@ -11,6 +11,13 @@ import java.util.ArrayList;
 
 import io.github.tonimheinonen.whattodonext.R;
 
+/**
+ * Handles List View element with List Item.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class ListItemAdapter extends BaseAdapter {
 
     private ArrayList<ListItem> listData;

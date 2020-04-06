@@ -9,6 +9,13 @@ import android.widget.EditText;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
 
+/**
+ * Handles modifying of List Items via Dialog.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class ListItemDialog extends Dialog implements
         android.view.View.OnClickListener {
 

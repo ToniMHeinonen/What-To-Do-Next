@@ -9,6 +9,13 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents an list item activity.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 @IgnoreExtraProperties
 public class ListItem implements Parcelable {
 

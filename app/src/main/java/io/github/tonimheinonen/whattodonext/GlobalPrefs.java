@@ -3,6 +3,13 @@ package io.github.tonimheinonen.whattodonext;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * Handles saving and loading values to local storage.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public abstract class GlobalPrefs {
     private static SharedPreferences prefs;
 

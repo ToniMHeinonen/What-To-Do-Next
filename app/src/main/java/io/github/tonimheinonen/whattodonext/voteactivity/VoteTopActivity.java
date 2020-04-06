@@ -21,9 +21,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 
-
+/**
+ * Handles voting top list with List Items.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class VoteTopActivity extends AppCompatActivity {
 
     private int topAmount;

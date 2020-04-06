@@ -24,6 +24,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Handles showing results of voting.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class VoteResultsActivity extends AppCompatActivity implements OnGetDataListener {
 
     private boolean lastResults;

@@ -14,6 +14,13 @@ import io.github.tonimheinonen.whattodonext.ListAndProfileAdapter;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
 
+/**
+ * Handles list of items.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class ListDialog extends Dialog implements
         android.view.View.OnClickListener {
 

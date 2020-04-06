@@ -16,6 +16,13 @@ import androidx.annotation.NonNull;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
+/**
+ * Handles controlling of Firebase database.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public abstract class DatabaseHandler {
 
     private static FirebaseUser user;

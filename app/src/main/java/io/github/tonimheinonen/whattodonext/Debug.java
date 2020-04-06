@@ -1,11 +1,17 @@
 package io.github.tonimheinonen.whattodonext;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Handles debugging.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class Debug {
     private static int DEBUG_LEVEL = 1;
     public static boolean showOnUI;

@@ -19,6 +19,13 @@ import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
+/**
+ * Handles setting up voting.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class StartVoteActivity extends AppCompatActivity implements OnGetDataListener,
         View.OnClickListener {
 

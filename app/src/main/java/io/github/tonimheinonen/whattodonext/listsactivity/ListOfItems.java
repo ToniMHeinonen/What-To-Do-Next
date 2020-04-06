@@ -12,6 +12,13 @@ import java.util.Map;
 
 import io.github.tonimheinonen.whattodonext.DatabaseValue;
 
+/**
+ * Represents a list of items.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 @IgnoreExtraProperties
 public class ListOfItems implements DatabaseValue, Parcelable {
 

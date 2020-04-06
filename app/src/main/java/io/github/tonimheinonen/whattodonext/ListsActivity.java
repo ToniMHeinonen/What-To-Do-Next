@@ -18,6 +18,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+/**
+ * Handles modifying of ListOfViews and ListItems.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class ListsActivity extends AppCompatActivity implements OnGetDataListener {
 
     private ListsActivity _this = this;

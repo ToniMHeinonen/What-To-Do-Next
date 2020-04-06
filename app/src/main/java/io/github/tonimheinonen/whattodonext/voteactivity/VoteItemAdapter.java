@@ -14,6 +14,13 @@ import io.github.tonimheinonen.whattodonext.DatabaseValue;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 
+/**
+ * Handles List View with voting items.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class VoteItemAdapter extends BaseAdapter {
 
     private ArrayList<ListItem> data;
