@@ -122,6 +122,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
             return;
         }
 
+        Buddy.filterListByFallen(items, false);
         selectedList.setItems(items); // Put loaded items to selected list
 
         // Move to voting top list

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FFA500</color>
     <color name="colorPrimaryDark">#B84221</color>
-    <color name="colorAccent">#00FFFF</color>
+    <color name="colorAccent">#0FF</color>
     <color name="textColorPrimary">#FFA500</color>
     <color name="voteItemBackground">#FFF</color>
 

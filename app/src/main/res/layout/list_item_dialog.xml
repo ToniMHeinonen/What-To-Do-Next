@@ -74,17 +74,25 @@
         </LinearLayout>
 
         <!-- DROP & DELETE -->
-        <Button
-            android:id="@+id/drop"
-            style="@style/listItemButtons"
-            android:text="@string/list_item_dialog_drop"
-            android:background="#FFF" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+            <Button
+                android:id="@+id/drop"
+                style="@style/listItemButtons"
+                android:text="@string/list_item_dialog_drop"
+                android:background="@color/colorAccent" />
 
-        <Button
-            android:id="@+id/delete"
-            style="@style/listItemButtons"
-            android:text="@string/list_item_dialog_delete"
-            android:background="#FFF" />
+            <Button
+                android:id="@+id/delete"
+                style="@style/listItemButtons"
+                android:text="@string/list_item_dialog_delete"
+                android:background="@color/colorPrimary" />
+
+        </LinearLayout>
 
         <!-- CONFIRM & CANCEL-->
 
@@ -97,13 +105,13 @@
 
             <Button
                 android:id="@+id/cancel"
-                style="@style/listItemConfirmCancel"
+                style="@style/listItemButtons"
                 android:text="@string/list_item_dialog_cancel"
                 android:background="#F00" />
 
             <Button
                 android:id="@+id/confirm"
-                style="@style/listItemConfirmCancel"
+                style="@style/listItemButtons"
                 android:text="@string/list_item_dialog_confirm"
                 android:background="#0F0" />
         </LinearLayout>
