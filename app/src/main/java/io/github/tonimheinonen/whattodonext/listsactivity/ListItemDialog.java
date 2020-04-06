@@ -17,12 +17,21 @@ public class ListItemDialog extends Dialog implements
     private EditText name, bonusAmount, perilAmount;
     private final int BONUS_INDEX = 0, PERIL_INDEX = 1;
 
+    /**
+     * Initializes ListItemDialog.
+     * @param a current activity
+     * @param item selected item
+     */
     public ListItemDialog(ListsActivity a, ListItem item) {
         super(a);
         this.activity = a;
         this.item = item;
     }
 
+    /**
+     * Initializes views.
+     * @param savedInstanceState previous instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +57,14 @@ public class ListItemDialog extends Dialog implements
         findViewById(R.id.cancel).setOnClickListener(this);
     }
 
+    /**
+     * Retrieves points from edit texts.
+     * @return array of points
+     */
     private int[] getPointsFromEditTexts() {
         int[] points = new int[2];
 
-        // If text is "", set value to 0, else get value from text
+        // If user changed text to "", set value to 0, else get value from text
         String bonusStr = bonusAmount.getText().toString();
         int bonus = bonusStr.equals("") ? 0 : Integer.parseInt(bonusStr);
 
@@ -64,6 +77,10 @@ public class ListItemDialog extends Dialog implements
         return points;
     }
 
+    /**
+     * Handles view clicks.
+     * @param v clicked view
+     */
     @Override
     public void onClick(View v) {
         int[] points = getPointsFromEditTexts();
@@ -94,6 +111,9 @@ public class ListItemDialog extends Dialog implements
         }
     }
 
+    /**
+     * Confirms changes to item.
+     */
     private void confirmChanges() {
         String n = name.getText().toString();
         item.setName(n);
