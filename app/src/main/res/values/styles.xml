@@ -4,11 +4,18 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <item name="android:dropDownListViewStyle">@style/SpinnerStyle</item>
+        <item name="editTextStyle">@style/App_EditTextStyle</item>
     </style>
 
     <style name="SpinnerStyle" parent="Widget.AppCompat.ListView.DropDown">
         <item name="android:divider">#d1d1d1</item>
         <item name="android:dividerHeight">1dp</item>
+    </style>
+
+    <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:gravity">center</item>
+        <item name="android:inputType">text</item>
+        <item name="android:imeOptions">actionDone</item>
     </style>
 
     <style name="menuButtons">

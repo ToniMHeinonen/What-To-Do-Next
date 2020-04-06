@@ -15,10 +15,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="{Item name}"
+            android:hint="@string/list_item_dialog_nameHint"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:minWidth="20dp"/>
+            android:textStyle="bold" />
 
         <!-- BONUS -->
         <TextView

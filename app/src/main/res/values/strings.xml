@@ -60,6 +60,7 @@
     <string name="alert_delete_cancel">Cancel</string>
 
     <!-- ListItemDialog-->
+    <string name="list_item_dialog_nameHint">Name</string>
     <string name="list_item_dialog_bonus">Bonus</string>
     <string name="list_item_dialog_peril">Peril</string>
     <string name="list_item_dialog_drop">Drop</string>
