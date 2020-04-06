@@ -189,6 +189,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
      */
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
+        Buddy.filterListByFallen(items, false); // Ignore fallen items
         ArrayList<ListItem> itemsLeft = selectedList.getItems();
 
         final int DEFAULT = 0, ADD_BONUS = 1, RESET = 2;
