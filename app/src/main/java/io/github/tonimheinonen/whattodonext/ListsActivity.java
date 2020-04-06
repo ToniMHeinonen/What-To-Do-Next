@@ -10,6 +10,7 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private TextView vName, vTotal, vBonus, vPeril, vSelectedList;
     private int originalTextColor;
 
+    private Button fallenButton;
     private boolean fallenList = false;
 
     /**
@@ -61,8 +63,19 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         vSelectedList = findViewById(R.id.selected_list);
         originalTextColor = vName.getCurrentTextColor();
 
+        // Find fallen button for controlling it's color
+        fallenButton = findViewById(R.id.fallenButton);
+
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
         DatabaseHandler.getLists(this);
+    }
+
+    /**
+     * Shows loading bar and starts fetching items for list.
+     */
+    private void getItems() {
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
+        DatabaseHandler.getItems(this, curList);
     }
 
     /**
@@ -82,8 +95,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
                 // If list has same id as saved previously used list, select that
                 if (curListId.equals(list.getDbID())) {
                     setCurrentList(list);
-                    findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
-                    DatabaseHandler.getItems(this, curList);
+                    getItems();
                     break;
                 }
             }
@@ -97,7 +109,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
         curList.setItems(items);
-        Buddy.filterListByFallen(curList.getItems(), false);
+        Buddy.filterListByFallen(curList.getItems(), fallenList);
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
         createListItems();
@@ -117,6 +129,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      */
     private void setCurrentList(ListOfItems list) {
         curList = list;
+        setFallenStatus(false); // Show normal items when list changes
 
         // Update list text on top of the screen
         if (list != null)
@@ -189,7 +202,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         // If selection is not the same as current list
         if (curList != lists.get(listIndex)) {
             setCurrentList(lists.get(listIndex));
-            Buddy.filterListByFallen(curList.getItems(), false);
+            Buddy.filterListByFallen(curList.getItems(), fallenList);
 
             GlobalPrefs.saveCurrentList(curList.getDbID());
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
@@ -370,6 +383,14 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
     }
 
+    private void setFallenStatus(boolean status) {
+        fallenList = status;
+
+        fallenButton.setTextColor(fallenList ?
+                getResources().getColor(R.color.colorAccent) :
+                getResources().getColor(R.color.ListsTopButtonTextColor));
+    }
+
     /*//////////////////// TOP BAR BUTTONS ////////////////////*/
 
     /**
@@ -383,6 +404,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
 
         final ListItem item = new ListItem("", 0, 0);
+        item.setFallen(fallenList); // Set fallen status to current fallenList status
         ListItemDialog dialog = new ListItemDialog(this, item);
         dialog.show();
     }
@@ -402,5 +424,16 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      */
     public void backClicked(View v) {
         super.onBackPressed();
+    }
+
+    /**
+     * Handles whether to show fallen items or not.
+     * @param v fallen button
+     */
+    public void fallenClicked(View v) {
+        setFallenStatus(!fallenList);
+
+        // Retrieve items filtered with correct fallen status
+        getItems();
     }
 }

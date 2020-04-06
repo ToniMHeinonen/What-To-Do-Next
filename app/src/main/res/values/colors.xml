@@ -5,4 +5,7 @@
     <color name="colorAccent">#00FFFF</color>
     <color name="textColorPrimary">#FFA500</color>
     <color name="voteItemBackground">#FFF</color>
+
+    <!-- ListActivity -->
+    <color name="ListsTopButtonTextColor">#000</color>
 </resources>

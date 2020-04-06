@@ -47,6 +47,7 @@
     <string name="lists_add">Add</string>
     <string name="lists_list">List</string>
     <string name="lists_back">Back</string>
+    <string name="lists_fallen">Fallen</string>
 
     <string name="lists_name">Name</string>
     <string name="lists_total">Total</string>

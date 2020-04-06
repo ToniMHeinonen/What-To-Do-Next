@@ -30,14 +30,33 @@
             android:onClick="backClicked"/>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/selected_list"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_list_selected"
-        android:layout_gravity="center"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/selected_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/no_list_selected"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/fallenButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lists_fallen"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:onClick="fallenClicked"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
