@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="450dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,9 +15,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
-            android:text="Item name"
+            android:text="{Item name}"
             android:textSize="25sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:minWidth="20dp"/>
 
         <!-- BONUS -->
         <TextView
@@ -73,6 +74,19 @@
                 android:text="+" />
         </LinearLayout>
 
+        <!-- DROP & DELETE -->
+        <Button
+            android:id="@+id/drop"
+            style="@style/listItemButtons"
+            android:text="@string/list_item_dialog_drop"
+            android:background="#FFF" />
+
+        <Button
+            android:id="@+id/delete"
+            style="@style/listItemButtons"
+            android:text="@string/list_item_dialog_delete"
+            android:background="#FFF" />
+
         <!-- CONFIRM & CANCEL-->
 
         <LinearLayout
@@ -80,18 +94,18 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="40dp">
+            android:layout_marginTop="20dp">
 
             <Button
                 android:id="@+id/cancel"
                 style="@style/listItemConfirmCancel"
-                android:text="Cancel"
+                android:text="@string/list_item_dialog_cancel"
                 android:background="#F00" />
 
             <Button
                 android:id="@+id/confirm"
                 style="@style/listItemConfirmCancel"
-                android:text="Confirm"
+                android:text="@string/list_item_dialog_confirm"
                 android:background="#0F0" />
         </LinearLayout>
     </LinearLayout>

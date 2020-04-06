@@ -61,6 +61,9 @@
     <!-- ListItemDialog-->
     <string name="list_item_dialog_bonus">Bonus</string>
     <string name="list_item_dialog_peril">Peril</string>
+    <string name="list_item_dialog_drop">Drop</string>
+    <string name="list_item_dialog_return">Return</string>
+    <string name="list_item_dialog_delete">Delete</string>
     <string name="list_item_dialog_confirm">Confirm</string>
     <string name="list_item_dialog_cancel">Cancel</string>
 

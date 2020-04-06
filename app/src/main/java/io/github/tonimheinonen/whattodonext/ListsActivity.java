@@ -42,6 +42,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private TextView vName, vTotal, vBonus, vPeril, vSelectedList;
     private int originalTextColor;
 
+    private boolean fallenList = false;
+
     /**
      * Initializes necessary values.
      * @param savedInstanceState previous Activity state
@@ -222,6 +224,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         curList.getItems().add(item);
         DatabaseHandler.addItem(curList, item);
 
+        checkFallenStatus(item);
         updateListItems();
     }
 
@@ -237,6 +240,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
 
         DatabaseHandler.modifyItem(item);
+        checkFallenStatus(item);
         updateListItems();
     }
 
@@ -244,9 +248,24 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      * Deletes selected item.
      * @param item selected item
      */
-    private void deleteItem(ListItem item) {
-        curList.getItems().remove(item);
-        DatabaseHandler.removeItem(item);
+    public void deleteItem(ListItem item) {
+        // If item is new, it has not been yet added in list
+        if (curList.getItems().contains(item)) {
+            curList.getItems().remove(item);
+            DatabaseHandler.removeItem(item);
+            updateListItems();
+        }
+    }
+
+    /**
+     * Checks the fallen status of the item.
+     *
+     * If fallen status is not the same as fallenList status, drop item from list.
+     * @param item item to check
+     */
+    private void checkFallenStatus(ListItem item) {
+        if (item.isFallen() != fallenList)
+            curList.getItems().remove(item);
     }
 
     /*//////////////////// SORTING ////////////////////*/
