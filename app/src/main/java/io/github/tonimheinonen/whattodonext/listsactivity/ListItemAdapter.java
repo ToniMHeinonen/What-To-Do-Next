@@ -16,26 +16,52 @@ public class ListItemAdapter extends BaseAdapter {
     private ArrayList<ListItem> listData;
     private LayoutInflater layoutInflater;
 
+    /**
+     * Initializes adapter for list items.
+     * @param aContext current context
+     * @param listData list items
+     */
     public ListItemAdapter(Context aContext, ArrayList<ListItem> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(aContext);
     }
 
+    /**
+     * Returns size of the data.
+     * @return size of the data
+     */
     @Override
     public int getCount() {
         return listData.size();
     }
 
+    /**
+     * Returns item at given position.
+     * @param position index of the item
+     * @return item
+     */
     @Override
     public Object getItem(int position) {
         return listData.get(position);
     }
 
+    /**
+     * Returns position of the item.
+     * @param position index of the item
+     * @return position of the item
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * Creates view of the given data.
+     * @param position index of the data
+     * @param convertView part of the view reserved for current data
+     * @param parent listview parent
+     * @return view of the data
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
@@ -57,6 +83,9 @@ public class ListItemAdapter extends BaseAdapter {
         return convertView;
     }
 
+    /**
+     * Static class for holding view data.
+     */
     static class ViewHolder {
         TextView txtItemName;
         TextView txtItemTotal;

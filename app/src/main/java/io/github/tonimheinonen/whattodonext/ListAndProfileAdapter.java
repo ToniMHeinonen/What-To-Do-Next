@@ -15,27 +15,54 @@ public class ListAndProfileAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private View.OnClickListener listener;
 
+    /**
+     * Adapter for handling ListView with list and profile.
+     * @param aContext current context
+     * @param listData data to be added to ListView
+     * @param listener click listener
+     */
     public ListAndProfileAdapter(Context aContext, ArrayList<? extends DatabaseValue> listData, View.OnClickListener listener) {
         this.listData = listData;
         this.listener = listener;
         layoutInflater = LayoutInflater.from(aContext);
     }
 
+    /**
+     * Returns size of the data.
+     * @return size of the data
+     */
     @Override
     public int getCount() {
         return listData.size();
     }
 
+    /**
+     * Returns item at given position.
+     * @param position index of the item
+     * @return item
+     */
     @Override
     public Object getItem(int position) {
         return listData.get(position);
     }
 
+    /**
+     * Returns position of the item.
+     * @param position index of the item
+     * @return position of the item
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * Creates view of the given data.
+     * @param position index of the data
+     * @param convertView part of the view reserved for current data
+     * @param parent listview parent
+     * @return view of the data
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
