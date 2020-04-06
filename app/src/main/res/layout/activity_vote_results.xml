@@ -39,12 +39,14 @@
     </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/results"
-        android:textSize="25sp"
-        android:textStyle="bold"/>
+        style="@style/voteTopic"
+        android:text="@string/results"/>
+
+    <TextView
+        android:id="@+id/resultsInfoText"
+        style="@style/voteInfo"
+        android:text="@string/results_info"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"

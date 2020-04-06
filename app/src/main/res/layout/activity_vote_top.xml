@@ -33,21 +33,13 @@
 
     <TextView
         android:id="@+id/profileName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Profile"
-        android:textSize="25sp"
-        android:textStyle="bold"/>
+        style="@style/voteTopic"
+        android:text="{Profile}"/>
 
     <TextView
         android:id="@+id/voteInfoText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Vote top ~ from list"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        style="@style/voteInfo"
+        android:text="{Vote top ~ from list}"/>
 
     <ListView
         android:id = "@+id/voteItems"

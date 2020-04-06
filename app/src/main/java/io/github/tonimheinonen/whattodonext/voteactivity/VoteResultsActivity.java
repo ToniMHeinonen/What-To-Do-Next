@@ -19,7 +19,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,6 +36,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
     private int topAmount;
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
+    private ArrayList<ListItem> itemsToReset = new ArrayList<>();
 
     /**
      * Initializes VoteResultsActivity.
@@ -58,6 +58,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         if (lastResults) {
             Button next = findViewById(R.id.nextButton);
             next.setText(getString(R.string.save_and_exit));
+            findViewById(R.id.resultsInfoText).setVisibility(View.VISIBLE);
         }
 
         calculateVotePoints();
@@ -136,6 +137,24 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         final ListView list = findViewById(R.id.resultItems);
         VoteResultsAdapter adapter = new VoteResultsAdapter(this, selectedList.getItems());
         list.setAdapter(adapter);
+
+        if (lastResults) {
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    ListItem item = (ListItem) list.getItemAtPosition(position);
+
+                    // Reset selected items
+                    if (itemsToReset.contains(item)) {
+                        itemsToReset.remove(item);
+                        view.setBackground(getResources().getDrawable(R.drawable.vote_item_unselected));
+                    } else {
+                        itemsToReset.add(item);
+                        view.setBackground(getResources().getDrawable(R.drawable.vote_item_selected));
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -172,34 +191,53 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
     public void onDataGetItems(ArrayList<ListItem> items) {
         ArrayList<ListItem> itemsLeft = selectedList.getItems();
 
+        final int DEFAULT = 0, ADD_BONUS = 1, RESET = 2;
+
         // Loop through all items and calculate bonus and peril
         for (ListItem item : items) {
-            boolean contains = false;
+            int state = DEFAULT;
 
-            // If item is inside itemsLeft
-            for (ListItem itemLeft : itemsLeft) {
-                if (item.getDbID().equals(itemLeft.getDbID())) {
-                    contains = true;
-                    itemsLeft.remove(itemLeft);
+            // Check if user selected this item to be done
+            for (ListItem itemToReset : itemsToReset) {
+                if (item.equalsTo(itemToReset)) {
+                    state = RESET;
+                    itemsToReset.remove(itemToReset);
                     break;
+                }
+            }
+
+            // Check if item made it to the final results
+            if (state == DEFAULT) {
+                // If item is inside itemsLeft
+                for (ListItem itemLeft : itemsLeft) {
+                    if (item.equalsTo(itemLeft)) {
+                        state = ADD_BONUS;
+                        itemsLeft.remove(itemLeft);
+                        break;
+                    }
                 }
             }
 
             Debug.print(this, "onDataGetItems", item.toString(), 1);
 
-            // If item made it to final results, add bonus point
-            if (contains) {
-                item.setBonus(item.getBonus() + 1);
-                Debug.print(this, "true","", 1);
-            } else {
-                item.setPeril(item.getPeril() + 1);
-                Debug.print(this, "false","", 1);
+            // Check what to do with items points
+            switch (state) {
+                case DEFAULT:
+                    item.setPeril(item.getPeril() + 1);
 
-                // If peril points are over maximum peril points, drop item from list
-                if (item.getPeril() > GlobalPrefs.loadMaxPerilPoints()) {
+                    // If peril points are over maximum peril points, drop item from list
+                    if (item.getPeril() > GlobalPrefs.loadMaxPerilPoints()) {
+                        item.setPeril(0);
+                        item.setFallen(true);
+                    }
+                    break;
+                case ADD_BONUS:
+                    item.setBonus(item.getBonus() + 1);
+                    break;
+                case RESET:
+                    item.setBonus(0);
                     item.setPeril(0);
-                    item.setFallen(true);
-                }
+                    break;
             }
 
             DatabaseHandler.modifyItem(item);

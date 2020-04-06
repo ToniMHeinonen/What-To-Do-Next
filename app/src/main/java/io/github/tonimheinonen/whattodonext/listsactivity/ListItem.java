@@ -176,6 +176,18 @@ public class ListItem implements Parcelable {
     }
 
     /**
+     * Compares if items are the same.
+     * @param otherItem other item
+     * @return true if items are same
+     */
+    public boolean equalsTo(ListItem otherItem) {
+        if (dbID.equals(otherItem.getDbID()))
+            return true;
+
+        return false;
+    }
+
+    /**
      * Prints this instead of pointer.
      * @return string to print
      */
