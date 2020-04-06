@@ -38,6 +38,10 @@ public class VoteTopActivity extends AppCompatActivity {
     private int currentVotePoint, currentProfileIndex;
     private Profile currentProfile;
 
+    /**
+     * Initializes VoteTopActivity.
+     * @param savedInstanceState previous activity state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +63,9 @@ public class VoteTopActivity extends AppCompatActivity {
         startVoting();
     }
 
+    /**
+     * Setups voting items.
+     */
     private void setupVoteItems() {
         final ListView list = findViewById(R.id.voteItems);
         adapter = new VoteItemAdapter(this, selectedList.getItems());
@@ -85,17 +92,27 @@ public class VoteTopActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sorts vote points so highest available number is always used.
+     */
     private void sortVotePoints() {
         Collections.sort(votePoints, Collections.<Integer>reverseOrder());
         currentVotePoint = votePoints.get(0);
     }
 
+    /**
+     * Adds vote point back to the available points.
+     * @param value points value
+     */
     private void addVotePoint(int value) {
         votePoints.add(value);
         sortVotePoints();
         updateVoteItems();
     }
 
+    /**
+     * Removes vote point from available points.
+     */
     private void removeVotePoint() {
         votePoints.remove(0);
 
@@ -108,6 +125,9 @@ public class VoteTopActivity extends AppCompatActivity {
         updateVoteItems();
     }
 
+    /**
+     * Update views.
+     */
     private void updateVoteItems() {
         if (!votePoints.isEmpty()) {
             infoView.setText(getString(R.string.give_points_to, currentVotePoint));
@@ -119,18 +139,24 @@ public class VoteTopActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Loads correct profile for voting and resets necessary values.
+     */
     private void startVoting() {
         currentProfile = selectedProfiles.get(currentProfileIndex);
         currentProfile.initVoteSize(topAmount);
 
         profileView.setText(currentProfile.getName());
 
+        // Add vote points to list
         for (int i = topAmount; i > 0; i--) {
             votePoints.add(i);
         }
 
+        // Pick highest available number
         currentVotePoint = votePoints.get(0);
 
+        // Clear previous vote points from items
         for (ListItem item : selectedList.getItems()) {
             item.clearVotePoints();
         }
@@ -138,10 +164,18 @@ public class VoteTopActivity extends AppCompatActivity {
         updateVoteItems();
     }
 
+    /**
+     * Make exit prompt when clicking exit.
+     * @param v exit view
+     */
     public void exitPressed(View v) {
         Buddy.exitVoting(this);
     }
 
+    /**
+     * Checks whether to move to next profile or go to results.
+     * @param v next button view
+     */
     public void nextPressed(View v) {
         currentProfileIndex++;
 

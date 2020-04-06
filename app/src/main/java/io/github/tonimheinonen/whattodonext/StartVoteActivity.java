@@ -33,6 +33,10 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
     private int profileTextDefaultColor = -1;
     private ArrayList<Profile> selectedProfiles = new ArrayList<>();
 
+    /**
+     * Initializes StartVoteActivity.
+     * @param savedInstanceState previous activity state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,9 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
 
     //////////////////////// LOAD DATA FROM FIREBASE ////////////////////////
 
+    /**
+     * Shows loading bar and starts loading lists.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -48,26 +55,28 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         DatabaseHandler.getLists(this);
     }
 
+    /**
+     * Checks if lists are empty.
+     * @param lists loaded lists from database
+     */
     @Override
     public void onDataGetLists(ArrayList<ListOfItems> lists) {
         Debug.print(this, "onDataGetLists", "", 1);
         this.lists = lists;
 
         if (lists.isEmpty()) {
+            // If there are no lists, show alert message
             Debug.print(this, "onDataGetLists", "isEmpty", 1);
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.alert_no_lists_title))
                     .setMessage(getString(R.string.alert_no_lists_message))
 
-                    // Specifying a listener allows you to take an action before dismissing the dialog.
-                    // The dialog is automatically dismissed when a dialog button is clicked.
                     .setPositiveButton(getString(R.string.alert_no_lists_move), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             startActivity(new Intent(_this, ListsActivity.class));
                         }
                     })
 
-                    // A null listener allows the button to dismiss the dialog and take no further action.
                     .setNegativeButton(getString(R.string.alert_no_lists_back),  new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             startActivity(new Intent(_this, MainActivity.class));
@@ -76,10 +85,15 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
         } else {
+            // Else start loading profiles
             DatabaseHandler.getProfiles(this);
         }
     }
 
+    /**
+     * Initialize views after profiles have been retrieved.
+     * @param profiles loaded lists from database
+     */
     @Override
     public void onDataGetProfiles(ArrayList<Profile> profiles) {
         this.profiles = profiles;
@@ -88,6 +102,10 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         initializeVotingSetup();
     }
 
+    /**
+     * Loads items for selected list and starts voting.
+     * @param items loaded lists from database
+     */
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
         int firstTopAmount = GlobalPrefs.loadListVoteSizeFirst();
@@ -109,37 +127,11 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
 
     //////////////////////// INITIALIZE VIEWS ////////////////////////
 
+    /**
+     *
+     */
     private void initializeVotingSetup() {
-        // Setup saved lists spinner
-        ArrayList<String> listNames = new ArrayList<>();
-        int startingListPosition = -1;
-
-        String currentListId = GlobalPrefs.loadCurrentList();
-        for (int i = 0; i < lists.size(); i++) {
-            ListOfItems list = lists.get(i);
-            listNames.add(list.getName());
-
-            if (list.getDbID().equals(currentListId)) {
-                startingListPosition = i;
-            }
-        }
-
-        Spinner spinner = findViewById(R.id.listsSpinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.custom_spinner, listNames);
-
-        spinner.setAdapter(adapter);
-        spinner.setSelection(startingListPosition);
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedList = lists.get(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        setupListsSpinner();
 
         // Set listeners for confirm and cancel
         findViewById(R.id.back).setOnClickListener(this);
@@ -152,6 +144,43 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         profileListView.setAdapter(profileListAdapter);
     }
 
+    private void setupListsSpinner() {
+        ArrayList<String> listNames = new ArrayList<>();
+        int startingListPosition = -1;
+
+        // Load current starting position depending on latest used list.
+        String currentListId = GlobalPrefs.loadCurrentList();
+        for (int i = 0; i < lists.size(); i++) {
+            ListOfItems list = lists.get(i);
+            listNames.add(list.getName());
+
+            if (list.getDbID().equals(currentListId)) {
+                startingListPosition = i;
+            }
+        }
+
+        // Set adapter and position
+        Spinner spinner = findViewById(R.id.listsSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spinner, listNames);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(startingListPosition);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedList = lists.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
+    /**
+     * Listens clicks of views.
+     * @param v view
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -175,13 +204,20 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         }
     }
 
+    /**
+     * Moves back to MainActivity.
+     */
     @Override
     public void onBackPressed() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
+    /**
+     * Adds new profile.
+     */
     private void addNewProfile() {
+        // Get name of the new profile
         EditText profileTextView = findViewById(R.id.newProfile);
         String name = profileTextView.getText().toString();
         if (name.isEmpty()) {
@@ -189,19 +225,26 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
             return;
         }
 
+        // Hides keyboard and clears profile edit text
         Buddy.hideKeyboardAndClear(profileTextView);
 
+        // Add new profile to list and database
         Profile profile = new Profile(name);
         DatabaseHandler.addProfile(profile);
         profiles.add(profile);
         profileListAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Selects and deselects profiles.
+     * @param v profile view
+     */
     private void profileClicked(View v) {
         Profile selected = profiles.get((int) v.getTag());
 
         Button btn = (Button) v;
 
+        // If profile text default color has not yet been initialized, retrieve it
         if (profileTextDefaultColor == -1) {
             profileTextDefaultColor = btn.getCurrentTextColor();
         }
@@ -215,6 +258,10 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         }
     }
 
+    /**
+     * Deletes clicked profile.
+     * @param v profile view
+     */
     private void deleteProfile(View v) {
         Profile selected = profiles.get((int) v.getTag());
 
@@ -230,6 +277,9 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         profileListAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Checks whether to start voting or not.
+     */
     private void startVoting() {
         if (selectedProfiles.isEmpty()) {
             Buddy.showToast(Buddy.getString(R.string.toast_selected_profiles_empty));

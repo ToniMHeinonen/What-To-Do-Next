@@ -31,6 +31,10 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
 
+    /**
+     * Initializes VoteResultsActivity.
+     * @param savedInstanceState previous activity state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         selectedList = intent.getExtras().getParcelable("selectedList");
         selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
 
+        // If current topAmount is the same as last vote size
         lastResults = topAmount == GlobalPrefs.loadListVoteSizeSecond();
 
         if (lastResults) {
@@ -52,6 +57,9 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         setupItemList();
     }
 
+    /**
+     * Calculates vote points.
+     */
     private void calculateVotePoints() {
         ArrayList<ListItem> items = selectedList.getItems();
 
@@ -114,12 +122,19 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         }
     }
 
+    /**
+     * Shows results in list view.
+     */
     private void setupItemList() {
         final ListView list = findViewById(R.id.resultItems);
         VoteResultsAdapter adapter = new VoteResultsAdapter(this, selectedList.getItems());
         list.setAdapter(adapter);
     }
 
+    /**
+     * Check whether to start new vote or to end voting.
+     * @param v
+     */
     public void nextPressed(View v) {
         if (lastResults) {
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
@@ -134,10 +149,18 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         }
     }
 
+    /**
+     * Shows exit confirmation prompt.
+     * @param v exit button view
+     */
     public void exitPressed(View v) {
         Buddy.exitVoting(this);
     }
 
+    /**
+     * Calculates bonus and peril points for items.
+     * @param items loaded lists from database
+     */
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
         ArrayList<ListItem> itemsLeft = selectedList.getItems();
@@ -165,6 +188,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
                 item.setPeril(item.getPeril() + 1);
                 Debug.print(this, "false","", 1);
 
+                // If peril points are over maximum peril points, drop item from list
                 if (item.getPeril() > GlobalPrefs.loadMaxPerilPoints()) {
                     item.setPeril(0);
                     item.setFallen(true);
@@ -178,9 +202,17 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         finish();
     }
 
+    /**
+     * Gets lists data from database.
+     * @param lists loaded lists from database
+     */
     @Override
     public void onDataGetLists(ArrayList<ListOfItems> lists) {}
 
+    /**
+     * Gets profile data from database.
+     * @param profiles loaded lists from database
+     */
     @Override
     public void onDataGetProfiles(ArrayList<Profile> profiles) {}
 }
