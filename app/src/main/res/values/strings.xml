@@ -2,6 +2,8 @@
     <string name="app_name">What To Do Next</string>
     <!-- Global -->
     <string name="delete">Delete</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+        ultrices mattis nunc vitae dignissim. Cras finibus libero vel pulvinar finibus.</string>
 
     <!-- MainActivity -->
     <string name="menu_vote">Vote</string>
@@ -76,6 +78,15 @@
     <string name="last_vote">Last Vote</string>
     <string name="half_extra">Half Extra</string>
     <string name="ignore_unselected">Ignore Unselected</string>
+
+    <string name="max_peril_text">Adjust the threshold how many peril points can activity receive
+    before it falls to the fallen list.</string>
+    <string name="first_vote_text">Adjust how many points will be given in the first vote.</string>
+    <string name="last_vote_text">Adjust how many points will be given in the last vote.</string>
+    <string name="half_extra_text">Enabling this will count only half the value of activity\'s
+    extra points in the last vote. Value will be rounded upwards.</string>
+    <string name="ignore_unselected_text">Enabling this will ignore all the activities which no one
+        voted when counting the vote points.</string>
 
     <!-- Email login -->
     <string name="signup_btn">Sign up</string>

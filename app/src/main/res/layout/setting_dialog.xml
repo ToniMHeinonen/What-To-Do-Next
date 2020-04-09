@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#DDD">
+
+    <TextView
+        android:id="@+id/settingTopic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="{Setting}"
+        android:textSize="35sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/settingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/lorem_ipsum"
+        android:textSize="20sp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/perilMinus"
+            style="@style/listItemSigns"
+            android:text="-" />
+
+        <EditText
+            android:id="@+id/perilPoints"
+            style="@style/listItemNumbers"
+            android:text="0"/>
+
+        <Button
+            android:id="@+id/perilPlus"
+            style="@style/listItemSigns"
+            android:text="+" />
+    </LinearLayout>
+
+    <!-- CONFIRM & CANCEL-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/listItemButtons"
+            android:text="@string/list_item_dialog_cancel"
+            android:background="#F00" />
+
+        <Button
+            android:id="@+id/confirm"
+            style="@style/listItemButtons"
+            android:text="@string/list_item_dialog_confirm"
+            android:background="#0F0" />
+    </LinearLayout>
+
+</LinearLayout>
