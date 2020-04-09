@@ -26,12 +26,8 @@
     <!-- ADJUSTING POINTS -->
     <LinearLayout
         android:id="@+id/adjustingPoints"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        style="@style/settingsOptionAdjustments"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/minus"
@@ -48,6 +44,11 @@
             style="@style/listItemSigns"
             android:text="+" />
     </LinearLayout>
+
+    <!-- ON / OFF SWITCH -->
+    <Switch
+        android:id="@+id/onOffSwitch"
+        style="@style/settingsOptionAdjustments"/>
 
     <!-- CONFIRM & CANCEL-->
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 /**
@@ -25,6 +26,7 @@ public class SettingDialog extends Dialog implements
     HALVE_EXTRA = 4;
     private int setting;
     private EditText points;
+    private Switch onOffSwitch;
 
     /**
      * Initializes necessary values.
@@ -64,6 +66,7 @@ public class SettingDialog extends Dialog implements
         TextView text = findViewById(R.id.settingText);
         LinearLayout adjustingPoints = findViewById(R.id.adjustingPoints);
         points = findViewById(R.id.points);
+        onOffSwitch = findViewById(R.id.onOffSwitch);
 
         switch (setting) {
             case MAX_PERIL:
@@ -87,10 +90,14 @@ public class SettingDialog extends Dialog implements
             case IGNORE_UNSELECTED:
                 topic.setText(activity.getString(R.string.ignore_unselected));
                 text.setText(activity.getString(R.string.ignore_unselected_text));
+                onOffSwitch.setVisibility(View.VISIBLE);
+                onOffSwitch.setChecked(GlobalPrefs.loadIgnoreUnselected());
                 break;
             case HALVE_EXTRA:
                 topic.setText(activity.getString(R.string.halve_extra));
                 text.setText(activity.getString(R.string.halve_extra_text));
+                onOffSwitch.setVisibility(View.VISIBLE);
+                onOffSwitch.setChecked(GlobalPrefs.loadHalveExtra());
                 break;
         }
     }
@@ -191,10 +198,12 @@ public class SettingDialog extends Dialog implements
                 }
                 break;
             case IGNORE_UNSELECTED:
-
+                GlobalPrefs.saveIgnoreUnselected(onOffSwitch.isChecked());
+                dismiss();
                 break;
             case HALVE_EXTRA:
-
+                GlobalPrefs.saveHalveExtra(onOffSwitch.isChecked());
+                dismiss();
                 break;
         }
     }

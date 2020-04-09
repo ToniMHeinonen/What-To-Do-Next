@@ -121,4 +121,12 @@
         <item name="android:onClick">settingSelected</item>
     </style>
 
+    <style name="settingsOptionAdjustments">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
 </resources>
