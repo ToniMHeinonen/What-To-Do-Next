@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext.database
+package io.github.tonimheinonen.whattodonext.registration
 
 import com.google.firebase.database.IgnoreExtraProperties
 

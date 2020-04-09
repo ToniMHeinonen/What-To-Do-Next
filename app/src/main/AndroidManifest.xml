@@ -13,9 +13,9 @@
         android:theme="@style/AppTheme">
         <activity android:name=".voteactivity.VoteResultsActivity"></activity>
         <activity android:name=".voteactivity.VoteTopActivity" />
-        <activity android:name=".database.ForgotPasswordActivity" />
-        <activity android:name=".database.LoginActivity" />
-        <activity android:name=".database.SignupActivity" />
+        <activity android:name=".registration.ForgotPasswordActivity" />
+        <activity android:name=".registration.LoginActivity" />
+        <activity android:name=".registration.SignupActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".StartVoteActivity" />
         <activity android:name=".ListsActivity" />

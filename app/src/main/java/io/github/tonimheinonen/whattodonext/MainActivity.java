@@ -1,7 +1,7 @@
 package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.database.LoginActivity;
+import io.github.tonimheinonen.whattodonext.registration.LoginActivity;
 
 import android.content.Intent;
 import android.os.Bundle;

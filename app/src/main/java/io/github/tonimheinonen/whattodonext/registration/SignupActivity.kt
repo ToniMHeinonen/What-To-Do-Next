@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext.database
+package io.github.tonimheinonen.whattodonext.registration
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,7 +11,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import io.github.tonimheinonen.whattodonext.MainActivity
