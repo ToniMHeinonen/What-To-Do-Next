@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.SwitchCompat;
+
 /**
  * Handles user changing app settings.
  * @author Toni Heinonen
@@ -26,7 +28,7 @@ public class SettingDialog extends Dialog implements
     HALVE_EXTRA = 4;
     private int setting;
     private EditText points;
-    private Switch onOffSwitch;
+    private SwitchCompat onOffSwitch;
 
     /**
      * Initializes necessary values.

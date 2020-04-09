@@ -46,9 +46,13 @@
     </LinearLayout>
 
     <!-- ON / OFF SWITCH -->
-    <Switch
+
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/onOffSwitch"
-        style="@style/settingsOptionAdjustments"/>
+        style="@style/settingsOptionAdjustments"
+        android:theme="@style/ThemeOverlay.MySwitchCompat"
+        android:scaleX="1.5"
+        android:scaleY="1.5"/>
 
     <!-- CONFIRM & CANCEL-->
 
