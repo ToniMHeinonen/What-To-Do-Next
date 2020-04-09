@@ -69,6 +69,14 @@
     <string name="list_item_dialog_confirm">Confirm</string>
     <string name="list_item_dialog_cancel">Cancel</string>
 
+    <!-- SettingsActivity -->
+    <string name="settings">Settings</string>
+    <string name="max_peril">Max Peril</string>
+    <string name="first_vote">First Vote</string>
+    <string name="last_vote">Last Vote</string>
+    <string name="half_extra">Half Extra</string>
+    <string name="ignore_unselected">Ignore Unselected</string>
+
     <!-- Email login -->
     <string name="signup_btn">Sign up</string>
     <string name="login_btn">Login</string>
