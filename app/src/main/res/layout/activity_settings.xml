@@ -48,9 +48,9 @@
                 android:text="@string/ignore_unselected"/>
 
             <Button
-                android:id="@+id/halfExtra"
+                android:id="@+id/halveExtra"
                 style="@style/settingsButtons"
-                android:text="@string/half_extra"/>
+                android:text="@string/halve_extra"/>
 
             <Button
                 android:id="@+id/back"

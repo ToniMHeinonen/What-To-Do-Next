@@ -18,6 +18,8 @@ public abstract class GlobalPrefs {
     private static String keyMaxPerilPoints = "max_peril_points";
     private static String keyListVoteSizeFirst = "list_vote_size_first";
     private static String keyListVoteSizeSecond = "list_vote_size_second";
+    private static String keyIgnoreUnselected = "ignore_unselected";
+    private static String keyHalveExtra = "halve_extra";
 
     /**
      * Gets access to the correct prefs depending on the user.
@@ -90,5 +92,37 @@ public abstract class GlobalPrefs {
      */
     public static void saveMaxPerilPoints(int maxPerilPoints) {
         prefs.edit().putInt(keyMaxPerilPoints, maxPerilPoints).apply();
+    }
+
+    /**
+     * Loads whether to ignore unselected when voting or not.
+     * @return true if to ignore
+     */
+    public static boolean loadIgnoreUnselected() {
+        return prefs.getBoolean(keyIgnoreUnselected, true);
+    }
+
+    /**
+     * Saves whether to ignore unselected when voting or not.
+     * @param ignore true if to ignore
+     */
+    public static void saveIgnoreUnselected(boolean ignore) {
+        prefs.edit().putBoolean(keyIgnoreUnselected, ignore).apply();
+    }
+
+    /**
+     * Loads whether to halve extra points in last vote or not.
+     * @return true if to halve
+     */
+    public static boolean loadHalveExtra() {
+        return prefs.getBoolean(keyHalveExtra, true);
+    }
+
+    /**
+     * Saves whether to halve extra points in last vote or not.
+     * @param halve true if to halve
+     */
+    public static void saveHalveExtra(boolean halve) {
+        prefs.edit().putBoolean(keyHalveExtra, halve).apply();
     }
 }

@@ -40,8 +40,8 @@ public class SettingsActivity extends AppCompatActivity {
             case R.id.ignoreUnselected:
                 dialog = new SettingDialog(this, SettingDialog.IGNORE_UNSELECTED);
                 break;
-            case R.id.halfExtra:
-                dialog = new SettingDialog(this, SettingDialog.HALF_EXTRA);
+            case R.id.halveExtra:
+                dialog = new SettingDialog(this, SettingDialog.HALVE_EXTRA);
                 break;
             default:
                 // Add default to suppress error dialog not initialized

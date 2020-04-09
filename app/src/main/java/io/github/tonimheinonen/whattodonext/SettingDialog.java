@@ -2,19 +2,12 @@ package io.github.tonimheinonen.whattodonext;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
-import androidx.appcompat.app.AlertDialog;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 /**
  * Handles user changing app settings.
@@ -29,7 +22,7 @@ public class SettingDialog extends Dialog implements
     private Activity activity;
 
     public static final int MAX_PERIL = 0, FIRST_VOTE = 1, LAST_VOTE = 2, IGNORE_UNSELECTED = 3,
-    HALF_EXTRA = 4;
+    HALVE_EXTRA = 4;
     private int setting;
     private EditText points;
 
@@ -95,9 +88,9 @@ public class SettingDialog extends Dialog implements
                 topic.setText(activity.getString(R.string.ignore_unselected));
                 text.setText(activity.getString(R.string.ignore_unselected_text));
                 break;
-            case HALF_EXTRA:
-                topic.setText(activity.getString(R.string.half_extra));
-                text.setText(activity.getString(R.string.half_extra_text));
+            case HALVE_EXTRA:
+                topic.setText(activity.getString(R.string.halve_extra));
+                text.setText(activity.getString(R.string.halve_extra_text));
                 break;
         }
     }
@@ -200,7 +193,7 @@ public class SettingDialog extends Dialog implements
             case IGNORE_UNSELECTED:
 
                 break;
-            case HALF_EXTRA:
+            case HALVE_EXTRA:
 
                 break;
         }
