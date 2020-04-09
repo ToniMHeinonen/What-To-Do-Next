@@ -59,7 +59,8 @@
                 android:textSize="20sp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:text="@string/back"/>
+                android:text="@string/back"
+                android:onClick="backSelected"/>
 
         </LinearLayout>
 
