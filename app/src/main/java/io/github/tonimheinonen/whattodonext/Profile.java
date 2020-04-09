@@ -25,6 +25,9 @@ public class Profile implements DatabaseValue, Parcelable {
     private String dbID;
 
     @Exclude
+    private boolean selected;
+
+    @Exclude
     private int[] votedItems;
 
     /**
@@ -40,6 +43,23 @@ public class Profile implements DatabaseValue, Parcelable {
      */
     public Profile(String name) {
         this.name = name;
+    }
+
+    /**
+     * Returns if profile has been selected or not.
+     * @return true if selected
+     */
+    @Override
+    public boolean isSelected() {
+        return selected;
+    }
+
+    /**
+     * Sets if profile is selected or not.
+     * @param selected true if selected
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     /**

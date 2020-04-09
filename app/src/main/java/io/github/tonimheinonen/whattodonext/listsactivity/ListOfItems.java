@@ -28,6 +28,9 @@ public class ListOfItems implements DatabaseValue, Parcelable {
     private String dbID;
 
     @Exclude
+    private boolean selected;
+
+    @Exclude
     private ArrayList<ListItem> items = new ArrayList<>();
 
     /**
@@ -91,6 +94,23 @@ public class ListOfItems implements DatabaseValue, Parcelable {
      */
     public void setDbID(String dbID) {
         this.dbID = dbID;
+    }
+
+    /**
+     * Returns if list has been selected or not.
+     * @return true if selected
+     */
+    @Override
+    public boolean isSelected() {
+        return selected;
+    }
+
+    /**
+     * Sets if list is selected or not.
+     * @param selected true if selected
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     /**

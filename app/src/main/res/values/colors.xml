@@ -8,4 +8,5 @@
 
     <!-- ListActivity -->
     <color name="ListsTopButtonTextColor">#000</color>
+    <color name="profileAndListOfItemsTextColor">#000</color>
 </resources>

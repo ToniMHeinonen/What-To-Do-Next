@@ -37,7 +37,6 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
     // Setup voting options
     private ListOfItems selectedList;
     private ListAndProfileAdapter profileListAdapter;
-    private int profileTextDefaultColor = -1;
     private ArrayList<Profile> selectedProfiles = new ArrayList<>();
 
     /**
@@ -250,20 +249,15 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
     private void profileClicked(View v) {
         Profile selected = profiles.get((int) v.getTag());
 
-        Button btn = (Button) v;
-
-        // If profile text default color has not yet been initialized, retrieve it
-        if (profileTextDefaultColor == -1) {
-            profileTextDefaultColor = btn.getCurrentTextColor();
-        }
-
         if (selectedProfiles.contains(selected)) {
             selectedProfiles.remove(selected);
-            btn.setTextColor(profileTextDefaultColor);
+            selected.setSelected(false);
         } else {
             selectedProfiles.add(selected);
-            btn.setTextColor(getResources().getColor(R.color.colorPrimary));
+            selected.setSelected(true);
         }
+
+        profileListAdapter.notifyDataSetChanged();
     }
 
     /**

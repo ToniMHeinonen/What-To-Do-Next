@@ -13,4 +13,5 @@ public interface DatabaseValue {
      * @return name of the object
      */
     String getName();
+    boolean isSelected();
 }

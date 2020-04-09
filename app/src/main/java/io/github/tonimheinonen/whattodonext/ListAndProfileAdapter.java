@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public class ListAndProfileAdapter extends BaseAdapter {
 
+    private Context context;
     private ArrayList<? extends DatabaseValue> listData;
     private LayoutInflater layoutInflater;
     private View.OnClickListener listener;
@@ -29,6 +30,7 @@ public class ListAndProfileAdapter extends BaseAdapter {
      * @param listener click listener
      */
     public ListAndProfileAdapter(Context aContext, ArrayList<? extends DatabaseValue> listData, View.OnClickListener listener) {
+        this.context = aContext;
         this.listData = listData;
         this.listener = listener;
         layoutInflater = LayoutInflater.from(aContext);
@@ -83,6 +85,11 @@ public class ListAndProfileAdapter extends BaseAdapter {
             listName.setText(listData.get(position).getName());
             listName.setOnClickListener(listener);
             listName.setTag(position);
+
+            if (item.isSelected())
+                listName.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+            else
+                listName.setTextColor(context.getResources().getColor(R.color.profileAndListOfItemsTextColor));
 
             Button listDelete = view.findViewById(R.id.savedDelete);
             listDelete.setOnClickListener(listener);
