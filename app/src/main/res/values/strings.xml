@@ -40,7 +40,7 @@
     <string name="results">Results</string>
     <string name="results_info">Select which activities you are going to do (optional):</string>
     <string name="results_name">Name</string>
-    <string name="results_bonus">Bonus</string>
+    <string name="results_extra">Extra</string>
     <string name="results_total">Total</string>
     <string name="save_and_exit">Save and exit</string>
 

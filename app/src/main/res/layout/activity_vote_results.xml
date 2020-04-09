@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="@dimen/results_points_weight"
-            android:text="@string/results_bonus"
+            android:text="@string/results_extra"
             android:textSize="20sp"
             android:gravity="center"/>
 
