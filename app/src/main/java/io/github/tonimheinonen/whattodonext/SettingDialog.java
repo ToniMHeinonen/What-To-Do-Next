@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,7 @@ public class SettingDialog extends Dialog implements
     public static final int MAX_PERIL = 0, FIRST_VOTE = 1, LAST_VOTE = 2, IGNORE_UNSELECTED = 3,
     HALF_EXTRA = 4;
     private int setting;
+    private EditText points;
 
     /**
      * Initializes necessary values.
@@ -51,9 +54,52 @@ public class SettingDialog extends Dialog implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.setting_dialog);
 
+        initializeViews();
+
         // Set listeners for confirm and cancel
+        findViewById(R.id.minus).setOnClickListener(this);
+        findViewById(R.id.plus).setOnClickListener(this);
         findViewById(R.id.cancel).setOnClickListener(this);
         findViewById(R.id.confirm).setOnClickListener(this);
+    }
+
+    /**
+     * Changes texts of views and shows necessary views.
+     */
+    private void initializeViews() {
+        TextView topic = findViewById(R.id.settingTopic);
+        TextView text = findViewById(R.id.settingText);
+        LinearLayout adjustingPoints = findViewById(R.id.adjustingPoints);
+        points = findViewById(R.id.points);
+
+        switch (setting) {
+            case MAX_PERIL:
+                points.setText(String.valueOf(GlobalPrefs.loadMaxPerilPoints()));
+                topic.setText(activity.getString(R.string.max_peril));
+                text.setText(activity.getString(R.string.max_peril_text));
+                adjustingPoints.setVisibility(View.VISIBLE);
+                break;
+            case FIRST_VOTE:
+                points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeFirst()));
+                topic.setText(activity.getString(R.string.first_vote));
+                text.setText(activity.getString(R.string.first_vote_text));
+                adjustingPoints.setVisibility(View.VISIBLE);
+                break;
+            case LAST_VOTE:
+                points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeSecond()));
+                topic.setText(activity.getString(R.string.last_vote));
+                text.setText(activity.getString(R.string.last_vote_text));
+                adjustingPoints.setVisibility(View.VISIBLE);
+                break;
+            case IGNORE_UNSELECTED:
+                topic.setText(activity.getString(R.string.ignore_unselected));
+                text.setText(activity.getString(R.string.ignore_unselected_text));
+                break;
+            case HALF_EXTRA:
+                topic.setText(activity.getString(R.string.half_extra));
+                text.setText(activity.getString(R.string.half_extra_text));
+                break;
+        }
     }
 
     /**
@@ -62,13 +108,100 @@ public class SettingDialog extends Dialog implements
      */
     @Override
     public void onClick(View v) {
+        int p;
+
         switch (v.getId()) {
+            case R.id.plus:
+                p = Integer.parseInt(points.getText().toString());
+                checkPoints(p + 1);
+                break;
+            case R.id.minus:
+                p = Integer.parseInt(points.getText().toString());
+                checkPoints(p - 1);
+                break;
             case R.id.cancel:
                 cancel();
                 break;
             case R.id.confirm:
+                confirm();
                 break;
             default:
+                break;
+        }
+    }
+
+    /**
+     * Check whether the amount of points in EditText is allowed.
+     * @param p amount of points
+     * @return true if points are allowed
+     */
+    private boolean checkPoints(int p) {
+        switch (setting) {
+            case MAX_PERIL:
+                if (p <= 0) {
+                    Buddy.showToast(activity.getString(R.string.points_at_zero));
+                    points.setText("1");
+                    return false;
+                }
+                break;
+            case LAST_VOTE:
+                // If last vote is the same size as first vote
+                if (p >= GlobalPrefs.loadListVoteSizeFirst()) {
+                    Buddy.showToast(activity.getString(R.string.last_vote_same_as_first));
+                    points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeFirst() - 1));
+                    return false;
+                }
+
+                if (p <= 0) {
+                    Buddy.showToast(activity.getString(R.string.points_at_zero));
+                    points.setText("1");
+                    return false;
+                }
+                break;
+            case FIRST_VOTE:
+                // If first vote is the same size as last vote
+                if (p <= GlobalPrefs.loadListVoteSizeSecond()) {
+                    Buddy.showToast(activity.getString(R.string.first_vote_same_as_last));
+                    points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeSecond() + 1));
+                    return false;
+                }
+                break;
+        }
+
+        points.setText(String.valueOf(p));
+        return true;
+    }
+
+    /**
+     * Checks whether to dismiss dialog and save new values.
+     */
+    private void confirm() {
+        int p = Integer.parseInt(points.getText().toString());
+
+        switch (setting) {
+            case MAX_PERIL:
+                if (checkPoints(p)) {
+                    GlobalPrefs.saveMaxPerilPoints(p);
+                    dismiss();
+                }
+                break;
+            case FIRST_VOTE:
+                if (checkPoints(p)) {
+                    GlobalPrefs.saveListVoteSizeFirst(p);
+                    dismiss();
+                }
+                break;
+            case LAST_VOTE:
+                if (checkPoints(p)) {
+                    GlobalPrefs.saveListVoteSizeSecond(p);
+                    dismiss();
+                }
+                break;
+            case IGNORE_UNSELECTED:
+
+                break;
+            case HALF_EXTRA:
+
                 break;
         }
     }

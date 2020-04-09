@@ -20,26 +20,42 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
     }
 
+    /**
+     * Listens for setting button presses.
+     * @param v selected setting
+     */
     public void settingSelected(View v) {
+        SettingDialog dialog;
+
         switch (v.getId()) {
             case R.id.maxPeril:
-
+                dialog = new SettingDialog(this, SettingDialog.MAX_PERIL);
                 break;
             case R.id.firstVote:
-
+                dialog = new SettingDialog(this, SettingDialog.FIRST_VOTE);
                 break;
             case R.id.lastVote:
-
+                dialog = new SettingDialog(this, SettingDialog.LAST_VOTE);
                 break;
             case R.id.ignoreUnselected:
-
+                dialog = new SettingDialog(this, SettingDialog.IGNORE_UNSELECTED);
                 break;
             case R.id.halfExtra:
-
+                dialog = new SettingDialog(this, SettingDialog.HALF_EXTRA);
+                break;
+            default:
+                // Add default to suppress error dialog not initialized
+                dialog = new SettingDialog(this, -1);
                 break;
         }
+
+        dialog.show();
     }
 
+    /**
+     * Listens for back button presses.
+     * @param v back button
+     */
     public void backSelected(View v) {
         super.onBackPressed();
     }
