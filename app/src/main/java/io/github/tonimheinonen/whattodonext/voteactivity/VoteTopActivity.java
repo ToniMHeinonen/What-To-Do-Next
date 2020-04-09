@@ -179,6 +179,14 @@ public class VoteTopActivity extends AppCompatActivity {
      * @param v exit view
      */
     public void exitPressed(View v) {
+        onBackPressed();
+    }
+
+    /**
+     * Override what happens when pressing back during voting.
+     */
+    @Override
+    public void onBackPressed() {
         Buddy.exitVoting(this);
     }
 

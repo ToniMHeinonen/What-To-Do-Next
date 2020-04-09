@@ -188,6 +188,14 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
      * @param v exit button view
      */
     public void exitPressed(View v) {
+        onBackPressed();
+    }
+
+    /**
+     * Override what happens when pressing back during voting.
+     */
+    @Override
+    public void onBackPressed() {
         Buddy.exitVoting(this);
     }
 
