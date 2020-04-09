@@ -78,6 +78,16 @@ public class ListItem implements Parcelable {
     }
 
     /**
+     * Sets total amount of points.
+     *
+     * Mainly used in VoteResultsActivity to halve points.
+     * @param total total amount of extra points
+     */
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    /**
      * Returns bonus points.
      * @return bonus points
      */
