@@ -6,6 +6,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -191,7 +192,8 @@ public abstract class DatabaseHandler {
      * @param list list where items must belong to
      */
     public static void getItems(final OnGetDataListener listener, final ListOfItems list) {
-        dbItems.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = dbItems.orderByChild("listID").equalTo(list.getDbID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Debug.print("DatabaseHandler", "onDataChange",
@@ -205,9 +207,7 @@ public abstract class DatabaseHandler {
                     Debug.print("DatabaseHandler", "onDataChange",
                             "Item name: " + item.getName(), 1);
                     item.setDbID(key);
-                    if (item.getListID().equals(list.getDbID())) {
-                        items.add(item);
-                    }
+                    items.add(item);
                 }
 
                 listener.onDataGetItems(items);
