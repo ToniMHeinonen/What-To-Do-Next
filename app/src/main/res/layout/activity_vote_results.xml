@@ -1,86 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_for_layouts"
-    tools:context=".voteactivity.VoteTopActivity">
-
-    <RelativeLayout
-        style="@style/GenericProgressBackground"
-        android:id="@+id/loadingPanel">
-
-        <ProgressBar
-            style="@style/GenericProgressIndicator"/>
-    </RelativeLayout>
+    android:orientation="vertical"
+    android:background="@drawable/app_bg">
 
     <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_for_layouts"
+        android:background="@drawable/custom_bg"
+        tools:context=".voteactivity.VoteTopActivity">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:text="@string/vote_exit"
-            android:onClick="exitPressed"/>
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:id="@+id/loadingPanel">
 
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:text="@string/vote_next"
-            android:onClick="nextPressed"/>
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                style="@style/voteButtonsOnTop"
+                android:text="@string/vote_exit"
+                android:onClick="exitPressed"/>
+
+            <Button
+                android:id="@+id/nextButton"
+                style="@style/voteButtonsOnTop"
+                android:text="@string/vote_next"
+                android:onClick="nextPressed"/>
+
+        </LinearLayout>
+
+        <TextView
+            style="@style/voteTopic"
+            android:text="@string/results"/>
+
+        <TextView
+            android:id="@+id/resultsInfoText"
+            style="@style/voteInfo"
+            android:text="@string/results_info"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/results_name_weight"
+                android:paddingLeft="10dp"
+                android:text="@string/results_name"
+                android:textSize="20sp"
+                android:textColor="@color/defaultTextColor"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/results_points_weight"
+                android:text="@string/results_extra"
+                android:textSize="20sp"
+                android:textColor="@color/defaultTextColor"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="@dimen/results_points_weight"
+                android:text="@string/results_total"
+                android:textSize="20sp"
+                android:textColor="@color/defaultTextColor"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <ListView
+            android:id = "@+id/resultItems"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"/>
 
     </LinearLayout>
-
-    <TextView
-        style="@style/voteTopic"
-        android:text="@string/results"/>
-
-    <TextView
-        android:id="@+id/resultsInfoText"
-        style="@style/voteInfo"
-        android:text="@string/results_info"
-        android:visibility="gone"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="@dimen/results_name_weight"
-            android:text="@string/results_name"
-            android:textSize="20sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="@dimen/results_points_weight"
-            android:text="@string/results_extra"
-            android:textSize="20sp"
-            android:gravity="center"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="@dimen/results_points_weight"
-            android:text="@string/results_total"
-            android:textSize="20sp"
-            android:gravity="center"/>
-
-    </LinearLayout>
-
-    <ListView
-        android:id = "@+id/resultItems"
-        android:layout_width = "match_parent"
-        android:layout_height = "match_parent"/>
-
 </LinearLayout>

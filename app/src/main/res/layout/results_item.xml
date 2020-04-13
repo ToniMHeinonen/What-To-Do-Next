@@ -6,17 +6,20 @@
 
     <TextView
         android:id="@+id/resultsName"
-        style="@style/listItemName">
+        style="@style/listItemName"
+        android:layout_weight="@dimen/results_name_weight">
     </TextView>
 
     <TextView
         android:id="@+id/resultsBonus"
-        style="@style/listItemPoints">
+        style="@style/listItemPoints"
+        android:layout_weight="@dimen/results_points_weight">
     </TextView>
 
     <TextView
         android:id="@+id/resultsVotePoints"
-        style="@style/listItemPoints">
+        style="@style/listItemPoints"
+        android:layout_weight="@dimen/results_points_weight">
     </TextView>
 
 </LinearLayout>
