@@ -80,7 +80,9 @@
             <ListView
                 android:id = "@+id/savedProfiles"
                 android:layout_width = "match_parent"
-                android:layout_height = "match_parent"/>
+                android:layout_height = "match_parent"
+                android:requiresFadingEdge="vertical"
+                android:fadingEdgeLength="24dp"/>
 
         </LinearLayout>
 
