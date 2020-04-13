@@ -72,6 +72,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     // If name was changed, save it
                     if (!vSelectedList.getText().toString().equals(curList.getName())) {
+                        curList.setName(vSelectedList.getText().toString());
+                        DatabaseHandler.modifyList(curList);
                         Buddy.showToast("New list name saved", Toast.LENGTH_SHORT);
                     }
 

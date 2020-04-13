@@ -76,6 +76,19 @@ public abstract class DatabaseHandler {
     }
 
     /**
+     * Modifies list values.
+     * @param list list to modify
+     */
+    public static void modifyList(ListOfItems list) {
+        Map<String, Object> listValues = list.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(list.getDbID(), listValues);
+
+        dbLists.updateChildren(childUpdates);
+    }
+
+    /**
      * Removes list.
      * @param list list to remove
      */
