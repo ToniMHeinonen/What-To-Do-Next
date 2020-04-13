@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFA500</color>
-    <color name="colorPrimaryDark">#B84221</color>
+    <color name="colorPrimaryDark">#8D5E00</color>
     <color name="colorAccent">#0FF</color>
+    <color name="colorAccentDark">#007A7A</color>
     <color name="textColorPrimary">#FFA500</color>
     <color name="voteItemBackground">#FFF</color>
+    <color name="defaultTextColor">#FFF</color>
+    <color name="listItemButtonBorder">#000</color>
+    <color name="listItemButtonBorderClicked">#FFF</color>
 
     <!-- ListActivity -->
     <color name="ListsTopButtonTextColor">#000</color>

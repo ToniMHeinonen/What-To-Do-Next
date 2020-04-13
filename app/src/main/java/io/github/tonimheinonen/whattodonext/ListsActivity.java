@@ -386,9 +386,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private void setFallenStatus(boolean status) {
         fallenList = status;
 
-        fallenButton.setTextColor(fallenList ?
-                getResources().getColor(R.color.colorAccent) :
-                getResources().getColor(R.color.ListsTopButtonTextColor));
+        fallenButton.setBackground(fallenList ?
+                getResources().getDrawable(R.drawable.button_bg_clicked) :
+                getResources().getDrawable(R.drawable.button_selector));
     }
 
     /*//////////////////// TOP BAR BUTTONS ////////////////////*/

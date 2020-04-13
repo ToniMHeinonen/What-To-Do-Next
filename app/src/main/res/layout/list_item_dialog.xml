@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#DDD">
+        android:background="@drawable/custom_bg">
 
         <EditText
             android:id="@+id/itemName"
@@ -17,7 +17,8 @@
             android:layout_margin="10dp"
             android:hint="@string/list_item_dialog_nameHint"
             android:textSize="25sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/defaultTextColor"/>
 
         <!-- BONUS -->
         <TextView
@@ -84,13 +85,13 @@
                 android:id="@+id/drop"
                 style="@style/listItemButtons"
                 android:text="@string/list_item_dialog_drop"
-                android:background="@color/colorAccent" />
+                android:background="@drawable/drop_button" />
 
             <Button
                 android:id="@+id/delete"
                 style="@style/listItemButtons"
                 android:text="@string/list_item_dialog_delete"
-                android:background="@color/colorPrimary" />
+                android:background="@drawable/delete_button" />
 
         </LinearLayout>
 
@@ -107,13 +108,13 @@
                 android:id="@+id/cancel"
                 style="@style/listItemButtons"
                 android:text="@string/list_item_dialog_cancel"
-                android:background="#F00" />
+                android:background="@drawable/cancel_button" />
 
             <Button
                 android:id="@+id/confirm"
                 style="@style/listItemButtons"
                 android:text="@string/list_item_dialog_confirm"
-                android:background="#0F0" />
+                android:background="@drawable/confirm_button"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
