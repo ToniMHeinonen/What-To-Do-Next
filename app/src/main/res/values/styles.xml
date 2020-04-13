@@ -105,12 +105,23 @@
         <item name="android:layout_centerVertical">true</item>
     </style>
 
+    <!-- START VOTE ACTIVITY -->
+    <style name="startVoteTitles">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
     <!-- VOTE ACTIVITY -->
     <style name="voteButtons">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_margin">10dp</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 

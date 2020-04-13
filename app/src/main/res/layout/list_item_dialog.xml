@@ -91,7 +91,7 @@
                 android:id="@+id/delete"
                 style="@style/listItemButtons"
                 android:text="@string/list_item_dialog_delete"
-                android:background="@drawable/delete_button" />
+                android:background="@drawable/orange_button" />
 
         </LinearLayout>
 
