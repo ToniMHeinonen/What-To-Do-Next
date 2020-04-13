@@ -1,69 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_margin="40dp"
-    tools:context=".SettingsActivity">
+    android:background="@drawable/app_bg">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/settings"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="30dp"
-        android:layout_gravity="center" />
-
-    <!-- Wrap inside Scroll View just in case -->
-    <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_margin="40dp"
+        tools:context=".SettingsActivity"
+        android:background="@drawable/custom_bg">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:textColor="@color/defaultTextColor"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="30dp"
+            android:layout_gravity="center" />
+
+        <!-- Wrap inside Scroll View just in case -->
+        <ScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <Button
-                android:id="@+id/maxPeril"
-                style="@style/settingsButtons"
-                android:text="@string/max_peril"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <Button
-                android:id="@+id/firstVote"
-                style="@style/settingsButtons"
-                android:text="@string/first_vote"/>
+                <Button
+                    android:id="@+id/maxPeril"
+                    style="@style/settingsButtons"
+                    android:text="@string/max_peril"/>
 
-            <Button
-                android:id="@+id/lastVote"
-                style="@style/settingsButtons"
-                android:text="@string/last_vote"/>
+                <Button
+                    android:id="@+id/firstVote"
+                    style="@style/settingsButtons"
+                    android:text="@string/first_vote"/>
 
-            <Button
-                android:id="@+id/ignoreUnselected"
-                style="@style/settingsButtons"
-                android:text="@string/ignore_unselected"/>
+                <Button
+                    android:id="@+id/lastVote"
+                    style="@style/settingsButtons"
+                    android:text="@string/last_vote"/>
 
-            <Button
-                android:id="@+id/halveExtra"
-                style="@style/settingsButtons"
-                android:text="@string/halve_extra"/>
+                <Button
+                    android:id="@+id/ignoreUnselected"
+                    style="@style/settingsButtons"
+                    android:text="@string/ignore_unselected"/>
 
-            <Button
-                android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:text="@string/back"
-                android:onClick="backSelected"/>
+                <Button
+                    android:id="@+id/halveExtra"
+                    style="@style/settingsButtons"
+                    android:text="@string/halve_extra"/>
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:background="@drawable/button_selector"
+                    android:text="@string/back"
+                    android:onClick="backSelected"/>
 
-    </ScrollView>
+            </LinearLayout>
 
-</LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+</RelativeLayout>

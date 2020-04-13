@@ -7,8 +7,11 @@
     <color name="textColorPrimary">#FFA500</color>
     <color name="voteItemBackground">#FFF</color>
     <color name="defaultTextColor">#FFF</color>
+
+    <!-- Drawables -->
     <color name="listItemButtonBorder">#FFF</color>
     <color name="listItemButtonBorderClicked">#000</color>
+    <color name="bgBorderColor">#515151</color>
 
     <!-- ListActivity -->
     <color name="ListsTopButtonTextColor">#000</color>
