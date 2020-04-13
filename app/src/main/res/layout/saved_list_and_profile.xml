@@ -7,20 +7,13 @@
     <Button
         android:id="@+id/savedName"
         android:layout_weight="0.7"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="25sp"
-        android:textStyle="bold"/>
+        style="@style/listAndProfile"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/savedDelete"
         android:layout_weight="0.3"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
         android:text="@string/delete"
-        android:textSize="15sp"
-        android:textStyle="bold"/>
+        style="@style/listAndProfile"/>
 
 </LinearLayout>

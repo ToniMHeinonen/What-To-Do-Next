@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#DDD">
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/newList"
@@ -32,9 +32,9 @@
                 android:layout_gravity="end"
                 android:layout_margin="10dp"
                 android:text="@string/lists_back"
-                android:textSize="25sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                android:background="#F00"/>
+                android:background="@drawable/cancel_button"/>
 
             <Button
                 android:id="@+id/addList"
@@ -43,17 +43,15 @@
                 android:layout_gravity="end"
                 android:layout_margin="10dp"
                 android:text="@string/lists_add"
-                android:textSize="25sp"
+                android:textSize="15sp"
                 android:textStyle="bold"
-                android:background="#0F0"/>
+                android:background="@drawable/confirm_button"/>
         </LinearLayout>
 
         <ListView
             android:id = "@+id/savedLists"
             android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"
-            android:divider="#000"
-            android:dividerHeight="1dp"/>
+            android:layout_height = "wrap_content"/>
 
     </LinearLayout>
 </RelativeLayout>

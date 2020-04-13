@@ -8,10 +8,16 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:dropDownListViewStyle">@style/SpinnerStyle</item>
         <item name="editTextStyle">@style/App_EditTextStyle</item>
+        <item name="android:listViewStyle">@style/listViewStyle</item>
     </style>
 
     <style name="SpinnerStyle" parent="Widget.AppCompat.ListView.DropDown">
-        <item name="android:divider">#d1d1d1</item>
+        <item name="android:divider">@drawable/list_divider</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+
+    <style name="listViewStyle" parent="Widget.AppCompat.ListView">
+        <item name="android:divider">@drawable/list_divider</item>
         <item name="android:dividerHeight">1dp</item>
     </style>
 
@@ -19,6 +25,7 @@
         <item name="android:gravity">center</item>
         <item name="android:inputType">text</item>
         <item name="android:imeOptions">actionDone</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
         <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
     </style>
 
@@ -30,6 +37,16 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:textSize">30sp</item>
         <item name="android:onClick">menuButtonClicked</item>
+    </style>
+
+    <!-- LIST AND PROFILE -->
+    <style name="listAndProfile">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:background">@drawable/button_selector</item>
     </style>
 
     <!-- LOADING ICON -->
