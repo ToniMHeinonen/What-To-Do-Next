@@ -6,5 +6,5 @@
         android:type="linear"
         android:angle="270" />
     <corners android:radius="@dimen/button_radius" />
-    <stroke android:width="3dp" android:color="@color/colorPrimary" />
+    <stroke android:width="@dimen/button_border_width" android:color="@color/colorPrimary" />
 </shape>
