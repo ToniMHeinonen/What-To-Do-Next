@@ -55,13 +55,16 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, ListsActivity.class);
         } else if (v.getId() == R.id.settingsButton) {
             intent = new Intent(this, SettingsActivity.class);
-        } else if (v.getId() == R.id.logOutButton) {
-            intent = new Intent(this, LoginActivity.class);
         } else {
             // Add else statement to fix possibility for null intent
             return;
         }
 
         startActivity(intent);
+    }
+
+    public void logOutClicked(View v) {
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 }
