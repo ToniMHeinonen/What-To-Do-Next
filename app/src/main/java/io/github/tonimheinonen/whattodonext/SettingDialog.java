@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
 
@@ -141,7 +142,7 @@ public class SettingDialog extends Dialog implements
         switch (setting) {
             case MAX_PERIL:
                 if (p <= 0) {
-                    Buddy.showToast(activity.getString(R.string.points_at_zero));
+                    Buddy.showToast(activity.getString(R.string.points_at_zero), Toast.LENGTH_LONG);
                     points.setText("1");
                     return false;
                 }
@@ -149,13 +150,13 @@ public class SettingDialog extends Dialog implements
             case LAST_VOTE:
                 // If last vote is the same size as first vote
                 if (p >= GlobalPrefs.loadListVoteSizeFirst()) {
-                    Buddy.showToast(activity.getString(R.string.last_vote_same_as_first));
+                    Buddy.showToast(activity.getString(R.string.last_vote_same_as_first), Toast.LENGTH_LONG);
                     points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeFirst() - 1));
                     return false;
                 }
 
                 if (p <= 0) {
-                    Buddy.showToast(activity.getString(R.string.points_at_zero));
+                    Buddy.showToast(activity.getString(R.string.points_at_zero), Toast.LENGTH_LONG);
                     points.setText("1");
                     return false;
                 }
@@ -163,7 +164,7 @@ public class SettingDialog extends Dialog implements
             case FIRST_VOTE:
                 // If first vote is the same size as last vote
                 if (p <= GlobalPrefs.loadListVoteSizeSecond()) {
-                    Buddy.showToast(activity.getString(R.string.first_vote_same_as_last));
+                    Buddy.showToast(activity.getString(R.string.first_vote_same_as_last), Toast.LENGTH_LONG);
                     points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeSecond() + 1));
                     return false;
                 }

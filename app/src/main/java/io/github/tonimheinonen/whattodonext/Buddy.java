@@ -40,11 +40,14 @@ public abstract class Buddy {
      *
      * Notice that in order for this to work, you need to add android:focusable="true" &
      * android:focusableInTouchMode="true" to current view's parent layout.
-     * @param editTextView
+     * @param editTextView view to clear focus
+     * @param clearText true if to reset text field to ""
      */
-    public static void hideKeyboardAndClear(EditText editTextView) {
+    public static void hideKeyboardAndClear(EditText editTextView, boolean clearText) {
         editTextView.clearFocus();
-        editTextView.setText("");
+        if (clearText)
+            editTextView.setText("");
+
         InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
     }
@@ -52,9 +55,10 @@ public abstract class Buddy {
     /**
      * Shows long toast text.
      * @param text message to show
+     * @param duration either Toast.LENGTH_LONG or Toast.LENGTH_SHORT
      */
-    public static void showToast(String text) {
-        Toast.makeText(context, text, Toast.LENGTH_LONG).show();
+    public static void showToast(String text, int duration) {
+        Toast.makeText(context, text, duration).show();
     }
 
     /**

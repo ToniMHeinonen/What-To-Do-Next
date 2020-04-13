@@ -8,9 +8,12 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,8 +43,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
     private boolean ascending = true;
-    private TextView vName, vTotal, vBonus, vPeril, vSelectedList;
-    private int originalTextColor;
+    private TextView vName, vTotal, vBonus, vPeril, vNoList;
+    private EditText vSelectedList;
 
     private Button fallenButton;
     private boolean fallenList = false;
@@ -60,8 +63,24 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         vTotal = findViewById(R.id.total);
         vBonus = findViewById(R.id.bonus);
         vPeril = findViewById(R.id.peril);
+        vNoList = findViewById(R.id.no_list);
         vSelectedList = findViewById(R.id.selected_list);
-        originalTextColor = vName.getCurrentTextColor();
+
+        vSelectedList.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    // If name was changed, save it
+                    if (!vSelectedList.getText().toString().equals(curList.getName())) {
+                        Buddy.showToast("New list name saved", Toast.LENGTH_SHORT);
+                    }
+
+                    Buddy.hideKeyboardAndClear(vSelectedList, false);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         // Find fallen button for controlling it's color
         fallenButton = findViewById(R.id.fallenButton);
@@ -132,10 +151,14 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         setFallenStatus(false); // Show normal items when list changes
 
         // Update list text on top of the screen
-        if (list != null)
+        if (list != null) {
+            vSelectedList.setVisibility(View.VISIBLE);
+            vNoList.setVisibility(View.GONE);
             vSelectedList.setText(list.getName());
-        else
-            vSelectedList.setText(getString(R.string.no_list_selected));
+        } else {
+            vSelectedList.setVisibility(View.GONE);
+            vNoList.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
@@ -317,19 +340,19 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private void changeColor(int selected) {
         vName.setTextColor(selected == NAME ?
                 getResources().getColor(R.color.textColorPrimary) :
-                originalTextColor);
+                getResources().getColor(R.color.defaultTextColor));
 
         vTotal.setTextColor(selected == TOTAL ?
                 getResources().getColor(R.color.textColorPrimary) :
-                originalTextColor);
+                getResources().getColor(R.color.defaultTextColor));
 
         vBonus.setTextColor(selected == BONUS ?
                 getResources().getColor(R.color.textColorPrimary) :
-                originalTextColor);
+                getResources().getColor(R.color.defaultTextColor));
 
         vPeril.setTextColor(selected == PERIL ?
                 getResources().getColor(R.color.textColorPrimary) :
-                originalTextColor);
+                getResources().getColor(R.color.defaultTextColor));
     }
 
     /**

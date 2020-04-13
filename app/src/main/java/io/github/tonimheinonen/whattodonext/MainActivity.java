@@ -35,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show();
             Buddy.initialize(this);
             DatabaseHandler.initialize();
             GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
+            Buddy.showToast("Logged in", Toast.LENGTH_SHORT);
         }
     }
 

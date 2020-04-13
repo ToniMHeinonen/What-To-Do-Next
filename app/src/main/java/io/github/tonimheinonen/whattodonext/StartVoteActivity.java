@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -117,7 +118,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         int firstTopAmount = GlobalPrefs.loadListVoteSizeFirst();
 
         if (items.size() < firstTopAmount) {
-            Buddy.showToast(Buddy.getString(R.string.toast_not_enough_activities));
+            Buddy.showToast(Buddy.getString(R.string.toast_not_enough_activities), Toast.LENGTH_LONG);
             return;
         }
 
@@ -228,12 +229,12 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         EditText profileTextView = findViewById(R.id.newProfile);
         String name = profileTextView.getText().toString();
         if (name.isEmpty()) {
-            Buddy.showToast(Buddy.getString(R.string.toast_profile_empty));
+            Buddy.showToast(Buddy.getString(R.string.toast_profile_empty), Toast.LENGTH_LONG);
             return;
         }
 
         // Hides keyboard and clears profile edit text
-        Buddy.hideKeyboardAndClear(profileTextView);
+        Buddy.hideKeyboardAndClear(profileTextView, true);
 
         // Add new profile to list and database
         Profile profile = new Profile(name);
@@ -268,7 +269,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         Profile selected = profiles.get((int) v.getTag());
 
         if (selectedProfiles.contains(selected)) {
-            Buddy.showToast(Buddy.getString(R.string.toast_cant_delete_selected));
+            Buddy.showToast(Buddy.getString(R.string.toast_cant_delete_selected), Toast.LENGTH_LONG);
             return;
         }
 
@@ -284,7 +285,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
      */
     private void startVoting() {
         if (selectedProfiles.isEmpty()) {
-            Buddy.showToast(Buddy.getString(R.string.toast_selected_profiles_empty));
+            Buddy.showToast(Buddy.getString(R.string.toast_selected_profiles_empty), Toast.LENGTH_LONG);
             return;
         }
 
