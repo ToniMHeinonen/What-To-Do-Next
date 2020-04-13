@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">What To Do Next</string>
+    <string name="app_name">What To Do Next?</string>
     <!-- Global -->
     <string name="delete">Delete</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
