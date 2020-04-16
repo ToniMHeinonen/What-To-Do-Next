@@ -41,7 +41,8 @@
         <EditText
             android:id="@+id/points"
             style="@style/listItemNumbers"
-            android:text="0"/>
+            android:text="0"
+            android:gravity="center"/>
 
         <Button
             android:id="@+id/plus"
