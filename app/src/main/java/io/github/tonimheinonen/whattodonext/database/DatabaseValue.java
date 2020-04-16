@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.database;
 
 /**
  * Represents database value.

@@ -5,14 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import io.github.tonimheinonen.whattodonext.DatabaseValue;
 import io.github.tonimheinonen.whattodonext.R;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
 
 /**
  * Handles List View with voting items.

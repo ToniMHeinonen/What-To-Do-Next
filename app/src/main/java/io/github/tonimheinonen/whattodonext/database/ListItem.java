@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext.listsactivity;
+package io.github.tonimheinonen.whattodonext.database;
 
 import android.os.Parcel;
 import android.os.Parcelable;

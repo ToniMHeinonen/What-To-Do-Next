@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import io.github.tonimheinonen.whattodonext.R;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
 
 /**
  * Handles List View with results items.

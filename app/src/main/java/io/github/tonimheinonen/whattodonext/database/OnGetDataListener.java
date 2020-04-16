@@ -1,9 +1,6 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.database;
 
 import java.util.ArrayList;
-
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 /**
  * Listens data retrieval from Firebase database.

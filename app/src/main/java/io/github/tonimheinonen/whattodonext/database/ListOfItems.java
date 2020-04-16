@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext.listsactivity;
+package io.github.tonimheinonen.whattodonext.database;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,8 +9,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import io.github.tonimheinonen.whattodonext.DatabaseValue;
 
 /**
  * Represents a list of items.

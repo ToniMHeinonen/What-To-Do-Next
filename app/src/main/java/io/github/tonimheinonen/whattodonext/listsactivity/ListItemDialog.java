@@ -11,6 +11,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AlertDialog;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
 
 /**
  * Handles modifying of List Items via Dialog.

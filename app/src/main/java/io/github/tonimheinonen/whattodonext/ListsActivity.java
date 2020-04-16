@@ -1,11 +1,14 @@
 package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
+import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
+import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
+import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 

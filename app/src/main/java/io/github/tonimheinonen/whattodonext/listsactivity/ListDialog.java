@@ -11,8 +11,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AlertDialog;
+import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
-import io.github.tonimheinonen.whattodonext.ListAndProfileAdapter;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
 

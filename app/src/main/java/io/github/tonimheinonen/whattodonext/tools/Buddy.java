@@ -16,7 +16,7 @@ import java.util.Iterator;
 import androidx.appcompat.app.AlertDialog;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.StartVoteActivity;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
 
 /**
  * Handles often used helpful methods.

@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.listsactivity;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 import java.util.ArrayList;
+
+import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.database.DatabaseValue;
 
 /**
  * Handles ListView with ListOfView and Profile.
