@@ -112,23 +112,13 @@ public abstract class Buddy {
      * @param activity
      */
     public static void exitVoting(final Activity activity) {
-        new AlertDialog.Builder(activity)
-                .setTitle(getString(R.string.alert_exit_title))
-                .setMessage(getString(R.string.alert_exit_message))
-
-                // Specifying a listener allows you to take an action before dismissing the dialog.
-                // The dialog is automatically dismissed when a dialog button is clicked.
-                .setPositiveButton(getString(R.string.alert_exit_yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        activity.startActivity(new Intent(activity, StartVoteActivity.class));
-                        activity.finish();
-                    }
-                })
-
-                // A null listener allows the button to dismiss the dialog and take no further action.
-                .setNegativeButton(getString(R.string.alert_exit_no),  null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        showAlert(activity, getString(R.string.alert_exit_title),
+                getString(R.string.alert_exit_message),
+                getString(R.string.alert_exit_yes), null,
+                () -> {
+                    activity.startActivity(new Intent(activity, StartVoteActivity.class));
+                    activity.finish();
+                }, null);
     }
 
     /**
