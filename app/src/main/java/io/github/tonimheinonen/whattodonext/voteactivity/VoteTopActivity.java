@@ -1,14 +1,10 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.Buddy;
-import io.github.tonimheinonen.whattodonext.Debug;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.Profile;
 import io.github.tonimheinonen.whattodonext.R;
-import io.github.tonimheinonen.whattodonext.StartVoteActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItemAdapter;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListOfItems;
 
 import android.content.Intent;

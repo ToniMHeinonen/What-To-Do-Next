@@ -1,9 +1,12 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.tools;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
+
+import io.github.tonimheinonen.whattodonext.BuildConfig;
+import io.github.tonimheinonen.whattodonext.R;
 
 /**
  * Handles debugging.

@@ -1,10 +1,10 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.DatabaseHandler;
-import io.github.tonimheinonen.whattodonext.Debug;
-import io.github.tonimheinonen.whattodonext.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.tools.Debug;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.MainActivity;
 import io.github.tonimheinonen.whattodonext.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.Profile;

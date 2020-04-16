@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.tools;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,6 +14,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import androidx.appcompat.app.AlertDialog;
+import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.StartVoteActivity;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItem;
 
 /**
