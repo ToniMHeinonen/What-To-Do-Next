@@ -112,15 +112,16 @@
     <string name="update_password">Update password</string>
     <string name="logout">Log out</string>
     <string name="email_hint">Email</string>
-    <string name="password_hint">Password</string>
+    <string name="login_password_hint">Password</string>
+    <string name="registration_password_hint">Password (min 6 characters)</string>
     <string name="or_text">OR</string>
 
     <string name="fields_empty">Please fill all the fields</string>
     <string name="login_success">Successfully logged in</string>
-    <string name="login_failed">Login failed, check email and password</string>
+    <string name="login_failed">Login failed: Check email and password</string>
     <string name="registration_success">Successfully registered</string>
-    <string name="registration_failed">Registration failed, use valid email</string>
+    <string name="registration_failed">Registration failed: Give valid email and password</string>
     <string name="email_empty">Please enter email id</string>
     <string name="password_reset_success">Reset link sent to your email</string>
-    <string name="password_reset_failed">Unable to send reset mail, use valid email</string>
+    <string name="password_reset_failed">Unable to send reset mail: Use valid email</string>
 </resources>
