@@ -1,7 +1,6 @@
 package io.github.tonimheinonen.whattodonext.listsactivity;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -10,8 +9,8 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import androidx.appcompat.app.AlertDialog;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
@@ -111,19 +110,13 @@ public class ListDialog extends Dialog implements
         Debug.print("ListDialog", "deleteList", "", 1);
         final int index = (int) v.getTag();
         String name = lists.get(index).getName();
-        new AlertDialog.Builder(activity)
-                .setTitle(activity.getString(R.string.alert_delete_topic, name))
-                .setMessage(activity.getString(R.string.alert_delete_message))
 
-                .setPositiveButton(activity.getString(R.string.alert_delete_confirm), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        activity.deleteList(index);
-                        dismiss();
-                    }
-                })
-
-                .setNegativeButton(activity.getString(R.string.alert_delete_cancel),  null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        Buddy.showAlert(activity, activity.getString(R.string.alert_delete_topic, name),
+                activity.getString(R.string.alert_delete_message),
+                activity.getString(R.string.alert_delete_confirm), null,
+                () -> {
+                    activity.deleteList(index);
+                    dismiss();
+                }, null);
     }
 }
