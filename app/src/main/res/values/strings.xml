@@ -96,6 +96,12 @@
     <string name="first_vote_same_as_last">Points has to be higher than in last vote!</string>
     <string name="points_at_zero">Points has to be at least 1!</string>
 
+    <!-- CUSTOM ALERT DIALOG -->
+    <string name="alertTopic">Alert!</string>
+    <string name="alertMessage">Are you sure?</string>
+    <string name="alertPositiveButton">Ok</string>
+    <string name="alertNegativeButton">Cancel</string>
+
     <!-- Email login -->
     <string name="signup_btn">Sign up</string>
     <string name="login_btn">Login</string>
