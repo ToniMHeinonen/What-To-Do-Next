@@ -22,7 +22,8 @@
     <string name="toast_profile_empty">New profile name is empty!</string>
     <string name="toast_cant_delete_selected">Selected profiles can\'t be deleted!</string>
     <string name="toast_selected_profiles_empty">You need to select at least 1 profile!</string>
-    <string name="toast_not_enough_activities">Current list does not have enough activities!</string>
+    <string name="toast_not_enough_activities">Selected list does not have enough activities!
+        (%1$s required)</string>
 
     <!-- Voting -->
     <string name="alert_exit_title">Exit</string>

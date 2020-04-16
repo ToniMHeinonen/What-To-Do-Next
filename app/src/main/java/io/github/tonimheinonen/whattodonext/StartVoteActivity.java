@@ -41,6 +41,9 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
     private ArrayList<ListOfItems> lists = new ArrayList<>();
     private ArrayList<Profile> profiles = new ArrayList<>();
 
+    private boolean listBigEnough = false;
+    private int firstVoteSize;
+
     // Setup voting options
     private ListOfItems selectedList;
     private ListAndProfileAdapter profileListAdapter;
@@ -54,6 +57,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_vote);
+        firstVoteSize = GlobalPrefs.loadListVoteSizeFirst();
     }
 
     //////////////////////// LOAD DATA FROM FIREBASE ////////////////////////
@@ -121,22 +125,16 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
      */
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
-        int firstTopAmount = GlobalPrefs.loadListVoteSizeFirst();
+        Buddy.filterListByFallen(items, false);
 
-        if (items.size() < firstTopAmount) {
-            Buddy.showToast(Buddy.getString(R.string.toast_not_enough_activities), Toast.LENGTH_LONG);
+        if (items.size() < firstVoteSize) {
+            Buddy.showToast(getString(R.string.toast_not_enough_activities,
+                    String.valueOf(firstVoteSize)), Toast.LENGTH_LONG);
             return;
         }
 
-        Buddy.filterListByFallen(items, false);
         selectedList.setItems(items); // Put loaded items to selected list
-
-        // Move to voting top list
-        Intent intent = new Intent(this, VoteTopActivity.class);
-        intent.putExtra("topAmount", firstTopAmount);
-        intent.putExtra("selectedList", selectedList);
-        intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
-        startActivity(intent);
+        listBigEnough = true;
     }
 
     //////////////////////// INITIALIZE VIEWS ////////////////////////
@@ -183,7 +181,10 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                listBigEnough = false; // Change to false to prevent starting before items loaded
                 selectedList = lists.get(position);
+                GlobalPrefs.saveCurrentList(selectedList.getDbID());
+                DatabaseHandler.getItems(_this, selectedList);
             }
 
             @Override
@@ -295,6 +296,17 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
             return;
         }
 
-        DatabaseHandler.getItems(this, selectedList);
+        if (!listBigEnough) {
+            Buddy.showToast(getString(R.string.toast_not_enough_activities,
+                    String.valueOf(firstVoteSize)), Toast.LENGTH_LONG);
+            return;
+        }
+
+        // Move to voting top list
+        Intent intent = new Intent(this, VoteTopActivity.class);
+        intent.putExtra("topAmount", GlobalPrefs.loadListVoteSizeFirst());
+        intent.putExtra("selectedList", selectedList);
+        intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
+        startActivity(intent);
     }
 }
