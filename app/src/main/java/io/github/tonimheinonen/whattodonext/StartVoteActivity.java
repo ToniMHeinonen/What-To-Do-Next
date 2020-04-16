@@ -84,23 +84,12 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         if (lists.isEmpty()) {
             // If there are no lists, show alert message
             Debug.print(this, "onDataGetLists", "isEmpty", 1);
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.alert_no_lists_title))
-                    .setMessage(getString(R.string.alert_no_lists_message))
-
-                    .setPositiveButton(getString(R.string.alert_no_lists_move), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(_this, ListsActivity.class));
-                        }
-                    })
-
-                    .setNegativeButton(getString(R.string.alert_no_lists_back),  new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(_this, MainActivity.class));
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+            Buddy.showAlert(this, getString(R.string.alert_no_lists_title),
+                    getString(R.string.alert_no_lists_message),
+                    getString(R.string.alert_no_lists_move),
+                    getString(R.string.alert_no_lists_back),
+                    () -> startActivity(new Intent(_this, ListsActivity.class)),
+                    () -> startActivity(new Intent(_this, MainActivity.class)));
         } else {
             // Else start loading profiles
             DatabaseHandler.getProfiles(this);
