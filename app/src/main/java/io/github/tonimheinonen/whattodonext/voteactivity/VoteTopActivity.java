@@ -35,8 +35,8 @@ public class VoteTopActivity extends AppCompatActivity {
     private TextView profileView, infoView;
     private VoteItemAdapter adapter;
 
-    private ArrayList<Integer> votePoints = new ArrayList<>();
-    private ArrayList<ListItem> votedItems = new ArrayList<>();
+    private ArrayList<Integer> votePoints;
+    private ArrayList<ListItem> votedItems;
     private int currentVotePoint, currentProfileIndex;
     private Profile currentProfile;
 
@@ -149,6 +149,9 @@ public class VoteTopActivity extends AppCompatActivity {
      * Loads correct profile for voting and resets necessary values.
      */
     private void startVoting() {
+        votePoints = new ArrayList<>();
+        votedItems = new ArrayList<>();
+
         currentProfile = selectedProfiles.get(currentProfileIndex);
         currentProfile.initVoteSize(topAmount);
 
