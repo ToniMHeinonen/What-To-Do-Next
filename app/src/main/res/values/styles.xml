@@ -22,7 +22,7 @@
     </style>
 
     <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">left</item>
         <item name="android:inputType">textNoSuggestions</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:textColor">@color/defaultTextColor</item>
@@ -132,14 +132,14 @@
 
     <style name="listName">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">0.7</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
         <item name="android:text">@string/no_list_selected</item>
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/defaultTextColor</item>
-        <item name="android:layout_centerVertical">true</item>
     </style>
 
     <!-- START VOTE ACTIVITY -->
