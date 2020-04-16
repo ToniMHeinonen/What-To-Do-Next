@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FFA500</color>
-    <color name="colorPrimaryDark">#8D5E00</color>
+    <color name="colorPrimaryDark">#D49A27</color>
     <color name="colorAccent">#0FF</color>
-    <color name="colorAccentDark">#007A7A</color>
+    <color name="colorAccentDark">#22DCDC</color>
     <color name="textColorPrimary">#FFA500</color>
     <color name="voteItemBackground">#FFF</color>
     <color name="defaultTextColor">#FFF</color>
