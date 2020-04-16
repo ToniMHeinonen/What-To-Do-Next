@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
             Buddy.initialize(this);
             DatabaseHandler.initialize();
             GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
-            Buddy.showToast("Logged in", Toast.LENGTH_SHORT);
         }
     }
 

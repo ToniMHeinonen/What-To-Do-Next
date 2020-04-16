@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import io.github.tonimheinonen.whattodonext.R
+import io.github.tonimheinonen.whattodonext.tools.Buddy
 
 /**
  * Handles resetting forgotten password.
@@ -49,17 +50,20 @@ class ForgotPasswordActivity : AppCompatActivity() {
         resetPasswordBtn.setOnClickListener {
             var email: String = emailEt.text.toString()
             if (TextUtils.isEmpty(email)) {
-                Toast.makeText(this, "Please enter email id", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.email_empty), Toast.LENGTH_LONG).show()
             } else {
+                Buddy.registrationShowLoading(this)
+
                 auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(this, OnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Toast.makeText(this, "Reset link sent to your email", Toast.LENGTH_LONG)
+                                Toast.makeText(this, getString(R.string.password_reset_success), Toast.LENGTH_LONG)
                                         .show()
                                 startActivity(Intent(this, LoginActivity::class.java));
                             } else {
-                                Toast.makeText(this, "Unable to send reset mail", Toast.LENGTH_LONG)
+                                Toast.makeText(this, getString(R.string.password_reset_failed), Toast.LENGTH_LONG)
                                         .show()
+                                Buddy.registrationHideLoading(this)
                             }
                         })
             }

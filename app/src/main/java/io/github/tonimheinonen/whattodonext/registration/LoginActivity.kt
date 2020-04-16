@@ -1,17 +1,19 @@
 package io.github.tonimheinonen.whattodonext.registration
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import io.github.tonimheinonen.whattodonext.MainActivity
 import io.github.tonimheinonen.whattodonext.R
+import io.github.tonimheinonen.whattodonext.tools.Buddy
 
 /**
  * Handles logging in to Firebase database.
@@ -55,16 +57,19 @@ class LoginActivity : AppCompatActivity() {
             var password: String = passwordEt.text.toString()
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                Toast.makeText(this@LoginActivity, "Please fill all the fields", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LoginActivity, getString(R.string.fields_empty), Toast.LENGTH_LONG).show()
             } else{
+                Buddy.registrationShowLoading(this)
+
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful) {
-                        Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_LONG).show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
                     }else {
-                        Toast.makeText(this, "Login Failed", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()
+                        Buddy.registrationHideLoading(this)
                     }
                 })
             }

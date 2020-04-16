@@ -103,7 +103,7 @@
     <string name="alertPositiveButton">Ok</string>
     <string name="alertNegativeButton">Cancel</string>
 
-    <!-- Email login -->
+    <!-- REGISTRATION -->
     <string name="signup_btn">Sign up</string>
     <string name="login_btn">Login</string>
     <string name="get_password_link">Reset password</string>
@@ -114,4 +114,13 @@
     <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="or_text">OR</string>
+
+    <string name="fields_empty">Please fill all the fields</string>
+    <string name="login_success">Successfully logged in</string>
+    <string name="login_failed">Login failed, check email and password</string>
+    <string name="registration_success">Successfully registered</string>
+    <string name="registration_failed">Registration failed, use valid email</string>
+    <string name="email_empty">Please enter email id</string>
+    <string name="password_reset_success">Reset link sent to your email</string>
+    <string name="password_reset_failed">Unable to send reset mail, use valid email</string>
 </resources>

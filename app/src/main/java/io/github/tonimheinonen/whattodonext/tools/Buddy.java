@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.StartVoteActivity;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
@@ -171,5 +172,23 @@ public abstract class Buddy {
         // Show alert
         alertD.setView(view);
         alertD.show();
+    }
+
+    /**
+     * Shows loading bar and hide info box in registration activities.
+     * @param activity registration related activity
+     */
+    public static void registrationShowLoading(AppCompatActivity activity) {
+        activity.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+        activity.findViewById(R.id.informationBox).setVisibility(View.GONE);
+    }
+
+    /**
+     * Hides loading bar and shows info box in registration activities.
+     * @param activity registration related activity
+     */
+    public static void registrationHideLoading(AppCompatActivity activity) {
+        activity.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        activity.findViewById(R.id.informationBox).setVisibility(View.VISIBLE);
     }
 }

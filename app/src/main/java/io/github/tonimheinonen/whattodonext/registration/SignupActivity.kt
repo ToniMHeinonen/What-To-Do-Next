@@ -15,6 +15,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import io.github.tonimheinonen.whattodonext.MainActivity
 import io.github.tonimheinonen.whattodonext.R
+import io.github.tonimheinonen.whattodonext.tools.Buddy
 
 /**
  * Handles signing up to Firebase database.
@@ -56,14 +57,17 @@ class SignupActivity : AppCompatActivity() {
             var password: String = passwordEt.text.toString()
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.fields_empty), Toast.LENGTH_LONG).show()
             } else{
+                Buddy.registrationShowLoading(this)
+
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
-                        Toast.makeText(this, "Successfully Registered", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.registration_success), Toast.LENGTH_LONG).show()
                         onAuthSuccess(task.result?.user!!)
                     }else {
-                        Toast.makeText(this, "Registration Failed", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.registration_failed), Toast.LENGTH_LONG).show()
+                        Buddy.registrationHideLoading(this)
                     }
                 })
             }
