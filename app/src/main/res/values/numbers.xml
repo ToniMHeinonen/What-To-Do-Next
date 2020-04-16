@@ -1,6 +1,12 @@
 <resources>
+    <!-- FLOAT -->
     <item name="list_name_weight" format="float" type="dimen">0.5</item>
     <item name="list_points_weight" format="float" type="dimen">0.166</item>
     <item name="results_name_weight" format="float" type="dimen">0.5</item>
     <item name="results_points_weight" format="float" type="dimen">0.25</item>
+
+    <!-- INTEGER -->
+    <item name="list_name_max_length" format="integer" type="integer">30</item>
+    <item name="activity_name_max_length" format="integer" type="integer">50</item>
+    <item name="profile_name_max_length" format="integer" type="integer">20</item>
 </resources>

@@ -18,7 +18,8 @@
             android:hint="@string/list_item_dialog_nameHint"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:textColor="@color/defaultTextColor"/>
+            android:textColor="@color/defaultTextColor"
+            android:maxLength="@integer/activity_name_max_length"/>
 
         <!-- BONUS -->
         <TextView

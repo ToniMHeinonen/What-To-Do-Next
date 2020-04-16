@@ -46,7 +46,8 @@
         <EditText
             android:id="@+id/selected_list"
             style="@style/listName"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:maxLength="@integer/list_name_max_length"/>
 
         <Button
             android:id="@+id/fallenButton"

@@ -67,7 +67,7 @@
                     android:layout_margin="10dp"
                     android:hint="@string/new_profile"
                     android:textSize="25sp"
-                    android:maxLength="15"/>
+                    android:maxLength="@integer/profile_name_max_length"/>
 
                 <Button
                     android:id="@+id/addProfile"
