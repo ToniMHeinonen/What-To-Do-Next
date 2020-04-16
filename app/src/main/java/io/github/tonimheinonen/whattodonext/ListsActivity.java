@@ -125,6 +125,10 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
                     break;
                 }
             }
+        } else {
+            // If lists are empty, show list dialog
+            // This is mainly intended for new users for them to understand what to do
+            new ListDialog(this, lists).show();
         }
     }
 
