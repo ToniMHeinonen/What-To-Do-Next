@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            Buddy.initialize(this);
-            DatabaseHandler.initialize();
+            DatabaseHandler.initializeUserDatabase();
             GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
         }
     }

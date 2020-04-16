@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".voteactivity.VoteResultsActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".voteactivity.VoteResultsActivity" />
         <activity android:name=".voteactivity.VoteTopActivity" />
         <activity android:name=".registration.ForgotPasswordActivity" />
         <activity android:name=".registration.LoginActivity" />
@@ -19,7 +20,7 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".StartVoteActivity" />
         <activity android:name=".ListsActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".InitializeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

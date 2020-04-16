@@ -30,18 +30,21 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbLists;
     private static DatabaseReference dbItems;
     private static DatabaseReference dbProfiles;
-    private static boolean offlinePersistenceEnabled = false;
+
+    /**
+     * Initialized persistence for Firebase.
+     *
+     * This only needs to be called once and before any other Firebase call,
+     * otherwise the app crashes.
+     */
+    public static void initializePersistence() {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
 
     /**
      * Initializes necessary values.
      */
-    public static void initialize() {
-        if (!offlinePersistenceEnabled) {
-            offlinePersistenceEnabled = true;
-            // This only needs to be called once, otherwise app crashes
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        }
-
+    public static void initializeUserDatabase() {
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         // Init database paths and keep them synced when coming from offline to online
