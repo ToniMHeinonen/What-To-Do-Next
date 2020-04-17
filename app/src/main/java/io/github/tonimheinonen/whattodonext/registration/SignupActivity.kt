@@ -77,7 +77,7 @@ class SignupActivity : AppCompatActivity() {
                     } else if (exception is FirebaseAuthInvalidCredentialsException) {
                         Toast.makeText(this, getString(R.string.registration_invalid_credentials), Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(this, getString(R.string.registration_failed), Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, getString(R.string.firebase_unusual_error), Toast.LENGTH_LONG).show()
                     }
                     Buddy.registrationHideLoading(this)
                 })

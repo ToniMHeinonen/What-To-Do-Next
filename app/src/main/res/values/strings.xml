@@ -117,15 +117,20 @@
     <string name="or_text">OR</string>
 
     <string name="firebase_no_internet">Request failed: Check your internet connection</string>
+    <string name="firebase_unusual_error">Something unusual went wrong: Contact developer
+        toni1.heinonen@gmail.com</string>
     <string name="fields_empty">Please fill all the fields</string>
+
     <string name="login_success">Successfully logged in</string>
     <string name="login_failed">Login failed: Check email and password</string>
+    <string name="login_invalid_user">Email has not been registered: Sign up instead</string>
+    <string name="login_invalid_password">Email or password is incorrect</string>
+
     <string name="registration_success">Successfully registered</string>
-    <string name="registration_failed">Something unusual went wrong: Contact developer
-        toni1.heinonen@gmail.com</string>
     <string name="registration_weak_password">Password is too weak (min 6 characters)</string>
-    <string name="registration_user_collision">User already exists</string>
+    <string name="registration_user_collision">Email already exists</string>
     <string name="registration_invalid_credentials">Give valid email address</string>
+
     <string name="email_empty">Please enter email id</string>
     <string name="password_reset_success">Reset link sent to your email</string>
     <string name="password_reset_failed">Unable to send reset mail: Use valid email</string>

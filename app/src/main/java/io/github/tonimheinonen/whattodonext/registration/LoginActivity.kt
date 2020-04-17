@@ -10,7 +10,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import io.github.tonimheinonen.whattodonext.MainActivity
 import io.github.tonimheinonen.whattodonext.R
 import io.github.tonimheinonen.whattodonext.tools.Buddy
@@ -67,10 +72,19 @@ class LoginActivity : AppCompatActivity() {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
-                    }else {
-                        Toast.makeText(this, getString(R.string.login_failed), Toast.LENGTH_LONG).show()
-                        Buddy.registrationHideLoading(this)
                     }
+                }).addOnFailureListener(this, OnFailureListener { exception ->
+                    if (exception is FirebaseAuthInvalidUserException) {
+                        // For some reason this only checks valid email addresses
+                        Toast.makeText(this, getString(R.string.login_invalid_user), Toast.LENGTH_LONG).show()
+                    } else if (exception is FirebaseAuthInvalidCredentialsException) {
+                        Toast.makeText(this, getString(R.string.login_invalid_password), Toast.LENGTH_LONG).show()
+                    } else if (exception is FirebaseNetworkException) {
+                        Toast.makeText(this, getString(R.string.firebase_no_internet), Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, getString(R.string.firebase_unusual_error), Toast.LENGTH_LONG).show()
+                    }
+                    Buddy.registrationHideLoading(this)
                 })
             }
         }
