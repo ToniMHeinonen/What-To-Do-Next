@@ -7,78 +7,91 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <TextView
-        android:id="@+id/settingTopic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:text="{Setting}"
-        android:textColor="@color/defaultTextColor"
-        android:textSize="35sp"
-        android:textStyle="bold"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/settingText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/lorem_ipsum"
-        android:textSize="20sp"
-        android:textColor="@color/defaultTextColor"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <!-- ADJUSTING POINTS -->
-    <LinearLayout
-        android:id="@+id/adjustingPoints"
-        style="@style/settingsOptionAdjustments"
-        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/settingTopic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="{Setting}"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="35sp"
+                android:textStyle="bold"/>
 
-        <Button
-            android:id="@+id/minus"
-            style="@style/listItemSigns"
-            android:text="-" />
+            <TextView
+                android:id="@+id/settingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/lorem_ipsum"
+                android:textSize="20sp"
+                android:textColor="@color/defaultTextColor"/>
 
-        <EditText
-            android:id="@+id/points"
-            style="@style/listItemNumbers"
-            android:text="0"
-            android:gravity="center"/>
+            <!-- ADJUSTING POINTS -->
+            <LinearLayout
+                android:id="@+id/adjustingPoints"
+                style="@style/settingsOptionAdjustments"
+                android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/plus"
-            style="@style/listItemSigns"
-            android:text="+" />
-    </LinearLayout>
+                <Button
+                    android:id="@+id/minus"
+                    style="@style/listItemSigns"
+                    android:text="-" />
 
-    <!-- ON / OFF SWITCH -->
+                <EditText
+                    android:id="@+id/points"
+                    style="@style/listItemNumbers"
+                    android:text="0"
+                    android:gravity="center"/>
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/onOffSwitch"
-        style="@style/settingsOptionAdjustments"
-        android:theme="@style/ThemeOverlay.MySwitchCompat"
-        android:scaleX="1.5"
-        android:scaleY="1.5"/>
+                <Button
+                    android:id="@+id/plus"
+                    style="@style/listItemSigns"
+                    android:text="+" />
+            </LinearLayout>
 
-    <!-- CONFIRM & CANCEL-->
+            <!-- ON / OFF SWITCH -->
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:layout_margin="20dp">
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/onOffSwitch"
+                style="@style/settingsOptionAdjustments"
+                android:theme="@style/ThemeOverlay.MySwitchCompat"
+                android:scaleX="1.5"
+                android:scaleY="1.5"/>
 
-        <Button
-            android:id="@+id/cancel"
-            style="@style/listItemButtons"
-            android:text="@string/list_item_dialog_cancel"
-            android:background="@drawable/cancel_button" />
+            <!-- CONFIRM & CANCEL-->
 
-        <Button
-            android:id="@+id/confirm"
-            style="@style/listItemButtons"
-            android:text="@string/list_item_dialog_confirm"
-            android:background="@drawable/confirm_button" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_margin="20dp">
+
+                <Button
+                    android:id="@+id/cancel"
+                    style="@style/listItemButtons"
+                    android:text="@string/list_item_dialog_cancel"
+                    android:background="@drawable/cancel_button" />
+
+                <Button
+                    android:id="@+id/confirm"
+                    style="@style/listItemButtons"
+                    android:text="@string/list_item_dialog_confirm"
+                    android:background="@drawable/confirm_button" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

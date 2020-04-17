@@ -26,14 +26,18 @@
             android:textSize="35sp"
             android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/settingText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/lorem_ipsum"
-            android:textSize="20sp"
-            android:textColor="@color/defaultTextColor"/>
+        <androidx.core.widget.NestedScrollView style="@style/NestedScrollBarStyle">
+
+            <TextView
+                android:id="@+id/settingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/lorem_ipsum"
+                android:textSize="20sp"
+                android:textColor="@color/defaultTextColor"/>
+
+        </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
 
@@ -85,13 +89,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:layout_margin="20dp">
+            android:layout_margin="10dp">
 
             <Button
                 android:id="@+id/cancel"
                 style="@style/listItemButtons"
                 android:text="@string/list_item_dialog_cancel"
-                android:background="@drawable/cancel_button" />
+                android:background="@drawable/cancel_button"/>
 
             <Button
                 android:id="@+id/confirm"

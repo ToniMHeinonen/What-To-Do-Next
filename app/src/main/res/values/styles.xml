@@ -9,7 +9,6 @@
         <item name="android:dropDownListViewStyle">@style/SpinnerStyle</item>
         <item name="editTextStyle">@style/App_EditTextStyle</item>
         <item name="android:listViewStyle">@style/listViewStyle</item>
-        <item name="android:scrollViewStyle">@style/scrollViewStyle</item>
     </style>
 
     <style name="SpinnerStyle" parent="Widget.AppCompat.ListView.DropDown">
@@ -20,6 +19,18 @@
     <style name="listViewStyle" parent="Widget.AppCompat.ListView">
         <item name="android:divider">@drawable/list_divider</item>
         <item name="android:dividerHeight">1dp</item>
+        <item name="android:requiresFadingEdge">vertical</item>
+        <item name="android:fadingEdgeLength">24dp</item>
+        <item name="android:scrollbarThumbVertical">@drawable/custom_scroll_bar</item>
+    </style>
+
+    <style name="NestedScrollBarStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:scrollbarFadeDuration">2</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fillViewport">true</item>
+        <item name="android:orientation">vertical</item>
         <item name="android:requiresFadingEdge">vertical</item>
         <item name="android:fadingEdgeLength">24dp</item>
         <item name="android:scrollbarThumbVertical">@drawable/custom_scroll_bar</item>
