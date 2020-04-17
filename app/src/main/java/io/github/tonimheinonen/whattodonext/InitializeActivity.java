@@ -7,6 +7,13 @@ import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import android.content.Intent;
 import android.os.Bundle;
 
+/**
+ * Runs once when app starts, initializes necessary values.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
 public class InitializeActivity extends AppCompatActivity {
 
     /**
