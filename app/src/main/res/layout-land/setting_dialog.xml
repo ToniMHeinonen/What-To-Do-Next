@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/custom_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <!-- LEFT SIDE -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settingTopic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:text="{Setting}"
+            android:textColor="@color/defaultTextColor"
+            android:textSize="35sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/settingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/lorem_ipsum"
+            android:textSize="20sp"
+            android:textColor="@color/defaultTextColor"/>
+
+    </LinearLayout>
+
+    <!-- RIGHT SIDE -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_margin="10dp"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <!-- ADJUSTING POINTS -->
+        <LinearLayout
+            android:id="@+id/adjustingPoints"
+            style="@style/settingsOptionAdjustments"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/minus"
+                style="@style/listItemSigns"
+                android:text="-" />
+
+            <EditText
+                android:id="@+id/points"
+                style="@style/listItemNumbers"
+                android:text="0"
+                android:gravity="center"/>
+
+            <Button
+                android:id="@+id/plus"
+                style="@style/listItemSigns"
+                android:text="+" />
+        </LinearLayout>
+
+        <!-- ON / OFF SWITCH -->
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/onOffSwitch"
+            style="@style/settingsOptionAdjustments"
+            android:theme="@style/ThemeOverlay.MySwitchCompat"
+            android:scaleX="1.5"
+            android:scaleY="1.5"/>
+
+        <!-- CONFIRM & CANCEL-->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_margin="20dp">
+
+            <Button
+                android:id="@+id/cancel"
+                style="@style/listItemButtons"
+                android:text="@string/list_item_dialog_cancel"
+                android:background="@drawable/cancel_button" />
+
+            <Button
+                android:id="@+id/confirm"
+                style="@style/listItemButtons"
+                android:text="@string/list_item_dialog_confirm"
+                android:background="@drawable/confirm_button" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
