@@ -7,7 +7,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "io.github.tonimheinonen.whattodonext"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
