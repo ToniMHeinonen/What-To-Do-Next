@@ -51,6 +51,7 @@
     <string name="lists_list">List</string>
     <string name="lists_back">Back</string>
     <string name="lists_fallen">Fallen</string>
+    <string name="first_select_list">First select list</string>
 
     <string name="hint_new_list">List name</string>
 

@@ -433,7 +433,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      */
     public void addClicked(View v) {
         if (curList == null) {
-            Toast.makeText(this, "First select list", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.first_select_list), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -465,6 +465,11 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      * @param v fallen button
      */
     public void fallenClicked(View v) {
+        if (curList == null) {
+            Toast.makeText(this, getString(R.string.first_select_list), Toast.LENGTH_LONG).show();
+            return;
+        }
+
         setFallenStatus(!fallenList);
 
         // Retrieve items filtered with correct fallen status
