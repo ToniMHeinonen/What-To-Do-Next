@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import io.github.tonimheinonen.whattodonext.R
 import io.github.tonimheinonen.whattodonext.tools.Buddy
@@ -60,11 +62,14 @@ class ForgotPasswordActivity : AppCompatActivity() {
                                 Toast.makeText(this, getString(R.string.password_reset_success), Toast.LENGTH_LONG)
                                         .show()
                                 startActivity(Intent(this, LoginActivity::class.java));
-                            } else {
-                                Toast.makeText(this, getString(R.string.password_reset_failed), Toast.LENGTH_LONG)
-                                        .show()
-                                Buddy.registrationHideLoading(this)
                             }
+                        }).addOnFailureListener(this, OnFailureListener { exception ->
+                            if (exception is FirebaseNetworkException) {
+                                Toast.makeText(this, getString(R.string.firebase_no_internet), Toast.LENGTH_LONG).show()
+                            } else {
+                                Toast.makeText(this, getString(R.string.password_reset_failed), Toast.LENGTH_LONG).show()
+                            }
+                            Buddy.registrationHideLoading(this)
                         })
             }
         }
