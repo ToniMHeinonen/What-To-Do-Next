@@ -22,11 +22,13 @@
         <item name="android:dividerHeight">1dp</item>
         <item name="android:requiresFadingEdge">vertical</item>
         <item name="android:fadingEdgeLength">24dp</item>
+        <item name="android:scrollbarThumbVertical">@drawable/custom_scroll_bar</item>
     </style>
 
     <style name="scrollViewStyle" parent="Widget.AppCompat.ListView">
         <item name="android:requiresFadingEdge">vertical</item>
         <item name="android:fadingEdgeLength">24dp</item>
+        <item name="android:scrollbarThumbVertical">@drawable/custom_scroll_bar</item>
     </style>
 
     <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
