@@ -1,0 +1,234 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:dropDownListViewStyle">@style/SpinnerStyle</item>
+        <item name="editTextStyle">@style/App_EditTextStyle</item>
+        <item name="android:listViewStyle">@style/listViewStyle</item>
+    </style>
+
+    <style name="SpinnerStyle" parent="Widget.AppCompat.ListView.DropDown">
+        <item name="android:divider">@drawable/list_divider</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+
+    <style name="listViewStyle" parent="Widget.AppCompat.ListView">
+        <item name="android:divider">@drawable/list_divider</item>
+        <item name="android:dividerHeight">1dp</item>
+    </style>
+
+    <style name="App_EditTextStyle" parent="@android:style/Widget.EditText">
+        <item name="android:gravity">left</item>
+        <item name="android:inputType">textNoSuggestions</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
+    </style>
+
+    <style name="menuButtons">
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">0.33</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:onClick">menuButtonClicked</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <!-- REGISTRATION -->
+    <style name="registrationLayout">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginLeft">32dp</item>
+        <item name="android:layout_marginRight">32dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/custom_bg</item>
+    </style>
+
+    <style name="registrationButtons">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">16dp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <style name="registrationOrText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:text">@string/or_text</item>
+    </style>
+
+    <!-- LIST AND PROFILE -->
+    <style name="listAndProfile">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <!-- LOADING ICON -->
+    <style name="GenericProgressBackground" parent="android:Theme">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:visibility">gone</item>
+    </style>
+    <style name="GenericProgressIndicator" parent="@android:style/Widget.ProgressBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminate">true</item>
+    </style>
+
+    <!-- Custom alert dialog -->
+    <style name="alertDialogButtons">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <!-- LISTS ACTIVITY -->
+    <style name="listsButtons">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_weight">0.33</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <style name="listsTopics">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">@dimen/list_points_weight</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:onClick">topicClicked</item>
+    </style>
+
+    <style name="listsTopicsName" parent="listsTopics">
+        <item name="android:text">@string/lists_name</item>
+        <item name="android:layout_weight">@dimen/list_name_weight</item>
+    </style>
+
+    <style name="listsTopicsPoints" parent="listsTopics">
+        <item name="android:layout_weight">@dimen/list_points_weight</item>
+    </style>
+
+    <style name="listName">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">0.7</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:text">@string/no_list_selected</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <!-- START VOTE ACTIVITY -->
+    <style name="startVoteTitles">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <!-- VOTE ACTIVITY -->
+    <style name="voteButtons">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="voteButtonsOnTop">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">0.5</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:background">@drawable/button_selector</item>
+    </style>
+
+    <style name="voteTopic">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <style name="voteInfo">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <!-- VOTE RESULTS ACTIVITY -->
+    <style name="resultsItemValues">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="resultsItemName" parent="resultsItemValues">
+        <item name="android:layout_weight">@dimen/results_name_weight</item>
+    </style>
+
+    <style name="resultsItemPoints" parent="resultsItemValues">
+        <item name="android:layout_weight">@dimen/results_points_weight</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <!-- SETTINGS ACTIVITY -->
+    <style name="settingsButtons">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:background">@drawable/button_selector</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:onClick">settingSelected</item>
+    </style>
+
+    <style name="settingsOptionAdjustments">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="ThemeOverlay.MySwitchCompat" parent="">
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorSwitchThumbNormal">#f1f1f1</item>
+        <item name="android:colorForeground">#42221f1f</item>
+    </style>
+
+</resources>
