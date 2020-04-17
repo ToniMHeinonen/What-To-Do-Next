@@ -8,8 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -65,10 +66,20 @@ class SignupActivity : AppCompatActivity() {
                     if(task.isSuccessful){
                         Toast.makeText(this, getString(R.string.registration_success), Toast.LENGTH_LONG).show()
                         onAuthSuccess(task.result?.user!!)
-                    }else {
-                        Toast.makeText(this, getString(R.string.registration_failed), Toast.LENGTH_LONG).show()
-                        Buddy.registrationHideLoading(this)
                     }
+                }).addOnFailureListener(this, OnFailureListener { exception ->
+                    if (exception is FirebaseAuthUserCollisionException) {
+                    Toast.makeText(this, getString(R.string.registration_user_collision), Toast.LENGTH_LONG).show()
+                    } else if (exception is FirebaseAuthWeakPasswordException) {
+                        Toast.makeText(this, getString(R.string.registration_weak_password), Toast.LENGTH_LONG).show()
+                    } else if (exception is FirebaseNetworkException) {
+                        Toast.makeText(this, getString(R.string.firebase_no_internet), Toast.LENGTH_LONG).show()
+                    } else if (exception is FirebaseAuthInvalidCredentialsException) {
+                        Toast.makeText(this, getString(R.string.registration_invalid_credentials), Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, getString(R.string.registration_failed), Toast.LENGTH_LONG).show()
+                    }
+                    Buddy.registrationHideLoading(this)
                 })
             }
         }
