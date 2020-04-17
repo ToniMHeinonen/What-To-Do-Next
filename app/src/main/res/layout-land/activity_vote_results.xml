@@ -14,6 +14,14 @@
         android:background="@drawable/custom_bg"
         tools:context=".voteactivity.VoteTopActivity">
 
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
         <!-- LEFT SIDE -->
         <LinearLayout
             android:layout_width="0dp"
@@ -37,7 +45,6 @@
                     android:id="@+id/nextButton"
                     style="@style/voteButtonsOnTop"
                     android:text="@string/vote_next"
-                    android:visibility="invisible"
                     android:onClick="nextPressed"/>
 
             </LinearLayout>
@@ -49,14 +56,14 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/profileName"
                     style="@style/voteTopic"
-                    android:text="{Profile}"/>
+                    android:text="@string/results"/>
 
                 <TextView
-                    android:id="@+id/voteInfoText"
+                    android:id="@+id/resultsInfoText"
                     style="@style/voteInfo"
-                    android:text="{Vote top ~ from list}"/>
+                    android:text="@string/results_info"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
@@ -69,8 +76,42 @@
             android:layout_weight="0.5"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/results_name_weight"
+                    android:paddingLeft="10dp"
+                    android:text="@string/results_name"
+                    android:textSize="20sp"
+                    android:textColor="@color/defaultTextColor"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/results_points_weight"
+                    android:text="@string/results_extra"
+                    android:textSize="20sp"
+                    android:textColor="@color/defaultTextColor"
+                    android:gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/results_points_weight"
+                    android:text="@string/results_total"
+                    android:textSize="20sp"
+                    android:textColor="@color/defaultTextColor"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
             <ListView
-                android:id = "@+id/voteItems"
+                android:id = "@+id/resultItems"
                 android:layout_width = "match_parent"
                 android:layout_height = "match_parent"/>
 
