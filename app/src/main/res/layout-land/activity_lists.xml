@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ListsActivity"
+    android:orientation="horizontal"
+    android:baselineAligned="false"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/app_bg">
+
+    <!-- Left side -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:layout_margin="40dp"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/no_list"
+                style="@style/listName"/>
+
+            <EditText
+                android:id="@+id/selected_list"
+                style="@style/listName"
+                android:visibility="gone"
+                android:maxLength="@integer/list_name_max_length"/>
+
+            <Button
+                android:id="@+id/fallenButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="@string/lists_fallen"
+                android:textSize="15sp"
+                android:background="@drawable/button_selector"
+                android:onClick="fallenClicked"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:background="@drawable/custom_bg">
+
+            <Button
+                android:id="@+id/addButton"
+                style="@style/listsButtons"
+                android:text="@string/lists_add"
+                android:onClick="addClicked"/>
+
+            <Button
+                android:id="@+id/listButton"
+                style="@style/listsButtons"
+                android:text="@string/lists_list"
+                android:onClick="listClicked"/>
+
+            <Button
+                android:id="@+id/backButton"
+                style="@style/listsButtons"
+                android:text="@string/lists_back"
+                android:onClick="backClicked"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Right side -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:id="@+id/name"
+                style="@style/listsTopicsName"/>
+
+            <TextView
+                android:id="@+id/total"
+                style="@style/listsTopicsPoints"
+                android:text="@string/lists_total"/>
+
+            <TextView
+                android:id="@+id/bonus"
+                style="@style/listsTopicsPoints"
+                android:text="@string/lists_bonus"/>
+
+            <TextView
+                android:id="@+id/peril"
+                style="@style/listsTopicsPoints"
+                android:text="@string/lists_peril"/>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
+        <ListView
+            android:id = "@+id/list"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:background="@drawable/custom_bg" />
+
+    </LinearLayout>
+
+</LinearLayout>
