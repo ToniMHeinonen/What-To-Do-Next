@@ -113,7 +113,7 @@
     <string name="logout">Log out</string>
     <string name="email_hint">Email</string>
     <string name="login_password_hint">Password</string>
-    <string name="registration_password_hint">Password (min 6 characters)</string>
+    <string name="registration_password_hint">Password</string>
     <string name="or_text">OR</string>
 
     <string name="firebase_no_internet">Request failed: Check your internet connection</string>
