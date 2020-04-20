@@ -7,11 +7,13 @@ import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * Runs once when app starts, initializes necessary values.
  * @author Toni Heinonen
  * @author toni1.heinonen@gmail.com
- * @version 1.0
+ * @version 1.0.2
  * @since 1.0
  */
 public class InitializeActivity extends AppCompatActivity {
@@ -24,7 +26,6 @@ public class InitializeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseHandler.initializePersistence();    // Set database offline persistence
         Buddy.initialize(this);               // Set context for Buddy
 
         // Start MainActivity and close this activity

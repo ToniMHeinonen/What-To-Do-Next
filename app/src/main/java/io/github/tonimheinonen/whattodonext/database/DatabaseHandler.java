@@ -21,7 +21,7 @@ import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
  * Handles controlling of Firebase database.
  * @author Toni Heinonen
  * @author toni1.heinonen@gmail.com
- * @version 1.0
+ * @version 1.0.2
  * @since 1.0
  */
 public abstract class DatabaseHandler {
@@ -30,16 +30,6 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbLists;
     private static DatabaseReference dbItems;
     private static DatabaseReference dbProfiles;
-
-    /**
-     * Initialized persistence for Firebase.
-     *
-     * This only needs to be called once and before any other Firebase call,
-     * otherwise the app crashes.
-     */
-    public static void initializePersistence() {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-    }
 
     /**
      * Initializes necessary values.
