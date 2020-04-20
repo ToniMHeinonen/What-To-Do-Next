@@ -50,7 +50,7 @@
         <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
     </style>
 
-    <style name="menuButtons">
+    <style name="menuButtons"> <!-- MODIFIED IN LANDSCAPE -->
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_weight">0.33</item>
@@ -151,7 +151,7 @@
         <item name="android:layout_weight">@dimen/list_points_weight</item>
     </style>
 
-    <style name="listName">
+    <style name="listName"> <!-- MODIFIED IN LANDSCAPE -->
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">0.7</item>
