@@ -18,7 +18,7 @@ import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
  * Handles user changing app settings.
  * @author Toni Heinonen
  * @author toni1.heinonen@gmail.com
- * @version 1.0
+ * @version 1.0.2
  * @since 1.0
  */
 public class SettingDialog extends Dialog implements
@@ -52,6 +52,11 @@ public class SettingDialog extends Dialog implements
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.setting_dialog);
+
+        // Set dialog window size to 90% of the screen width and height
+        int width = (int)(activity.getResources().getDisplayMetrics().widthPixels*0.90);
+        int height = (int)(activity.getResources().getDisplayMetrics().heightPixels*0.90);
+        getWindow().setLayout(width, height);
 
         initializeViews();
 

@@ -32,7 +32,7 @@
                 android:id="@+id/settingText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="15dp"
                 android:text="@string/lorem_ipsum"
                 android:textSize="20sp"
                 android:textColor="@color/defaultTextColor"/>
