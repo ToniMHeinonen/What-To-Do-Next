@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValue;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
@@ -26,15 +27,6 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
  */
 public class DatabaseValueListAdapter extends BaseAdapter {
 
-    public enum AdapterType {
-        LIST_ITEM,
-        LIST_OF_ITEMS,
-        PROFILE,
-        VOTE_HIDE_EXTRA,
-        VOTE_SHOW_EXTRA,
-        VOTE_RESULTS
-    }
-
     private Context context;
     private ArrayList<? extends DatabaseValue> listData;
     private LayoutInflater layoutInflater;
@@ -43,18 +35,18 @@ public class DatabaseValueListAdapter extends BaseAdapter {
     private View view;
     private int position;
 
-    private AdapterType type;
+    private DatabaseType type;
 
-    private static final HashMap<AdapterType, Integer> layouts = new HashMap<>();
+    private static final HashMap<DatabaseType, Integer> layouts = new HashMap<>();
 
     // Set correct resources for types in HashMap
     static {
-        layouts.put(AdapterType.LIST_ITEM, R.layout.list_item);
-        layouts.put(AdapterType.LIST_OF_ITEMS, R.layout.saved_list_and_profile);
-        layouts.put(AdapterType.PROFILE, R.layout.saved_list_and_profile);
-        layouts.put(AdapterType.VOTE_HIDE_EXTRA, R.layout.vote_item);
-        layouts.put(AdapterType.VOTE_SHOW_EXTRA, R.layout.vote_item_show_extra);
-        layouts.put(AdapterType.VOTE_RESULTS, R.layout.results_item);
+        layouts.put(DatabaseType.LIST_ITEM, R.layout.list_item);
+        layouts.put(DatabaseType.LIST_OF_ITEMS, R.layout.saved_list_and_profile);
+        layouts.put(DatabaseType.PROFILE, R.layout.saved_list_and_profile);
+        layouts.put(DatabaseType.VOTE_HIDE_EXTRA, R.layout.vote_item);
+        layouts.put(DatabaseType.VOTE_SHOW_EXTRA, R.layout.vote_item_show_extra);
+        layouts.put(DatabaseType.VOTE_RESULTS, R.layout.results_item);
     }
 
     /**
@@ -63,7 +55,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
      * @param listData list items
      */
     public DatabaseValueListAdapter(Context aContext, ArrayList<? extends DatabaseValue> listData,
-                                    View.OnClickListener listener, AdapterType type) {
+                                    View.OnClickListener listener, DatabaseType type) {
         this.context = aContext;
         this.listData = listData;
         this.listener = listener;
@@ -117,17 +109,17 @@ public class DatabaseValueListAdapter extends BaseAdapter {
 
         // Test this later
         if (getItem(position) != null) {
-            if (type.equals(AdapterType.LIST_ITEM))
+            if (type.equals(DatabaseType.LIST_ITEM))
                 listItem();
-            else if (type.equals(AdapterType.LIST_OF_ITEMS))
+            else if (type.equals(DatabaseType.LIST_OF_ITEMS))
                 listOfItems();
-            else if (type.equals(AdapterType.PROFILE))
+            else if (type.equals(DatabaseType.PROFILE))
                 profile();
-            else if (type.equals(AdapterType.VOTE_HIDE_EXTRA))
+            else if (type.equals(DatabaseType.VOTE_HIDE_EXTRA))
                 voteHideExtra();
-            else if (type.equals(AdapterType.VOTE_SHOW_EXTRA))
+            else if (type.equals(DatabaseType.VOTE_SHOW_EXTRA))
                 voteShowExtra();
-            else if (type.equals(AdapterType.VOTE_RESULTS))
+            else if (type.equals(DatabaseType.VOTE_RESULTS))
                 voteResults();
         }
 

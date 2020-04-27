@@ -1,7 +1,10 @@
 package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
@@ -178,7 +181,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     public void createListItems() {
         list = findViewById(R.id.list);
         adapter = new DatabaseValueListAdapter(this, curList.getItems(),
-                null, DatabaseValueListAdapter.AdapterType.LIST_ITEM);
+                null, DatabaseType.LIST_ITEM);
 
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

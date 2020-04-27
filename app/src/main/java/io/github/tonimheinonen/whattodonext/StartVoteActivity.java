@@ -2,6 +2,7 @@ package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
@@ -140,7 +141,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
         // Add profiles to ListView
         final ListView profileListView = findViewById(R.id.savedProfiles);
         profileListAdapter = new DatabaseValueListAdapter(this, profiles, this,
-                DatabaseValueListAdapter.AdapterType.PROFILE);
+                DatabaseType.PROFILE);
         profileListView.setAdapter(profileListAdapter);
     }
 

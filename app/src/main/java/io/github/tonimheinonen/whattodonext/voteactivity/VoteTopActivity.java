@@ -1,6 +1,7 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.listsactivity.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.database.Profile;
@@ -72,7 +73,7 @@ public class VoteTopActivity extends AppCompatActivity {
     private void setupVoteItems() {
         final ListView list = findViewById(R.id.voteItems);
         adapter = new DatabaseValueListAdapter(this, selectedList.getItems(), null,
-                DatabaseValueListAdapter.AdapterType.VOTE_HIDE_EXTRA);
+                DatabaseType.VOTE_HIDE_EXTRA);
 
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
