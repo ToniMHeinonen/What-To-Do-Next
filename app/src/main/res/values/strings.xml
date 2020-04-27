@@ -60,6 +60,7 @@
     <string name="lists_total">Total</string>
     <string name="lists_bonus">Bonus</string>
     <string name="lists_peril">Peril</string>
+    <string name="lists_voted">Voted</string>
 
     <string name="alert_delete_topic">Delete %1$s</string>
     <string name="alert_delete_message">Are you sure you want to delete? There is no going back.</string>

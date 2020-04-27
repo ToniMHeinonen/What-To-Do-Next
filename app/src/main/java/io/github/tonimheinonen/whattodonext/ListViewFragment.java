@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -18,6 +19,7 @@ import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.listsactivity.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
 
 public class ListViewFragment extends Fragment implements View.OnClickListener {
 
@@ -27,30 +29,17 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
     private ListView listView;
     private DatabaseValueListAdapter adapter;
 
-    private TextView vName, vTotal, vBonus, vPeril;
+    private TextView vName, vTotal, vBonus, vPeril, vVoteAmount;
 
     // Sorting
-    private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
+    private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3, VOTE_POINTS = 4;
     private int curSort = NAME;
     private boolean ascending = true;
-
-    // Fallen
-    private boolean fallenList = false;
 
     /**
      * Default constructor for handling device orientation changes.
      */
     public ListViewFragment() {}
-
-    /**
-     * Initializes ListViewFragment with necessary values.
-     * @param type
-     * @param curList
-     */
-    public ListViewFragment(DatabaseType type, ListOfItems curList) {
-        this.type = type;
-        this.curList = curList;
-    }
 
     /**
      * Creates the Fragment view.
@@ -59,33 +48,60 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
      * @param savedInstanceState previous instance state
      * @return
      */
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_item_fragment, // The xml file
-                container,
-                false);
+        View view;
 
-        // Find topics so that color can be changed
+        type = DatabaseType.valueOf(getArguments().getString("type"));
+        curList = getArguments().getParcelable("curList");
+
+        switch (type) {
+            case LIST_ITEM:
+                view = inflater.inflate(R.layout.fragment_list_item, container, false);
+                break;
+            case VOTE_SHOW_EXTRA:
+                view = inflater.inflate(R.layout.fragment_vote_show_extra, container, false);
+                break;
+            default:
+                // Prevents "view not initialized" error
+                view = inflater.inflate(null, null, false);
+        }
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        // Find topics so that color and sorting type can be changed
         vName = view.findViewById(R.id.name);
         vTotal = view.findViewById(R.id.total);
         vBonus = view.findViewById(R.id.bonus);
         vPeril = view.findViewById(R.id.peril);
+        vVoteAmount = view.findViewById(R.id.voteAmount);
 
-        vName.setOnClickListener(this);
-        vTotal.setOnClickListener(this);
-        vBonus.setOnClickListener(this);
-        vPeril.setOnClickListener(this);
+        if (vName != null) vName.setOnClickListener(this);
+        if (vTotal != null) vTotal.setOnClickListener(this);
+        if (vBonus != null) vBonus.setOnClickListener(this);
+        if (vPeril != null) vPeril.setOnClickListener(this);
+        if (vVoteAmount != null) vVoteAmount.setOnClickListener(this);
 
-        return view;
+        createListItems();
+        updateListItems();
     }
 
     /**
      * Creates ListView with correct adapter and data.
      */
-    public void createListItems() {
+    private void createListItems() {
         listView = getView().findViewById(R.id.list);
-        adapter = new DatabaseValueListAdapter(getActivity(), curList.getItems(),
-                null, DatabaseType.LIST_ITEM);
+        // If current list is null, add empty arraylist
+        ArrayList<ListItem> items = curList != null ?
+                curList.getItems() :
+                new ArrayList<>();
+
+        adapter = new DatabaseValueListAdapter(getActivity(), items,
+                null, type);
 
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -93,11 +109,15 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (type) {
                     case LIST_ITEM:
-                        ListItem item = (ListItem) listView.getItemAtPosition(position);
-                        ListItemDialog dialog = new ListItemDialog((ListsActivity) getActivity(), item);
+                        ListItem listItem = (ListItem) listView.getItemAtPosition(position);
+                        ListItemDialog dialog = new ListItemDialog((ListsActivity) getActivity(), listItem);
                         dialog.show();
                         break;
-
+                    case VOTE_SHOW_EXTRA:
+                        ListItem voteShowItem = (ListItem) listView.getItemAtPosition(position);
+                        VoteTopActivity activity = (VoteTopActivity) getActivity();
+                        activity.itemClicked(voteShowItem, position);
+                        break;
                 }
             }
         });
@@ -107,15 +127,14 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
      * Sorts list correctly and adjusts changes to list.
      */
     public void updateListItems() {
-        if (listView == null || curList == null)
+        // If getView() is null, the onCreateView is not completed yet
+        // If listView is null, createListItems has not been called yet
+        // If curList is null, Activity has not given the list yet
+        if (getView() == null || listView == null || curList == null)
             return;
 
         sortList();
-
-        if (listView.getAdapter() != null)
-            adapter.notifyDataSetChanged();
-        else
-            createListItems();
+        adapter.updateItems(curList.getItems());
     }
 
     /**
@@ -124,11 +143,10 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
      */
     public void setCurrentList(ListOfItems list) {
         curList = list;
-        setFallenStatus(false); // Show normal items when list changes
 
         // Hide list if curList is null
         if (curList == null)
-            listView.setAdapter(null);
+            adapter.updateItems(new ArrayList<>());
     }
 
     /*//////////////////// SORTING ////////////////////*/
@@ -170,6 +188,15 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
                     }
                 });
                 break;
+            case VOTE_POINTS:
+                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
+                    public int compare(ListItem o1, ListItem o2) {
+                        return ascending ?
+                                ((Integer)o1.getVotePoints()).compareTo(o2.getVotePoints()) :
+                                ((Integer)o2.getVotePoints()).compareTo(o1.getVotePoints());
+                    }
+                });
+                break;
         }
     }
 
@@ -178,21 +205,30 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
      * @param selected currently selected sort type
      */
     private void changeColor(int selected) {
-        vName.setTextColor(selected == NAME ?
-                getResources().getColor(R.color.textColorPrimary) :
-                getResources().getColor(R.color.defaultTextColor));
+        if (vName != null)
+            vName.setTextColor(selected == NAME ?
+                    getResources().getColor(R.color.textColorPrimary) :
+                    getResources().getColor(R.color.defaultTextColor));
 
-        vTotal.setTextColor(selected == TOTAL ?
-                getResources().getColor(R.color.textColorPrimary) :
-                getResources().getColor(R.color.defaultTextColor));
+        if (vTotal != null)
+            vTotal.setTextColor(selected == TOTAL ?
+                    getResources().getColor(R.color.textColorPrimary) :
+                    getResources().getColor(R.color.defaultTextColor));
 
-        vBonus.setTextColor(selected == BONUS ?
-                getResources().getColor(R.color.textColorPrimary) :
-                getResources().getColor(R.color.defaultTextColor));
+        if (vBonus != null)
+            vBonus.setTextColor(selected == BONUS ?
+                    getResources().getColor(R.color.textColorPrimary) :
+                    getResources().getColor(R.color.defaultTextColor));
 
-        vPeril.setTextColor(selected == PERIL ?
-                getResources().getColor(R.color.textColorPrimary) :
-                getResources().getColor(R.color.defaultTextColor));
+        if (vPeril != null)
+            vPeril.setTextColor(selected == PERIL ?
+                    getResources().getColor(R.color.textColorPrimary) :
+                    getResources().getColor(R.color.defaultTextColor));
+
+        if (vVoteAmount != null)
+            vVoteAmount.setTextColor(selected == VOTE_POINTS ?
+                    getResources().getColor(R.color.textColorPrimary) :
+                    getResources().getColor(R.color.defaultTextColor));
     }
 
     /**
@@ -212,6 +248,9 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
+        if (curList == null)
+            return;
+
         int sort = -1;
 
         switch (v.getId()) {
@@ -227,30 +266,13 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
             case R.id.peril:
                 sort = PERIL;
                 break;
+            case R.id.voteAmount:
+                sort = VOTE_POINTS;
+                break;
         }
 
         invertSortOrder(sort);
         curSort = sort;
         updateListItems();
-    }
-
-    /*//////////////////// FALLEN ////////////////////*/
-
-    /**
-     * Sets fallen status.
-     *
-     * Determines if to load fallen or unfallen items.
-     * @param status true if to load fallen items
-     */
-    public void setFallenStatus(boolean status) {
-        fallenList = status;
-    }
-
-    /**
-     * Returns fallen status.
-     * @return
-     */
-    public boolean getFallenStatus() {
-        return fallenList;
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/voteAmount"
+            style="@style/voteTopicsVoteAmount"/>
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/voteTopicsName"
+            android:text="@string/lists_name"/>
+
+        <TextView
+            android:id="@+id/total"
+            style="@style/voteTopicsPoints"
+            android:text="@string/lists_total"/>
+
+        <TextView
+            android:id="@+id/bonus"
+            style="@style/voteTopicsPoints"
+            android:text="@string/lists_bonus"/>
+
+        <TextView
+            android:id="@+id/peril"
+            style="@style/voteTopicsPoints"
+            android:text="@string/lists_peril"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id = "@+id/list"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:background="@drawable/custom_bg"/>
+
+</LinearLayout>

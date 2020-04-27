@@ -131,6 +131,19 @@
         <item name="android:background">@drawable/button_selector</item>
     </style>
 
+    <style name="listName"> <!-- MODIFIED IN LANDSCAPE -->
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">0.7</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:text">@string/no_list_selected</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <!-- LIST VIEW FRAGMENT -->
     <style name="listsTopics">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">0dp</item>
@@ -150,16 +163,18 @@
         <item name="android:layout_weight">@dimen/list_points_weight</item>
     </style>
 
-    <style name="listName"> <!-- MODIFIED IN LANDSCAPE -->
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">0.7</item>
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:text">@string/no_list_selected</item>
-        <item name="android:textSize">25sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/defaultTextColor</item>
+    <style name="voteTopicsName" parent="listsTopics">
+        <item name="android:text">@string/lists_name</item>
+        <item name="android:layout_weight">@dimen/vote_show_extra_name_weight</item>
+    </style>
+
+    <style name="voteTopicsPoints" parent="listsTopics">
+        <item name="android:layout_weight">@dimen/vote_show_extra_points_weight</item>
+    </style>
+
+    <style name="voteTopicsVoteAmount" parent="listsTopics">
+        <item name="android:text">@string/lists_voted</item>
+        <item name="android:layout_weight">@dimen/vote_show_extra_voteAmount_weight</item>
     </style>
 
     <!-- START VOTE ACTIVITY -->

@@ -1,6 +1,9 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import io.github.tonimheinonen.whattodonext.ListViewFragment;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.listsactivity.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -35,7 +38,7 @@ public class VoteTopActivity extends AppCompatActivity {
 
     private Button nextButton;
     private TextView profileView, infoView;
-    private DatabaseValueListAdapter adapter;
+    private ListViewFragment itemsFragment;
 
     private ArrayList<Integer> votePoints;
     private ArrayList<ListItem> votedItems;
@@ -71,34 +74,36 @@ public class VoteTopActivity extends AppCompatActivity {
      * Setups voting items.
      */
     private void setupVoteItems() {
-        final ListView list = findViewById(R.id.voteItems);
-        adapter = new DatabaseValueListAdapter(this, selectedList.getItems(), null,
-                DatabaseType.VOTE_HIDE_EXTRA);
+        // Setup list fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListItem item = (ListItem) list.getItemAtPosition(position);
+        itemsFragment = new ListViewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("type", DatabaseType.VOTE_SHOW_EXTRA.name());
+        bundle.putParcelable("curList", selectedList);
+        itemsFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.listFragment, itemsFragment);
+        fragmentTransaction.commit();
+    }
 
-                if (votedItems.contains(item)) {
-                    votedItems.remove(item);
-                    int points = item.retrieveVotePoints();
-                    addVotePoint(points);
-                    // Index -1 since index starts at 0, vote points start at 1
-                    currentProfile.removeVoteItem(points - 1);
-                } else {
-                    // If all points have not been given
-                    if (!votePoints.isEmpty()) {
-                        votedItems.add(item);
-                        item.setVotePoints(currentVotePoint);
-                        // Index -1 since index starts at 0, vote points start at 1
-                        currentProfile.addVoteItem(currentVotePoint - 1, position);
-                        removeVotePoint();
-                    }
-                }
+    public void itemClicked(ListItem item, int position) {
+        if (votedItems.contains(item)) {
+            votedItems.remove(item);
+            int points = item.retrieveVotePoints();
+            addVotePoint(points);
+            // Index -1 since index starts at 0, vote points start at 1
+            currentProfile.removeVoteItem(points - 1);
+        } else {
+            // If all points have not been given
+            if (!votePoints.isEmpty()) {
+                votedItems.add(item);
+                item.setVotePoints(currentVotePoint);
+                // Index -1 since index starts at 0, vote points start at 1
+                currentProfile.addVoteItem(currentVotePoint - 1, position);
+                removeVotePoint();
             }
-        });
+        }
     }
 
     /**
@@ -145,7 +150,8 @@ public class VoteTopActivity extends AppCompatActivity {
             nextButton.setVisibility(View.VISIBLE);
             infoView.setText(getString(R.string.vote_ready, getString(R.string.vote_next)));
         }
-        adapter.notifyDataSetChanged();
+
+        itemsFragment.updateListItems();
     }
 
     /**

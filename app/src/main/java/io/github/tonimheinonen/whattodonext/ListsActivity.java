@@ -43,7 +43,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     private TextView vNoList;
     private EditText vSelectedList;
 
+    // Fallen
     private Button fallenButton;
+    private boolean fallenList = false;
 
     /**
      * Initializes necessary values.
@@ -58,7 +60,11 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        itemsFragment = new ListViewFragment(DatabaseType.LIST_ITEM, curList);
+        itemsFragment = new ListViewFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("type", DatabaseType.LIST_ITEM.name());
+        bundle.putParcelable("curList", curList);
+        itemsFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.listFragment, itemsFragment);
         fragmentTransaction.commit();
 
@@ -134,10 +140,9 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
         curList.setItems(items);
-        Buddy.filterListByFallen(curList.getItems(), itemsFragment.getFallenStatus());
+        Buddy.filterListByFallen(curList.getItems(), fallenList);
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
-        itemsFragment.createListItems();
         itemsFragment.updateListItems();
     }
 
@@ -154,7 +159,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      */
     private void setCurrentList(ListOfItems list) {
         curList = list;
-        itemsFragment.setCurrentList(list);
+        setFallenStatus(false); // Show normal items when list changes
+        itemsFragment.setCurrentList(curList);
 
         // Update list text on top of the screen
         if (list != null) {
@@ -176,7 +182,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     public void addList(String name) {
         ListOfItems list = new ListOfItems(name);
         setCurrentList(list);
-        itemsFragment.createListItems();
+        itemsFragment.updateListItems();
 
         lists.add(list);
         DatabaseHandler.addList(list);
@@ -190,7 +196,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         // If selection is not the same as current list
         if (curList != lists.get(listIndex)) {
             setCurrentList(lists.get(listIndex));
-            Buddy.filterListByFallen(curList.getItems(), itemsFragment.getFallenStatus());
+            setFallenStatus(false);
+            Buddy.filterListByFallen(curList.getItems(), fallenList);
 
             GlobalPrefs.saveCurrentList(curList.getDbID());
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
@@ -264,14 +271,18 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      * @param item item to check
      */
     public void checkFallenStatus(ListItem item) {
-        if (item.isFallen() != itemsFragment.getFallenStatus())
+        if (item.isFallen() != fallenList)
             curList.getItems().remove(item);
     }
 
+    /**
+     * Changes fallen status and updates it's button's color.
+     * @param status whether to load fallen or not
+     */
     private void setFallenStatus(boolean status) {
-        itemsFragment.setFallenStatus(status);
+        fallenList = status;
 
-        fallenButton.setBackground(status ?
+        fallenButton.setBackground(fallenList ?
                 getResources().getDrawable(R.drawable.button_bg_clicked) :
                 getResources().getDrawable(R.drawable.button_selector));
     }
@@ -289,7 +300,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
 
         final ListItem item = new ListItem("", 0, 0);
-        item.setFallen(itemsFragment.getFallenStatus()); // Set fallen status to current fallenList status
+        item.setFallen(fallenList); // Set fallen status to current fallenList status
         ListItemDialog dialog = new ListItemDialog(this, item);
         dialog.show();
     }
@@ -321,7 +332,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
             return;
         }
 
-        setFallenStatus(!itemsFragment.getFallenStatus());
+        setFallenStatus(!fallenList);
 
         // Retrieve items filtered with correct fallen status
         getItems();

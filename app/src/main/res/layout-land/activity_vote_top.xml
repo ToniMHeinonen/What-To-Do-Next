@@ -69,10 +69,11 @@
             android:layout_weight="0.5"
             android:orientation="vertical">
 
-            <ListView
-                android:id = "@+id/voteItems"
-                android:layout_width = "match_parent"
-                android:layout_height = "match_parent"/>
+            <FrameLayout
+                android:id="@+id/listFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
 
         </LinearLayout>
 

@@ -76,12 +76,6 @@
         android:layout_weight="0.7"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:id="@+id/listFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-
         <RelativeLayout
             style="@style/GenericProgressBackground"
             android:id="@+id/loadingPanel">
@@ -89,6 +83,12 @@
             <ProgressBar
                 style="@style/GenericProgressIndicator"/>
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/listFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
 
     </LinearLayout>
 

@@ -92,6 +92,11 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         return position;
     }
 
+    public void updateItems(ArrayList<? extends DatabaseValue> listData) {
+        this.listData = listData;
+        notifyDataSetChanged();
+    }
+
     /**
      * Creates view of the given data.
      * @param position index of the data
