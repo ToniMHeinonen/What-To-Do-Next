@@ -55,7 +55,8 @@ public class ListDialog extends Dialog implements
 
         // Add lists to ListView
         final ListView list = findViewById(R.id.savedLists);
-        list.setAdapter(new ListAndProfileAdapter(activity, lists, this));
+        list.setAdapter(new DatabaseValueListAdapter(activity, lists, this,
+                DatabaseValueListAdapter.AdapterType.LIST_OF_ITEMS));
     }
 
     /**

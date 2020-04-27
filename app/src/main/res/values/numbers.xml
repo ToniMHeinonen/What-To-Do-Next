@@ -4,6 +4,9 @@
     <item name="list_points_weight" format="float" type="dimen">0.166</item>
     <item name="results_name_weight" format="float" type="dimen">0.5</item>
     <item name="results_points_weight" format="float" type="dimen">0.25</item>
+    <item name="vote_show_extra_name_weight" format="float" type="dimen">0.4</item>
+    <item name="vote_show_extra_points_weight" format="float" type="dimen">0.15</item>
+    <item name="vote_show_extra_voteAmount_weight" format="float" type="dimen">0.15</item>
 
     <!-- INTEGER -->
     <item name="list_name_max_length" format="integer" type="integer">30</item>

@@ -17,7 +17,7 @@ import java.util.Map;
  * @since 1.0
  */
 @IgnoreExtraProperties
-public class ListItem implements Parcelable {
+public class ListItem implements DatabaseValue, Parcelable {
 
     private String listID;
     private String name;

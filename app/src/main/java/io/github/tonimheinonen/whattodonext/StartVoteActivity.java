@@ -1,19 +1,17 @@
 package io.github.tonimheinonen.whattodonext;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListAndProfileAdapter;
+import io.github.tonimheinonen.whattodonext.listsactivity.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -46,7 +44,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
 
     // Setup voting options
     private ListOfItems selectedList;
-    private ListAndProfileAdapter profileListAdapter;
+    private DatabaseValueListAdapter profileListAdapter;
     private ArrayList<Profile> selectedProfiles = new ArrayList<>();
 
     /**
@@ -141,7 +139,8 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
 
         // Add profiles to ListView
         final ListView profileListView = findViewById(R.id.savedProfiles);
-        profileListAdapter = new ListAndProfileAdapter(this, profiles, this);
+        profileListAdapter = new DatabaseValueListAdapter(this, profiles, this,
+                DatabaseValueListAdapter.AdapterType.PROFILE);
         profileListView.setAdapter(profileListAdapter);
     }
 

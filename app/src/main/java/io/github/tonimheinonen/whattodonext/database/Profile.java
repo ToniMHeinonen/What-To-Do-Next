@@ -49,7 +49,6 @@ public class Profile implements DatabaseValue, Parcelable {
      * Returns if profile has been selected or not.
      * @return true if selected
      */
-    @Override
     public boolean isSelected() {
         return selected;
     }

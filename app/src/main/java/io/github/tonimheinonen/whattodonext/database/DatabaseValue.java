@@ -8,10 +8,5 @@ package io.github.tonimheinonen.whattodonext.database;
  * @since 1.0
  */
 public interface DatabaseValue {
-    /**
-     * Returns name of the object
-     * @return name of the object
-     */
-    String getName();
-    boolean isSelected();
+
 }

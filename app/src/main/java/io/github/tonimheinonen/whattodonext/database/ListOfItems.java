@@ -98,7 +98,6 @@ public class ListOfItems implements DatabaseValue, Parcelable {
      * Returns if list has been selected or not.
      * @return true if selected
      */
-    @Override
     public boolean isSelected() {
         return selected;
     }

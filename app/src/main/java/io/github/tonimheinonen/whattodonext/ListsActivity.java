@@ -6,7 +6,7 @@ import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItemAdapter;
+import io.github.tonimheinonen.whattodonext.listsactivity.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -43,7 +43,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     private ArrayList<ListOfItems> lists = new ArrayList<>();
     private ListView list;
-    private ListItemAdapter adapter;
+    private DatabaseValueListAdapter adapter;
 
     private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
     private int curSort = NAME;
@@ -177,7 +177,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      */
     public void createListItems() {
         list = findViewById(R.id.list);
-        adapter = new ListItemAdapter(this, curList.getItems());
+        adapter = new DatabaseValueListAdapter(this, curList.getItems(),
+                null, DatabaseValueListAdapter.AdapterType.LIST_ITEM);
 
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
