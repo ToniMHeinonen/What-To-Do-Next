@@ -9,7 +9,6 @@ import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
-import io.github.tonimheinonen.whattodonext.listsactivity.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -19,16 +18,12 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Handles modifying of ListOfViews and ListItems.
@@ -39,23 +34,16 @@ import java.util.Comparator;
  */
 public class ListsActivity extends AppCompatActivity implements OnGetDataListener {
 
-    private ListsActivity _this = this;
-
     private ListOfItems curList;
     private String curListId = "";
+    private ListViewFragment itemsFragment;
 
     private ArrayList<ListOfItems> lists = new ArrayList<>();
-    private ListView list;
-    private DatabaseValueListAdapter adapter;
 
-    private final int NAME = 0, TOTAL = 1, BONUS = 2, PERIL = 3;
-    private int curSort = NAME;
-    private boolean ascending = true;
-    private TextView vName, vTotal, vBonus, vPeril, vNoList;
+    private TextView vNoList;
     private EditText vSelectedList;
 
     private Button fallenButton;
-    private boolean fallenList = false;
 
     /**
      * Initializes necessary values.
@@ -66,11 +54,15 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists);
 
-        // Find topics so that color can be changed
-        vName = findViewById(R.id.name);
-        vTotal = findViewById(R.id.total);
-        vBonus = findViewById(R.id.bonus);
-        vPeril = findViewById(R.id.peril);
+        // Setup list fragment
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        itemsFragment = new ListViewFragment(DatabaseType.LIST_ITEM, curList);
+        fragmentTransaction.add(R.id.listFragment, itemsFragment);
+        fragmentTransaction.commit();
+
+        // Retrieve name of the list views
         vNoList = findViewById(R.id.no_list);
         vSelectedList = findViewById(R.id.selected_list);
 
@@ -82,7 +74,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
                     if (!vSelectedList.getText().toString().equals(curList.getName())) {
                         curList.setName(vSelectedList.getText().toString());
                         DatabaseHandler.modifyList(curList);
-                        Buddy.showToast("New list name saved", Toast.LENGTH_SHORT);
+                        Buddy.showToast(getString(R.string.list_rename_saved), Toast.LENGTH_SHORT);
                     }
 
                     Buddy.hideKeyboardAndClear(vSelectedList, false);
@@ -142,11 +134,11 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     @Override
     public void onDataGetItems(ArrayList<ListItem> items) {
         curList.setItems(items);
-        Buddy.filterListByFallen(curList.getItems(), fallenList);
+        Buddy.filterListByFallen(curList.getItems(), itemsFragment.getFallenStatus());
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
-        createListItems();
-        updateListItems();
+        itemsFragment.createListItems();
+        itemsFragment.updateListItems();
     }
 
     /**
@@ -162,7 +154,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      */
     private void setCurrentList(ListOfItems list) {
         curList = list;
-        setFallenStatus(false); // Show normal items when list changes
+        itemsFragment.setCurrentList(list);
 
         // Update list text on top of the screen
         if (list != null) {
@@ -175,48 +167,6 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
     }
 
-    /**
-     * Creates ListView with correct adapter and data.
-     */
-    public void createListItems() {
-        list = findViewById(R.id.list);
-        adapter = new DatabaseValueListAdapter(this, curList.getItems(),
-                null, DatabaseType.LIST_ITEM);
-
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListItem item = (ListItem) list.getItemAtPosition(position);
-                ListItemDialog dialog = new ListItemDialog(_this, item);
-                dialog.show();
-            }
-        });
-    }
-
-    /**
-     * Sorts list correctly and adjusts changes to list.
-     */
-    private void updateListItems() {
-        if (list == null || curList == null)
-            return;
-
-        sortList();
-
-        if (list.getAdapter() != null)
-            adapter.notifyDataSetChanged();
-        else
-            createListItems();
-    }
-
-    /**
-     * Hides list items when current list is deleted.
-     */
-    private void hideListItems() {
-        list.setAdapter(null);
-    }
-
-
     /*//////////////////// LIST DIALOG ////////////////////*/
 
     /**
@@ -226,7 +176,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
     public void addList(String name) {
         ListOfItems list = new ListOfItems(name);
         setCurrentList(list);
-        createListItems();
+        itemsFragment.createListItems();
 
         lists.add(list);
         DatabaseHandler.addList(list);
@@ -240,7 +190,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         // If selection is not the same as current list
         if (curList != lists.get(listIndex)) {
             setCurrentList(lists.get(listIndex));
-            Buddy.filterListByFallen(curList.getItems(), fallenList);
+            Buddy.filterListByFallen(curList.getItems(), itemsFragment.getFallenStatus());
 
             GlobalPrefs.saveCurrentList(curList.getDbID());
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
@@ -261,7 +211,6 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         if (curList == list) {
             setCurrentList(null);
             GlobalPrefs.saveCurrentList("");
-            hideListItems();
         }
     }
 
@@ -276,7 +225,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         DatabaseHandler.addItem(curList, item);
 
         checkFallenStatus(item);
-        updateListItems();
+        itemsFragment.updateListItems();
     }
 
     /**
@@ -292,7 +241,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
         DatabaseHandler.modifyItem(item);
         checkFallenStatus(item);
-        updateListItems();
+        itemsFragment.updateListItems();
     }
 
     /**
@@ -304,7 +253,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         if (curList.getItems().contains(item)) {
             curList.getItems().remove(item);
             DatabaseHandler.removeItem(item);
-            updateListItems();
+            itemsFragment.updateListItems();
         }
     }
 
@@ -314,117 +263,15 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      * If fallen status is not the same as fallenList status, drop item from list.
      * @param item item to check
      */
-    private void checkFallenStatus(ListItem item) {
-        if (item.isFallen() != fallenList)
+    public void checkFallenStatus(ListItem item) {
+        if (item.isFallen() != itemsFragment.getFallenStatus())
             curList.getItems().remove(item);
     }
 
-    /*//////////////////// SORTING ////////////////////*/
-
-    /**
-     * Sorts list correctly when some of the topic texts are touched.
-     * @param v topic value
-     */
-    public void topicClicked(View v) {
-        int sort = -1;
-
-        switch (v.getId()) {
-            case R.id.name:
-                sort = NAME;
-                break;
-            case R.id.total:
-                sort = TOTAL;
-                break;
-            case R.id.bonus:
-                sort = BONUS;
-                break;
-            case R.id.peril:
-                sort = PERIL;
-                break;
-        }
-
-        invertSortOrder(sort);
-        curSort = sort;
-        updateListItems();
-    }
-
-    /**
-     * Changes currently sorted text color.
-     * @param selected currently selected sort type
-     */
-    private void changeColor(int selected) {
-        vName.setTextColor(selected == NAME ?
-                getResources().getColor(R.color.textColorPrimary) :
-                getResources().getColor(R.color.defaultTextColor));
-
-        vTotal.setTextColor(selected == TOTAL ?
-                getResources().getColor(R.color.textColorPrimary) :
-                getResources().getColor(R.color.defaultTextColor));
-
-        vBonus.setTextColor(selected == BONUS ?
-                getResources().getColor(R.color.textColorPrimary) :
-                getResources().getColor(R.color.defaultTextColor));
-
-        vPeril.setTextColor(selected == PERIL ?
-                getResources().getColor(R.color.textColorPrimary) :
-                getResources().getColor(R.color.defaultTextColor));
-    }
-
-    /**
-     * Inverts sorting order.
-     * @param sort selected sorting type
-     */
-    private void invertSortOrder(int sort) {
-        // If new sort is same as current, reverse order
-        if (sort == curSort) {
-            ascending = !ascending;
-        }
-    }
-
-    /**
-     * Sorts list.
-     */
-    private void sortList() {
-        changeColor(curSort);
-
-        switch (curSort) {
-            case NAME:
-                Buddy.sortItemsByName(curList.getItems(), ascending);
-                break;
-            case TOTAL:
-                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
-                    public int compare(ListItem o1, ListItem o2) {
-                        return ascending ?
-                                ((Integer)o1.getTotal()).compareTo(o2.getTotal()) :
-                                ((Integer)o2.getTotal()).compareTo(o1.getTotal());
-                    }
-                });
-                break;
-            case BONUS:
-                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
-                    public int compare(ListItem o1, ListItem o2) {
-                        return ascending ?
-                                ((Integer)o1.getBonus()).compareTo(o2.getBonus()) :
-                                ((Integer)o2.getBonus()).compareTo(o1.getBonus());
-                    }
-                });
-                break;
-            case PERIL:
-                Collections.sort(curList.getItems(), new Comparator<ListItem>() {
-                    public int compare(ListItem o1, ListItem o2) {
-                        return ascending ?
-                                ((Integer)o1.getPeril()).compareTo(o2.getPeril()) :
-                                ((Integer)o2.getPeril()).compareTo(o1.getPeril());
-                    }
-                });
-                break;
-        }
-    }
-
     private void setFallenStatus(boolean status) {
-        fallenList = status;
+        itemsFragment.setFallenStatus(status);
 
-        fallenButton.setBackground(fallenList ?
+        fallenButton.setBackground(status ?
                 getResources().getDrawable(R.drawable.button_bg_clicked) :
                 getResources().getDrawable(R.drawable.button_selector));
     }
@@ -442,7 +289,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         }
 
         final ListItem item = new ListItem("", 0, 0);
-        item.setFallen(fallenList); // Set fallen status to current fallenList status
+        item.setFallen(itemsFragment.getFallenStatus()); // Set fallen status to current fallenList status
         ListItemDialog dialog = new ListItemDialog(this, item);
         dialog.show();
     }
@@ -474,7 +321,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
             return;
         }
 
-        setFallenStatus(!fallenList);
+        setFallenStatus(!itemsFragment.getFallenStatus());
 
         // Retrieve items filtered with correct fallen status
         getItems();

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="top"
+    android:background="@drawable/app_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/listsTopicsName"/>
+
+        <TextView
+            android:id="@+id/total"
+            style="@style/listsTopicsPoints"
+            android:text="@string/lists_total"/>
+
+        <TextView
+            android:id="@+id/bonus"
+            style="@style/listsTopicsPoints"
+            android:text="@string/lists_bonus"/>
+
+        <TextView
+            android:id="@+id/peril"
+            style="@style/listsTopicsPoints"
+            android:text="@string/lists_peril"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id = "@+id/list"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:background="@drawable/custom_bg"/>
+
+</LinearLayout>

@@ -54,6 +54,7 @@
     <string name="first_select_list">First select list</string>
 
     <string name="hint_new_list">List name</string>
+    <string name="list_rename_saved">List name saved</string>
 
     <string name="lists_name">Name</string>
     <string name="lists_total">Total</string>

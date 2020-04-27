@@ -63,32 +63,11 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/listFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp">
-
-        <TextView
-            android:id="@+id/name"
-            style="@style/listsTopicsName"/>
-
-        <TextView
-            android:id="@+id/total"
-            style="@style/listsTopicsPoints"
-            android:text="@string/lists_total"/>
-
-        <TextView
-            android:id="@+id/bonus"
-            style="@style/listsTopicsPoints"
-            android:text="@string/lists_bonus"/>
-
-        <TextView
-            android:id="@+id/peril"
-            style="@style/listsTopicsPoints"
-            android:text="@string/lists_peril"/>
-
-    </LinearLayout>
+        android:orientation="vertical"/>
 
     <RelativeLayout
         style="@style/GenericProgressBackground"
@@ -97,11 +76,5 @@
         <ProgressBar
             style="@style/GenericProgressIndicator"/>
     </RelativeLayout>
-
-    <ListView
-        android:id = "@+id/list"
-        android:layout_width = "match_parent"
-        android:layout_height = "wrap_content"
-        android:background="@drawable/custom_bg"/>
 
 </LinearLayout>
