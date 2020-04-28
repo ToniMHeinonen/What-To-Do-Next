@@ -28,7 +28,7 @@ public class Profile implements DatabaseValue, Parcelable {
     private boolean selected;
 
     @Exclude
-    private int[] votedItems;
+    private ListItem[] votedItems;
 
     /**
      * Default constructor.
@@ -124,16 +124,16 @@ public class Profile implements DatabaseValue, Parcelable {
      * @param amount voting item amount
      */
     public void initVoteSize(int amount) {
-        votedItems = new int[amount];
+        votedItems = new ListItem[amount];
     }
 
     /**
      * Adds new itemIndex to given index.
      * @param index amount of points index
-     * @param itemIndex position of the item
+     * @param votedItem voted item
      */
-    public void addVoteItem(int index, int itemIndex) {
-        votedItems[index] = itemIndex;
+    public void addVoteItem(int index, ListItem votedItem) {
+        votedItems[index] = votedItem;
     }
 
     /**
@@ -141,15 +141,15 @@ public class Profile implements DatabaseValue, Parcelable {
      * @param index amount of points index
      */
     public void removeVoteItem(int index) {
-        votedItems[index] = -1;
+        votedItems[index] = null;
     }
 
     /**
      * Returns voted item index from given position.
      * @param index vote points index
-     * @return
+     * @return voted item at index
      */
-    public int getVoteItem(int index) {
+    public ListItem getVoteItem(int index) {
         return votedItems[index];
     }
 
@@ -173,7 +173,7 @@ public class Profile implements DatabaseValue, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
         dest.writeString(name);
-        dest.writeIntArray(votedItems);
+        dest.writeTypedArray(votedItems, 0);
     }
 
     /**
@@ -183,7 +183,7 @@ public class Profile implements DatabaseValue, Parcelable {
     public Profile(Parcel in) {
         dbID = in.readString();
         name = in.readString();
-        votedItems = in.createIntArray();
+        votedItems = in.createTypedArray(ListItem.CREATOR);
     }
 
     /**

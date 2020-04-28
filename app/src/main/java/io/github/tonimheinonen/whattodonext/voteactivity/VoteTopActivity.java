@@ -58,8 +58,6 @@ public class VoteTopActivity extends AppCompatActivity {
         infoView = findViewById(R.id.voteInfoText);
         nextButton = findViewById(R.id.nextButton);
 
-        Buddy.sortItemsByName(selectedList.getItems(), true);
-
         // Setup voting items
         itemsFragment = Buddy.createListItemFragment(this,
                 DatabaseType.VOTE_SHOW_EXTRA, selectedList);
@@ -67,7 +65,7 @@ public class VoteTopActivity extends AppCompatActivity {
         startVoting();
     }
 
-    public void itemClicked(ListItem item, int position) {
+    public void itemClicked(ListItem item) {
         if (votedItems.contains(item)) {
             votedItems.remove(item);
             int points = item.retrieveVotePoints();
@@ -80,7 +78,7 @@ public class VoteTopActivity extends AppCompatActivity {
                 votedItems.add(item);
                 item.setVotePoints(currentVotePoint);
                 // Index -1 since index starts at 0, vote points start at 1
-                currentProfile.addVoteItem(currentVotePoint - 1, position);
+                currentProfile.addVoteItem(currentVotePoint - 1, item);
                 removeVotePoint();
             }
         }

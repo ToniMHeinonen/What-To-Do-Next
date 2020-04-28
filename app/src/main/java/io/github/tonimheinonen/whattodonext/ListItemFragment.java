@@ -120,7 +120,7 @@ public class ListItemFragment extends Fragment implements View.OnClickListener {
                     case VOTE_HIDE_EXTRA:
                         ListItem voteShowItem = (ListItem) listView.getItemAtPosition(position);
                         VoteTopActivity activity = (VoteTopActivity) getActivity();
-                        activity.itemClicked(voteShowItem, position);
+                        activity.itemClicked(voteShowItem);
                         break;
                 }
             }

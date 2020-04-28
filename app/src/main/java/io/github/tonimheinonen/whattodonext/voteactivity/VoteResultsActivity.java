@@ -78,8 +78,15 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
             int votePoints = i + 1; // i + 1 because index starts at 0, points at 1
 
             for (Profile p : selectedProfiles) {
-                int index = p.getVoteItem(i);
-                items.get(index).addVotePoints(votePoints);
+                ListItem votedItem = p.getVoteItem(i);
+
+                // Loop through all the items to give votePoints to correct item
+                for (ListItem item : items) {
+                    if (item.equalsTo(votedItem)) {
+                        item.addVotePoints(votePoints);
+                        break;
+                    }
+                }
             }
         }
 
