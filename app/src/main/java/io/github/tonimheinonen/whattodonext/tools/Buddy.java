@@ -2,8 +2,8 @@ package io.github.tonimheinonen.whattodonext.tools;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,9 +19,14 @@ import java.util.Iterator;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import io.github.tonimheinonen.whattodonext.ListItemFragment;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.StartVoteActivity;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 
 /**
  * Handles often used helpful methods.
@@ -190,5 +195,32 @@ public abstract class Buddy {
     public static void registrationHideLoading(AppCompatActivity activity) {
         activity.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         activity.findViewById(R.id.informationBox).setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Creates a fragment for displaying list items.
+     * @param activity current activity
+     * @param type database type of list
+     * @param curList list to display
+     * @return created list fragment
+     */
+    public static ListItemFragment createListItemFragment(AppCompatActivity activity, DatabaseType type,
+                                                   ListOfItems curList) {
+        // Retrieve FragmentManager and begin transaction
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // Create Fragment and put database type and list as intent
+        ListItemFragment itemsFragment = new ListItemFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("type", type.name());
+        bundle.putParcelable("curList", curList);
+        itemsFragment.setArguments(bundle);
+
+        // Add fragment to the listFragment FrameLayout
+        fragmentTransaction.add(R.id.listFragment, itemsFragment);
+        fragmentTransaction.commit();   // Add fragment to queue
+
+        return itemsFragment;
     }
 }

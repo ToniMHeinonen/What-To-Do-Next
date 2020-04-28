@@ -1,8 +1,6 @@
 package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
@@ -36,7 +34,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
     private ListOfItems curList;
     private String curListId = "";
-    private ListViewFragment itemsFragment;
+    private ListItemFragment itemsFragment;
 
     private ArrayList<ListOfItems> lists = new ArrayList<>();
 
@@ -57,16 +55,8 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         setContentView(R.layout.activity_lists);
 
         // Setup list fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        itemsFragment = new ListViewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("type", DatabaseType.LIST_ITEM.name());
-        bundle.putParcelable("curList", curList);
-        itemsFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.listFragment, itemsFragment);
-        fragmentTransaction.commit();
+        itemsFragment = Buddy.createListItemFragment(this,
+                DatabaseType.LIST_ITEM, curList);
 
         // Retrieve name of the list views
         vNoList = findViewById(R.id.no_list);

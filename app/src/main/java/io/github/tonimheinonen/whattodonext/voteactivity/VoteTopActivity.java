@@ -1,11 +1,8 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import io.github.tonimheinonen.whattodonext.ListViewFragment;
+import io.github.tonimheinonen.whattodonext.ListItemFragment;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
-import io.github.tonimheinonen.whattodonext.listsactivity.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.R;
@@ -15,9 +12,7 @@ import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -38,7 +33,7 @@ public class VoteTopActivity extends AppCompatActivity {
 
     private Button nextButton;
     private TextView profileView, infoView;
-    private ListViewFragment itemsFragment;
+    private ListItemFragment itemsFragment;
 
     private ArrayList<Integer> votePoints;
     private ArrayList<ListItem> votedItems;
@@ -65,26 +60,11 @@ public class VoteTopActivity extends AppCompatActivity {
 
         Buddy.sortItemsByName(selectedList.getItems(), true);
 
-        setupVoteItems();
+        // Setup voting items
+        itemsFragment = Buddy.createListItemFragment(this,
+                DatabaseType.VOTE_SHOW_EXTRA, selectedList);
 
         startVoting();
-    }
-
-    /**
-     * Setups voting items.
-     */
-    private void setupVoteItems() {
-        // Setup list fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        itemsFragment = new ListViewFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("type", DatabaseType.VOTE_SHOW_EXTRA.name());
-        bundle.putParcelable("curList", selectedList);
-        itemsFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.listFragment, itemsFragment);
-        fragmentTransaction.commit();
     }
 
     public void itemClicked(ListItem item, int position) {

@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext.listsactivity;
+package io.github.tonimheinonen.whattodonext.database;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,11 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.github.tonimheinonen.whattodonext.R;
-import io.github.tonimheinonen.whattodonext.database.DatabaseType;
-import io.github.tonimheinonen.whattodonext.database.DatabaseValue;
-import io.github.tonimheinonen.whattodonext.database.ListItem;
-import io.github.tonimheinonen.whattodonext.database.ListOfItems;
-import io.github.tonimheinonen.whattodonext.database.Profile;
 
 /**
  * Handles List View element with List Item.

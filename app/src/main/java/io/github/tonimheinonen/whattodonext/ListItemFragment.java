@@ -16,12 +16,12 @@ import androidx.fragment.app.Fragment;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
-import io.github.tonimheinonen.whattodonext.listsactivity.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
 
-public class ListViewFragment extends Fragment implements View.OnClickListener {
+public class ListItemFragment extends Fragment implements View.OnClickListener {
 
     private DatabaseType type;
     private ListOfItems curList;
@@ -39,7 +39,7 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
     /**
      * Default constructor for handling device orientation changes.
      */
-    public ListViewFragment() {}
+    public ListItemFragment() {}
 
     /**
      * Creates the Fragment view.
