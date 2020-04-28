@@ -83,9 +83,13 @@ public class ListItemDialog extends Dialog implements
         // If user changed text to "", set value to 0, else get value from text
         String bonusStr = bonusAmount.getText().toString();
         int bonus = bonusStr.equals("") ? 0 : Integer.parseInt(bonusStr);
+        if (bonus < 0 )
+            bonus = 0;
 
         String perilStr = perilAmount.getText().toString();
         int peril = perilStr.equals("") ? 0 : Integer.parseInt(perilStr);
+        if (peril < 0)
+            peril = 0;
 
         points[BONUS_INDEX] = bonus;
         points[PERIL_INDEX] = peril;
@@ -105,13 +109,19 @@ public class ListItemDialog extends Dialog implements
 
         switch (v.getId()) {
             case R.id.bonusMinus:
-                bonusAmount.setText(String.valueOf(bonus - 1));
+                if (bonus - 1 < 0)
+                    bonusAmount.setText(String.valueOf(0));
+                else
+                    bonusAmount.setText(String.valueOf(bonus - 1));
                 break;
             case R.id.bonusPlus:
                 bonusAmount.setText(String.valueOf(bonus + 1));
                 break;
             case R.id.perilMinus:
-                perilAmount.setText(String.valueOf(peril - 1));
+                if (peril - 1 < 0)
+                    perilAmount.setText(String.valueOf(0));
+                else
+                    perilAmount.setText(String.valueOf(peril - 1));
                 break;
             case R.id.perilPlus:
                 perilAmount.setText(String.valueOf(peril + 1));
