@@ -1,16 +1,16 @@
 <resources>
     <string name="app_name">What To Do Next?</string>
-    <!-- Global -->
+    <!-- GLOBAL -->
     <string name="delete">Delete</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
         ultrices mattis nunc vitae dignissim. Cras finibus libero vel pulvinar finibus.</string>
 
-    <!-- MainActivity -->
+    <!-- MAIN_ACTIVITY -->
     <string name="menu_vote">Vote</string>
     <string name="menu_lists">Lists</string>
     <string name="menu_settings">Settings</string>
 
-    <!-- StartVoteActivity -->
+    <!-- START_VOTE_ACTIVITY -->
     <string name="select_list">Select List</string>
     <string name="select_voters">Select Voters</string>
     <string name="new_profile">New Profile</string>
@@ -25,7 +25,7 @@
     <string name="toast_not_enough_activities">Selected list does not have enough activities!
         (%1$s required)</string>
 
-    <!-- Voting -->
+    <!-- VOTING -->
     <string name="alert_exit_title">Exit</string>
     <string name="alert_exit_message">Are you sure you want to exit?</string>
     <string name="alert_exit_yes">Exit</string>
@@ -33,11 +33,11 @@
     <string name="vote_next">Next</string>
     <string name="vote_exit">Exit</string>
 
-    <!-- VoteTopActivity -->
+    <!-- VOTE_TOP_ACTIVITY -->
     <string name="give_points_to">Give %1$d points to?</string>
     <string name="vote_ready">Tap %1$s to continue</string>
 
-    <!-- VoteResultsActivity -->
+    <!-- VOTE_RESULTS_ACTIVITY -->
     <string name="results">Results</string>
     <string name="results_info">Select which activities you are going to do (optional):</string>
     <string name="results_name">Name</string>
@@ -47,7 +47,7 @@
 
     <string name="save_successful">Save successful, points have been calculated</string>
 
-    <!-- ListsActivity -->
+    <!-- LISTS_ACTIVITY -->
     <string name="no_list_selected">No list selected</string>
     <string name="lists_add">Add</string>
     <string name="lists_list">List</string>
@@ -69,7 +69,7 @@
     <string name="alert_delete_confirm">Delete</string>
     <string name="alert_delete_cancel">Cancel</string>
 
-    <!-- ListItemDialog-->
+    <!-- LIST_ITEM_DIALOG -->
     <string name="list_item_dialog_nameHint">Activity name</string>
     <string name="list_item_dialog_bonus">Bonus</string>
     <string name="list_item_dialog_peril">Peril</string>
@@ -79,7 +79,7 @@
     <string name="list_item_dialog_confirm">Confirm</string>
     <string name="list_item_dialog_cancel">Cancel</string>
 
-    <!-- SettingsActivity -->
+    <!-- SETTINGS_ACTIVITY -->
     <string name="settings">Settings</string>
     <string name="max_peril">Max Peril</string>
     <string name="first_vote">First Vote</string>
@@ -105,6 +105,36 @@
     <string name="last_vote_same_as_first">Points has to be lower than in first vote!</string>
     <string name="first_vote_same_as_last">Points has to be higher than in last vote!</string>
     <string name="points_at_zero">Points has to be at least 1!</string>
+
+    <!-- TUTORIAL -->
+    <string name="show_later">Show Later</string>
+
+    <string name="first_tutorial">Welcome to the app!</string>
+
+    <string name="first_tutorial_text">Have you ever been in a situation with your friends when you
+        can\'t decide what to do? With this app, your everyday decisions will flow like a charm and
+        you never have to argue again.\n
+        \n
+        Using the app is as simple as this:\n
+        1. Create a new list\n
+        2. Add all the activities you consider doing on that list (you can ignore bonus and peril
+        points for now)\n
+        3. Every voter lists their top 7 activities\n
+        4. Activities that receive the most amount of points will move on to the next voting round\n
+        5. Every voter lists their top 5 activities from the remaining list\n
+        6. Select all the activities which your group of friends will do today\n
+        7. Save and enjoy!\n
+        \n
+        If you are already used to the concept of voting and want to use the app regularly, there
+        are some extra steps which can improve your voting experience:\n
+        \n
+        - Every activity that makes it into the top 7 list will gain 1 "bonus" point\n
+        - Every other activity will gain 1 "peril" point\n
+        - When activity gains over 5 peril points, it will be removed from the list
+        (you can return it back by clicking the fallen button)\n
+        - You can alter all of these point thresholds and other settings from the setting menu\n
+        \n
+        Note: You can read this tutorial at any time from the Google Play Store</string>
 
     <!-- CUSTOM ALERT DIALOG -->
     <string name="alertTopic">Alert!</string>

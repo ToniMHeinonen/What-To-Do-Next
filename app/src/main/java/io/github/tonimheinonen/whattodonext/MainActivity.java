@@ -3,13 +3,11 @@ package io.github.tonimheinonen.whattodonext;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.registration.LoginActivity;
-import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -40,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             DatabaseHandler.initializeUserDatabase();
             GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
+
+            // If first tutorial has not been confirmed yet, show it
+            if (GlobalPrefs.loadFirstTutorial())
+                new TutorialDialog(this, TutorialDialog.FIRST_TUTORIAL).show();
         }
     }
 

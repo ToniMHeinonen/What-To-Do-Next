@@ -22,6 +22,9 @@ public abstract class GlobalPrefs {
     private static String keyHalveExtra = "halve_extra";
     private static String keyShowExtra = "show_extra";
 
+    // Tutorial
+    private static String keyFirstTutorial = "first_tutorial";
+
     /**
      * Gets access to the correct prefs depending on the user.
      * @param context activity context
@@ -141,5 +144,21 @@ public abstract class GlobalPrefs {
      */
     public static void saveShowExtra(boolean show) {
         prefs.edit().putBoolean(keyShowExtra, show).apply();
+    }
+
+    /**
+     * Loads whether to show first tutorial or not.
+     * @return true if to show
+     */
+    public static boolean loadFirstTutorial() {
+        return prefs.getBoolean(keyFirstTutorial, true);
+    }
+
+    /**
+     * Saves whether to show first tutorial or not.
+     * @param show true if to show
+     */
+    public static void saveFirstTutorial(boolean show) {
+        prefs.edit().putBoolean(keyFirstTutorial, show).apply();
     }
 }
