@@ -100,10 +100,6 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
             if (!lastResults && GlobalPrefs.loadIgnoreUnselected() && item.getVotePoints() == 0)
                 continue;
 
-            // If last vote and user wants to halve extra points
-            if (lastResults && GlobalPrefs.loadHalveExtra())
-                item.setTotal((int) Math.ceil((double) item.getTotal() / 2));
-
             item.addVotePoints(item.getTotal());
             Debug.print(this, "item", "name: " + item.getName(), 1);
             Debug.print(this, "item", "points: " + item.getVotePoints(), 1);

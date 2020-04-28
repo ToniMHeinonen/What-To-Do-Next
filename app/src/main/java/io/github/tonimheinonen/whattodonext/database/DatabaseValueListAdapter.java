@@ -231,6 +231,10 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         total.setText(String.valueOf(item.getTotal()));
         bonus.setText(String.valueOf(item.getBonus()));
         peril.setText(String.valueOf(item.getPeril()));
+
+        // If total points are halved, change text color
+        if (item.getTotal() != (item.getBonus() + item.getPeril()))
+            total.setTextColor(context.getResources().getColor(R.color.colorAccent));
     }
 
     /**

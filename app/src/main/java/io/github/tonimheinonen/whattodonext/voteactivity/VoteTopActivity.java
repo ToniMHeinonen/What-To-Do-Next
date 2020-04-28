@@ -62,6 +62,14 @@ public class VoteTopActivity extends AppCompatActivity {
         infoView = findViewById(R.id.voteInfoText);
         nextButton = findViewById(R.id.nextButton);
 
+        // If it's the last vote and halve is selected, halve the total bonus points on item
+        if (topAmount == GlobalPrefs.loadListVoteSizeSecond() &&
+            GlobalPrefs.loadHalveExtra()) {
+            for (ListItem item : selectedList.getItems()) {
+                item.setTotal((int) Math.ceil((double) item.getTotal() / 2));
+            }
+        }
+
         // Setup voting items
         itemsFragment = Buddy.createListItemFragment(this,
                 GlobalPrefs.loadShowExtra() ? DatabaseType.VOTE_SHOW_EXTRA : DatabaseType.VOTE_HIDE_EXTRA,
