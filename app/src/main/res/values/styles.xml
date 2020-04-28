@@ -154,29 +154,6 @@
         <item name="android:padding">5dp</item>
     </style>
 
-    <style name="listsTopicsName" parent="listsTopics">
-        <item name="android:text">@string/lists_name</item>
-        <item name="android:layout_weight">@dimen/list_name_weight</item>
-    </style>
-
-    <style name="listsTopicsPoints" parent="listsTopics">
-        <item name="android:layout_weight">@dimen/list_points_weight</item>
-    </style>
-
-    <style name="voteTopicsName" parent="listsTopics">
-        <item name="android:text">@string/lists_name</item>
-        <item name="android:layout_weight">@dimen/vote_show_extra_name_weight</item>
-    </style>
-
-    <style name="voteTopicsPoints" parent="listsTopics">
-        <item name="android:layout_weight">@dimen/vote_show_extra_points_weight</item>
-    </style>
-
-    <style name="voteTopicsVoteAmount" parent="listsTopics">
-        <item name="android:text">@string/lists_voted</item>
-        <item name="android:layout_weight">@dimen/vote_show_extra_voteAmount_weight</item>
-    </style>
-
     <!-- START VOTE ACTIVITY -->
     <style name="startVoteTitles">
         <item name="android:layout_height">wrap_content</item>

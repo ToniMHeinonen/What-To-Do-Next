@@ -7,6 +7,8 @@
     <item name="vote_show_extra_name_weight" format="float" type="dimen">0.4</item>
     <item name="vote_show_extra_points_weight" format="float" type="dimen">0.15</item>
     <item name="vote_show_extra_voteAmount_weight" format="float" type="dimen">0.15</item>
+    <item name="vote_hide_extra_name_weight" format="float" type="dimen">0.7</item>
+    <item name="vote_hide_extra_voteAmount_weight" format="float" type="dimen">0.3</item>
 
     <!-- INTEGER -->
     <item name="list_name_max_length" format="integer" type="integer">30</item>

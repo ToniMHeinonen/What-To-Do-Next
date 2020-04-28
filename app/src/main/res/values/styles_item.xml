@@ -8,27 +8,7 @@
         <item name="android:padding">10dp</item>
     </style>
 
-    <style name="listItemName" parent="listItemValues">
-        <item name="android:layout_weight">@dimen/list_name_weight</item>
-    </style>
-
     <style name="listItemPoints" parent="listItemValues">
-        <item name="android:layout_weight">@dimen/list_points_weight</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
-    <!-- Voting -->
-    <style name="voteShowExtraName" parent="listItemValues">
-        <item name="android:layout_weight">@dimen/vote_show_extra_name_weight</item>
-    </style>
-
-    <style name="voteShowExtraPoints" parent="listItemValues">
-        <item name="android:layout_weight">@dimen/vote_show_extra_points_weight</item>
-        <item name="android:textAlignment">center</item>
-    </style>
-
-    <style name="voteShowExtraVoteAmount" parent="listItemValues">
-        <item name="android:layout_weight">@dimen/vote_show_extra_voteAmount_weight</item>
         <item name="android:textAlignment">center</item>
     </style>
 

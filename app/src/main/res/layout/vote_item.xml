@@ -5,12 +5,15 @@
 
     <TextView
         android:id="@+id/voteName"
-        style="@style/listItemName">
+        style="@style/listItemValues"
+        android:layout_weight="@dimen/vote_hide_extra_name_weight">
     </TextView>
 
     <TextView
         android:id="@+id/voteAmount"
-        style="@style/listItemPoints">
+        style="@style/listItemPoints"
+        android:layout_weight="@dimen/vote_hide_extra_voteAmount_weight"
+        android:textColor="@color/colorPrimary">
     </TextView>
 
 </LinearLayout>

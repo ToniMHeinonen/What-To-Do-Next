@@ -63,6 +63,9 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
             case VOTE_SHOW_EXTRA:
                 view = inflater.inflate(R.layout.fragment_vote_show_extra, container, false);
                 break;
+            case VOTE_HIDE_EXTRA:
+                view = inflater.inflate(R.layout.fragment_vote_hide_extra, container, false);
+                break;
             default:
                 // Prevents "view not initialized" error
                 view = inflater.inflate(null, null, false);
@@ -114,6 +117,7 @@ public class ListViewFragment extends Fragment implements View.OnClickListener {
                         dialog.show();
                         break;
                     case VOTE_SHOW_EXTRA:
+                    case VOTE_HIDE_EXTRA:
                         ListItem voteShowItem = (ListItem) listView.getItemAtPosition(position);
                         VoteTopActivity activity = (VoteTopActivity) getActivity();
                         activity.itemClicked(voteShowItem, position);

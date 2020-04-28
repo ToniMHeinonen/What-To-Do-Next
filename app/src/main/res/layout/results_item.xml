@@ -6,7 +6,7 @@
 
     <TextView
         android:id="@+id/resultsName"
-        style="@style/listItemName"
+        style="@style/listItemValues"
         android:layout_weight="@dimen/results_name_weight">
     </TextView>
 

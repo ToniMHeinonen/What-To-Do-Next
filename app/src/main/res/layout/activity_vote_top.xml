@@ -9,8 +9,10 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_for_layouts"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_for_layouts"
+        android:layout_marginLeft="@dimen/margin_for_layouts"
+        android:layout_marginRight="@dimen/margin_for_layouts"
         android:background="@drawable/custom_bg"
         tools:context=".voteactivity.VoteTopActivity">
 
@@ -44,11 +46,12 @@
             style="@style/voteInfo"
             android:text="{Vote top ~ from list}"/>
 
-        <FrameLayout
-            android:id="@+id/listFragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"/>
-
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/listFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"/>
+
 </LinearLayout>

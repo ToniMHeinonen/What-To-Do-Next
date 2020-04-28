@@ -12,21 +12,26 @@
 
         <TextView
             android:id="@+id/name"
-            style="@style/listsTopicsName"/>
+            style="@style/listsTopics"
+            android:layout_weight="@dimen/list_name_weight"
+            android:text="@string/lists_name"/>
 
         <TextView
             android:id="@+id/total"
-            style="@style/listsTopicsPoints"
+            style="@style/listsTopics"
+            android:layout_weight="@dimen/list_points_weight"
             android:text="@string/lists_total"/>
 
         <TextView
             android:id="@+id/bonus"
-            style="@style/listsTopicsPoints"
+            style="@style/listsTopics"
+            android:layout_weight="@dimen/list_points_weight"
             android:text="@string/lists_bonus"/>
 
         <TextView
             android:id="@+id/peril"
-            style="@style/listsTopicsPoints"
+            style="@style/listsTopics"
+            android:layout_weight="@dimen/list_points_weight"
             android:text="@string/lists_peril"/>
 
     </LinearLayout>

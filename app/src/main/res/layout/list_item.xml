@@ -5,22 +5,26 @@
 
     <TextView
         android:id="@+id/name"
-        style="@style/listItemName">
+        style="@style/listItemValues"
+        android:layout_weight="@dimen/list_name_weight">
     </TextView>
 
     <TextView
         android:id="@+id/total"
-        style="@style/listItemPoints">
+        style="@style/listItemPoints"
+        android:layout_weight="@dimen/list_points_weight">
     </TextView>
 
     <TextView
         android:id="@+id/bonus"
-        style="@style/listItemPoints">
+        style="@style/listItemPoints"
+        android:layout_weight="@dimen/list_points_weight">
     </TextView>
 
     <TextView
         android:id="@+id/peril"
-        style="@style/listItemPoints">
+        style="@style/listItemPoints"
+        android:layout_weight="@dimen/list_points_weight">
     </TextView>
 
 </LinearLayout>
