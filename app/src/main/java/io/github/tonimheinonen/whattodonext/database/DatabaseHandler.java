@@ -89,22 +89,15 @@ public abstract class DatabaseHandler {
         dbLists.child(list.getDbID()).removeValue();
 
         // Remove all items from database connected to this list
-        dbItems.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = dbItems.orderByChild("listID").equalTo(list.getDbID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<ListItem> items = new ArrayList<>();
-
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     String key = dataSnapshot.getKey();
                     ListItem item = dataSnapshot.getValue(ListItem.class);
                     item.setDbID(key);
-                    if (item.getListID().equals(list.getDbID())) {
-                        removeItem(item);
-                    }
-                }
-
-                for(ListItem item : items) {
-
+                    removeItem(item);
                 }
             }
 
