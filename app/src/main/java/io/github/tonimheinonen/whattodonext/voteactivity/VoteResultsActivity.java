@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -270,6 +271,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         }
 
         startActivity(new Intent(this, MainActivity.class));
+        Buddy.showToast(getString(R.string.save_successful), Toast.LENGTH_LONG);
         finish();
     }
 

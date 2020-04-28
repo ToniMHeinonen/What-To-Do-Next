@@ -45,6 +45,8 @@
     <string name="results_total">Total</string>
     <string name="save_and_exit">Save and exit</string>
 
+    <string name="save_successful">Save successful, points have been calculated</string>
+
     <!-- ListsActivity -->
     <string name="no_list_selected">No list selected</string>
     <string name="lists_add">Add</string>
