@@ -8,6 +8,7 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -60,7 +61,8 @@ public class VoteTopActivity extends AppCompatActivity {
 
         // Setup voting items
         itemsFragment = Buddy.createListItemFragment(this,
-                DatabaseType.VOTE_SHOW_EXTRA, selectedList);
+                GlobalPrefs.loadShowExtra() ? DatabaseType.VOTE_SHOW_EXTRA : DatabaseType.VOTE_HIDE_EXTRA,
+                selectedList);
 
         startVoting();
     }

@@ -13,15 +13,36 @@
         tools:context=".SettingsActivity"
         android:background="@drawable/custom_bg">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- TOP -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:textColor="@color/defaultTextColor"
+            android:layout_gravity="center_vertical"
             android:layout_margin="10dp"
-            android:layout_gravity="center" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:text="@string/settings"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:textColor="@color/defaultTextColor"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:layout_margin="5dp"
+                android:textSize="20sp"
+                android:background="@drawable/button_selector"
+                android:text="@string/back"
+                android:onClick="backSelected"/>
+
+        </LinearLayout>
 
         <!-- BOTTOM -->
         <LinearLayout
@@ -40,7 +61,8 @@
                 <!-- Wrap inside Scroll View just in case -->
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    style="@style/scrollViewStyle">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -74,13 +96,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
                 android:layout_margin="10dp"
-                android:layout_gravity="center_vertical"
                 android:orientation="vertical">
 
                 <!-- Wrap inside Scroll View just in case -->
                 <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    style="@style/scrollViewStyle">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -98,15 +120,11 @@
                             android:text="@string/halve_extra"/>
 
                         <Button
-                            android:id="@+id/back"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/button_selector"
-                            android:text="@string/back"
-                            android:onClick="backSelected"/>
+                            android:id="@+id/showExtra"
+                            style="@style/settingsButtons"
+                            android:text="@string/show_extra"/>
+
+
 
                     </LinearLayout>
 

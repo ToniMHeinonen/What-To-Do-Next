@@ -27,7 +27,7 @@ public class SettingDialog extends Dialog implements
     private Activity activity;
 
     public static final int MAX_PERIL = 0, FIRST_VOTE = 1, LAST_VOTE = 2, IGNORE_UNSELECTED = 3,
-    HALVE_EXTRA = 4;
+    HALVE_EXTRA = 4, SHOW_EXTRA = 5;
     private int setting;
     private EditText points;
     private SwitchCompat onOffSwitch;
@@ -107,6 +107,12 @@ public class SettingDialog extends Dialog implements
                 text.setText(activity.getString(R.string.halve_extra_text));
                 onOffSwitch.setVisibility(View.VISIBLE);
                 onOffSwitch.setChecked(GlobalPrefs.loadHalveExtra());
+                break;
+            case SHOW_EXTRA:
+                topic.setText(activity.getString(R.string.show_extra));
+                text.setText(activity.getString(R.string.show_extra_text));
+                onOffSwitch.setVisibility(View.VISIBLE);
+                onOffSwitch.setChecked(GlobalPrefs.loadShowExtra());
                 break;
         }
     }
@@ -212,6 +218,10 @@ public class SettingDialog extends Dialog implements
                 break;
             case HALVE_EXTRA:
                 GlobalPrefs.saveHalveExtra(onOffSwitch.isChecked());
+                dismiss();
+                break;
+            case SHOW_EXTRA:
+                GlobalPrefs.saveShowExtra(onOffSwitch.isChecked());
                 dismiss();
                 break;
         }

@@ -26,9 +26,9 @@
 
         <!-- Wrap inside Scroll View just in case -->
         <ScrollView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            style="@style/scrollViewStyle">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,6 +59,11 @@
                     android:id="@+id/halveExtra"
                     style="@style/settingsButtons"
                     android:text="@string/halve_extra"/>
+
+                <Button
+                    android:id="@+id/showExtra"
+                    style="@style/settingsButtons"
+                    android:text="@string/show_extra"/>
 
                 <Button
                     android:id="@+id/back"

@@ -20,6 +20,7 @@ public abstract class GlobalPrefs {
     private static String keyListVoteSizeSecond = "list_vote_size_second";
     private static String keyIgnoreUnselected = "ignore_unselected";
     private static String keyHalveExtra = "halve_extra";
+    private static String keyShowExtra = "show_extra";
 
     /**
      * Gets access to the correct prefs depending on the user.
@@ -124,5 +125,21 @@ public abstract class GlobalPrefs {
      */
     public static void saveHalveExtra(boolean halve) {
         prefs.edit().putBoolean(keyHalveExtra, halve).apply();
+    }
+
+    /**
+     * Loads whether to show extra points when voting or not.
+     * @return true if to show
+     */
+    public static boolean loadShowExtra() {
+        return prefs.getBoolean(keyShowExtra, true);
+    }
+
+    /**
+     * Saves whether to show extra points when voting or not.
+     * @param show true if to show
+     */
+    public static void saveShowExtra(boolean show) {
+        prefs.edit().putBoolean(keyShowExtra, show).apply();
     }
 }
