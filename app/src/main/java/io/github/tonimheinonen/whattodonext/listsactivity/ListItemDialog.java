@@ -1,17 +1,16 @@
 package io.github.tonimheinonen.whattodonext.listsactivity;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AlertDialog;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 /**
  * Handles modifying of List Items via Dialog.
@@ -157,19 +156,12 @@ public class ListItemDialog extends Dialog implements
     private void deleteItem() {
         String n = name.getText().toString();
 
-        new AlertDialog.Builder(activity)
-                .setTitle(activity.getString(R.string.alert_delete_topic, n))
-                .setMessage(activity.getString(R.string.alert_delete_message))
-
-                .setPositiveButton(activity.getString(R.string.alert_delete_confirm), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        activity.deleteItem(item);
-                        dismiss();
-                    }
-                })
-
-                .setNegativeButton(activity.getString(R.string.alert_delete_cancel),  null)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        Buddy.showAlert(activity, activity.getString(R.string.alert_delete_topic, n),
+                activity.getString(R.string.alert_delete_message),
+                activity.getString(R.string.alert_delete_confirm), null,
+                () -> {
+                    activity.deleteItem(item);
+                    dismiss();
+                }, null);
     }
 }
