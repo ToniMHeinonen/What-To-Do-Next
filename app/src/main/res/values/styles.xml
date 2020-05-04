@@ -214,6 +214,17 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+    <style name="resultsTopicValues">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <style name="resultsTopicPoints" parent="resultsTopicValues">
+        <item name="android:textAlignment">center</item>
+    </style>
+
     <!-- SETTINGS ACTIVITY -->
     <style name="settingsButtons">
         <item name="android:layout_height">wrap_content</item>

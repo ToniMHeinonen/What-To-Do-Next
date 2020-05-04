@@ -16,27 +16,19 @@
             android:paddingRight="@dimen/results_list_padding">
 
             <TextView
+                style="@style/resultsTopicValues"
                 android:layout_width="@dimen/results_show_votes_name_width"
-                android:layout_height="wrap_content"
-                android:text="@string/results_name"
-                android:textSize="20sp"
-                android:textColor="@color/defaultTextColor"/>
+                android:text="@string/results_name"/>
 
             <TextView
+                style="@style/resultsTopicPoints"
                 android:layout_width="@dimen/results_show_votes_points_width"
-                android:layout_height="wrap_content"
-                android:text="@string/results_extra"
-                android:textSize="20sp"
-                android:textColor="@color/defaultTextColor"
-                android:textAlignment="center" />
+                android:text="@string/results_extra" />
 
             <TextView
+                style="@style/resultsTopicPoints"
                 android:layout_width="@dimen/results_show_votes_points_width"
-                android:layout_height="wrap_content"
-                android:text="@string/results_total"
-                android:textSize="20sp"
-                android:textColor="@color/defaultTextColor"
-                android:textAlignment="center"/>
+                android:text="@string/results_total" />
 
         </LinearLayout>
 
