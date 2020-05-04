@@ -156,7 +156,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         LinearLayout viewHolder = findViewById(R.id.listHolder);
         View child;
         DatabaseType type;
-        if (false) {
+        if (GlobalPrefs.loadShowVoted()) {
             child = getLayoutInflater().inflate(R.layout.result_show_votes_list, null);
             type = DatabaseType.VOTE_RESULTS_SHOW_VOTES;
         } else {

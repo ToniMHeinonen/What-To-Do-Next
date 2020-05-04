@@ -21,6 +21,7 @@ public abstract class GlobalPrefs {
     private static String keyIgnoreUnselected = "ignore_unselected";
     private static String keyHalveExtra = "halve_extra";
     private static String keyShowExtra = "show_extra";
+    private static String keyShowVoted = "show_voted";
 
     // Tutorial
     private static String keyFirstTutorial = "first_tutorial";
@@ -144,6 +145,22 @@ public abstract class GlobalPrefs {
      */
     public static void saveShowExtra(boolean show) {
         prefs.edit().putBoolean(keyShowExtra, show).apply();
+    }
+
+    /**
+     * Loads whether to show voted points in vote results or not.
+     * @return true if to show
+     */
+    public static boolean loadShowVoted() {
+        return prefs.getBoolean(keyShowVoted, true);
+    }
+
+    /**
+     * Saves whether to show voted points in vote results or not.
+     * @param show true if to show
+     */
+    public static void saveShowVoted(boolean show) {
+        prefs.edit().putBoolean(keyShowVoted, show).apply();
     }
 
     /**
