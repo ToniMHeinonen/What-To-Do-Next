@@ -78,15 +78,25 @@ public class ResultsShowVotesAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.result_show_votes_item, null);
-            holder = new ViewHolder(convertView, position);
+            holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.name.setText(listData.get(position).getName());
-        holder.extra.setText(String.valueOf(listData.get(position).getTotal()));
-        holder.total.setText(String.valueOf(listData.get(position).getVotePoints()));
+        ListItem item = listData.get(position);
+
+        holder.name.setText(item.getName());
+        holder.extra.setText(String.valueOf(item.getTotal()));
+        holder.total.setText(String.valueOf(item.getVotePoints()));
+
+        // Loop through voters and update their given points
+        for (int i = 0; i < profiles.size(); i++) {
+            Profile profile = profiles.get(i);                  // Get profile
+            TextView vote = holder.votePoints[i];               // Get textview for vote point
+            int voteAmount = profile.votePointsOfItem(item);    // Get vote points amount for item
+            vote.setText(voteAmount == 0 ? "" : String.valueOf(voteAmount));
+        }
 
         return convertView;
     }
@@ -102,9 +112,8 @@ public class ResultsShowVotesAdapter extends BaseAdapter {
         /**
          * Holds all the necessary data for the view.
          * @param view convertview
-         * @param position position of the item
          */
-        public ViewHolder(View view, int position) {
+        public ViewHolder(View view) {
             this.view = view;
             name = view.findViewById(R.id.resultsName);
             extra = view.findViewById(R.id.resultsBonus);
@@ -114,12 +123,8 @@ public class ResultsShowVotesAdapter extends BaseAdapter {
             // Add vote points to layout
             LinearLayout layout = view.findViewById(R.id.resultItemLayout);
             for (int i = 0; i < profiles.size(); i++) {
-                ListItem voteItem = listData.get(position);
-                Profile profile = profiles.get(i);
-                int voteAmount = profile.votePointsOfItem(voteItem);
                 // Use "layout" and "false" as parameters to get the width and height from result_voter_points
                 TextView vote = (TextView) layoutInflater.inflate(R.layout.result_voter_points, layout, false);
-                vote.setText(voteAmount == 0 ? "" : String.valueOf(voteAmount));
                 layout.addView(vote);
                 votePoints[i] = vote;
             }
