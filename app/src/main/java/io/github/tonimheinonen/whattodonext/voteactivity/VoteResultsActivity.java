@@ -1,7 +1,7 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.ListAdapter;
+import io.github.tonimheinonen.whattodonext.ResultsShowVotesAdapter;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -172,7 +172,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
                 topicLayout.addView(name);
             }
 
-            adapter = new ListAdapter(this, selectedList.getItems(),
+            adapter = new ResultsShowVotesAdapter(this, selectedList.getItems(),
                     selectedProfiles);
         } else {
             // Inflate list with no vote points
