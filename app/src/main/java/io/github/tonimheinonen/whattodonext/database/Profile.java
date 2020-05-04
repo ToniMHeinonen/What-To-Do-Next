@@ -153,6 +153,22 @@ public class Profile implements DatabaseValue, Parcelable {
         return votedItems[index];
     }
 
+    /**
+     * Returns the amount of vote points this profile gave to provided List Item.
+     * @param item item to check
+     * @return amount of vote points
+     */
+    public int votePointsOfItem(ListItem item) {
+        for (int i = 0; i < votedItems.length; i++) {
+            ListItem voteItem = votedItems[i];
+            if (voteItem.equalsTo(item)) {
+                return i + 1;
+            }
+        }
+
+        return 0;
+    }
+
     ////////////////////////// PARCELABLE //////////////////////////
 
     /**

@@ -123,7 +123,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
             else if (type.equals(DatabaseType.VOTE_RESULTS))
                 voteResults();
             else if (type.equals(DatabaseType.VOTE_RESULTS_SHOW_VOTES))
-                voteResults();
+                voteResultsShowVoted();
         }
 
         return this.view;
@@ -257,4 +257,24 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         TextView itemPoints = view.findViewById(R.id.resultsVotePoints);
         itemPoints.setText(String.valueOf(item.getVotePoints()));
     }
+
+    /**
+     * Displays ListItem in a ListView in VoteResultsActivity.
+     *
+     * Displays the name and total points and all voters points.
+     */
+    private void voteResultsShowVoted() {
+        ListItem item = (ListItem) getItem(position);
+
+        TextView itemName = view.findViewById(R.id.resultsName);
+        itemName.setText(item.getName());
+
+        TextView itemBonus = view.findViewById(R.id.resultsBonus);
+        itemBonus.setText(String.valueOf(item.getTotal()));
+
+        TextView itemPoints = view.findViewById(R.id.resultsVotePoints);
+        itemPoints.setText(String.valueOf(item.getVotePoints()));
+    }
+
+
 }

@@ -1,6 +1,10 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import io.github.tonimheinonen.whattodonext.ResultsAdapter;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -22,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -154,40 +159,59 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
     private void setupItemList() {
         // Load whether to show vote items or not
         LinearLayout viewHolder = findViewById(R.id.listHolder);
-        View child;
-        DatabaseType type;
         if (GlobalPrefs.loadShowVoted()) {
-            child = getLayoutInflater().inflate(R.layout.result_show_votes_list, null);
-            type = DatabaseType.VOTE_RESULTS_SHOW_VOTES;
+            // Use RecyclerView
+            View child = getLayoutInflater().inflate(R.layout.result_show_votes_list, null);
+
+            viewHolder.addView(child);
+
+            // Add profile names to topics
+            LinearLayout topicLayout = child.findViewById(R.id.topicLayout);
+            for (Profile p : selectedProfiles) {
+                TextView name = (TextView) getLayoutInflater().inflate(R.layout.result_voter_name, topicLayout, false);
+                name.setText(p.getName());
+                topicLayout.addView(name);
+            }
+
+            RecyclerView recyclerView = child.findViewById(R.id.recycler_view);
+
+            ResultsAdapter adapter = new ResultsAdapter(this, selectedList.getItems(), selectedProfiles);
+            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(adapter);
         } else {
-            child = getLayoutInflater().inflate(R.layout.result_hide_votes_list, null);
-            type = DatabaseType.VOTE_RESULTS;
-        }
-        viewHolder.addView(child);
+            View child = getLayoutInflater().inflate(R.layout.result_hide_votes_list, null);
 
-        // Create adapter
-        final ListView list = child.findViewById(R.id.resultItems);
-        list.setAdapter(new DatabaseValueListAdapter(this, selectedList.getItems(),
-                null, type));
+            viewHolder.addView(child);
 
-        // Listen for clicks
-        if (lastResults) {
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    ListItem item = (ListItem) list.getItemAtPosition(position);
+            // Create adapter
+            final ListView list = child.findViewById(R.id.resultItems);
+            DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(this, selectedList.getItems(),
+                    null, DatabaseType.VOTE_RESULTS);
+            list.setAdapter(adapter);
 
-                    // Reset selected items
-                    if (itemsToReset.contains(item)) {
-                        itemsToReset.remove(item);
-                        view.setBackground(getResources().getDrawable(R.drawable.vote_item_unselected));
-                    } else {
-                        itemsToReset.add(item);
-                        view.setBackground(getResources().getDrawable(R.drawable.vote_item_selected));
+            // Listen for clicks
+            if (lastResults) {
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ListItem item = (ListItem) list.getItemAtPosition(position);
+
+                        // Reset selected items
+                        if (itemsToReset.contains(item)) {
+                            itemsToReset.remove(item);
+                            view.setBackground(getResources().getDrawable(R.drawable.vote_item_unselected));
+                        } else {
+                            itemsToReset.add(item);
+                            view.setBackground(getResources().getDrawable(R.drawable.vote_item_selected));
+                        }
                     }
-                }
-            });
+                });
+            }
         }
+
+
     }
 
     /**

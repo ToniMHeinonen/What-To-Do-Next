@@ -9,6 +9,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/topicLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -32,10 +33,11 @@
 
         </LinearLayout>
 
-        <ListView
-            android:id = "@+id/resultItems"
-            android:layout_width = "match_parent"
-            android:layout_height = "wrap_content"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
