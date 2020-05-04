@@ -42,7 +42,6 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         layouts.put(DatabaseType.VOTE_HIDE_EXTRA, R.layout.vote_item);
         layouts.put(DatabaseType.VOTE_SHOW_EXTRA, R.layout.vote_item_show_extra);
         layouts.put(DatabaseType.VOTE_RESULTS, R.layout.result_hide_votes_item);
-        layouts.put(DatabaseType.VOTE_RESULTS_SHOW_VOTES, R.layout.result_show_votes_item);
     }
 
     /**
@@ -122,8 +121,6 @@ public class DatabaseValueListAdapter extends BaseAdapter {
                 voteShowExtra();
             else if (type.equals(DatabaseType.VOTE_RESULTS))
                 voteResults();
-            else if (type.equals(DatabaseType.VOTE_RESULTS_SHOW_VOTES))
-                voteResultsShowVoted();
         }
 
         return this.view;
@@ -257,24 +254,4 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         TextView itemPoints = view.findViewById(R.id.resultsVotePoints);
         itemPoints.setText(String.valueOf(item.getVotePoints()));
     }
-
-    /**
-     * Displays ListItem in a ListView in VoteResultsActivity.
-     *
-     * Displays the name and total points and all voters points.
-     */
-    private void voteResultsShowVoted() {
-        ListItem item = (ListItem) getItem(position);
-
-        TextView itemName = view.findViewById(R.id.resultsName);
-        itemName.setText(item.getName());
-
-        TextView itemBonus = view.findViewById(R.id.resultsBonus);
-        itemBonus.setText(String.valueOf(item.getTotal()));
-
-        TextView itemPoints = view.findViewById(R.id.resultsVotePoints);
-        itemPoints.setText(String.valueOf(item.getVotePoints()));
-    }
-
-
 }
