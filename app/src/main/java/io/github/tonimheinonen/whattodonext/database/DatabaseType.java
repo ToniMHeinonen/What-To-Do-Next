@@ -6,5 +6,6 @@ public enum DatabaseType {
     PROFILE,
     VOTE_HIDE_EXTRA,
     VOTE_SHOW_EXTRA,
-    VOTE_RESULTS
+    VOTE_RESULTS,
+    VOTE_RESULTS_SHOW_VOTES
 }

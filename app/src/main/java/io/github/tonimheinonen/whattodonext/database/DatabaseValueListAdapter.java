@@ -41,7 +41,8 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         layouts.put(DatabaseType.PROFILE, R.layout.saved_list_and_profile);
         layouts.put(DatabaseType.VOTE_HIDE_EXTRA, R.layout.vote_item);
         layouts.put(DatabaseType.VOTE_SHOW_EXTRA, R.layout.vote_item_show_extra);
-        layouts.put(DatabaseType.VOTE_RESULTS, R.layout.results_item);
+        layouts.put(DatabaseType.VOTE_RESULTS, R.layout.result_hide_votes_item);
+        layouts.put(DatabaseType.VOTE_RESULTS_SHOW_VOTES, R.layout.result_show_votes_item);
     }
 
     /**
@@ -120,6 +121,8 @@ public class DatabaseValueListAdapter extends BaseAdapter {
             else if (type.equals(DatabaseType.VOTE_SHOW_EXTRA))
                 voteShowExtra();
             else if (type.equals(DatabaseType.VOTE_RESULTS))
+                voteResults();
+            else if (type.equals(DatabaseType.VOTE_RESULTS_SHOW_VOTES))
                 voteResults();
         }
 

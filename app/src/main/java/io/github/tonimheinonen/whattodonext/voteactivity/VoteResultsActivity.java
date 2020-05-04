@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -151,10 +152,25 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
      * Shows results in list view.
      */
     private void setupItemList() {
-        final ListView list = findViewById(R.id.resultItems);
-        list.setAdapter(new DatabaseValueListAdapter(this, selectedList.getItems(),
-                null, DatabaseType.VOTE_RESULTS));
+        // Load whether to show vote items or not
+        LinearLayout viewHolder = findViewById(R.id.listHolder);
+        View child;
+        DatabaseType type;
+        if (false) {
+            child = getLayoutInflater().inflate(R.layout.result_show_votes_list, null);
+            type = DatabaseType.VOTE_RESULTS_SHOW_VOTES;
+        } else {
+            child = getLayoutInflater().inflate(R.layout.result_hide_votes_list, null);
+            type = DatabaseType.VOTE_RESULTS;
+        }
+        viewHolder.addView(child);
 
+        // Create adapter
+        final ListView list = child.findViewById(R.id.resultItems);
+        list.setAdapter(new DatabaseValueListAdapter(this, selectedList.getItems(),
+                null, type));
+
+        // Listen for clicks
         if (lastResults) {
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

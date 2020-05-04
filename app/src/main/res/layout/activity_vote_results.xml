@@ -52,43 +52,10 @@
             android:visibility="gone"/>
 
         <LinearLayout
+            android:id="@+id/listHolder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/results_name_weight"
-                android:paddingLeft="10dp"
-                android:text="@string/results_name"
-                android:textSize="20sp"
-                android:textColor="@color/defaultTextColor"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/results_points_weight"
-                android:text="@string/results_extra"
-                android:textSize="20sp"
-                android:textColor="@color/defaultTextColor"
-                android:gravity="center" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="@dimen/results_points_weight"
-                android:text="@string/results_total"
-                android:textSize="20sp"
-                android:textColor="@color/defaultTextColor"
-                android:gravity="center"/>
-
-        </LinearLayout>
-
-        <ListView
-            android:id = "@+id/resultItems"
-            android:layout_width = "match_parent"
-            android:layout_height = "match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"/>
 
     </LinearLayout>
 </LinearLayout>

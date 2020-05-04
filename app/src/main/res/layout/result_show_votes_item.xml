@@ -2,24 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="@dimen/results_list_padding"
     android:background="@drawable/vote_item_unselected">
 
     <TextView
         android:id="@+id/resultsName"
-        style="@style/listItemValues"
-        android:layout_weight="@dimen/results_name_weight">
+        style="@style/resultsItemValues"
+        android:layout_width="@dimen/results_show_votes_name_width">
     </TextView>
 
     <TextView
         android:id="@+id/resultsBonus"
-        style="@style/listItemPoints"
-        android:layout_weight="@dimen/results_points_weight">
+        style="@style/resultsItemPoints"
+        android:layout_width="@dimen/results_show_votes_points_width">
     </TextView>
 
     <TextView
         android:id="@+id/resultsVotePoints"
-        style="@style/listItemPoints"
-        android:layout_weight="@dimen/results_points_weight">
+        style="@style/resultsItemPoints"
+        android:layout_width="@dimen/results_show_votes_points_width">
     </TextView>
 
 </LinearLayout>

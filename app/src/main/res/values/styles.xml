@@ -206,16 +206,12 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:padding">10dp</item>
-    </style>
-
-    <style name="resultsItemName" parent="resultsItemValues">
-        <item name="android:layout_weight">@dimen/results_name_weight</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
     </style>
 
     <style name="resultsItemPoints" parent="resultsItemValues">
-        <item name="android:layout_weight">@dimen/results_points_weight</item>
         <item name="android:textAlignment">center</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 
     <!-- SETTINGS ACTIVITY -->
