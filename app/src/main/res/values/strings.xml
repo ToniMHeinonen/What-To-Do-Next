@@ -86,6 +86,7 @@
     <string name="last_vote">Last Vote</string>
     <string name="halve_extra">Halve Extra</string>
     <string name="show_extra">Show Extra</string>
+    <string name="show_votes">Show Votes</string>
     <string name="ignore_unselected">Ignore Unselected</string>
 
     <string name="max_peril_text">Adjust the threshold of how many peril points activity can receive
@@ -101,6 +102,8 @@
     <string name="show_extra_text">All activities receive extra points when voting by the amount of
         bonus and peril points they have. Enabling this will show the amount of points each activity
         has when voting.</string>
+    <string name="show_votes_text">Enabling this will show the individual points each activity
+        received from every voter.</string>
 
     <string name="last_vote_same_as_first">Points has to be lower than in first vote!</string>
     <string name="first_vote_same_as_last">Points has to be higher than in last vote!</string>

@@ -28,6 +28,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
             style="@style/scrollViewStyle">
 
             <LinearLayout
@@ -64,6 +65,11 @@
                     android:id="@+id/showExtra"
                     style="@style/settingsButtons"
                     android:text="@string/show_extra"/>
+
+                <Button
+                    android:id="@+id/showVotes"
+                    style="@style/settingsButtons"
+                    android:text="@string/show_votes"/>
 
                 <Button
                     android:id="@+id/back"

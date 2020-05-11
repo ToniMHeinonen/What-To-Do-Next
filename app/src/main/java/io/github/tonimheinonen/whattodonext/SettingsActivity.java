@@ -46,6 +46,9 @@ public class SettingsActivity extends AppCompatActivity {
             case R.id.showExtra:
                 dialog = new SettingDialog(this, SettingDialog.SHOW_EXTRA);
                 break;
+            case R.id.showVotes:
+                dialog = new SettingDialog(this, SettingDialog.SHOW_VOTES);
+                break;
             default:
                 // Add default to suppress error dialog not initialized
                 dialog = new SettingDialog(this, -1);

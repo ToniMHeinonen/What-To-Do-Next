@@ -124,7 +124,10 @@
                             style="@style/settingsButtons"
                             android:text="@string/show_extra"/>
 
-
+                        <Button
+                            android:id="@+id/showVotes"
+                            style="@style/settingsButtons"
+                            android:text="@string/show_votes"/>
 
                     </LinearLayout>
 
