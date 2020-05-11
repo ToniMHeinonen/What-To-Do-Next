@@ -36,6 +36,12 @@
         <item name="android:scrollbarThumbVertical">@drawable/custom_scroll_bar</item>
     </style>
 
+    <style name="horizontalScrollViewStyle">
+        <item name="android:requiresFadingEdge">horizontal</item>
+        <item name="android:fadingEdgeLength">24dp</item>
+        <item name="android:scrollbarThumbHorizontal">@drawable/custom_scroll_bar</item>
+    </style>
+
     <style name="scrollViewStyle" parent="Widget.AppCompat.ListView">
         <item name="android:requiresFadingEdge">vertical</item>
         <item name="android:fadingEdgeLength">24dp</item>
