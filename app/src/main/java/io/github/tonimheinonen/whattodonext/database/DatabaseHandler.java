@@ -93,12 +93,15 @@ public abstract class DatabaseHandler {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> childRemoval = new HashMap<>();
+
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     String key = dataSnapshot.getKey();
-                    ListItem item = dataSnapshot.getValue(ListItem.class);
-                    item.setDbID(key);
-                    removeItem(item);
+                    childRemoval.put(key, null);
                 }
+
+                // Remove all items with single call
+                dbItems.updateChildren(childRemoval);
             }
 
             @Override
