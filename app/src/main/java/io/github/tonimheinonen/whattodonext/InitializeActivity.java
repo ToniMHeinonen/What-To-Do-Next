@@ -24,6 +24,7 @@ public class InitializeActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
 
         Buddy.initialize(this);               // Set context for Buddy

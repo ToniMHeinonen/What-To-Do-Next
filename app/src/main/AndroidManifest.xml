@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity"/>
         <activity android:name=".voteactivity.VoteResultsActivity" />
         <activity android:name=".voteactivity.VoteTopActivity" />
         <activity android:name=".registration.ForgotPasswordActivity" />
@@ -21,7 +21,9 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".StartVoteActivity" />
         <activity android:name=".ListsActivity" />
-        <activity android:name=".InitializeActivity">
+        <activity
+            android:name=".InitializeActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
