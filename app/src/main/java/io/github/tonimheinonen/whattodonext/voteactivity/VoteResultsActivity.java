@@ -16,7 +16,6 @@ import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,8 +53,6 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_results);
-        // Lock orientation during voting to prevent million different problems
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         Intent intent = getIntent();
         topAmount = intent.getIntExtra("topAmount", -1);
@@ -71,8 +68,28 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
             findViewById(R.id.resultsInfoText).setVisibility(View.VISIBLE);
         }
 
-        calculateVotePoints();
+        // If activity has not been recreated (by screen rotation)
+        if (savedInstanceState == null) {
+            calculateVotePoints();
+        } else {
+            // Load items to reset before orientation change
+            itemsToReset = savedInstanceState.getParcelableArrayList("itemsToReset");
+        }
+
         setupItemList();
+    }
+
+    /**
+     * Save selected items to reset.
+     *
+     * This gets called when screen rotation changes.
+     * @param outState bundle to be saved
+     */
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelableArrayList("itemsToReset", itemsToReset);
     }
 
     /**
