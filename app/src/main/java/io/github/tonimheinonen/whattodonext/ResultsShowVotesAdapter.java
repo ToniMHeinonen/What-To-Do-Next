@@ -22,6 +22,7 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
  */
 public class ResultsShowVotesAdapter extends BaseAdapter {
 
+    private Context context;
     private ArrayList<ListItem> listData;
     private ArrayList<Profile> profiles;
     private LayoutInflater layoutInflater;
@@ -33,6 +34,7 @@ public class ResultsShowVotesAdapter extends BaseAdapter {
      * @param profiles selected profiles
      */
     public ResultsShowVotesAdapter(Context aContext, ArrayList<ListItem> listData, ArrayList<Profile> profiles) {
+        this.context = aContext;
         this.listData = listData;
         this.profiles = profiles;
         layoutInflater = LayoutInflater.from(aContext);
@@ -89,6 +91,10 @@ public class ResultsShowVotesAdapter extends BaseAdapter {
         holder.name.setText(item.getName());
         holder.extra.setText(String.valueOf(item.getTotal()));
         holder.total.setText(String.valueOf(item.getVotePoints()));
+
+        // Set correct text color
+        holder.name.setTextColor(context.getResources().getColor(item.isSelected() ?
+                R.color.colorPrimary : R.color.defaultTextColor));
 
         // Loop through voters and update their given points
         for (int i = 0; i < profiles.size(); i++) {

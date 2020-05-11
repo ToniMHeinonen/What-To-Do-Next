@@ -32,6 +32,8 @@ public class ListItem implements DatabaseValue, Parcelable {
 
     @Exclude
     private int votePoints;
+    @Exclude
+    private boolean selected;
 
     /**
      * Default constructor.
@@ -258,7 +260,27 @@ public class ListItem implements DatabaseValue, Parcelable {
         votePoints = points;
     }
 
-////////////////////////// PARCELABLE //////////////////////////
+    /**
+     * Returns true is item is currently selected.
+     *
+     * Mainly used in VoteResultsActivity.
+     * @return true if selected
+     */
+    public boolean isSelected() {
+        return selected;
+    }
+
+    /**
+     * Sets if item is currently selected.
+     *
+     * Mainly used in VoteResultsActivity.
+     * @param selected true if selected
+     */
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    ////////////////////////// PARCELABLE //////////////////////////
 
     /**
      * Describes contents

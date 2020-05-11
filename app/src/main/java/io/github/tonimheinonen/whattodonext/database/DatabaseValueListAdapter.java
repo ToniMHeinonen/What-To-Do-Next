@@ -183,10 +183,8 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         listName.setOnClickListener(listener);
         listName.setTag(position);
 
-        if (item.isSelected())
-            listName.setTextColor(context.getResources().getColor(R.color.colorPrimary));
-        else
-            listName.setTextColor(context.getResources().getColor(R.color.profileAndListOfItemsTextColor));
+        listName.setTextColor(context.getResources().getColor(item.isSelected() ?
+                R.color.colorPrimary : R.color.profileAndListOfItemsTextColor));
 
         Button listDelete = view.findViewById(R.id.savedDelete);
         listDelete.setOnClickListener(listener);
@@ -247,6 +245,8 @@ public class DatabaseValueListAdapter extends BaseAdapter {
 
         TextView itemName = view.findViewById(R.id.resultsName);
         itemName.setText(item.getName());
+        itemName.setTextColor(context.getResources().getColor(item.isSelected() ?
+                R.color.colorPrimary : R.color.defaultTextColor));
 
         TextView itemBonus = view.findViewById(R.id.resultsBonus);
         itemBonus.setText(String.valueOf(item.getTotal()));

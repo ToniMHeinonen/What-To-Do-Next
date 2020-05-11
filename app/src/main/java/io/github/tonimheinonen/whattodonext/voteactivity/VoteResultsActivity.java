@@ -196,11 +196,13 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
                     // Reset selected items
                     if (itemsToReset.contains(item)) {
                         itemsToReset.remove(item);
-                        view.setBackground(getResources().getDrawable(R.drawable.vote_item_unselected));
+                        item.setSelected(false);
                     } else {
                         itemsToReset.add(item);
-                        view.setBackground(getResources().getDrawable(R.drawable.vote_item_selected));
+                        item.setSelected(true);
                     }
+
+                    adapter.notifyDataSetChanged();
                 }
             });
         }
