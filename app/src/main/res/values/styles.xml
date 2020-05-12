@@ -61,10 +61,14 @@
     </style>
 
     <style name="menuButtons"> <!-- MODIFIED IN LANDSCAPE -->
-        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_weight">0.33</item>
-        <item name="android:layout_margin">30dp</item>
+        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginRight">30dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginBottom">15dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:textSize">30sp</item>
         <item name="android:onClick">menuButtonClicked</item>

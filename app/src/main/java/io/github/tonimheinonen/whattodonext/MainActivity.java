@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
             intent = new Intent(this, ListsActivity.class);
         } else if (v.getId() == R.id.settingsButton) {
             intent = new Intent(this, SettingsActivity.class);
+        } else if (v.getId() == R.id.resultsButton) {
+            intent = new Intent(this, ResultsActivity.class);
         } else {
             // Add else statement to fix possibility for null intent
             return;

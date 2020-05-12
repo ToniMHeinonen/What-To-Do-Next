@@ -32,8 +32,8 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void setupResultsList() {
-        final ListView list = findViewById(R.id.savedProfiles);
-        DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(this, results, null,
+        final ListView list = findViewById(R.id.savedResults);
+        DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(this, results, this,
                 DatabaseType.SAVED_RESULTS);
         list.setAdapter(adapter);
     }
@@ -42,6 +42,14 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         int position = (int) v.getTag();
 
-        new SavedResultDialog(this, results.get(position));
+        new SavedResultDialog(this, results.get(position)).show();
+    }
+
+    /**
+     * Listens for back button presses.
+     * @param v back button
+     */
+    public void backSelected(View v) {
+        super.onBackPressed();
     }
 }

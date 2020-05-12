@@ -9,6 +9,7 @@
     <string name="menu_vote">Vote</string>
     <string name="menu_lists">Lists</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_results">Results</string>
 
     <!-- START_VOTE_ACTIVITY -->
     <string name="select_list">Select List</string>

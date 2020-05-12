@@ -67,10 +67,11 @@ public class SavedResultDialog extends Dialog implements
 
         // Set voters names
         StringBuilder voters = new StringBuilder(activity.getString(R.string.resultVoters));
+        String prefix = " ";
         for (String v : result.voterNames) {
-            voters.append(v).append(", ");
+            voters.append(prefix).append(v);
+            prefix = ", ";
         }
-        voters.delete(voters.capacity() - 2, voters.capacity());
         voterView.setText(voters);
 
         // Set results

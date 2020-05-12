@@ -43,6 +43,11 @@
                 android:id="@+id/settingsButton"
                 style="@style/menuButtons"
                 android:text="@string/menu_settings" />
+
+            <Button
+                android:id="@+id/resultsButton"
+                style="@style/menuButtons"
+                android:text="@string/menu_results" />
         </LinearLayout>
 
     </LinearLayout>
