@@ -326,23 +326,12 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
             DatabaseHandler.modifyItem(item);
         }
 
-        GlobalPrefs.saveNewResult(new SavedResult(resultsSaving));
+        GlobalPrefs.saveNewResult(new SavedResult(selectedList.getName(), resultsSaving, selectedProfiles));
 
         startActivity(new Intent(this, MainActivity.class));
         Buddy.showToast(getString(R.string.save_successful), Toast.LENGTH_LONG);
         finish();
     }
-
-    /*private String formatResults(int position, ListItem item, int state) {
-        int newBonus = 0, newPeril = 0;
-        String bonus = getString(R.string.lists_bonus);
-        String peril = getString(R.string.lists_peril);
-        String dropped = "";
-
-        return String.format("%d. %s: %s = %d -> %d / %s = %d -> %d %s",
-                position, item.getName(), bonus, item.getBonus(), newBonus, peril, item.getPeril(),
-                newPeril, dropped);
-    }*/
 
     /**
      * Gets lists data from database.

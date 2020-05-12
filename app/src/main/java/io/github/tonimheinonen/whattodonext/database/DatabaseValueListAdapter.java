@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.SavedResult;
 
 /**
  * Handles List View element with List Item.
@@ -42,6 +43,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         layouts.put(DatabaseType.VOTE_HIDE_EXTRA, R.layout.vote_item);
         layouts.put(DatabaseType.VOTE_SHOW_EXTRA, R.layout.vote_item_show_extra);
         layouts.put(DatabaseType.VOTE_RESULTS, R.layout.result_hide_votes_item);
+        layouts.put(DatabaseType.SAVED_RESULTS, R.layout.saved_result);
     }
 
     /**
@@ -121,6 +123,8 @@ public class DatabaseValueListAdapter extends BaseAdapter {
                 voteShowExtra();
             else if (type.equals(DatabaseType.VOTE_RESULTS))
                 voteResults();
+            else if (type.equals(DatabaseType.SAVED_RESULTS))
+                savedResults();
         }
 
         return this.view;
@@ -253,5 +257,18 @@ public class DatabaseValueListAdapter extends BaseAdapter {
 
         TextView itemPoints = view.findViewById(R.id.resultsVotePoints);
         itemPoints.setText(String.valueOf(item.getVotePoints()));
+    }
+
+    /**
+     * Displays saved results date in a button.
+     */
+    private void savedResults() {
+        SavedResult item = (SavedResult) getItem(position);
+
+        Button itemName = view.findViewById(R.id.savedResult);
+        itemName.setText(item.date.toString());
+
+        itemName.setOnClickListener(listener);
+        itemName.setTag(position);
     }
 }

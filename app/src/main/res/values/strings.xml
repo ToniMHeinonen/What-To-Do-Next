@@ -45,8 +45,15 @@
     <string name="results_total">Total</string>
     <string name="save_and_exit">Save and exit</string>
 
-    <string name="dropped">dropped</string>
     <string name="save_successful">Save successful, points have been calculated</string>
+
+    <!-- RESULTS_ACTIVITY -->
+    <string name="resultsTopic">Results</string>
+    <string name="resultList">List name: %1$s</string>
+    <string name="resultVoters">Voters: </string>
+    <string name="dropped">DROPPED</string>
+    <string name="reset">RESET</string>
+    <string name="resultBack">Back</string>
 
     <!-- LISTS_ACTIVITY -->
     <string name="no_list_selected">No list selected</string>

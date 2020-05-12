@@ -10,10 +10,10 @@ public class ResultItem implements Serializable {
 
     public static final int RESET = 0, BONUS = 1, PERIL = 2;
 
-    private int position;
-    private String name;
-    private int oldBonus, newBonus, oldPeril, newPeril;
-    private boolean dropped, reseted;
+    public final int position;
+    public final String name;
+    public final int oldBonus, newBonus, oldPeril, newPeril;
+    public final boolean dropped, reset;
 
     public ResultItem(int position, ListItem item, int destiny) {
         this.position = position;
@@ -25,19 +25,32 @@ public class ResultItem implements Serializable {
             case RESET:
                 newBonus = 0;
                 newPeril = 0;
-                reseted = true;
+                reset = true;
+                dropped = false;
                 break;
             case BONUS:
                 newBonus = oldBonus + 1;
                 newPeril = oldPeril;
+                reset = false;
+                dropped = false;
                 break;
             case PERIL:
                 newBonus = oldBonus;
-                newPeril = oldPeril + 1;
-                if (newPeril > GlobalPrefs.loadMaxPerilPoints()) {
+                int peril = oldPeril + 1;
+                if (peril > GlobalPrefs.loadMaxPerilPoints()) {
                     newPeril = 0;
                     dropped = true;
+                } else {
+                    newPeril = peril;
+                    dropped = false;
                 }
+                reset = false;
+                break;
+            default:
+                newBonus = -1;
+                newPeril = -1;
+                dropped = false;
+                reset = false;
                 break;
         }
 
@@ -54,7 +67,7 @@ public class ResultItem implements Serializable {
                 ", oldPeril=" + oldPeril +
                 ", newPeril=" + newPeril +
                 ", dropped=" + dropped +
-                ", reseted=" + reseted +
+                ", reset=" + reset +
                 '}';
     }
 }
