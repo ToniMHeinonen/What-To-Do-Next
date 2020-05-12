@@ -3,6 +3,11 @@ package io.github.tonimheinonen.whattodonext.tools;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.github.tonimheinonen.whattodonext.SavedResult;
+
 /**
  * Handles saving and loading values to local storage.
  * @author Toni Heinonen
@@ -11,10 +16,15 @@ import android.content.SharedPreferences;
  * @since 1.0
  */
 public abstract class GlobalPrefs {
+    private static Context context;
     private static SharedPreferences prefs;
 
     private static String keyPrefs;
+
+    // Lists
     private static String keyCurrentList = "current_list";
+
+    // Settings
     private static String keyMaxPerilPoints = "max_peril_points";
     private static String keyListVoteSizeFirst = "list_vote_size_first";
     private static String keyListVoteSizeSecond = "list_vote_size_second";
@@ -26,11 +36,16 @@ public abstract class GlobalPrefs {
     // Tutorial
     private static String keyFirstTutorial = "first_tutorial";
 
+    // Saved results
+    private static String keySavedResults = "saved_results";
+    private static String keyResultsAmount = "results_amount";
+
     /**
      * Gets access to the correct prefs depending on the user.
-     * @param context activity context
+     * @param aContext activity context
      */
-    public static void initialize(Context context, String user) {
+    public static void initialize(Context aContext, String user) {
+        context = aContext;
         keyPrefs = "WTDN_prefs_" + user;
         prefs = context.getSharedPreferences(keyPrefs, 0);
     }
@@ -177,5 +192,23 @@ public abstract class GlobalPrefs {
      */
     public static void saveFirstTutorial(boolean show) {
         prefs.edit().putBoolean(keyFirstTutorial, show).apply();
+    }
+
+    public static void saveNewResult(SavedResult result) {
+        int nextResultsIndex = prefs.getInt(keyResultsAmount, 0);
+
+        SerializableManager.saveSerializable(context, result, keySavedResults + nextResultsIndex);
+        prefs.edit().putInt(keyResultsAmount, nextResultsIndex + 1).apply();
+    }
+
+    public static List<SavedResult> loadResults() {
+        List<SavedResult> results = new ArrayList<>();
+        int resultsAmount = prefs.getInt(keyResultsAmount, 0);
+
+        for (int i = 0; i < resultsAmount; i++) {
+            results.add(SerializableManager.readSerializable(context, keySavedResults + i));
+        }
+
+        return results;
     }
 }

@@ -45,6 +45,7 @@
     <string name="results_total">Total</string>
     <string name="save_and_exit">Save and exit</string>
 
+    <string name="dropped">dropped</string>
     <string name="save_successful">Save successful, points have been calculated</string>
 
     <!-- LISTS_ACTIVITY -->

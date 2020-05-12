@@ -1,7 +1,9 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.ResultItem;
 import io.github.tonimheinonen.whattodonext.ResultsShowVotesAdapter;
+import io.github.tonimheinonen.whattodonext.SavedResult;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -227,7 +229,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
 
     /**
      * Check whether to start new vote or to end voting.
-     * @param v
+     * @param v next button view
      */
     public void nextPressed(View v) {
         if (lastResults) {
@@ -268,62 +270,79 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         Buddy.filterListByFallen(items, false); // Ignore fallen items
         ArrayList<ListItem> itemsLeft = selectedList.getItems();
 
-        final int DEFAULT = 0, ADD_BONUS = 1, RESET = 2;
+        // Saving results
+        ArrayList<ResultItem> resultsSaving = new ArrayList<>();
+        int votePosition = 1;
 
         // Loop through all items and calculate bonus and peril
-        for (ListItem item : items) {
-            int state = DEFAULT;
+        for (ListItem item : itemsLeft) {
+            boolean resetItem = false;
 
             // Check if user selected this item to be done
             for (ListItem itemToReset : itemsToReset) {
                 if (item.equalsTo(itemToReset)) {
-                    state = RESET;
+                    resetItem = true;
                     itemsToReset.remove(itemToReset);
                     break;
                 }
             }
 
-            // Check if item made it to the final results
-            if (state == DEFAULT) {
-                // If item is inside itemsLeft
-                for (ListItem itemLeft : itemsLeft) {
-                    if (item.equalsTo(itemLeft)) {
-                        state = ADD_BONUS;
-                        itemsLeft.remove(itemLeft);
-                        break;
-                    }
+            // Remove all items left from the database items
+            for (ListItem databaseItem : items) {
+                if (databaseItem.equalsTo(item)) {
+                    items.remove(databaseItem);
+                    break;
                 }
             }
 
             Debug.print(this, "onDataGetItems", item.toString(), 1);
 
-            // Check what to do with items points
-            switch (state) {
-                case DEFAULT:
-                    item.setPeril(item.getPeril() + 1);
+            // If user selected item, reset it, else add bonus to it
+            if (resetItem) {
+                resultsSaving.add(new ResultItem(votePosition, item, ResultItem.RESET));
+                item.setBonus(0);
+                item.setPeril(0);
+            } else {
+                resultsSaving.add(new ResultItem(votePosition, item, ResultItem.BONUS));
+                item.setBonus(item.getBonus() + 1);
+            }
 
-                    // If peril points are over maximum peril points, drop item from list
-                    if (item.getPeril() > GlobalPrefs.loadMaxPerilPoints()) {
-                        item.setPeril(0);
-                        item.setFallen(true);
-                    }
-                    break;
-                case ADD_BONUS:
-                    item.setBonus(item.getBonus() + 1);
-                    break;
-                case RESET:
-                    item.setBonus(0);
-                    item.setPeril(0);
-                    break;
+            DatabaseHandler.modifyItem(item);
+            votePosition++;
+        }
+
+        // Loop through all of the rest database items and add peril point to them,
+        // since they did not make it in to the last vote
+        for (ListItem item: items) {
+            resultsSaving.add(new ResultItem(-1, item, ResultItem.PERIL));
+            item.setPeril(item.getPeril() + 1);
+
+            // If peril points are over maximum peril points, drop item from list
+            if (item.getPeril() > GlobalPrefs.loadMaxPerilPoints()) {
+                item.setPeril(0);
+                item.setFallen(true);
             }
 
             DatabaseHandler.modifyItem(item);
         }
 
+        GlobalPrefs.saveNewResult(new SavedResult(resultsSaving));
+
         startActivity(new Intent(this, MainActivity.class));
         Buddy.showToast(getString(R.string.save_successful), Toast.LENGTH_LONG);
         finish();
     }
+
+    /*private String formatResults(int position, ListItem item, int state) {
+        int newBonus = 0, newPeril = 0;
+        String bonus = getString(R.string.lists_bonus);
+        String peril = getString(R.string.lists_peril);
+        String dropped = "";
+
+        return String.format("%d. %s: %s = %d -> %d / %s = %d -> %d %s",
+                position, item.getName(), bonus, item.getBonus(), newBonus, peril, item.getPeril(),
+                newPeril, dropped);
+    }*/
 
     /**
      * Gets lists data from database.
