@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.savedresults;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext;
+package io.github.tonimheinonen.whattodonext.savedresults;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,10 +8,10 @@ import android.view.Window;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 /**
  * Handles showing saved results in a dialog.

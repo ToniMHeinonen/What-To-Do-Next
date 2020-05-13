@@ -3,6 +3,8 @@ package io.github.tonimheinonen.whattodonext;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.savedresults.SavedResult;
+import io.github.tonimheinonen.whattodonext.savedresults.SavedResultDialog;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 import android.os.Bundle;
