@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
+
 /**
  * Handles showing saved results in a dialog.
  * @author Toni Heinonen
@@ -42,8 +44,8 @@ public class SavedResultDialog extends Dialog implements
         setContentView(R.layout.saved_result_dialog);
 
         // Set dialog window size to 90% of the screen width and height
-        int width = (int)(activity.getResources().getDisplayMetrics().widthPixels*0.90);
-        int height = (int)(activity.getResources().getDisplayMetrics().heightPixels*0.90);
+        int width = (int)(activity.getResources().getDisplayMetrics().widthPixels);
+        int height = (int)(activity.getResources().getDisplayMetrics().heightPixels);
         getWindow().setLayout(width, height);
 
         initializeViews();
@@ -62,7 +64,7 @@ public class SavedResultDialog extends Dialog implements
         TextView resultsView = findViewById(R.id.results);
 
         // Set date
-        dateView.setText(result.date.toString());
+        dateView.setText(Buddy.formatResultDate(result.date));
         listNameView.setText(activity.getString(R.string.resultList, result.listName));
 
         // Set voters names

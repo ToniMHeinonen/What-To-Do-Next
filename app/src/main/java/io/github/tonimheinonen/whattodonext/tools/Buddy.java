@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.Iterator;
 
 import androidx.appcompat.app.AlertDialog;
@@ -222,5 +223,14 @@ public abstract class Buddy {
         fragmentTransaction.commit();   // Add fragment to queue
 
         return itemsFragment;
+    }
+
+    /**
+     * Formats date of result to show in a desired format.
+     * @param date date of the result
+     * @return formatted date
+     */
+    public static String formatResultDate(Date date) {
+        return android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss a", date).toString();
     }
 }

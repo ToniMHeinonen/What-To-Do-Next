@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.SavedResult;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 /**
  * Handles List View element with List Item.
@@ -266,7 +267,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         SavedResult item = (SavedResult) getItem(position);
 
         Button itemName = view.findViewById(R.id.savedResult);
-        itemName.setText(item.date.toString());
+        itemName.setText(Buddy.formatResultDate(item.date));
 
         itemName.setOnClickListener(listener);
         itemName.setTag(position);
