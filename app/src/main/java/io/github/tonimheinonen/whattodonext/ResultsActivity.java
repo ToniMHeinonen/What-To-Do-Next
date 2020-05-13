@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Handles user selecting saved results to display.
@@ -29,11 +30,15 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
-        results = (ArrayList) GlobalPrefs.loadResults();
         setupResultsList();
     }
 
     private void setupResultsList() {
+        results = (ArrayList) GlobalPrefs.loadResults();
+
+        // Sort by newest
+        Collections.sort(results, (o1, o2) -> o2.date.compareTo(o1.date));
+
         final ListView list = findViewById(R.id.savedResults);
         DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(this, results, this,
                 DatabaseType.SAVED_RESULTS);
