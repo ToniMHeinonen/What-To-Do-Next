@@ -12,9 +12,9 @@ public class SavedResult implements Serializable, DatabaseValue {
     public final Date date;
     public final String listName;
     public final ArrayList<String> voterNames = new ArrayList<>();
-    public final ArrayList<ResultItem> resultItems;
+    public final ArrayList<SavedResultItem> resultItems;
 
-    public SavedResult(String listName, ArrayList<ResultItem> resultItems, ArrayList<Profile> voters) {
+    public SavedResult(String listName, ArrayList<SavedResultItem> resultItems, ArrayList<Profile> voters) {
         this.date = new Date();
         this.listName = listName;
         this.resultItems = resultItems;

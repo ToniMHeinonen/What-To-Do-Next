@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.SavedResult;
+import io.github.tonimheinonen.whattodonext.SavedResultItem;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 /**
@@ -45,6 +46,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         layouts.put(DatabaseType.VOTE_SHOW_EXTRA, R.layout.vote_item_show_extra);
         layouts.put(DatabaseType.VOTE_RESULTS, R.layout.result_hide_votes_item);
         layouts.put(DatabaseType.SAVED_RESULTS, R.layout.saved_result);
+        layouts.put(DatabaseType.SAVED_RESULT_ITEM, R.layout.saved_result_item);
     }
 
     /**
@@ -126,6 +128,8 @@ public class DatabaseValueListAdapter extends BaseAdapter {
                 voteResults();
             else if (type.equals(DatabaseType.SAVED_RESULTS))
                 savedResults();
+            else if (type.equals(DatabaseType.SAVED_RESULT_ITEM))
+                savedResultItem();
         }
 
         return this.view;
@@ -271,5 +275,31 @@ public class DatabaseValueListAdapter extends BaseAdapter {
 
         itemName.setOnClickListener(listener);
         itemName.setTag(position);
+    }
+
+    private void savedResultItem() {
+        SavedResultItem item = (SavedResultItem) getItem(position);
+
+        // Get views
+        TextView position = view.findViewById(R.id.resultsPosition);
+        TextView name = view.findViewById(R.id.resultsName);
+        TextView bonus = view.findViewById(R.id.resultsBonus);
+        TextView peril = view.findViewById(R.id.resultsPeril);
+
+        // Set correct texts
+        position.setText(item.position != -1 ? "" + item.position : "-");
+        name.setText(item.name);
+        bonus.setText(item.bonusDiff == 0 ? "" + item.newBonus :
+                item.newBonus + "(" + item.bonusSign + item.bonusDiff + ")");
+        peril.setText(item.perilDiff == 0 ? "" + item.newPeril :
+                item.newPeril + "(" + item.perilSign + item.perilDiff + ")");
+
+        // If item was reset, set name to primary color, if dropped set to accent color
+        if (item.reset)
+            name.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+        else if (item.dropped)
+            name.setTextColor(context.getResources().getColor(R.color.colorAccent));
+        else
+            name.setTextColor(context.getResources().getColor(R.color.defaultTextColor));
     }
 }

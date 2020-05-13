@@ -5,9 +5,13 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
+import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 /**
  * Handles showing saved results in a dialog.
@@ -61,7 +65,6 @@ public class SavedResultDialog extends Dialog implements
         TextView dateView = findViewById(R.id.date);
         TextView listNameView = findViewById(R.id.listName);
         TextView voterView = findViewById(R.id.voters);
-        TextView resultsView = findViewById(R.id.results);
 
         // Set date
         dateView.setText(Buddy.formatResultDate(result.date));
@@ -76,23 +79,11 @@ public class SavedResultDialog extends Dialog implements
         }
         voterView.setText(voters);
 
-        // Set results
-        StringBuilder results = new StringBuilder();
-        for (ResultItem r : result.resultItems) {
-            results.append(formatResults(r)).append("\n");
-        }
-        resultsView.setText(results);
-    }
-
-    private String formatResults(ResultItem result) {
-        String bonus = activity.getString(R.string.lists_bonus);
-        String peril = activity.getString(R.string.lists_peril);
-        String dropped = result.dropped ? activity.getString(R.string.dropped) : "";
-        String reset = result.reset ? activity.getString(R.string.reset) : "";
-
-        return String.format("%d. %s: %s = %d -> %d / %s = %d -> %d %s%s",
-                result.position, result.name, bonus, result.oldBonus, result.newBonus, peril,
-                result.oldPeril, result.newPeril, dropped, reset);
+        // Set result item list
+        final ListView list = findViewById(R.id.resultItems);
+        DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(activity, result.resultItems,
+                null, DatabaseType.SAVED_RESULT_ITEM);
+        list.setAdapter(adapter);
     }
 
     /**

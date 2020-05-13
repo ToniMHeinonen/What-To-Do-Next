@@ -7,5 +7,6 @@ public enum DatabaseType {
     VOTE_HIDE_EXTRA,
     VOTE_SHOW_EXTRA,
     VOTE_RESULTS,
-    SAVED_RESULTS
+    SAVED_RESULTS,
+    SAVED_RESULT_ITEM
 }

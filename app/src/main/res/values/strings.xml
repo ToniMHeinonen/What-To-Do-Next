@@ -52,9 +52,10 @@
     <string name="resultsTopic">Results</string>
     <string name="resultList">List name: %1$s</string>
     <string name="resultVoters">Voters: </string>
-    <string name="dropped">DROPPED</string>
-    <string name="reset">RESET</string>
-    <string name="resultBack">Back</string>
+    <string name="results_position">#</string>
+    <string name="results_bonus">Bonus</string>
+    <string name="results_peril">Peril</string>
+    <string name="resultBack">Close</string>
 
     <!-- LISTS_ACTIVITY -->
     <string name="no_list_selected">No list selected</string>

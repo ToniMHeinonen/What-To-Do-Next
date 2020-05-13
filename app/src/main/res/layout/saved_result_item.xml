@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/results_list_padding"
+    android:background="@drawable/vote_item_unselected">
+
+    <TextView
+        android:id="@+id/resultsPosition"
+        style="@style/resultsItemPoints"
+        android:layout_weight="@dimen/saved_result_points_weight">
+    </TextView>
+
+    <TextView
+        android:id="@+id/resultsName"
+        style="@style/resultsItemValues"
+        android:layout_weight="@dimen/saved_result_name_weight">
+    </TextView>
+
+    <TextView
+        android:id="@+id/resultsBonus"
+        style="@style/resultsItemPoints"
+        android:layout_weight="@dimen/saved_result_points_weight">
+    </TextView>
+
+    <TextView
+        android:id="@+id/resultsPeril"
+        style="@style/resultsItemPoints"
+        android:layout_weight="@dimen/saved_result_points_weight">
+    </TextView>
+
+</LinearLayout>

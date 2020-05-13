@@ -1,7 +1,7 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.ResultItem;
+import io.github.tonimheinonen.whattodonext.SavedResultItem;
 import io.github.tonimheinonen.whattodonext.ResultsShowVotesAdapter;
 import io.github.tonimheinonen.whattodonext.SavedResult;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
@@ -271,7 +271,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         ArrayList<ListItem> itemsLeft = selectedList.getItems();
 
         // Saving results
-        ArrayList<ResultItem> resultsSaving = new ArrayList<>();
+        ArrayList<SavedResultItem> resultsSaving = new ArrayList<>();
         int votePosition = 1;
 
         // Loop through all items and calculate bonus and peril
@@ -299,11 +299,11 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
 
             // If user selected item, reset it, else add bonus to it
             if (resetItem) {
-                resultsSaving.add(new ResultItem(votePosition, item, ResultItem.RESET));
+                resultsSaving.add(new SavedResultItem(votePosition, item, SavedResultItem.RESET));
                 item.setBonus(0);
                 item.setPeril(0);
             } else {
-                resultsSaving.add(new ResultItem(votePosition, item, ResultItem.BONUS));
+                resultsSaving.add(new SavedResultItem(votePosition, item, SavedResultItem.BONUS));
                 item.setBonus(item.getBonus() + 1);
             }
 
@@ -314,7 +314,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         // Loop through all of the rest database items and add peril point to them,
         // since they did not make it in to the last vote
         for (ListItem item: items) {
-            resultsSaving.add(new ResultItem(-1, item, ResultItem.PERIL));
+            resultsSaving.add(new SavedResultItem(-1, item, SavedResultItem.PERIL));
             item.setPeril(item.getPeril() + 1);
 
             // If peril points are over maximum peril points, drop item from list

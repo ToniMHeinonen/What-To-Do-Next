@@ -2,20 +2,22 @@ package io.github.tonimheinonen.whattodonext;
 
 import java.io.Serializable;
 
+import io.github.tonimheinonen.whattodonext.database.DatabaseValue;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
-public class ResultItem implements Serializable {
+public class SavedResultItem implements Serializable, DatabaseValue {
 
     public static final int RESET = 0, BONUS = 1, PERIL = 2;
 
     public final int position;
     public final String name;
-    public final int oldBonus, newBonus, oldPeril, newPeril;
+    public final String bonusSign, perilSign;
+    public final int oldBonus, newBonus, oldPeril, newPeril, bonusDiff, perilDiff;
     public final boolean dropped, reset;
 
-    public ResultItem(int position, ListItem item, int destiny) {
+    public SavedResultItem(int position, ListItem item, int destiny) {
         this.position = position;
         this.name = item.getName();
         oldBonus = item.getBonus();
@@ -53,6 +55,12 @@ public class ResultItem implements Serializable {
                 reset = false;
                 break;
         }
+
+        bonusDiff = newBonus - oldBonus;
+        perilDiff = newPeril - oldPeril;
+
+        bonusSign = bonusDiff > 0 ? "+" : "";
+        perilSign = perilDiff > 0 ? "+" : "";
 
         Debug.print("ResultItem", "result", toString(), 1);
     }
