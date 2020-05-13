@@ -50,6 +50,7 @@
 
     <!-- RESULTS_ACTIVITY -->
     <string name="resultsTopic">Results</string>
+    <string name="noResults">You don\'t have any results saved yet.</string>
     <string name="resultList">List name: %1$s</string>
     <string name="resultVoters">Voters: </string>
     <string name="results_position">#</string>

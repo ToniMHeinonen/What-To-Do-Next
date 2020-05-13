@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/app_bg">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -22,8 +22,20 @@
             android:textStyle="bold"
             android:textColor="@color/defaultTextColor"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="20dp"
             android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/noResults"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:text="@string/noResults"
+            android:textSize="30sp"
+            android:layout_margin="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/defaultTextColor"
+            android:visibility="gone"/>
 
         <ListView
             android:id="@+id/savedResults"

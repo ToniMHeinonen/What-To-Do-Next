@@ -34,12 +34,19 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void setupResultsList() {
+        final ListView list = findViewById(R.id.savedResults);
         results = (ArrayList) GlobalPrefs.loadResults();
+
+        // If there are not saved results, show text
+        if (results.isEmpty()) {
+            findViewById(R.id.noResults).setVisibility(View.VISIBLE);
+            list.setVisibility(View.GONE);
+            return;
+        }
 
         // Sort by newest
         Collections.sort(results, (o1, o2) -> o2.date.compareTo(o1.date));
 
-        final ListView list = findViewById(R.id.savedResults);
         DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(this, results, this,
                 DatabaseType.SAVED_RESULTS);
         list.setAdapter(adapter);
