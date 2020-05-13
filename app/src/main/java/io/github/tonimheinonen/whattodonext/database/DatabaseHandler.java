@@ -49,6 +49,32 @@ public abstract class DatabaseHandler {
         dbProfiles.keepSynced(true);
     }
 
+    /////////////////////* LISTENER INTERFACES *////////////////////
+
+    public interface ListsListener {
+        /**
+         * Gets loaded lists from database.
+         * @param lists loaded lists from database
+         */
+        void onDataGetLists(ArrayList<ListOfItems> lists);
+    }
+
+    public interface ItemsListener {
+        /**
+         * gets loaded items from database.
+         * @param items loaded items from database
+         */
+        void onDataGetItems(ArrayList<ListItem> items);
+    }
+
+    public interface ProfilesListener {
+        /**
+         * Gets loaded profiles from database.
+         * @param profiles loaded profiles from database
+         */
+        void onDataGetProfiles(ArrayList<Profile> profiles);
+    }
+
     /////////////////////* LISTS *////////////////////
 
     /**
@@ -116,7 +142,7 @@ public abstract class DatabaseHandler {
      * Loads lists from database.
      * @param listener listener to send data to
      */
-    public static void getLists(final OnGetDataListener listener) {
+    public static void getLists(final ListsListener listener) {
         dbLists.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -193,7 +219,7 @@ public abstract class DatabaseHandler {
      * @param listener listener to send data to
      * @param list list where items must belong to
      */
-    public static void getItems(final OnGetDataListener listener, final ListOfItems list) {
+    public static void getItems(final ItemsListener listener, final ListOfItems list) {
         Query query = dbItems.orderByChild("listID").equalTo(list.getDbID());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -253,7 +279,7 @@ public abstract class DatabaseHandler {
      * Loads all profiles from database.
      * @param listener listener to send data to
      */
-    public static void getProfiles(final OnGetDataListener listener) {
+    public static void getProfiles(final ProfilesListener listener) {
         dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -281,4 +307,6 @@ public abstract class DatabaseHandler {
             }
         });
     }
+
+    /////////////////////* SAVED RESULTS *////////////////////
 }

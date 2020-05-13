@@ -3,7 +3,6 @@ package io.github.tonimheinonen.whattodonext;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
-import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
@@ -32,7 +31,7 @@ import java.util.ArrayList;
  * @version 1.0
  * @since 1.0
  */
-public class StartVoteActivity extends AppCompatActivity implements OnGetDataListener,
+public class StartVoteActivity extends AppCompatActivity implements
         View.OnClickListener {
 
     private StartVoteActivity _this = this;
@@ -68,15 +67,14 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
     protected void onStart() {
         super.onStart();
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
-        DatabaseHandler.getLists(this);
+        DatabaseHandler.getLists(this::loadLists);
     }
 
     /**
      * Checks if lists are empty.
      * @param lists loaded lists from database
      */
-    @Override
-    public void onDataGetLists(ArrayList<ListOfItems> lists) {
+    public void loadLists(ArrayList<ListOfItems> lists) {
         Debug.print(this, "onDataGetLists", "", 1);
         this.lists = lists;
 
@@ -91,7 +89,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
                     () -> startActivity(new Intent(_this, MainActivity.class)));
         } else {
             // Else start loading profiles
-            DatabaseHandler.getProfiles(this);
+            DatabaseHandler.getProfiles(this::profilesLoaded);
         }
     }
 
@@ -99,8 +97,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
      * Initialize views after profiles have been retrieved.
      * @param profiles loaded lists from database
      */
-    @Override
-    public void onDataGetProfiles(ArrayList<Profile> profiles) {
+    public void profilesLoaded(ArrayList<Profile> profiles) {
         this.profiles = profiles;
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
@@ -111,8 +108,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
      * Loads items for selected list and starts voting.
      * @param items loaded lists from database
      */
-    @Override
-    public void onDataGetItems(ArrayList<ListItem> items) {
+    public void itemsLoaded(ArrayList<ListItem> items) {
         Buddy.filterListByFallen(items, false);
 
         if (items.size() < firstVoteSize) {
@@ -173,7 +169,7 @@ public class StartVoteActivity extends AppCompatActivity implements OnGetDataLis
                 listBigEnough = false; // Change to false to prevent starting before items loaded
                 selectedList = lists.get(position);
                 GlobalPrefs.saveCurrentList(selectedList.getDbID());
-                DatabaseHandler.getItems(_this, selectedList);
+                DatabaseHandler.getItems(_this::itemsLoaded, selectedList);
             }
 
             @Override

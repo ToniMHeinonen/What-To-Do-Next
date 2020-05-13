@@ -11,7 +11,6 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.MainActivity;
-import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
@@ -39,7 +38,7 @@ import java.util.Comparator;
  * @version 1.0
  * @since 1.0
  */
-public class VoteResultsActivity extends AppCompatActivity implements OnGetDataListener {
+public class VoteResultsActivity extends AppCompatActivity {
 
     private boolean lastResults;
     private int topAmount;
@@ -234,7 +233,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
     public void nextPressed(View v) {
         if (lastResults) {
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-            DatabaseHandler.getItems(this, selectedList);
+            DatabaseHandler.getItems(this::itemsLoaded, selectedList);
         } else {
             // Proceed to next voting
             Intent intent = new Intent(this, VoteTopActivity.class);
@@ -265,8 +264,7 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
      * Calculates bonus and peril points for items.
      * @param items loaded lists from database
      */
-    @Override
-    public void onDataGetItems(ArrayList<ListItem> items) {
+    public void itemsLoaded(ArrayList<ListItem> items) {
         Buddy.filterListByFallen(items, false); // Ignore fallen items
         ArrayList<ListItem> itemsLeft = selectedList.getItems();
 
@@ -332,18 +330,4 @@ public class VoteResultsActivity extends AppCompatActivity implements OnGetDataL
         Buddy.showToast(getString(R.string.save_successful), Toast.LENGTH_LONG);
         finish();
     }
-
-    /**
-     * Gets lists data from database.
-     * @param lists loaded lists from database
-     */
-    @Override
-    public void onDataGetLists(ArrayList<ListOfItems> lists) {}
-
-    /**
-     * Gets profile data from database.
-     * @param profiles loaded lists from database
-     */
-    @Override
-    public void onDataGetProfiles(ArrayList<Profile> profiles) {}
 }

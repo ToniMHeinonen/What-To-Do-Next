@@ -3,8 +3,6 @@ package io.github.tonimheinonen.whattodonext;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
-import io.github.tonimheinonen.whattodonext.database.OnGetDataListener;
-import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
@@ -30,7 +28,7 @@ import java.util.ArrayList;
  * @version 1.0
  * @since 1.0
  */
-public class ListsActivity extends AppCompatActivity implements OnGetDataListener {
+public class ListsActivity extends AppCompatActivity {
 
     private ListOfItems curList;
     private String curListId = "";
@@ -84,7 +82,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
         fallenButton = findViewById(R.id.fallenButton);
 
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
-        DatabaseHandler.getLists(this);
+        DatabaseHandler.getLists(this::listsLoaded);
     }
 
     /**
@@ -92,15 +90,14 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      */
     private void getItems() {
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
-        DatabaseHandler.getItems(this, curList);
+        DatabaseHandler.getItems(this::itemsLoaded, curList);
     }
 
     /**
      * Loads all lists and select's previously chosen list.
      * @param lists database lists
      */
-    @Override
-    public void onDataGetLists(ArrayList<ListOfItems> lists) {
+    public void listsLoaded(ArrayList<ListOfItems> lists) {
         this.lists = lists;
         curListId = GlobalPrefs.loadCurrentList();
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
@@ -127,21 +124,13 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
      * Loads items for current list.
      * @param items database items in list
      */
-    @Override
-    public void onDataGetItems(ArrayList<ListItem> items) {
+    public void itemsLoaded(ArrayList<ListItem> items) {
         curList.setItems(items);
         Buddy.filterListByFallen(curList.getItems(), fallenList);
 
         findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
         itemsFragment.updateListItems();
     }
-
-    /**
-     * Loads profiles from database.
-     * @param profiles database profiles
-     */
-    @Override
-    public void onDataGetProfiles(ArrayList<Profile> profiles) {}
 
     /**
      * Sets current list.
@@ -191,7 +180,7 @@ public class ListsActivity extends AppCompatActivity implements OnGetDataListene
 
             GlobalPrefs.saveCurrentList(curList.getDbID());
             findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
-            DatabaseHandler.getItems(this, curList);
+            DatabaseHandler.getItems(this::itemsLoaded, curList);
         }
     }
 
