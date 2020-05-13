@@ -35,7 +35,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
 
     private void setupResultsList() {
         final ListView list = findViewById(R.id.savedResults);
-        results = (ArrayList) GlobalPrefs.loadResults();
+        results = (ArrayList<SavedResult>) GlobalPrefs.loadResults();
 
         // If there are not saved results, show text
         if (results.isEmpty()) {
