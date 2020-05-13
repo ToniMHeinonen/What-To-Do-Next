@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_bg">
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_for_layouts"
+        tools:context=".ResultsActivity"
+        android:background="@drawable/custom_bg">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/resultsTopic"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:textColor="@color/defaultTextColor"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center" />
+
+            <Button
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button_selector"
+                android:text="@string/back"
+                android:onClick="backSelected"/>
+
+        </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/noResults"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:text="@string/noResults"
+                android:textSize="30sp"
+                android:layout_margin="20dp"
+                android:textAlignment="center"
+                android:textColor="@color/defaultTextColor"
+                android:visibility="gone"/>
+
+            <ListView
+                android:id="@+id/savedResults"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"/>
+
+
+
+    </LinearLayout>
+</RelativeLayout>
