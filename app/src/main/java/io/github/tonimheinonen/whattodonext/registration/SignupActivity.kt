@@ -60,7 +60,7 @@ class SignupActivity : AppCompatActivity() {
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
                 Toast.makeText(this, getString(R.string.fields_empty), Toast.LENGTH_LONG).show()
             } else{
-                Buddy.registrationShowLoading(this)
+                Buddy.showLoadingBar(this, R.id.informationBox)
 
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
@@ -79,7 +79,7 @@ class SignupActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(this, getString(R.string.firebase_unusual_error), Toast.LENGTH_LONG).show()
                     }
-                    Buddy.registrationHideLoading(this)
+                    Buddy.hideLoadingBar(this, R.id.informationBox)
                 })
             }
         }

@@ -6,6 +6,7 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.SavedResult;
 import io.github.tonimheinonen.whattodonext.savedresults.SavedResultDialog;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +31,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        Buddy.showLoadingBar(this, R.id.savedResults);
         DatabaseHandler.getResults(this::resultsLoaded);
     }
 
@@ -37,6 +39,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         Collections.reverse(savedResults); // Reverse order to put newest at the top
         results = savedResults;
         setupResultsList();
+        Buddy.hideLoadingBar(this, R.id.savedResults);
     }
 
     private void setupResultsList() {

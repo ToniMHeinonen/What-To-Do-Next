@@ -62,6 +62,10 @@ public class SavedResultDialog extends Dialog implements
         findViewById(R.id.back).setOnClickListener(this);
 
         initializeViews();
+
+        // Show loading bar
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+        findViewById(R.id.resultItems).setVisibility(View.GONE);
         DatabaseHandler.getResultItems(this::resultItemsLoaded, result);
     }
 
@@ -75,6 +79,10 @@ public class SavedResultDialog extends Dialog implements
         DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(activity, resultItems,
                 null, DatabaseType.SAVED_RESULT_ITEM);
         list.setAdapter(adapter);
+
+        // Hide loading bar
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+        findViewById(R.id.resultItems).setVisibility(View.VISIBLE);
     }
 
     /**

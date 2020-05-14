@@ -82,6 +82,14 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
         <ListView
             android:id = "@+id/resultItems"
             android:layout_width = "match_parent"

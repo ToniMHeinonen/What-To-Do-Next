@@ -54,7 +54,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
             if (TextUtils.isEmpty(email)) {
                 Toast.makeText(this, getString(R.string.email_empty), Toast.LENGTH_LONG).show()
             } else {
-                Buddy.registrationShowLoading(this)
+                Buddy.showLoadingBar(this, R.id.informationBox)
 
                 auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(this, OnCompleteListener { task ->
@@ -69,7 +69,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
                             } else {
                                 Toast.makeText(this, getString(R.string.password_reset_failed), Toast.LENGTH_LONG).show()
                             }
-                            Buddy.registrationHideLoading(this)
+                            Buddy.hideLoadingBar(this, R.id.informationBox)
                         })
             }
         }

@@ -185,21 +185,21 @@ public abstract class Buddy {
     }
 
     /**
-     * Shows loading bar and hide info box in registration activities.
-     * @param activity registration related activity
+     * Shows loading bar and hides necessary view.
+     * @param activity current activity
      */
-    public static void registrationShowLoading(AppCompatActivity activity) {
+    public static void showLoadingBar(Activity activity, int viewIDToHide) {
         activity.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-        activity.findViewById(R.id.informationBox).setVisibility(View.GONE);
+        activity.findViewById(viewIDToHide).setVisibility(View.GONE);
     }
 
     /**
-     * Hides loading bar and shows info box in registration activities.
-     * @param activity registration related activity
+     * Hides loading bar and shows necessary view.
+     * @param activity current activity
      */
-    public static void registrationHideLoading(AppCompatActivity activity) {
+    public static void hideLoadingBar(Activity activity, int viewIDToShow) {
         activity.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-        activity.findViewById(R.id.informationBox).setVisibility(View.VISIBLE);
+        activity.findViewById(viewIDToShow).setVisibility(View.VISIBLE);
     }
 
     /**

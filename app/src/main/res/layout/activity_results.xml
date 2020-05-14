@@ -37,6 +37,17 @@
             android:textColor="@color/defaultTextColor"
             android:visibility="gone"/>
 
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
         <ListView
             android:id="@+id/savedResults"
             android:layout_width="match_parent"
