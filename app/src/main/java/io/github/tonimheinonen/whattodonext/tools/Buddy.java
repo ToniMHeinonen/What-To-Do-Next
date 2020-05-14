@@ -236,7 +236,7 @@ public abstract class Buddy {
      */
     public static String formatResultDate(String date) {
         Date dateFormat = stringToDate(date);
-        return android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss a", dateFormat).toString();
+        return android.text.format.DateFormat.format("yyyy-MM-dd hh:mm", dateFormat).toString();
     }
 
     /**
