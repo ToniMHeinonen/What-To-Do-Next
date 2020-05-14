@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import io.github.tonimheinonen.whattodonext.savedresults.SavedResult;
+import io.github.tonimheinonen.whattodonext.savedresults.SavedResultItem;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
@@ -30,6 +32,8 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbLists;
     private static DatabaseReference dbItems;
     private static DatabaseReference dbProfiles;
+    private static DatabaseReference dbSavedResults;
+    private static DatabaseReference dbResultItems;
 
     /**
      * Initializes necessary values.
@@ -47,6 +51,12 @@ public abstract class DatabaseHandler {
         dbProfiles = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("profiles");
         dbProfiles.keepSynced(true);
+        dbSavedResults = FirebaseDatabase.getInstance().getReference().child("users").
+                child(user.getUid()).child("saved_results");
+        dbSavedResults.keepSynced(true);
+        dbResultItems = FirebaseDatabase.getInstance().getReference().child("users").
+                child(user.getUid()).child("result_items");
+        dbResultItems.keepSynced(true);
     }
 
     /////////////////////* LISTENER INTERFACES *////////////////////
@@ -73,6 +83,22 @@ public abstract class DatabaseHandler {
          * @param profiles loaded profiles from database
          */
         void onDataGetProfiles(ArrayList<Profile> profiles);
+    }
+
+    public interface SavedResultsListener {
+        /**
+         * Gets loaded results from database.
+         * @param results loaded results from database
+         */
+        void onDataGetResults(ArrayList<SavedResult> results);
+    }
+
+    public interface ResultItemsListener {
+        /**
+         * Gets loaded result items from database.
+         * @param resultItems loaded result items from database
+         */
+        void onDataGetResultItems(ArrayList<SavedResultItem> resultItems);
     }
 
     /////////////////////* LISTS *////////////////////
@@ -309,4 +335,48 @@ public abstract class DatabaseHandler {
     }
 
     /////////////////////* SAVED RESULTS *////////////////////
+
+    /**
+     * Adds new result.
+     * @param result result to add
+     */
+    public static void addResult(SavedResult result) {
+        String key = dbSavedResults.push().getKey();   // Add new key to results
+
+        result.setDbID(key);
+        Map<String, Object> listValues = result.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, listValues);
+
+        dbSavedResults.updateChildren(childUpdates);
+    }
+
+    /**
+     * Loads results from database.
+     * @param listener listener to send data to
+     */
+    public static void getResults(final SavedResultsListener listener) {
+        dbSavedResults.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<SavedResult> results = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    SavedResult result = dataSnapshot.getValue(SavedResult.class);
+                    result.setDbID(key);
+                    results.add(result);
+                }
+
+                listener.onDataGetResults(results);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
 }

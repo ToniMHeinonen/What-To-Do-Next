@@ -324,7 +324,7 @@ public class VoteResultsActivity extends AppCompatActivity {
             DatabaseHandler.modifyItem(item);
         }
 
-        GlobalPrefs.saveNewResult(new SavedResult(selectedList.getName(), resultsSaving, selectedProfiles));
+        DatabaseHandler.addResult(new SavedResult(selectedList.getName(), resultsSaving, selectedProfiles));
 
         startActivity(new Intent(this, MainActivity.class));
         Buddy.showToast(getString(R.string.save_successful), Toast.LENGTH_LONG);

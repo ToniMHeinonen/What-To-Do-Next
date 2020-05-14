@@ -271,7 +271,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         SavedResult item = (SavedResult) getItem(position);
 
         Button itemName = view.findViewById(R.id.savedResult);
-        itemName.setText(Buddy.formatResultDate(item.date));
+        itemName.setText(Buddy.formatResultDate(item.getDate()));
 
         itemName.setOnClickListener(listener);
         itemName.setTag(position);

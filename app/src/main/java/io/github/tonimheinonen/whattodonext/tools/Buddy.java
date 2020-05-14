@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -39,6 +41,8 @@ import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 public abstract class Buddy {
 
     private static Context context;
+
+    public static final String FIREBASE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:sss'Z'";
 
     /**
      * Gets application context.
@@ -230,7 +234,25 @@ public abstract class Buddy {
      * @param date date of the result
      * @return formatted date
      */
-    public static String formatResultDate(Date date) {
-        return android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss a", date).toString();
+    public static String formatResultDate(String date) {
+        Date dateFormat = stringToDate(date);
+        return android.text.format.DateFormat.format("yyyy-MM-dd hh:mm:ss a", dateFormat).toString();
+    }
+
+    /**
+     * Converts firebase string to date.
+     * @param string string to convert
+     * @return converted date
+     */
+    public static Date stringToDate(String string) {
+        SimpleDateFormat format = new SimpleDateFormat(FIREBASE_DATE_FORMAT);
+        Date date = null;
+        try {
+            date = format.parse(string);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date;
     }
 }

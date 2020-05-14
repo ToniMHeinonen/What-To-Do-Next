@@ -36,10 +36,6 @@ public abstract class GlobalPrefs {
     // Tutorial
     private static String keyFirstTutorial = "first_tutorial";
 
-    // Saved results
-    private static String keySavedResults = "saved_results";
-    private static String keyResultsAmount = "results_amount";
-
     /**
      * Gets access to the correct prefs depending on the user.
      * @param aContext activity context
@@ -192,23 +188,5 @@ public abstract class GlobalPrefs {
      */
     public static void saveFirstTutorial(boolean show) {
         prefs.edit().putBoolean(keyFirstTutorial, show).apply();
-    }
-
-    public static void saveNewResult(SavedResult result) {
-        int nextResultsIndex = prefs.getInt(keyResultsAmount, 0);
-
-        SerializableManager.saveSerializable(context, result, keySavedResults + nextResultsIndex);
-        prefs.edit().putInt(keyResultsAmount, nextResultsIndex + 1).apply();
-    }
-
-    public static List<SavedResult> loadResults() {
-        List<SavedResult> results = new ArrayList<>();
-        int resultsAmount = prefs.getInt(keyResultsAmount, 0);
-
-        for (int i = 0; i < resultsAmount; i++) {
-            results.add(SerializableManager.readSerializable(context, keySavedResults + i));
-        }
-
-        return results;
     }
 }

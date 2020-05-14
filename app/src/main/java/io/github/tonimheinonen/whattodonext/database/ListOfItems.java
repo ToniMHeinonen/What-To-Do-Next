@@ -33,10 +33,10 @@ public class ListOfItems implements DatabaseValue, Parcelable {
 
     /**
      * Default constructor.
+     *
+     * Required for calls to DataSnapshot.getValue(ListOfItems.class).
      */
-    public ListOfItems() {
-        // Default constructor required for calls to DataSnapshot.getValue(ListOfItems.class)
-    }
+    public ListOfItems() {}
 
     /**
      * Initializes necessary values.

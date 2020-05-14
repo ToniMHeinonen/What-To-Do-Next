@@ -1,18 +1,17 @@
 package io.github.tonimheinonen.whattodonext;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.savedresults.SavedResult;
 import io.github.tonimheinonen.whattodonext.savedresults.SavedResultDialog;
-import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Handles user selecting saved results to display.
@@ -30,12 +29,16 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        DatabaseHandler.getResults(this::resultsLoaded);
+    }
+
+    private void resultsLoaded(ArrayList<SavedResult> savedResults) {
+        results = savedResults;
         setupResultsList();
     }
 
     private void setupResultsList() {
         final ListView list = findViewById(R.id.savedResults);
-        results = (ArrayList<SavedResult>) GlobalPrefs.loadResults();
 
         // If there are not saved results, show text
         if (results.isEmpty()) {
@@ -43,9 +46,6 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
             list.setVisibility(View.GONE);
             return;
         }
-
-        // Sort by newest
-        Collections.sort(results, (o1, o2) -> o2.date.compareTo(o1.date));
 
         DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(this, results, this,
                 DatabaseType.SAVED_RESULTS);

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 /**
@@ -62,28 +63,29 @@ public class SavedResultDialog extends Dialog implements
      * Changes texts of views and shows necessary views.
      */
     private void initializeViews() {
-        TextView dateView = findViewById(R.id.date);
+        /*TextView dateView = findViewById(R.id.date);
         TextView listNameView = findViewById(R.id.listName);
         TextView voterView = findViewById(R.id.voters);
 
         // Set date
-        dateView.setText(Buddy.formatResultDate(result.date));
-        listNameView.setText(activity.getString(R.string.resultList, result.listName));
+        dateView.setText(result.getDate());
+        listNameView.setText(activity.getString(R.string.resultList, result.getListName()));
 
         // Set voters names
         StringBuilder voters = new StringBuilder(activity.getString(R.string.resultVoters));
         String prefix = " ";
-        for (String v : result.voterNames) {
-            voters.append(prefix).append(v);
+        for (Profile p : result.getVoters()) {
+            String name = p.getName();
+            voters.append(prefix).append(name);
             prefix = ", ";
         }
         voterView.setText(voters);
 
         // Set result item list
         final ListView list = findViewById(R.id.resultItems);
-        DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(activity, result.resultItems,
+        DatabaseValueListAdapter adapter = new DatabaseValueListAdapter(activity, result.getResultItems(),
                 null, DatabaseType.SAVED_RESULT_ITEM);
-        list.setAdapter(adapter);
+        list.setAdapter(adapter);*/
     }
 
     /**
