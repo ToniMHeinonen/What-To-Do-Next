@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext.savedresults;
+package io.github.tonimheinonen.whattodonext.database;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.github.tonimheinonen.whattodonext.database.DatabaseValue;
-import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 @IgnoreExtraProperties

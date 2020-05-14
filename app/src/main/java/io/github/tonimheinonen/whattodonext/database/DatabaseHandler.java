@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import io.github.tonimheinonen.whattodonext.savedresults.SavedResult;
-import io.github.tonimheinonen.whattodonext.savedresults.SavedResultItem;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 

@@ -1,9 +1,9 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.savedresults.SavedResultItem;
+import io.github.tonimheinonen.whattodonext.database.SavedResultItem;
 import io.github.tonimheinonen.whattodonext.ResultsShowVotesAdapter;
-import io.github.tonimheinonen.whattodonext.savedresults.SavedResult;
+import io.github.tonimheinonen.whattodonext.database.SavedResult;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;

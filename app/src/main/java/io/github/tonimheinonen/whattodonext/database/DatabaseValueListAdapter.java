@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.github.tonimheinonen.whattodonext.R;
-import io.github.tonimheinonen.whattodonext.savedresults.SavedResult;
-import io.github.tonimheinonen.whattodonext.savedresults.SavedResultItem;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 /**

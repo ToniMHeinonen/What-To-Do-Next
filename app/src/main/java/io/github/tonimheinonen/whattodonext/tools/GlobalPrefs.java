@@ -3,11 +3,6 @@ package io.github.tonimheinonen.whattodonext.tools;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.github.tonimheinonen.whattodonext.savedresults.SavedResult;
-
 /**
  * Handles saving and loading values to local storage.
  * @author Toni Heinonen
