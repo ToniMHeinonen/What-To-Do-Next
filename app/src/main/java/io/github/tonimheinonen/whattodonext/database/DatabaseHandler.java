@@ -35,6 +35,8 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbSavedResults;
     private static DatabaseReference dbResultItems;
 
+    private static int MAX_SAVED_RESULTS = 7;
+
     /**
      * Initializes necessary values.
      */
@@ -134,7 +136,7 @@ public abstract class DatabaseHandler {
     }
 
     /**
-     * Removes list.
+     * Removes list and its items.
      * @param list list to remove
      */
     public static void removeList(final ListOfItems list) {
@@ -350,6 +352,20 @@ public abstract class DatabaseHandler {
         childUpdates.put(key, values);
 
         dbSavedResults.updateChildren(childUpdates);
+
+        getResults(DatabaseHandler::checkResultsAmount);
+    }
+
+    /**
+     * Checks if there are more than maximum allowed amount of results.
+     *
+     * If there are more, removes the oldest result.
+     * @param results saved results
+     */
+    private static void checkResultsAmount(ArrayList<SavedResult> results) {
+        if (results.size() > MAX_SAVED_RESULTS) {
+            removeResult(results.get(0));   // Remove oldest, which is in index 0
+        }
     }
 
     /**
@@ -370,6 +386,37 @@ public abstract class DatabaseHandler {
                 }
 
                 listener.onDataGetResults(results);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Removes result and its items.
+     * @param result result to remove
+     */
+    private static void removeResult(final SavedResult result) {
+        dbSavedResults.child(result.getDbID()).removeValue();
+
+        // Remove all result items from database connected to this result
+        Query query = dbResultItems.orderByChild("resultID").equalTo(result.getDbID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> childRemoval = new HashMap<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    childRemoval.put(key, null);
+                }
+
+                // Remove all items with single call
+                dbResultItems.updateChildren(childRemoval);
             }
 
             @Override

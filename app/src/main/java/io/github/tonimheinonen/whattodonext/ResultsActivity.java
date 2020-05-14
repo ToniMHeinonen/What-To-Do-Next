@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Handles user selecting saved results to display.
@@ -33,6 +34,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void resultsLoaded(ArrayList<SavedResult> savedResults) {
+        Collections.reverse(savedResults); // Reverse order to put newest at the top
         results = savedResults;
         setupResultsList();
     }
