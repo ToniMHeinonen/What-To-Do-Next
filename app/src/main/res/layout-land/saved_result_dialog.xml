@@ -2,55 +2,66 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:background="@drawable/custom_bg"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0.35"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:text="{Date}"
-            android:textColor="@color/defaultTextColor"
-            android:textSize="25sp"
-            android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:text="{Date}"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="25sp"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/listName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/resultList"
-            android:textColor="@color/defaultTextColor"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/listName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/resultList"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:id="@+id/voters"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="5dp"
-            android:text="@string/resultVoters"
-            android:textColor="@color/defaultTextColor"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/voters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginBottom="5dp"
+                android:text="@string/resultVoters"
+                android:textColor="@color/defaultTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
 
+
+            <Button
+                android:id="@+id/back"
+                style="@style/listItemButtons"
+                android:text="@string/resultBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_bg"/>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.65"
         android:orientation="vertical">
 
         <LinearLayout
@@ -95,22 +106,6 @@
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2">
-
-        <Button
-            android:id="@+id/back"
-            style="@style/listItemButtons"
-            android:text="@string/resultBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="20dp"
-            android:background="@drawable/button_bg"/>
     </LinearLayout>
 
 </LinearLayout>
