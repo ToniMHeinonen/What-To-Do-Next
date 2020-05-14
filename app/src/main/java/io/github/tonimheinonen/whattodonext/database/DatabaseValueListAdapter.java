@@ -287,17 +287,17 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         TextView peril = view.findViewById(R.id.resultsPeril);
 
         // Set correct texts
-        position.setText(item.position != -1 ? "" + item.position : "-");
-        name.setText(item.name);
-        bonus.setText(item.bonusDiff == 0 ? "" + item.newBonus :
-                item.newBonus + "(" + item.bonusSign + item.bonusDiff + ")");
-        peril.setText(item.perilDiff == 0 ? "" + item.newPeril :
-                item.newPeril + "(" + item.perilSign + item.perilDiff + ")");
+        position.setText(item.getPosition() != -1 ? "" + item.getPosition() : "-");
+        name.setText(item.getName());
+        bonus.setText(item.getBonusDiff() == 0 ? "" + item.getNewBonus() :
+                item.getNewBonus() + "(" + item.getBonusSign() + item.getBonusDiff() + ")");
+        peril.setText(item.getPerilDiff() == 0 ? "" + item.getNewPeril() :
+                item.getNewPeril() + "(" + item.getPerilSign() + item.getPerilDiff() + ")");
 
         // If item was reset, set name to primary color, if dropped set to accent color
-        if (item.reset)
+        if (item.isReset())
             name.setTextColor(context.getResources().getColor(R.color.colorPrimary));
-        else if (item.dropped)
+        else if (item.isDropped())
             name.setTextColor(context.getResources().getColor(R.color.colorAccent));
         else
             name.setTextColor(context.getResources().getColor(R.color.defaultTextColor));

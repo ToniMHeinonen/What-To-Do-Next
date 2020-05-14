@@ -344,10 +344,10 @@ public abstract class DatabaseHandler {
         String key = dbSavedResults.push().getKey();   // Add new key to results
 
         result.setDbID(key);
-        Map<String, Object> listValues = result.toMap();
+        Map<String, Object> values = result.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put(key, listValues);
+        childUpdates.put(key, values);
 
         dbSavedResults.updateChildren(childUpdates);
     }
@@ -370,6 +370,59 @@ public abstract class DatabaseHandler {
                 }
 
                 listener.onDataGetResults(results);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    /////////////////////* RESULT ITEMS *////////////////////
+
+    /**
+     * Adds result items from saved result to database.
+     * @param result result which holds result items
+     */
+    public static void addResultItems(SavedResult result, ArrayList<SavedResultItem> items) {
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        for (SavedResultItem item : items) {
+            String key = dbResultItems.push().getKey();   // Add new key to path
+
+            // Set result db id for item
+            item.setDbID(key);
+            item.setResultID(result.getDbID());
+            Map<String, Object> listValues = item.toMap();
+
+            childUpdates.put(key, listValues);
+        }
+
+        dbResultItems.updateChildren(childUpdates);
+    }
+
+    /**
+     * Loads result items which are part of the given result from database.
+     * @param listener listener to send data to
+     * @param result result where items must belong to
+     */
+    public static void getResultItems(final ResultItemsListener listener, final SavedResult result) {
+        Query query = dbResultItems.orderByChild("resultID").equalTo(result.getDbID());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<SavedResultItem> items = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    SavedResultItem item = dataSnapshot.getValue(SavedResultItem.class);
+                    item.setDbID(key);
+                    items.add(item);
+                }
+
+                listener.onDataGetResultItems(items);
             }
 
             @Override

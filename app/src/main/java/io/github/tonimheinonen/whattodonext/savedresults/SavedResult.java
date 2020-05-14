@@ -23,9 +23,6 @@ public class SavedResult implements DatabaseValue {
     @Exclude
     private String dbID;
 
-    @Exclude
-    private ArrayList<SavedResultItem> resultItems;
-
     /**
      * Default constructor.
      *
@@ -33,12 +30,11 @@ public class SavedResult implements DatabaseValue {
      */
     public SavedResult() {}
 
-    public SavedResult(String listName, ArrayList<SavedResultItem> resultItems, ArrayList<Profile> voters) {
+    public SavedResult(String listName, ArrayList<Profile> voters) {
         SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat(Buddy.FIREBASE_DATE_FORMAT);
 
         this.date = ISO_8601_FORMAT.format(new Date());
         this.listName = listName;
-        this.resultItems = resultItems;
 
         // Create string from voters (example: "Jack, Phil & Rose")
         StringBuilder voterNames = new StringBuilder();
@@ -75,14 +71,6 @@ public class SavedResult implements DatabaseValue {
 
     public void setDbID(String dbID) {
         this.dbID = dbID;
-    }
-
-    public ArrayList<SavedResultItem> getResultItems() {
-        return resultItems;
-    }
-
-    public void setResultItems(ArrayList<SavedResultItem> resultItems) {
-        this.resultItems = resultItems;
     }
 
     public String getVoters() {
