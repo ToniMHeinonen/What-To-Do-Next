@@ -275,6 +275,9 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         itemName.setTag(position);
     }
 
+    /**
+     * Displays result items when looking saved results.
+     */
     private void savedResultItem() {
         SavedResultItem item = (SavedResultItem) getItem(position);
 

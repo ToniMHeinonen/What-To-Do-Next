@@ -9,11 +9,15 @@ import android.view.View;
  * Handles controlling of global values.
  * @author Toni Heinonen
  * @author toni1.heinonen@gmail.com
- * @version 1.0
+ * @version 1.2
  * @since 1.0
  */
 public class SettingsActivity extends AppCompatActivity {
 
+    /**
+     * Initializes SettingsActivity.
+     * @param savedInstanceState previous saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

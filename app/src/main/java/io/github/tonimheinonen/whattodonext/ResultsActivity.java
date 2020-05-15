@@ -26,15 +26,24 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
 
     ArrayList<SavedResult> results;
 
+    /**
+     * Initializes ResultsActivity.
+     * @param savedInstanceState saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        // Retrieve saved results
         Buddy.showLoadingBar(this, R.id.resultsLayout);
         DatabaseHandler.getResults(this::resultsLoaded);
     }
 
+    /**
+     * Initializes values after results are loaded from database.
+     * @param savedResults loaded results
+     */
     private void resultsLoaded(ArrayList<SavedResult> savedResults) {
         Collections.reverse(savedResults); // Reverse order to put newest at the top
         results = savedResults;
@@ -42,6 +51,9 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         Buddy.hideLoadingBar(this, R.id.resultsLayout);
     }
 
+    /**
+     * Creates a list View of saved results.
+     */
     private void setupResultsList() {
         final ListView list = findViewById(R.id.savedResults);
 
@@ -57,6 +69,10 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         list.setAdapter(adapter);
     }
 
+    /**
+     * Opens correct saved result when it is clicked.
+     * @param v clicked saved result view
+     */
     @Override
     public void onClick(View v) {
         int position = (int) v.getTag();
