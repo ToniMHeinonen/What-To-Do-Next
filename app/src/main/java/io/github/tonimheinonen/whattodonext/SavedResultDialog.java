@@ -1,4 +1,4 @@
-package io.github.tonimheinonen.whattodonext.savedresults;
+package io.github.tonimheinonen.whattodonext;
 
 import android.app.Activity;
 import android.app.Dialog;

@@ -5,7 +5,6 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.SavedResult;
-import io.github.tonimheinonen.whattodonext.savedresults.SavedResultDialog;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 import android.os.Bundle;
