@@ -46,8 +46,8 @@ public class TutorialDialog extends Dialog implements
         setContentView(R.layout.tutorial_dialog);
 
         // Set dialog window size to 90% of the screen width and height
-        int width = (int)(activity.getResources().getDisplayMetrics().widthPixels*0.90);
-        int height = (int)(activity.getResources().getDisplayMetrics().heightPixels*0.90);
+        int width = (int)(activity.getResources().getDisplayMetrics().widthPixels);
+        int height = (int)(activity.getResources().getDisplayMetrics().heightPixels);
         getWindow().setLayout(width, height);
 
         initializeViews();

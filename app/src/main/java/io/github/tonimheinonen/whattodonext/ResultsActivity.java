@@ -31,7 +31,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
-        Buddy.showLoadingBar(this, R.id.savedResults);
+        Buddy.showLoadingBar(this, R.id.resultsLayout);
         DatabaseHandler.getResults(this::resultsLoaded);
     }
 
@@ -39,7 +39,7 @@ public class ResultsActivity extends AppCompatActivity implements View.OnClickLi
         Collections.reverse(savedResults); // Reverse order to put newest at the top
         results = savedResults;
         setupResultsList();
-        Buddy.hideLoadingBar(this, R.id.savedResults);
+        Buddy.hideLoadingBar(this, R.id.resultsLayout);
     }
 
     private void setupResultsList() {

@@ -43,11 +43,28 @@
 
         </LinearLayout>
 
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/resultsLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.6">
+
             <TextView
                 android:id="@+id/noResults"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.6"
                 android:text="@string/noResults"
                 android:textSize="30sp"
                 android:layout_margin="20dp"
@@ -55,22 +72,12 @@
                 android:textColor="@color/defaultTextColor"
                 android:visibility="gone"/>
 
-            <RelativeLayout
-                style="@style/GenericProgressBackground"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.6"
-                android:id="@+id/loadingPanel">
-
-                <ProgressBar
-                    style="@style/GenericProgressIndicator"/>
-            </RelativeLayout>
-
             <ListView
                 android:id="@+id/savedResults"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.6"/>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 </RelativeLayout>
