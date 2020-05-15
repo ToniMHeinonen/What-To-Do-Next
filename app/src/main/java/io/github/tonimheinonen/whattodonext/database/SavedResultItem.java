@@ -9,6 +9,13 @@ import java.util.Map;
 
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
+/**
+ * Represents a voted item in result.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.2
+ * @since 1.2
+ */
 @IgnoreExtraProperties
 public class SavedResultItem implements Serializable, DatabaseValue {
 
@@ -32,12 +39,19 @@ public class SavedResultItem implements Serializable, DatabaseValue {
      */
     public SavedResultItem() {}
 
+    /**
+     * Initializes result item with required fields.
+     * @param position position of the item in last result
+     * @param item voted item
+     * @param destiny what happened to the item during vote (RESET, BONUS or PERIL)
+     */
     public SavedResultItem(int position, ListItem item, int destiny) {
         this.position = position;
         this.name = item.getName();
         oldBonus = item.getBonus();
         oldPeril = item.getPeril();
 
+        // Determine what new bonus and new peril points will be depending on the destiny
         switch (destiny) {
             case RESET:
                 newBonus = 0;
@@ -60,123 +74,11 @@ public class SavedResultItem implements Serializable, DatabaseValue {
                 break;
         }
 
+        // Create values to be used when this object is drawn to a list
         bonusDiff = newBonus - oldBonus;
         perilDiff = newPeril - oldPeril;
-
         bonusSign = bonusDiff > 0 ? "+" : "";
         perilSign = perilDiff > 0 ? "+" : "";
-    }
-
-    public String getResultID() {
-        return resultID;
-    }
-
-    public void setResultID(String resultID) {
-        this.resultID = resultID;
-    }
-
-    public String getDbID() {
-        return dbID;
-    }
-
-    public void setDbID(String dbID) {
-        this.dbID = dbID;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getOldBonus() {
-        return oldBonus;
-    }
-
-    public void setOldBonus(int oldBonus) {
-        this.oldBonus = oldBonus;
-    }
-
-    public int getNewBonus() {
-        return newBonus;
-    }
-
-    public void setNewBonus(int newBonus) {
-        this.newBonus = newBonus;
-    }
-
-    public int getOldPeril() {
-        return oldPeril;
-    }
-
-    public void setOldPeril(int oldPeril) {
-        this.oldPeril = oldPeril;
-    }
-
-    public int getNewPeril() {
-        return newPeril;
-    }
-
-    public void setNewPeril(int newPeril) {
-        this.newPeril = newPeril;
-    }
-
-    public boolean isDropped() {
-        return dropped;
-    }
-
-    public void setDropped(boolean dropped) {
-        this.dropped = dropped;
-    }
-
-    public boolean isReset() {
-        return reset;
-    }
-
-    public void setReset(boolean reset) {
-        this.reset = reset;
-    }
-
-    public String getBonusSign() {
-        return bonusSign;
-    }
-
-    public void setBonusSign(String bonusSign) {
-        this.bonusSign = bonusSign;
-    }
-
-    public String getPerilSign() {
-        return perilSign;
-    }
-
-    public void setPerilSign(String perilSign) {
-        this.perilSign = perilSign;
-    }
-
-    public int getBonusDiff() {
-        return bonusDiff;
-    }
-
-    public void setBonusDiff(int bonusDiff) {
-        this.bonusDiff = bonusDiff;
-    }
-
-    public int getPerilDiff() {
-        return perilDiff;
-    }
-
-    public void setPerilDiff(int perilDiff) {
-        this.perilDiff = perilDiff;
     }
 
     /**
@@ -203,6 +105,10 @@ public class SavedResultItem implements Serializable, DatabaseValue {
         return result;
     }
 
+    /**
+     * Draws item values then object is printed.
+     * @return values in a string
+     */
     @Override
     public String toString() {
         return "ResultItem{" +
@@ -216,4 +122,62 @@ public class SavedResultItem implements Serializable, DatabaseValue {
                 ", reset=" + reset +
                 '}';
     }
+
+    /************************ GETTERS & SETTERS ********************/
+
+    public String getResultID() { return resultID; }
+
+    public void setResultID(String resultID) { this.resultID = resultID; }
+
+    public String getDbID() { return dbID; }
+
+    public void setDbID(String dbID) { this.dbID = dbID; }
+
+    public int getPosition() { return position; }
+
+    public void setPosition(int position) { this.position = position; }
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
+
+    public int getOldBonus() { return oldBonus; }
+
+    public void setOldBonus(int oldBonus) { this.oldBonus = oldBonus; }
+
+    public int getNewBonus() { return newBonus; }
+
+    public void setNewBonus(int newBonus) { this.newBonus = newBonus; }
+
+    public int getOldPeril() { return oldPeril; }
+
+    public void setOldPeril(int oldPeril) { this.oldPeril = oldPeril; }
+
+    public int getNewPeril() { return newPeril; }
+
+    public void setNewPeril(int newPeril) { this.newPeril = newPeril; }
+
+    public boolean isDropped() { return dropped; }
+
+    public void setDropped(boolean dropped) { this.dropped = dropped; }
+
+    public boolean isReset() { return reset; }
+
+    public void setReset(boolean reset) { this.reset = reset; }
+
+    public String getBonusSign() { return bonusSign; }
+
+    public void setBonusSign(String bonusSign) { this.bonusSign = bonusSign; }
+
+    public String getPerilSign() { return perilSign; }
+
+    public void setPerilSign(String perilSign) { this.perilSign = perilSign; }
+
+    public int getBonusDiff() { return bonusDiff; }
+
+    public void setBonusDiff(int bonusDiff) { this.bonusDiff = bonusDiff; }
+
+    public int getPerilDiff() { return perilDiff; }
+
+    public void setPerilDiff(int perilDiff) { this.perilDiff = perilDiff; }
 }

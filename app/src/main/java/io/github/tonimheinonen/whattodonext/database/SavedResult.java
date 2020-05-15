@@ -11,6 +11,13 @@ import java.util.Map;
 
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
+/**
+ * Represents saved result.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.2
+ * @since 1.2
+ */
 @IgnoreExtraProperties
 public class SavedResult implements DatabaseValue {
 
@@ -28,6 +35,11 @@ public class SavedResult implements DatabaseValue {
      */
     public SavedResult() {}
 
+    /**
+     * Initializes saved result with required fields.
+     * @param listName name of the voted list
+     * @param voters list of voters
+     */
     public SavedResult(String listName, ArrayList<Profile> voters) {
         SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat(Buddy.FIREBASE_DATE_FORMAT);
 
@@ -47,37 +59,21 @@ public class SavedResult implements DatabaseValue {
     }
 
 
-    public String getDate() {
-        return date;
-    }
+    public String getDate() { return date; }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+    public void setDate(String date) { this.date = date; }
 
-    public String getListName() {
-        return listName;
-    }
+    public String getListName() { return listName; }
 
-    public void setListName(String listName) {
-        this.listName = listName;
-    }
+    public void setListName(String listName) { this.listName = listName; }
 
-    public String getDbID() {
-        return dbID;
-    }
+    public String getDbID() { return dbID; }
 
-    public void setDbID(String dbID) {
-        this.dbID = dbID;
-    }
+    public void setDbID(String dbID) { this.dbID = dbID; }
 
-    public String getVoters() {
-        return voters;
-    }
+    public String getVoters() { return voters; }
 
-    public void setVoters(String voters) {
-        this.voters = voters;
-    }
+    public void setVoters(String voters) { this.voters = voters; }
 
     /**
      * Maps values for database handling.
