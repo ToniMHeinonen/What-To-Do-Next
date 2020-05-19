@@ -36,8 +36,7 @@ public class Debug {
             } else {
                 CharSequence text = className + ": " + msg;
 
-                Toast toast = Toast.makeText(callerClass, text, Toast.LENGTH_LONG);
-                toast.show();
+                Buddy.showToast(text.toString(), Toast.LENGTH_LONG);
             }
         }
     }

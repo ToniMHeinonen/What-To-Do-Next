@@ -1,13 +1,10 @@
 package io.github.tonimheinonen.whattodonext;
 
-import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
-import io.github.tonimheinonen.whattodonext.tools.Buddy;
-
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.firebase.database.FirebaseDatabase;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Runs once when app starts, initializes necessary values.
@@ -18,6 +15,8 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 public class InitializeActivity extends AppCompatActivity {
 
+    private static Context context;
+
     /**
      * Initialize values which needs to be initialized only once.
      * @param savedInstanceState previous instance state
@@ -27,10 +26,19 @@ public class InitializeActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
 
-        Buddy.initialize(this);               // Set context for Buddy
+        // Set static context
+        InitializeActivity.context = getApplicationContext();
 
         // Start MainActivity and close this activity
         startActivity(new Intent(this, MainActivity.class));
         finish();
+    }
+
+    /**
+     * Return static application context.
+     * @return static application context
+     */
+    public static Context getAppContext() {
+        return InitializeActivity.context;
     }
 }

@@ -52,22 +52,21 @@ class ForgotPasswordActivity : AppCompatActivity() {
         resetPasswordBtn.setOnClickListener {
             var email: String = emailEt.text.toString()
             if (TextUtils.isEmpty(email)) {
-                Toast.makeText(this, getString(R.string.email_empty), Toast.LENGTH_LONG).show()
+                Buddy.showToast( getString(R.string.email_empty), Toast.LENGTH_LONG)
             } else {
                 Buddy.showLoadingBar(this, R.id.informationBox)
 
                 auth.sendPasswordResetEmail(email)
                         .addOnCompleteListener(this, OnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                Toast.makeText(this, getString(R.string.password_reset_success), Toast.LENGTH_LONG)
-                                        .show()
+                                Buddy.showToast(getString(R.string.password_reset_success), Toast.LENGTH_LONG)
                                 startActivity(Intent(this, LoginActivity::class.java));
                             }
                         }).addOnFailureListener(this, OnFailureListener { exception ->
                             if (exception is FirebaseNetworkException) {
-                                Toast.makeText(this, getString(R.string.firebase_no_internet), Toast.LENGTH_LONG).show()
+                                Buddy.showToast( getString(R.string.firebase_no_internet), Toast.LENGTH_LONG)
                             } else {
-                                Toast.makeText(this, getString(R.string.password_reset_failed), Toast.LENGTH_LONG).show()
+                                Buddy.showToast( getString(R.string.password_reset_failed), Toast.LENGTH_LONG)
                             }
                             Buddy.hideLoadingBar(this, R.id.informationBox)
                         })

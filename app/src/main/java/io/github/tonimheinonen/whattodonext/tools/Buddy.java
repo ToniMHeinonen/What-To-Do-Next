@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import io.github.tonimheinonen.whattodonext.InitializeActivity;
 import io.github.tonimheinonen.whattodonext.ListItemFragment;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.StartVoteActivity;
@@ -40,17 +41,7 @@ import io.github.tonimheinonen.whattodonext.database.ListOfItems;
  */
 public abstract class Buddy {
 
-    private static Context context;
-
     public static final String FIREBASE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:sss'Z'";
-
-    /**
-     * Gets application context.
-     * @param host context
-     */
-    public static void initialize(Context host) {
-        context = host;
-    }
 
     /**
      * Hides keyboard, clears focus on view and clears it's text.
@@ -61,6 +52,7 @@ public abstract class Buddy {
      * @param clearText true if to reset text field to ""
      */
     public static void hideKeyboardAndClear(EditText editTextView, boolean clearText) {
+        Context context = InitializeActivity.getAppContext();
         editTextView.clearFocus();
         if (clearText)
             editTextView.setText("");
@@ -75,7 +67,18 @@ public abstract class Buddy {
      * @param duration either Toast.LENGTH_LONG or Toast.LENGTH_SHORT
      */
     public static void showToast(String text, int duration) {
-        Toast.makeText(context, text, duration).show();
+        Context context = InitializeActivity.getAppContext();
+        Toast toast = Toast.makeText(context, text, duration);
+        View view = toast.getView();
+
+        // Gets the actual oval background of the Toast then sets the colour filter
+        view.setBackground(context.getResources().getDrawable(R.drawable.custom_bg));
+
+        // Gets the TextView from the Toast so it can be editted
+        TextView textView = view.findViewById(android.R.id.message);
+        textView.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
+
+        toast.show();
     }
 
     /**
@@ -84,6 +87,7 @@ public abstract class Buddy {
      * @return saved string
      */
     public static String getString(int stringID) {
+        Context context = InitializeActivity.getAppContext();
         return context.getResources().getString(stringID);
     }
 

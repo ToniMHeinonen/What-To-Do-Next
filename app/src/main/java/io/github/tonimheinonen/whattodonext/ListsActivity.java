@@ -1,15 +1,5 @@
 package io.github.tonimheinonen.whattodonext;
 
-import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
-import io.github.tonimheinonen.whattodonext.database.DatabaseType;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
-import io.github.tonimheinonen.whattodonext.database.ListItem;
-import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
-import io.github.tonimheinonen.whattodonext.database.ListOfItems;
-import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
-
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +10,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
+import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 /**
  * Handles modifying of ListOfViews and ListItems.
@@ -274,7 +274,7 @@ public class ListsActivity extends AppCompatActivity {
      */
     public void addClicked(View v) {
         if (curList == null) {
-            Toast.makeText(this, getString(R.string.first_select_list), Toast.LENGTH_LONG).show();
+            Buddy.showToast(getString(R.string.first_select_list), Toast.LENGTH_LONG);
             return;
         }
 
@@ -307,7 +307,7 @@ public class ListsActivity extends AppCompatActivity {
      */
     public void fallenClicked(View v) {
         if (curList == null) {
-            Toast.makeText(this, getString(R.string.first_select_list), Toast.LENGTH_LONG).show();
+            Buddy.showToast(getString(R.string.first_select_list), Toast.LENGTH_LONG);
             return;
         }
 

@@ -3,7 +3,6 @@ package io.github.tonimheinonen.whattodonext.registration
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -15,7 +14,6 @@ import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import io.github.tonimheinonen.whattodonext.MainActivity
 import io.github.tonimheinonen.whattodonext.R
 import io.github.tonimheinonen.whattodonext.tools.Buddy
@@ -62,13 +60,13 @@ class LoginActivity : AppCompatActivity() {
             var password: String = passwordEt.text.toString()
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                Toast.makeText(this@LoginActivity, getString(R.string.fields_empty), Toast.LENGTH_LONG).show()
+                Buddy.showToast(getString(R.string.fields_empty), Toast.LENGTH_LONG)
             } else{
                 Buddy.showLoadingBar(this, R.id.informationBox)
 
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener { task ->
                     if(task.isSuccessful) {
-                        Toast.makeText(this, getString(R.string.login_success), Toast.LENGTH_LONG).show()
+                        Buddy.showToast(getString(R.string.login_success), Toast.LENGTH_LONG)
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
                         finish()
@@ -76,13 +74,13 @@ class LoginActivity : AppCompatActivity() {
                 }).addOnFailureListener(this, OnFailureListener { exception ->
                     if (exception is FirebaseAuthInvalidUserException) {
                         // For some reason this only checks valid email addresses
-                        Toast.makeText(this, getString(R.string.login_invalid_user), Toast.LENGTH_LONG).show()
+                        Buddy.showToast( getString(R.string.login_invalid_user), Toast.LENGTH_LONG)
                     } else if (exception is FirebaseAuthInvalidCredentialsException) {
-                        Toast.makeText(this, getString(R.string.login_invalid_password), Toast.LENGTH_LONG).show()
+                        Buddy.showToast( getString(R.string.login_invalid_password), Toast.LENGTH_LONG)
                     } else if (exception is FirebaseNetworkException) {
-                        Toast.makeText(this, getString(R.string.firebase_no_internet), Toast.LENGTH_LONG).show()
+                        Buddy.showToast( getString(R.string.firebase_no_internet), Toast.LENGTH_LONG)
                     } else {
-                        Toast.makeText(this, getString(R.string.firebase_unusual_error), Toast.LENGTH_LONG).show()
+                        Buddy.showToast(getString(R.string.firebase_unusual_error), Toast.LENGTH_LONG)
                     }
                     Buddy.hideLoadingBar(this, R.id.informationBox)
                 })

@@ -58,26 +58,26 @@ class SignupActivity : AppCompatActivity() {
             var password: String = passwordEt.text.toString()
 
             if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-                Toast.makeText(this, getString(R.string.fields_empty), Toast.LENGTH_LONG).show()
+                Buddy.showToast( getString(R.string.fields_empty), Toast.LENGTH_LONG)
             } else{
                 Buddy.showLoadingBar(this, R.id.informationBox)
 
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, OnCompleteListener{ task ->
                     if(task.isSuccessful){
-                        Toast.makeText(this, getString(R.string.registration_success), Toast.LENGTH_LONG).show()
+                        Buddy.showToast( getString(R.string.registration_success), Toast.LENGTH_LONG)
                         onAuthSuccess(task.result?.user!!)
                     }
                 }).addOnFailureListener(this, OnFailureListener { exception ->
                     if (exception is FirebaseAuthUserCollisionException) {
-                    Toast.makeText(this, getString(R.string.registration_user_collision), Toast.LENGTH_LONG).show()
+                        Buddy.showToast(getString(R.string.registration_user_collision), Toast.LENGTH_LONG)
                     } else if (exception is FirebaseAuthWeakPasswordException) {
-                        Toast.makeText(this, getString(R.string.registration_weak_password), Toast.LENGTH_LONG).show()
+                        Buddy.showToast( getString(R.string.registration_weak_password), Toast.LENGTH_LONG)
                     } else if (exception is FirebaseNetworkException) {
-                        Toast.makeText(this, getString(R.string.firebase_no_internet), Toast.LENGTH_LONG).show()
+                        Buddy.showToast( getString(R.string.firebase_no_internet), Toast.LENGTH_LONG)
                     } else if (exception is FirebaseAuthInvalidCredentialsException) {
-                        Toast.makeText(this, getString(R.string.registration_invalid_credentials), Toast.LENGTH_LONG).show()
+                        Buddy.showToast( getString(R.string.registration_invalid_credentials), Toast.LENGTH_LONG)
                     } else {
-                        Toast.makeText(this, getString(R.string.firebase_unusual_error), Toast.LENGTH_LONG).show()
+                        Buddy.showToast( getString(R.string.firebase_unusual_error), Toast.LENGTH_LONG)
                     }
                     Buddy.hideLoadingBar(this, R.id.informationBox)
                 })
