@@ -104,7 +104,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(userID);
         dest.writeString(nickName);
-        dest.writeValue(isAdmin);
+        dest.writeInt(isAdmin ? 1 : 0);
     }
 
     /**
@@ -114,7 +114,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     public OnlineProfile(Parcel in) {
         userID = in.readString();
         nickName = in.readString();
-        isAdmin = isAdmin();
+        isAdmin = in.readInt() == 1;
     }
 
     /**

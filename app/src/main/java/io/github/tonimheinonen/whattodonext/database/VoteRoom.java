@@ -21,6 +21,8 @@ public class VoteRoom implements DatabaseValue, Parcelable {
 
     private String roomCode;
     private String state;
+    private int firstVoteSize, lastVoteSize;
+    private boolean ignoreUnselected, halveExtra, showExtra, showVotes;
 
     public static final String LOBBY = "lobby", VOTING = "voting", RESULTS = "results";
 
@@ -38,12 +40,25 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     }
 
     /**
-     * Initializes vote room with the given name.
-     * @param roomCode code for the room
+     * Initializes vote room with necessary values.
+     * @param roomCode room code
+     * @param firstVoteSize size of the first vote
+     * @param lastVoteSize size of the last vote
+     * @param ignoreUnselected whether to ignore unselected or not
+     * @param halveExtra whether to halve extra or not
+     * @param showExtra whether to show extra or not
+     * @param showVotes whether to show votes or not
      */
-    public VoteRoom(String roomCode) {
+    public VoteRoom(String roomCode, int firstVoteSize, int lastVoteSize, boolean ignoreUnselected,
+                    boolean halveExtra, boolean showExtra, boolean showVotes) {
         this.roomCode = roomCode;
         this.state = LOBBY;
+        this.firstVoteSize = firstVoteSize;
+        this.lastVoteSize = lastVoteSize;
+        this.ignoreUnselected = ignoreUnselected;
+        this.halveExtra = halveExtra;
+        this.showExtra = showExtra;
+        this.showVotes = showVotes;
     }
 
     /**
@@ -102,6 +117,54 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         this.state = state;
     }
 
+    public int getFirstVoteSize() {
+        return firstVoteSize;
+    }
+
+    public void setFirstVoteSize(int firstVoteSize) {
+        this.firstVoteSize = firstVoteSize;
+    }
+
+    public int getLastVoteSize() {
+        return lastVoteSize;
+    }
+
+    public void setLastVoteSize(int lastVoteSize) {
+        this.lastVoteSize = lastVoteSize;
+    }
+
+    public boolean isIgnoreUnselected() {
+        return ignoreUnselected;
+    }
+
+    public void setIgnoreUnselected(boolean ignoreUnselected) {
+        this.ignoreUnselected = ignoreUnselected;
+    }
+
+    public boolean isHalveExtra() {
+        return halveExtra;
+    }
+
+    public void setHalveExtra(boolean halveExtra) {
+        this.halveExtra = halveExtra;
+    }
+
+    public boolean isShowExtra() {
+        return showExtra;
+    }
+
+    public void setShowExtra(boolean showExtra) {
+        this.showExtra = showExtra;
+    }
+
+    public boolean isShowVotes() {
+        return showVotes;
+    }
+
+    public void setShowVotes(boolean showVotes) {
+        this.showVotes = showVotes;
+    }
+
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -111,18 +174,14 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         HashMap<String, Object> result = new HashMap<>();
         result.put("roomCode", roomCode);
         result.put("state", state);
+        result.put("firstVoteSize", firstVoteSize);
+        result.put("lastVoteSize", lastVoteSize);
+        result.put("ignoreUnselected", ignoreUnselected);
+        result.put("halveExtra", halveExtra);
+        result.put("showExtra", showExtra);
+        result.put("showVotes", showVotes);
 
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "VoteRoom{" +
-                "roomCode='" + roomCode + '\'' +
-                ", state='" + state + '\'' +
-                ", dbID='" + dbID + '\'' +
-                ", list=" + list +
-                '}';
     }
 
 ////////////////////////// PARCELABLE //////////////////////////
@@ -145,7 +204,12 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
         dest.writeString(roomCode);
-        dest.writeParcelable(list, flags);
+        dest.writeInt(firstVoteSize);
+        dest.writeInt(lastVoteSize);
+        dest.writeInt(ignoreUnselected ? 1 : 0);
+        dest.writeInt(halveExtra ? 1 : 0);
+        dest.writeInt(showExtra ? 1 : 0);
+        dest.writeInt(showVotes ? 1 : 0);
     }
 
     /**
@@ -155,7 +219,12 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     public VoteRoom(Parcel in) {
         dbID = in.readString();
         roomCode = in.readString();
-        list = in.readParcelable(ListOfItems.class.getClassLoader());
+        firstVoteSize = in.readInt();
+        lastVoteSize = in.readInt();
+        ignoreUnselected = in.readInt() == 1;
+        halveExtra = in.readInt() == 1;
+        showExtra = in.readInt() == 1;
+        showVotes = in.readInt() == 1;
     }
 
     /**
