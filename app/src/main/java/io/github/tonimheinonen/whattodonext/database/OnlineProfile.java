@@ -1,0 +1,142 @@
+package io.github.tonimheinonen.whattodonext.database;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Represents a online profile.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.0
+ * @since 1.0
+ */
+@IgnoreExtraProperties
+public class OnlineProfile implements DatabaseValue, Parcelable {
+
+    private String userID;
+    private String nickName;
+    private boolean isAdmin;
+    private boolean ready;
+
+    /**
+     * Default constructor.
+     */
+    public OnlineProfile() {
+        // Default constructor required for calls to DataSnapshot.getValue(OnlineProfile.class)
+    }
+
+    public OnlineProfile(String userID, String nickName, boolean isAdmin) {
+        this.userID = userID;
+        this.nickName = nickName;
+        this.isAdmin = isAdmin;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    /**
+     * Maps values for database handling.
+     * @return mapped values
+     */
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userID", userID);
+        result.put("nickName", nickName);
+        result.put("isAdmin", isAdmin);
+        result.put("ready", ready);
+
+        return result;
+    }
+
+    ////////////////////////// PARCELABLE //////////////////////////
+
+    /**
+     * Describes contents.
+     * @return value
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Writes necessary values to parcel.
+     * @param dest destination
+     * @param flags flags
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(userID);
+        dest.writeString(nickName);
+        dest.writeValue(isAdmin);
+    }
+
+    /**
+     * Creates profile from parcel info.
+     * @param in given parcel
+     */
+    public OnlineProfile(Parcel in) {
+        userID = in.readString();
+        nickName = in.readString();
+        isAdmin = isAdmin();
+    }
+
+    /**
+     * Creator object for profile.
+     */
+    public static final Creator<OnlineProfile> CREATOR = new Creator<OnlineProfile>() {
+        /**
+         * Creates from parcel.
+         * @param in given parcel
+         * @return profile
+         */
+        public OnlineProfile createFromParcel(Parcel in) {
+            return new OnlineProfile(in);
+        }
+
+        /**
+         * Creates new profile array.
+         * @param size size of array
+         * @return profile array
+         */
+        public OnlineProfile[] newArray(int size) {
+            return new OnlineProfile[size];
+        }
+    };
+}

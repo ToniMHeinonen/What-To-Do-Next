@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_bg">
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_for_layouts"
+        tools:context=".StartVoteActivity"
+        android:background="@drawable/custom_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
+        <!-- LIST -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/startVoteTitles"
+                android:text="@string/select_list"/>
+
+            <Spinner
+                android:id="@+id/listsSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:spinnerMode="dropdown"/>
+
+        </LinearLayout>
+
+        <!-- VOTERS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/startVoteTitles"
+                android:text="@string/online_detail"/>
+
+
+            <EditText
+                android:id="@+id/nickName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:hint="@string/online_nickname"
+                android:textSize="25sp"
+                android:maxLength="@integer/profile_name_max_length"/>
+
+            <EditText
+                android:id="@+id/roomCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp"
+                android:hint="@string/online_room_code"
+                android:textSize="25sp"
+                android:maxLength="@integer/room_code_max_length"/>
+
+        </LinearLayout>
+
+        <!-- HOST & JOIN -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical">
+
+            <Button
+                android:id="@+id/host"
+                style="@style/voteButtons"
+                android:text="@string/online_host"
+                android:background="@drawable/confirm_button" />
+
+            <Button
+                android:id="@+id/join"
+                style="@style/voteButtons"
+                android:text="@string/online_join"
+                android:background="@drawable/orange_button"/>
+        </LinearLayout>
+
+        <!-- BACK -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical">
+
+            <Button
+                android:id="@+id/back"
+                style="@style/voteButtons"
+                android:text="@string/lists_back"
+                android:background="@drawable/cancel_button" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

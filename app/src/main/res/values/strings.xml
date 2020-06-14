@@ -26,6 +26,13 @@
     <string name="toast_not_enough_activities">Selected list does not have enough activities!
         (%1$s required)</string>
 
+    <!-- START_VOTE_ONLINE -->
+    <string name="online_detail">Online Detail</string>
+    <string name="online_nickname">Nickname</string>
+    <string name="online_room_code">Room Code</string>
+    <string name="online_host">Host</string>
+    <string name="online_join">Join</string>
+
     <!-- VOTING -->
     <string name="alert_exit_title">Exit</string>
     <string name="alert_exit_message">Are you sure you want to exit?</string>
