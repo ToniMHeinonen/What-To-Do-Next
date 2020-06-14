@@ -20,7 +20,6 @@ import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
 
@@ -47,6 +46,8 @@ public class StartVoteActivity extends AppCompatActivity implements
     private DatabaseValueListAdapter profileListAdapter;
     private ArrayList<Profile> selectedProfiles = new ArrayList<>();
 
+    private boolean isOnlineVote = false;
+
     /**
      * Initializes StartVoteActivity.
      * @param savedInstanceState previous activity state
@@ -54,11 +55,12 @@ public class StartVoteActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_vote);
-        firstVoteSize = GlobalPrefs.loadListVoteSizeFirst();
+        if (isOnlineVote)
+            setContentView(R.layout.activity_start_vote_online);
+        else
+            setContentView(R.layout.activity_start_vote);
 
-        //DatabaseHandler.createVoteRoom((room) -> Debug.print("StartVote", "", room.toString(), 1), "7");
-        //DatabaseHandler.getVoteRoom((room) -> Debug.print("StartVote", "", room.toString(), 1), "7");
+        firstVoteSize = GlobalPrefs.loadListVoteSizeFirst();
     }
 
     //////////////////////// LOAD DATA FROM FIREBASE ////////////////////////
@@ -78,12 +80,23 @@ public class StartVoteActivity extends AppCompatActivity implements
      * @param lists loaded lists from database
      */
     public void loadLists(ArrayList<ListOfItems> lists) {
-        Debug.print(this, "onDataGetLists", "", 1);
         this.lists = lists;
 
+        // Online
+        if (isOnlineVote) {
+            if (lists.isEmpty()) {
+                // Hide lists spinner
+                findViewById(R.id.listsSpinner).setVisibility(View.GONE);
+                findViewById(R.id.noLists).setVisibility(View.VISIBLE);
+            }
+
+            initializeVotingSetupOnline();
+            return;
+        }
+
+        // Offline
         if (lists.isEmpty()) {
             // If there are no lists, show alert message
-            Debug.print(this, "onDataGetLists", "isEmpty", 1);
             Buddy.showAlert(this, getString(R.string.alert_no_lists_title),
                     getString(R.string.alert_no_lists_message),
                     getString(R.string.alert_no_lists_move),
@@ -103,8 +116,7 @@ public class StartVoteActivity extends AppCompatActivity implements
     public void profilesLoaded(ArrayList<Profile> profiles) {
         this.profiles = profiles;
 
-        findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
-        initializeVotingSetup();
+        initializeVotingSetupOffline();
     }
 
     /**
@@ -115,8 +127,11 @@ public class StartVoteActivity extends AppCompatActivity implements
         Buddy.filterListByFallen(items, false);
 
         if (items.size() < firstVoteSize) {
-            Buddy.showToast(getString(R.string.toast_not_enough_activities,
-                    String.valueOf(firstVoteSize)), Toast.LENGTH_LONG);
+            // If offline, show toast
+            if (!isOnlineVote) {
+                Buddy.showToast(getString(R.string.toast_not_enough_activities,
+                        String.valueOf(firstVoteSize)), Toast.LENGTH_LONG);
+            }
             return;
         }
 
@@ -126,10 +141,8 @@ public class StartVoteActivity extends AppCompatActivity implements
 
     //////////////////////// INITIALIZE VIEWS ////////////////////////
 
-    /**
-     *
-     */
-    private void initializeVotingSetup() {
+    private void initializeVotingSetupOffline() {
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
         setupListsSpinner();
 
         // Set listeners for confirm and cancel
@@ -142,6 +155,18 @@ public class StartVoteActivity extends AppCompatActivity implements
         profileListAdapter = new DatabaseValueListAdapter(this, profiles, this,
                 DatabaseType.PROFILE);
         profileListView.setAdapter(profileListAdapter);
+    }
+
+    private void initializeVotingSetupOnline() {
+        findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
+
+        if (!lists.isEmpty())
+            setupListsSpinner();
+
+        // Set listeners for buttons
+        findViewById(R.id.back).setOnClickListener(this);
+        findViewById(R.id.host).setOnClickListener(this);
+        findViewById(R.id.join).setOnClickListener(this);
     }
 
     private void setupListsSpinner() {
@@ -201,6 +226,13 @@ public class StartVoteActivity extends AppCompatActivity implements
                 break;
             case R.id.savedDelete:
                 deleteProfile(v);
+                break;
+            // Online
+            case R.id.host:
+                hostVoteRoom();
+                break;
+            case R.id.join:
+                joinVoteRoom();
                 break;
             default:
                 break;
@@ -296,5 +328,13 @@ public class StartVoteActivity extends AppCompatActivity implements
         intent.putExtra("selectedList", selectedList);
         intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
         startActivity(intent);
+    }
+
+    private void hostVoteRoom() {
+
+    }
+
+    private void joinVoteRoom() {
+
     }
 }

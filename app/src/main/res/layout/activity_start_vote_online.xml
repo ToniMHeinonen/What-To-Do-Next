@@ -34,6 +34,15 @@
                 style="@style/startVoteTitles"
                 android:text="@string/select_list"/>
 
+            <TextView
+                android:id="@+id/noLists"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:text="@string/online_no_lists"
+                android:visibility="gone"/>
+
             <Spinner
                 android:id="@+id/listsSpinner"
                 android:layout_width="wrap_content"
