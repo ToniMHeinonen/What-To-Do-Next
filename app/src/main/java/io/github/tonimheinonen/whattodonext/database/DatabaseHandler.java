@@ -32,6 +32,7 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbProfiles;
     private static DatabaseReference dbSavedResults;
     private static DatabaseReference dbResultItems;
+    private static DatabaseReference dbVoteRooms;
 
     private static int MAX_SAVED_RESULTS = 7;
 
@@ -57,6 +58,9 @@ public abstract class DatabaseHandler {
         dbResultItems = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("result_items");
         dbResultItems.keepSynced(true);
+
+        // Init online voting references
+        dbVoteRooms = FirebaseDatabase.getInstance().getReference().child("vote_rooms");
     }
 
     /////////////////////* LISTENER INTERFACES *////////////////////
@@ -99,6 +103,26 @@ public abstract class DatabaseHandler {
          * @param resultItems loaded result items from database
          */
         void onDataGetResultItems(ArrayList<SavedResultItem> resultItems);
+    }
+
+    public interface VoteRoomCreateListener {
+
+        /**
+         * Creates a vote room.
+         *
+         * @param voteRoom created vote room
+         */
+        void onDataCreateVoteRoom(VoteRoom voteRoom);
+    }
+
+    public interface VoteRoomGetListener {
+
+        /**
+         * Gets vote room based on the room code.
+         *
+         * @param voteRoom retrieved vote room
+         */
+        void onDataGetVoteRoom(VoteRoom voteRoom);
     }
 
     /////////////////////* LISTS *////////////////////
@@ -468,6 +492,61 @@ public abstract class DatabaseHandler {
                 }
 
                 listener.onDataGetResultItems(items);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    /////////////////////* VOTE ROOMS *////////////////////
+
+    public static void createVoteRoom(final VoteRoomCreateListener listener, final String roomCode) {
+        // Check if room code is already taken
+        getVoteRoom((room) -> {
+            VoteRoom voteRoom = null;
+            // If room code is not taken, create new room
+            if (room == null) {
+                String key = dbVoteRooms.push().getKey();   // Add new key to vote rooms
+
+                voteRoom = new VoteRoom(roomCode);
+                voteRoom.setDbID(key);
+                Map<String, Object> values = voteRoom.toMap();
+
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put(key, values);
+
+                dbVoteRooms.updateChildren(childUpdates);
+            }
+
+            listener.onDataCreateVoteRoom(voteRoom);
+        }, roomCode);
+    }
+
+    public static void getVoteRoom(VoteRoomGetListener listener, String roomCode) {
+        dbVoteRooms.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getVoteRoom",
+                        "rooms: " + snapshot.getChildrenCount(), 1);
+                VoteRoom voteRoom = null;
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    VoteRoom room = dataSnapshot.getValue(VoteRoom.class);
+
+                    if (room.getRoomCode().equals(roomCode)) {
+                        String key = dataSnapshot.getKey();
+                        voteRoom = room;
+                        voteRoom.setDbID(key);
+                        break;
+                    }
+                }
+
+                // Returns null if room is not found
+                listener.onDataGetVoteRoom(voteRoom);
             }
 
             @Override

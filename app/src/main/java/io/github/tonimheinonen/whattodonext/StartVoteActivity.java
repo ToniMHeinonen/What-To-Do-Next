@@ -1,28 +1,28 @@
 package io.github.tonimheinonen.whattodonext;
 
-import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
-import io.github.tonimheinonen.whattodonext.database.DatabaseType;
-import io.github.tonimheinonen.whattodonext.database.Profile;
-import io.github.tonimheinonen.whattodonext.database.ListItem;
-import io.github.tonimheinonen.whattodonext.database.ListOfItems;
-import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
-import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.tools.Debug;
-import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
-import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
+import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.database.Profile;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.Debug;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
 
 /**
  * Handles setting up voting.
@@ -56,6 +56,9 @@ public class StartVoteActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_vote);
         firstVoteSize = GlobalPrefs.loadListVoteSizeFirst();
+
+        //DatabaseHandler.createVoteRoom((room) -> Debug.print("StartVote", "", room.toString(), 1), "7");
+        //DatabaseHandler.getVoteRoom((room) -> Debug.print("StartVote", "", room.toString(), 1), "7");
     }
 
     //////////////////////// LOAD DATA FROM FIREBASE ////////////////////////
