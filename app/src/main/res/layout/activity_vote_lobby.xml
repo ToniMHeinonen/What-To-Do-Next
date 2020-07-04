@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_bg">
+
+    <LinearLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_for_layouts"
+        tools:context=".StartVoteActivity"
+        android:background="@drawable/custom_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
+        <!-- LIST -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/startVoteTitles"
+                android:text="@string/lobby_room_code"/>
+
+            <TextView
+                android:id="@+id/noLists"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="25sp"
+                android:textColor="@color/defaultTextColor"
+                android:text="{ADFG}"/>
+
+        </LinearLayout>
+
+        <!-- VOTERS -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.6"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/startVoteTitles"
+                android:text="@string/lobby_users"/>
+
+            <ListView
+                android:id = "@+id/usersList"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"/>
+
+        </LinearLayout>
+
+        <!-- BACK -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_vertical">
+
+            <Button
+                android:id="@+id/back"
+                style="@style/voteButtons"
+                android:text="@string/lists_back"
+                android:background="@drawable/cancel_button" />
+
+            <Button
+                android:id="@+id/join"
+                style="@style/voteButtons"
+                android:text="@string/lobby_start"
+                android:background="@drawable/orange_button"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

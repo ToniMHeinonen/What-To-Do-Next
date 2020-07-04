@@ -32,9 +32,16 @@
     <string name="online_room_code">Room Code</string>
     <string name="online_host">Host</string>
     <string name="online_join">Join</string>
-    <string name="online_no_lists">You have not made any lists!</string>
+    <string name="online_no_lists">You have not made any lists, you need at least 1 list for
+        voting!</string>
     <string name="online_toast_not_enough_activities">Unable to host, selected list does not have
         enough activities!(%1$s required)</string>
+    <string name="online_host_duplicate">Room code already taken!</string>
+
+    <!-- VOTE_LOBBY -->
+    <string name="lobby_room_code">Room Code</string>
+    <string name="lobby_users">Users</string>
+    <string name="lobby_start">Start</string>
 
     <!-- VOTING -->
     <string name="alert_exit_title">Exit</string>

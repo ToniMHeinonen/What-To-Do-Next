@@ -45,6 +45,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         layouts.put(DatabaseType.VOTE_RESULTS, R.layout.result_hide_votes_item);
         layouts.put(DatabaseType.SAVED_RESULTS, R.layout.saved_result);
         layouts.put(DatabaseType.SAVED_RESULT_ITEM, R.layout.saved_result_item);
+        layouts.put(DatabaseType.ONLINE_PROFILE, R.layout.online_profile);
     }
 
     /**
@@ -128,6 +129,8 @@ public class DatabaseValueListAdapter extends BaseAdapter {
                 savedResults();
             else if (type.equals(DatabaseType.SAVED_RESULT_ITEM))
                 savedResultItem();
+            else if (type.equals(DatabaseType.ONLINE_PROFILE))
+                onlineProfile();
         }
 
         return this.view;
@@ -302,5 +305,21 @@ public class DatabaseValueListAdapter extends BaseAdapter {
             name.setTextColor(context.getResources().getColor(R.color.colorAccent));
         else
             name.setTextColor(context.getResources().getColor(R.color.defaultTextColor));
+    }
+
+    /**
+     * Displays online profile in a ListView in VoteLobbyActivity.
+     *
+     * Displays only the nick name.
+     */
+    private void onlineProfile() {
+        ListItem item = (ListItem) getItem(position);
+
+        TextView itemName = view.findViewById(R.id.voteName);
+        itemName.setText(item.getName());
+
+        TextView itemVoteAmount = view.findViewById(R.id.voteAmount);
+        int points = item.getVotePoints();
+        itemVoteAmount.setText(points == 0 ? "" : String.valueOf(points));
     }
 }

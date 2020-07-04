@@ -105,14 +105,14 @@ public abstract class DatabaseHandler {
         void onDataGetResultItems(ArrayList<SavedResultItem> resultItems);
     }
 
-    public interface VoteRoomCreateListener {
+    public interface VoteRoomAddListener {
 
         /**
-         * Creates a vote room.
+         * Adds a vote room.
          *
-         * @param voteRoom created vote room
+         * @param added true if adding was successful
          */
-        void onDataCreateVoteRoom(VoteRoom voteRoom);
+        void onDataAddVoteRoom(boolean added);
     }
 
     public interface VoteRoomGetListener {
@@ -504,15 +504,13 @@ public abstract class DatabaseHandler {
 
     /////////////////////* VOTE ROOMS *////////////////////
 
-    public static void createVoteRoom(final VoteRoomCreateListener listener, final String roomCode) {
+    public static void addVoteRoom(final VoteRoomAddListener listener, final VoteRoom voteRoom) {
         // Check if room code is already taken
         getVoteRoom((room) -> {
-            VoteRoom voteRoom = null;
-            // If room code is not taken, create new room
+            // If room code is not taken, add new room
             if (room == null) {
                 String key = dbVoteRooms.push().getKey();   // Add new key to vote rooms
 
-                voteRoom = new VoteRoom(roomCode);
                 voteRoom.setDbID(key);
                 Map<String, Object> values = voteRoom.toMap();
 
@@ -520,10 +518,11 @@ public abstract class DatabaseHandler {
                 childUpdates.put(key, values);
 
                 dbVoteRooms.updateChildren(childUpdates);
+                listener.onDataAddVoteRoom(true);
+            } else {
+                listener.onDataAddVoteRoom(false);
             }
-
-            listener.onDataCreateVoteRoom(voteRoom);
-        }, roomCode);
+        }, voteRoom.getRoomCode());
     }
 
     public static void getVoteRoom(VoteRoomGetListener listener, String roomCode) {

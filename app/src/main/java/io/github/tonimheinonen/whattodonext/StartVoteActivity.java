@@ -10,6 +10,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,9 +20,12 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.Profile;
+import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.voteactivity.VoteLobbyActivity;
 import io.github.tonimheinonen.whattodonext.voteactivity.VoteTopActivity;
 
 /**
@@ -216,7 +221,7 @@ public class StartVoteActivity extends AppCompatActivity implements
                 onBackPressed();
                 break;
             case R.id.start:
-                startVoting();
+                startLocalVoting();
                 break;
             case R.id.addProfile:
                 addNewProfile();
@@ -310,7 +315,7 @@ public class StartVoteActivity extends AppCompatActivity implements
     /**
      * Checks whether to start voting or not.
      */
-    private void startVoting() {
+    private void startLocalVoting() {
         if (selectedProfiles.isEmpty()) {
             Buddy.showToast(Buddy.getString(R.string.toast_selected_profiles_empty), Toast.LENGTH_LONG);
             return;
@@ -331,10 +336,49 @@ public class StartVoteActivity extends AppCompatActivity implements
     }
 
     private void hostVoteRoom() {
+        // If there are no lists, show toast
+        if (lists.isEmpty()) {
+            Buddy.showToast(getString(R.string.online_no_lists), Toast.LENGTH_LONG);
+            return;
+        }
 
+        // If selected list is not big enough, show toast
+        if (!listBigEnough) {
+            Buddy.showToast(getString(R.string.toast_not_enough_activities,
+                    String.valueOf(firstVoteSize)), Toast.LENGTH_LONG);
+            return;
+        }
+
+        String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
+        VoteRoom voteRoom = new VoteRoom(roomCode, firstVoteSize, GlobalPrefs.loadListVoteSizeSecond(),
+                GlobalPrefs.loadIgnoreUnselected(), GlobalPrefs.loadHalveExtra(),
+                GlobalPrefs.loadShowExtra(), GlobalPrefs.loadShowVoted());
+        DatabaseHandler.addVoteRoom((added) -> {
+            if (added) {
+                moveToOnlineLobby(true);
+            } else {
+                Buddy.showToast(getString(R.string.online_host_duplicate), Toast.LENGTH_LONG);
+            }
+        }, voteRoom);
     }
 
     private void joinVoteRoom() {
 
+    }
+
+    private void moveToOnlineLobby(boolean host) {
+        String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
+        String nickName = ((EditText) findViewById(R.id.nickName)).getText().toString();
+
+        // Create online profile
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String UID = auth.getUid();
+        OnlineProfile profile = new OnlineProfile(UID, nickName, host);
+
+        // Move to lobby
+        Intent intent = new Intent(this, VoteLobbyActivity.class);
+        intent.putExtra("roomCode", roomCode);
+        intent.putExtra("onlineProfile", profile);
+        startActivity(intent);
     }
 }

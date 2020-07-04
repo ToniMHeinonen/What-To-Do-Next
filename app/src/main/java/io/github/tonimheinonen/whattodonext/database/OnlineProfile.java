@@ -21,7 +21,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
 
     private String userID;
     private String nickName;
-    private boolean isAdmin;
+    private boolean isHost;
     private boolean ready;
 
     /**
@@ -31,10 +31,10 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         // Default constructor required for calls to DataSnapshot.getValue(OnlineProfile.class)
     }
 
-    public OnlineProfile(String userID, String nickName, boolean isAdmin) {
+    public OnlineProfile(String userID, String nickName, boolean isHost) {
         this.userID = userID;
         this.nickName = nickName;
-        this.isAdmin = isAdmin;
+        this.isHost = isHost;
     }
 
     public String getUserID() {
@@ -53,12 +53,12 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         this.nickName = nickName;
     }
 
-    public boolean isAdmin() {
-        return isAdmin;
+    public boolean isHost() {
+        return isHost;
     }
 
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setHost(boolean isHost) {
+        this.isHost = isHost;
     }
 
     public boolean isReady() {
@@ -78,7 +78,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         HashMap<String, Object> result = new HashMap<>();
         result.put("userID", userID);
         result.put("nickName", nickName);
-        result.put("isAdmin", isAdmin);
+        result.put("isHost", isHost);
         result.put("ready", ready);
 
         return result;
@@ -104,7 +104,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(userID);
         dest.writeString(nickName);
-        dest.writeInt(isAdmin ? 1 : 0);
+        dest.writeInt(isHost ? 1 : 0);
     }
 
     /**
@@ -114,7 +114,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     public OnlineProfile(Parcel in) {
         userID = in.readString();
         nickName = in.readString();
-        isAdmin = in.readInt() == 1;
+        isHost = in.readInt() == 1;
     }
 
     /**
