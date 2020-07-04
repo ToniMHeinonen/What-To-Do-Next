@@ -20,6 +20,7 @@ import java.util.Map;
 public class VoteRoom implements DatabaseValue, Parcelable {
 
     private String roomCode;
+    private String listName;
     private String state;
     private int firstVoteSize, lastVoteSize;
     private boolean ignoreUnselected, halveExtra, showExtra, showVotes;
@@ -49,9 +50,11 @@ public class VoteRoom implements DatabaseValue, Parcelable {
      * @param showExtra whether to show extra or not
      * @param showVotes whether to show votes or not
      */
-    public VoteRoom(String roomCode, int firstVoteSize, int lastVoteSize, boolean ignoreUnselected,
-                    boolean halveExtra, boolean showExtra, boolean showVotes) {
+    public VoteRoom(String roomCode, String listName, int firstVoteSize, int lastVoteSize,
+                    boolean ignoreUnselected, boolean halveExtra, boolean showExtra,
+                    boolean showVotes) {
         this.roomCode = roomCode;
+        this.listName = listName;
         this.state = LOBBY;
         this.firstVoteSize = firstVoteSize;
         this.lastVoteSize = lastVoteSize;
@@ -75,6 +78,22 @@ public class VoteRoom implements DatabaseValue, Parcelable {
      */
     public void setRoomCode(String roomCode) {
         this.roomCode = roomCode;
+    }
+
+    /**
+     * Returns the name of the voted list.
+     * @return name of the voted list
+     */
+    public String getListName() {
+        return listName;
+    }
+
+    /**
+     * Sets the name of the voted list.
+     * @param listName name of the voted list
+     */
+    public void setListName(String listName) {
+        this.listName = listName;
     }
 
     /**
@@ -173,6 +192,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("roomCode", roomCode);
+        result.put("listName", listName);
         result.put("state", state);
         result.put("firstVoteSize", firstVoteSize);
         result.put("lastVoteSize", lastVoteSize);
@@ -204,6 +224,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
         dest.writeString(roomCode);
+        dest.writeString(listName);
         dest.writeInt(firstVoteSize);
         dest.writeInt(lastVoteSize);
         dest.writeInt(ignoreUnselected ? 1 : 0);
@@ -219,6 +240,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     public VoteRoom(Parcel in) {
         dbID = in.readString();
         roomCode = in.readString();
+        listName = in.readString();
         firstVoteSize = in.readInt();
         lastVoteSize = in.readInt();
         ignoreUnselected = in.readInt() == 1;

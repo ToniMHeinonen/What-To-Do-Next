@@ -2,6 +2,7 @@ package io.github.tonimheinonen.whattodonext.database;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +33,8 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbProfiles;
     private static DatabaseReference dbSavedResults;
     private static DatabaseReference dbResultItems;
+
+    // Online voting
     private static DatabaseReference dbVoteRooms;
 
     private static int MAX_SAVED_RESULTS = 7;
@@ -554,5 +557,23 @@ public abstract class DatabaseHandler {
                 databaseError.toException().printStackTrace();
             }
         });
+    }
+
+    public static void addOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child("profiles");
+
+        String key = dbProfiles.push().getKey();   // Add new key to profiles
+
+        Map<String, Object> values = profile.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, values);
+
+        dbProfiles.updateChildren(childUpdates);
+    }
+
+    public static void getOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child("profiles");
+        dbProfiles.addChildEventListener(listener);
     }
 }
