@@ -176,6 +176,7 @@
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
+        <item name="android:fontFamily">sans-serif-smallcaps</item>
         <item name="android:textColor">@color/defaultTextColor</item>
     </style>
 

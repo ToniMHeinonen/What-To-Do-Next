@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/app_bg">
 
     <LinearLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_for_layouts"
-        tools:context=".StartVoteActivity"
+        tools:context=".voteactivity.VoteSetupActivity"
         android:background="@drawable/custom_bg"
         android:focusable="true"
         android:focusableInTouchMode="true">
@@ -28,18 +28,13 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.2"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
 
             <TextView
                 style="@style/startVoteTitles"
-                android:text="@string/select_list"/>
-
-            <Spinner
-                android:id="@+id/listsSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:spinnerMode="dropdown"/>
+                android:textSize="40sp"
+                android:text="@string/voting" />
 
         </LinearLayout>
 
@@ -48,43 +43,29 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.6"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="60dp"
+            android:gravity="center">
 
-            <TextView
-                style="@style/startVoteTitles"
-                android:text="@string/select_voters"/>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/local"
+                style="@style/voteButtons"
+                android:text="@string/local"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:textSize="20sp"
+                android:background="@drawable/button_selector" />
 
-                <EditText
-                    android:id="@+id/newProfile"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:layout_gravity="center"
-                    android:layout_margin="10dp"
-                    android:hint="@string/new_profile"
-                    android:textSize="25sp"
-                    android:maxLength="@integer/profile_name_max_length"/>
-
-                <Button
-                    android:id="@+id/addProfile"
-                    style="@style/voteButtons"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.3"
-                    android:text="@string/lists_add"
-                    android:background="@drawable/confirm_button"/>
-
-            </LinearLayout>
-
-            <ListView
-                android:id = "@+id/savedProfiles"
-                android:layout_width = "match_parent"
-                android:layout_height = "match_parent"/>
+            <Button
+                android:id="@+id/online"
+                style="@style/voteButtons"
+                android:text="@string/online"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:textSize="20sp"
+                android:background="@drawable/button_selector" />
 
         </LinearLayout>
 
@@ -104,11 +85,6 @@
                 android:text="@string/lists_back"
                 android:background="@drawable/cancel_button" />
 
-            <Button
-                android:id="@+id/start"
-                style="@style/voteButtons"
-                android:text="@string/start_vote"
-                android:background="@drawable/orange_button"/>
         </LinearLayout>
 
     </LinearLayout>

@@ -12,6 +12,9 @@
     <string name="menu_results">Results</string>
 
     <!-- START_VOTE_ACTIVITY -->
+    <string name="voting">Voting</string>
+    <string name="local">Local</string>
+    <string name="online">Online</string>
     <string name="select_list">Select List</string>
     <string name="select_voters">Select Voters</string>
     <string name="new_profile">New Profile</string>

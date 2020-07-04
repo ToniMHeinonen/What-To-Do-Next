@@ -2,7 +2,6 @@ package io.github.tonimheinonen.whattodonext.tools;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +26,6 @@ import androidx.fragment.app.FragmentTransaction;
 import io.github.tonimheinonen.whattodonext.InitializeActivity;
 import io.github.tonimheinonen.whattodonext.ListItemFragment;
 import io.github.tonimheinonen.whattodonext.R;
-import io.github.tonimheinonen.whattodonext.StartVoteActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
@@ -130,10 +128,7 @@ public abstract class Buddy {
         showAlert(activity, getString(R.string.alert_exit_title),
                 getString(R.string.alert_exit_message),
                 getString(R.string.alert_exit_yes), null,
-                () -> {
-                    activity.startActivity(new Intent(activity, StartVoteActivity.class));
-                    activity.finish();
-                }, null);
+                () -> { activity.finish(); }, null);
     }
 
     /**
