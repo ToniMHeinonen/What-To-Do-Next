@@ -2,6 +2,7 @@ package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -14,9 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
+import io.github.tonimheinonen.whattodonext.tools.Debug;
 
 public class VoteLobbyActivity extends AppCompatActivity {
 
@@ -39,6 +42,9 @@ public class VoteLobbyActivity extends AppCompatActivity {
     }
 
     private void SetupLobby() {
+        // Setup list before adding and retrieving users
+        SetupUsersList();
+
         // Add user's profile to the voteroom
         DatabaseHandler.addOnlineProfile(voteRoom, profile);
 
@@ -49,32 +55,40 @@ public class VoteLobbyActivity extends AppCompatActivity {
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
                 users.add(onlineProfile);
                 usersAdapter.notifyDataSetChanged();
+                Debug.print("listener", "onChildAdded", onlineProfile.getNickName(), 1);
             }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-                users.remove(onlineProfile);
+                Debug.print("listener", "onChildRemoved", onlineProfile.getNickName(), 1);
+                for (OnlineProfile pro : users) {
+                    // Check user id and nick name, in finished product id check is enough
+                    if (pro.getUserID().equals(onlineProfile.getUserID()) &&
+                            pro.getNickName().equals(onlineProfile.getNickName())) {
+                        users.remove(pro);
+                        break;
+                    }
+                }
                 usersAdapter.notifyDataSetChanged();
             }
 
+            // Unused
             @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
-
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
         DatabaseHandler.getOnlineProfiles(voteRoom, childEventListener);
     }
 
-    /*private void SetupUsersList() {
+    private void SetupUsersList() {
         // Add users to ListView
         final ListView listView = findViewById(R.id.usersList);
         usersAdapter = new DatabaseValueListAdapter(this, users, null,
-                DatabaseType.ONLINE_USER);
-        profileListView.setAdapter(profileListAdapter);
-    }*/
+                DatabaseType.ONLINE_PROFILE);
+        listView.setAdapter(usersAdapter);
+    }
 }

@@ -313,13 +313,9 @@ public class DatabaseValueListAdapter extends BaseAdapter {
      * Displays only the nick name.
      */
     private void onlineProfile() {
-        ListItem item = (ListItem) getItem(position);
+        OnlineProfile onlineProfile = (OnlineProfile) getItem(position);
 
-        TextView itemName = view.findViewById(R.id.voteName);
-        itemName.setText(item.getName());
-
-        TextView itemVoteAmount = view.findViewById(R.id.voteAmount);
-        int points = item.getVotePoints();
-        itemVoteAmount.setText(points == 0 ? "" : String.valueOf(points));
+        Button button = view.findViewById(R.id.nickname);
+        button.setText(onlineProfile.getNickName());
     }
 }

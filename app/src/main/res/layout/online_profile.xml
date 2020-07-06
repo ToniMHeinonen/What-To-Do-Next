@@ -5,7 +5,7 @@
     android:orientation="horizontal">
 
     <Button
-        android:id="@+id/savedName"
+        android:id="@+id/nickname"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         style="@style/listAndProfile"
