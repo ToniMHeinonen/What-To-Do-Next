@@ -2,7 +2,6 @@ package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,14 +17,13 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
-import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 public class VoteLobbyActivity extends AppCompatActivity {
 
-    private String roomCode;
+    private VoteRoom voteRoom;
     private OnlineProfile profile;
 
-    private ArrayList<OnlineProfile> users;
+    private ArrayList<OnlineProfile> users = new ArrayList<>();
     private DatabaseValueListAdapter usersAdapter;
 
     @Override
@@ -34,45 +32,42 @@ public class VoteLobbyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vote_lobby);
 
         Intent intent = getIntent();
-        roomCode = intent.getStringExtra("roomCode");
+        voteRoom = intent.getParcelableExtra("voteRoom");
         profile = intent.getParcelableExtra("onlineProfile");
 
-        DatabaseHandler.getVoteRoom((room) -> OnGetVoteRoom(room), roomCode);
+        SetupLobby();
     }
 
-    private void OnGetVoteRoom(VoteRoom voteRoom) {
-        if (voteRoom != null) {
-            DatabaseHandler.addOnlineProfile(voteRoom, profile);
+    private void SetupLobby() {
+        // Add user's profile to the voteroom
+        DatabaseHandler.addOnlineProfile(voteRoom, profile);
 
-            ChildEventListener childEventListener = new ChildEventListener() {
+        // Create listener for users who connect to the room
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
+                users.add(onlineProfile);
+                usersAdapter.notifyDataSetChanged();
+            }
 
-                @Override
-                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                    OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-                    users.add(onlineProfile);
-                }
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
 
-                @Override
-                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
+                users.remove(onlineProfile);
+                usersAdapter.notifyDataSetChanged();
+            }
 
-                @Override
-                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                    OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-                    users.remove(onlineProfile);
-                }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
 
-                @Override
-                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {}
-            };
-            DatabaseHandler.getOnlineProfiles(voteRoom, childEventListener);
-
-        } else {
-            Buddy.showToast(getString(R.string.vote_room_error), Toast.LENGTH_LONG);
-            finish();
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+        DatabaseHandler.getOnlineProfiles(voteRoom, childEventListener);
     }
 
     /*private void SetupUsersList() {

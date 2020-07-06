@@ -54,6 +54,9 @@ public class VoteSetupActivity extends AppCompatActivity implements
 
     private boolean isOnlineVote;
 
+    // Online values
+    private String roomCode, nickname;
+
     /**
      * Initializes StartVoteActivity.
      * @param savedInstanceState previous activity state
@@ -240,10 +243,12 @@ public class VoteSetupActivity extends AppCompatActivity implements
                 break;
             // Online
             case R.id.host:
-                hostVoteRoom();
+                if (onlineDetailsValid())
+                    hostVoteRoom();
                 break;
             case R.id.join:
-                joinVoteRoom();
+                if (onlineDetailsValid())
+                    joinVoteRoom();
                 break;
             default:
                 break;
@@ -332,6 +337,23 @@ public class VoteSetupActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    private boolean onlineDetailsValid() {
+        roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
+        nickname = ((EditText) findViewById(R.id.nickName)).getText().toString();
+
+        if (roomCode.isEmpty()) {
+            Buddy.showToast(getString(R.string.room_code_empty), Toast.LENGTH_SHORT);
+            return false;
+        }
+
+        if (nickname.isEmpty()) {
+            Buddy.showToast(getString(R.string.nickname_empty), Toast.LENGTH_SHORT);
+            return false;
+        }
+
+        return true;
+    }
+
     private void hostVoteRoom() {
         // If there are no lists, show toast
         if (lists.isEmpty()) {
@@ -346,35 +368,48 @@ public class VoteSetupActivity extends AppCompatActivity implements
             return;
         }
 
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
+
         String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
-        VoteRoom voteRoom = new VoteRoom(roomCode, firstVoteSize, GlobalPrefs.loadListVoteSizeSecond(),
+        // Create vote room
+        final VoteRoom voteRoom = new VoteRoom(roomCode, selectedList.getName(), firstVoteSize,
+                GlobalPrefs.loadListVoteSizeSecond(),
                 GlobalPrefs.loadIgnoreUnselected(), GlobalPrefs.loadHalveExtra(),
                 GlobalPrefs.loadShowExtra(), GlobalPrefs.loadShowVoted());
+
+        // Add created vote room to database
         DatabaseHandler.addVoteRoom((added) -> {
             if (added) {
-                moveToOnlineLobby(true);
+                moveToOnlineLobby(voteRoom, true);
             } else {
                 Buddy.showToast(getString(R.string.online_host_duplicate), Toast.LENGTH_LONG);
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
             }
         }, voteRoom);
     }
 
     private void joinVoteRoom() {
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
 
+        DatabaseHandler.getVoteRoom((voteRoom) -> {
+            if (voteRoom != null) {
+                moveToOnlineLobby(voteRoom, false);
+            } else {
+                Buddy.showToast(getString(R.string.room_not_found), Toast.LENGTH_LONG);
+                findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
+            }
+        }, roomCode);
     }
 
-    private void moveToOnlineLobby(boolean host) {
-        String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
-        String nickName = ((EditText) findViewById(R.id.nickName)).getText().toString();
-
+    private void moveToOnlineLobby(VoteRoom voteRoom, boolean host) {
         // Create online profile
         FirebaseAuth auth = FirebaseAuth.getInstance();
         String UID = auth.getUid();
-        OnlineProfile profile = new OnlineProfile(UID, nickName, host);
+        OnlineProfile profile = new OnlineProfile(UID, nickname, host);
 
         // Move to lobby
         Intent intent = new Intent(this, VoteLobbyActivity.class);
-        intent.putExtra("roomCode", roomCode);
+        intent.putExtra("voteRoom", voteRoom);
         intent.putExtra("onlineProfile", profile);
         startActivity(intent);
     }

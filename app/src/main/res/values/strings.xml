@@ -40,6 +40,9 @@
     <string name="online_toast_not_enough_activities">Unable to host, selected list does not have
         enough activities!(%1$s required)</string>
     <string name="online_host_duplicate">Room code already taken!</string>
+    <string name="room_code_empty">Room code can\'t be empty!</string>
+    <string name="nickname_empty">Nickname can\'t be empty!</string>
+    <string name="room_not_found">Room not found! Please check your provided room code.</string>
 
     <!-- VOTE_LOBBY -->
     <string name="lobby_room_code">Room Code</string>
