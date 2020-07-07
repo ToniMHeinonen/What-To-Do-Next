@@ -85,7 +85,7 @@ public class VoteSetupActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
+        Buddy.showLoadingBar(this);
         DatabaseHandler.getLists(this::loadLists);
     }
 
@@ -156,7 +156,7 @@ public class VoteSetupActivity extends AppCompatActivity implements
     //////////////////////// INITIALIZE VIEWS ////////////////////////
 
     private void initializeVotingSetupOffline() {
-        findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
+        Buddy.hideLoadingBar(this);
         setupListsSpinner();
 
         // Set listeners for confirm and cancel
@@ -172,7 +172,7 @@ public class VoteSetupActivity extends AppCompatActivity implements
     }
 
     private void initializeVotingSetupOnline() {
-        findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
+        Buddy.hideLoadingBar(this);
 
         if (!lists.isEmpty())
             setupListsSpinner();
@@ -368,7 +368,7 @@ public class VoteSetupActivity extends AppCompatActivity implements
             return;
         }
 
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
+        Buddy.showLoadingBar(this);
 
         String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
         // Create vote room
@@ -383,20 +383,20 @@ public class VoteSetupActivity extends AppCompatActivity implements
                 moveToOnlineLobby(voteRoom, true);
             } else {
                 Buddy.showToast(getString(R.string.online_host_duplicate), Toast.LENGTH_LONG);
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
+                Buddy.hideLoadingBar(this);
             }
         }, voteRoom);
     }
 
     private void joinVoteRoom() {
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE); // Show loading bar
+        Buddy.showLoadingBar(this);
 
         DatabaseHandler.getVoteRoom((voteRoom) -> {
             if (voteRoom != null) {
                 moveToOnlineLobby(voteRoom, false);
             } else {
                 Buddy.showToast(getString(R.string.room_not_found), Toast.LENGTH_LONG);
-                findViewById(R.id.loadingPanel).setVisibility(View.GONE); // Hide loading bar
+                Buddy.hideLoadingBar(this);
             }
         }, roomCode);
     }

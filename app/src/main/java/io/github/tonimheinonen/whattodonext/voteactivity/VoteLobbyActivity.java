@@ -2,7 +2,9 @@ package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -19,10 +21,12 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 
-public class VoteLobbyActivity extends AppCompatActivity {
+public class VoteLobbyActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private VoteLobbyActivity _this;
     private VoteRoom voteRoom;
     private OnlineProfile profile;
 
@@ -33,11 +37,17 @@ public class VoteLobbyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_lobby);
+        _this = this;
 
         Intent intent = getIntent();
         voteRoom = intent.getParcelableExtra("voteRoom");
         profile = intent.getParcelableExtra("onlineProfile");
 
+        // Set onClick listeners for buttons
+        findViewById(R.id.back).setOnClickListener(this);
+        findViewById(R.id.start).setOnClickListener(this);
+
+        Buddy.showLoadingBar(this);
         SetupLobby();
     }
 
@@ -46,12 +56,13 @@ public class VoteLobbyActivity extends AppCompatActivity {
         SetupUsersList();
 
         // Add user's profile to the voteroom
-        DatabaseHandler.addOnlineProfile(voteRoom, profile);
+        DatabaseHandler.connectOnlineProfile(voteRoom, profile);
 
         // Create listener for users who connect to the room
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Buddy.hideLoadingBar(_this);
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
                 users.add(onlineProfile);
                 usersAdapter.notifyDataSetChanged();
@@ -90,5 +101,32 @@ public class VoteLobbyActivity extends AppCompatActivity {
         usersAdapter = new DatabaseValueListAdapter(this, users, null,
                 DatabaseType.ONLINE_PROFILE);
         listView.setAdapter(usersAdapter);
+    }
+
+    /**
+     * Listens for clicks of views.
+     * @param v view
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.back:
+                DatabaseHandler.disconnectOnlineProfile(voteRoom, profile);
+                onBackPressed();
+                break;
+            case R.id.start:
+                if (profile.isHost()) {
+                    startVoting();
+                } else {
+                    Buddy.showToast(getString(R.string.host_allowed_start), Toast.LENGTH_SHORT);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void startVoting() {
+
     }
 }

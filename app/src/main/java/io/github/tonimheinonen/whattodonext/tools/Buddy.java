@@ -184,8 +184,25 @@ public abstract class Buddy {
     }
 
     /**
+     * Shows loading bar.
+     * @param activity current activity
+     */
+    public static void showLoadingBar(Activity activity) {
+        activity.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Hides loading bar.
+     * @param activity current activity
+     */
+    public static void hideLoadingBar(Activity activity) {
+        activity.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+    }
+
+    /**
      * Shows loading bar and hides necessary view.
      * @param activity current activity
+     * @param viewIDToHide view to hide
      */
     public static void showLoadingBar(Activity activity, int viewIDToHide) {
         activity.findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
@@ -195,6 +212,7 @@ public abstract class Buddy {
     /**
      * Hides loading bar and shows necessary view.
      * @param activity current activity
+     * @param viewIDToShow view to show
      */
     public static void hideLoadingBar(Activity activity, int viewIDToShow) {
         activity.findViewById(R.id.loadingPanel).setVisibility(View.GONE);

@@ -24,6 +24,9 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     private boolean isHost;
     private boolean ready;
 
+    @Exclude
+    private String dbID;
+
     /**
      * Default constructor.
      */
@@ -69,6 +72,14 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         this.ready = ready;
     }
 
+    public String getDbID() {
+        return dbID;
+    }
+
+    public void setDbID(String dbID) {
+        this.dbID = dbID;
+    }
+
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -102,6 +113,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(dbID);
         dest.writeString(userID);
         dest.writeString(nickName);
         dest.writeInt(isHost ? 1 : 0);
@@ -112,6 +124,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
      * @param in given parcel
      */
     public OnlineProfile(Parcel in) {
+        dbID = in.readString();
         userID = in.readString();
         nickName = in.readString();
         isHost = in.readInt() == 1;

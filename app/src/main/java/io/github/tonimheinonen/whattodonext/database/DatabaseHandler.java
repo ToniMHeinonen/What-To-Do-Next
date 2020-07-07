@@ -559,10 +559,11 @@ public abstract class DatabaseHandler {
         });
     }
 
-    public static void addOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
+    public static void connectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child("profiles");
 
         String key = dbProfiles.push().getKey();   // Add new key to profiles
+        profile.setDbID(key);
 
         Map<String, Object> values = profile.toMap();
 
@@ -575,5 +576,14 @@ public abstract class DatabaseHandler {
     public static void getOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child("profiles");
         dbProfiles.addChildEventListener(listener);
+    }
+
+    /**
+     * Removes profile.
+     * @param profile profile to remove
+     */
+    public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child("profiles");
+        dbProfiles.child(profile.getDbID()).removeValue();
     }
 }

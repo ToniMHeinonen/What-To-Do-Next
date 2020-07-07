@@ -48,7 +48,7 @@
     <string name="lobby_room_code">Room Code</string>
     <string name="lobby_users">Users</string>
     <string name="lobby_start">Start</string>
-    <string name="vote_room_error">Something went wrong, please try again.</string>
+    <string name="host_allowed_start">Only the room host can start the vote!</string>
 
     <!-- VOTING -->
     <string name="alert_exit_title">Exit</string>
