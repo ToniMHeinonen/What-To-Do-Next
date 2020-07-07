@@ -19,6 +19,7 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -28,7 +29,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
 
     private VoteLobbyActivity _this;
     private VoteRoom voteRoom;
-    private OnlineProfile profile;
+    private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
     private DatabaseValueListAdapter usersAdapter;
@@ -41,7 +42,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
 
         Intent intent = getIntent();
         voteRoom = intent.getParcelableExtra("voteRoom");
-        profile = intent.getParcelableExtra("onlineProfile");
+        onlineProfile = intent.getParcelableExtra("onlineProfile");
 
         // Set onClick listeners for buttons
         findViewById(R.id.back).setOnClickListener(this);
@@ -56,7 +57,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         SetupUsersList();
 
         // Add user's profile to the voteroom
-        DatabaseHandler.connectOnlineProfile(voteRoom, profile);
+        DatabaseHandler.connectOnlineProfile(voteRoom, onlineProfile);
 
         // Create listener for users who connect to the room
         ChildEventListener childEventListener = new ChildEventListener() {
@@ -111,11 +112,11 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                DatabaseHandler.disconnectOnlineProfile(voteRoom, profile);
+                DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile);
                 onBackPressed();
                 break;
             case R.id.start:
-                if (profile.isHost()) {
+                if (onlineProfile.isHost()) {
                     startVoting();
                 } else {
                     Buddy.showToast(getString(R.string.host_allowed_start), Toast.LENGTH_SHORT);
@@ -127,6 +128,14 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void startVoting() {
+        ArrayList<ListItem> items = getIntent().getParcelableArrayListExtra("items");
+        DatabaseHandler.addItemsToVoteRoom(voteRoom, items);
 
+        Intent intent = new Intent(this, VoteTopActivity.class);
+        intent.putExtra("onlineProfile", onlineProfile);
+        intent.putExtra("voteRoom", voteRoom);
+        intent.putExtra("isOnline", true);
+        intent.putParcelableArrayListExtra("items", items);
+        startActivity(intent);
     }
 }

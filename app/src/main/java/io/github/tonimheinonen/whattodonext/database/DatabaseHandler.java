@@ -36,6 +36,8 @@ public abstract class DatabaseHandler {
 
     // Online voting
     private static DatabaseReference dbVoteRooms;
+    private static String ONLINE_PROFILES = "profiles";
+    private static String ONLINE_ITEMS = "items";
 
     private static int MAX_SAVED_RESULTS = 7;
 
@@ -559,8 +561,19 @@ public abstract class DatabaseHandler {
         });
     }
 
+    public static void changeVoteRoomState(VoteRoom voteRoom, String state) {
+        voteRoom.setState(state);
+
+        Map<String, Object> listValues = voteRoom.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(voteRoom.getDbID(), listValues);
+
+        dbVoteRooms.updateChildren(childUpdates);
+    }
+
     public static void connectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
-        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child("profiles");
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
 
         String key = dbProfiles.push().getKey();   // Add new key to profiles
         profile.setDbID(key);
@@ -574,7 +587,7 @@ public abstract class DatabaseHandler {
     }
 
     public static void getOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
-        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child("profiles");
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
         dbProfiles.addChildEventListener(listener);
     }
 
@@ -583,7 +596,26 @@ public abstract class DatabaseHandler {
      * @param profile profile to remove
      */
     public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
-        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child("profiles");
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
         dbProfiles.child(profile.getDbID()).removeValue();
+    }
+
+    public static void addItemsToVoteRoom(VoteRoom voteRoom, ArrayList<ListItem> items) {
+        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_ITEMS);
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        for (ListItem item : items) {
+            dbOnlineItems.push();
+            dbOnlineItems.setValue(item.getDbID());
+
+            Map<String, Object> listValues = item.toMap();
+
+            childUpdates.put(item.getDbID(), listValues);
+        }
+
+        // NOT WORKING AT THE MOMENT
+        // When items are added, change room state to inform other users so they can load items
+        dbOnlineItems.updateChildren(childUpdates).
+                addOnSuccessListener((success) -> changeVoteRoomState(voteRoom, VoteRoom.VOTING_FIRST));
     }
 }

@@ -1,15 +1,5 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.ListItemFragment;
-import io.github.tonimheinonen.whattodonext.database.DatabaseType;
-import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.database.Profile;
-import io.github.tonimheinonen.whattodonext.R;
-import io.github.tonimheinonen.whattodonext.database.ListItem;
-import io.github.tonimheinonen.whattodonext.database.ListOfItems;
-import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
-
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -19,6 +9,18 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.ListItemFragment;
+import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
+import io.github.tonimheinonen.whattodonext.database.Profile;
+import io.github.tonimheinonen.whattodonext.database.VoteRoom;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 /**
  * Handles voting top list with List Items.
@@ -31,6 +33,7 @@ public class VoteTopActivity extends AppCompatActivity {
 
     private int topAmount;
     private ListOfItems selectedList;
+    private ArrayList<ListItem> items;
     private ArrayList<Profile> selectedProfiles;
 
     private Button nextButton;
@@ -41,6 +44,11 @@ public class VoteTopActivity extends AppCompatActivity {
     private ArrayList<ListItem> votedItems;
     private int currentVotePoint, currentProfileIndex;
     private Profile currentProfile;
+
+    // Online
+    private boolean isOnline;
+    private VoteRoom voteRoom;
+    private OnlineProfile onlineProfile;
 
     /**
      * Initializes VoteTopActivity.
@@ -54,9 +62,24 @@ public class VoteTopActivity extends AppCompatActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         Intent intent = getIntent();
-        topAmount = intent.getIntExtra("topAmount", -1);
-        selectedList = intent.getExtras().getParcelable("selectedList");
-        selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
+        isOnline = intent.getBooleanExtra("isOnline", false);
+
+        if (isOnline) {
+            items = intent.getParcelableArrayListExtra("items");
+            onlineProfile = intent.getParcelableExtra("onlineProfile");
+            voteRoom = intent.getParcelableExtra("voteRoom");
+
+            // Get correct vote amount
+            if (voteRoom.getState().equals(VoteRoom.VOTING_FIRST))
+                topAmount = voteRoom.getFirstVoteSize();
+            else
+                topAmount = voteRoom.getLastVoteSize();
+        } else {
+            topAmount = intent.getIntExtra("topAmount", -1);
+            selectedList = intent.getExtras().getParcelable("selectedList");
+            selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
+            items = selectedList.getItems();
+        }
 
         profileView = findViewById(R.id.profileName);
         infoView = findViewById(R.id.voteInfoText);
@@ -65,7 +88,7 @@ public class VoteTopActivity extends AppCompatActivity {
         // If it's the last vote and halve is selected, halve the total bonus points on item
         if (topAmount == GlobalPrefs.loadListVoteSizeSecond() &&
             GlobalPrefs.loadHalveExtra()) {
-            for (ListItem item : selectedList.getItems()) {
+            for (ListItem item : items) {
                 item.setTotal((int) Math.ceil((double) item.getTotal() / 2));
             }
         }

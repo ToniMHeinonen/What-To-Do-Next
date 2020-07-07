@@ -411,6 +411,9 @@ public class VoteSetupActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, VoteLobbyActivity.class);
         intent.putExtra("voteRoom", voteRoom);
         intent.putExtra("onlineProfile", profile);
+        if (host)
+            intent.putParcelableArrayListExtra("items", selectedList.getItems());
+
         startActivity(intent);
     }
 }

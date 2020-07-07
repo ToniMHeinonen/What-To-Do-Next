@@ -25,7 +25,12 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     private int firstVoteSize, lastVoteSize;
     private boolean ignoreUnselected, halveExtra, showExtra, showVotes;
 
-    public static final String LOBBY = "lobby", VOTING = "voting", RESULTS = "results";
+    public static final String
+            LOBBY = "lobby",
+            VOTING_FIRST = "voting_first",
+            RESULTS_FIRST = "results_first",
+            VOTING_LAST = "voting_last",
+            RESULTS_LAST = "results_last";
 
     @Exclude
     private String dbID;
@@ -223,6 +228,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
+        dest.writeString(state);
         dest.writeString(roomCode);
         dest.writeString(listName);
         dest.writeInt(firstVoteSize);
@@ -239,6 +245,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
      */
     public VoteRoom(Parcel in) {
         dbID = in.readString();
+        state = in.readString();
         roomCode = in.readString();
         listName = in.readString();
         firstVoteSize = in.readInt();
