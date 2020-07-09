@@ -33,7 +33,6 @@ public class VoteTopActivity extends AppCompatActivity {
 
     private int topAmount;
     private ListOfItems selectedList;
-    private ArrayList<ListItem> items;
     private ArrayList<Profile> selectedProfiles;
 
     private Button nextButton;
@@ -63,9 +62,9 @@ public class VoteTopActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra("isOnline", false);
+        selectedList = intent.getParcelableExtra("selectedList");
 
         if (isOnline) {
-            items = intent.getParcelableArrayListExtra("items");
             onlineProfile = intent.getParcelableExtra("onlineProfile");
             voteRoom = intent.getParcelableExtra("voteRoom");
 
@@ -76,9 +75,7 @@ public class VoteTopActivity extends AppCompatActivity {
                 topAmount = voteRoom.getLastVoteSize();
         } else {
             topAmount = intent.getIntExtra("topAmount", -1);
-            selectedList = intent.getExtras().getParcelable("selectedList");
             selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
-            items = selectedList.getItems();
         }
 
         profileView = findViewById(R.id.profileName);
@@ -88,7 +85,7 @@ public class VoteTopActivity extends AppCompatActivity {
         // If it's the last vote and halve is selected, halve the total bonus points on item
         if (topAmount == GlobalPrefs.loadListVoteSizeSecond() &&
             GlobalPrefs.loadHalveExtra()) {
-            for (ListItem item : items) {
+            for (ListItem item : selectedList.getItems()) {
                 item.setTotal((int) Math.ceil((double) item.getTotal() / 2));
             }
         }

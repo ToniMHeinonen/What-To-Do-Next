@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -20,6 +21,7 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -49,16 +51,21 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.start).setOnClickListener(this);
 
         Buddy.showLoadingBar(this);
-        SetupLobby();
+        setupLobby();
     }
 
-    private void SetupLobby() {
+    private void setupLobby() {
         // Setup list before adding and retrieving users
-        SetupUsersList();
+        setupUsersList();
 
         // Add user's profile to the voteroom
         DatabaseHandler.connectOnlineProfile(voteRoom, onlineProfile);
 
+        createUsersListener();
+        createRoomStateListener();
+    }
+
+    private void createUsersListener() {
         // Create listener for users who connect to the room
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -96,7 +103,26 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         DatabaseHandler.getOnlineProfiles(voteRoom, childEventListener);
     }
 
-    private void SetupUsersList() {
+    private void createRoomStateListener() {
+        // Create listener for users who connect to the room
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String state = dataSnapshot.getValue(String.class);
+
+                if (state != null && state.equals(VoteRoom.VOTING_FIRST)) {
+                    Buddy.showLoadingBar(_this);
+                    DatabaseHandler.getVoteRoomItems(voteRoom, (items) -> moveToVoting(items));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        };
+        DatabaseHandler.getVoteRoomState(voteRoom, eventListener);
+    }
+
+    private void setupUsersList() {
         // Add users to ListView
         final ListView listView = findViewById(R.id.usersList);
         usersAdapter = new DatabaseValueListAdapter(this, users, null,
@@ -130,12 +156,20 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     private void startVoting() {
         ArrayList<ListItem> items = getIntent().getParcelableArrayListExtra("items");
         DatabaseHandler.addItemsToVoteRoom(voteRoom, items);
+        Buddy.showLoadingBar(this);
+    }
+
+    private void moveToVoting(ArrayList<ListItem> items) {
+        // Create list of items so code does not have to be modified so much
+        ListOfItems selectedList = new ListOfItems(voteRoom.getListName());
+        selectedList.setDbID(items.get(0).getListID());
+        selectedList.setItems(items);
 
         Intent intent = new Intent(this, VoteTopActivity.class);
         intent.putExtra("onlineProfile", onlineProfile);
         intent.putExtra("voteRoom", voteRoom);
         intent.putExtra("isOnline", true);
-        intent.putParcelableArrayListExtra("items", items);
+        intent.putExtra("selectedList", selectedList);
         startActivity(intent);
     }
 }

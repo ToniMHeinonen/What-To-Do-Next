@@ -1,5 +1,7 @@
 package io.github.tonimheinonen.whattodonext.database;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -128,6 +130,16 @@ public abstract class DatabaseHandler {
          * @param voteRoom retrieved vote room
          */
         void onDataGetVoteRoom(VoteRoom voteRoom);
+    }
+
+    public interface VoteRoomGetItemsListener {
+
+        /**
+         * Gets vote room items.
+         *
+         * @param items retrieved items
+         */
+        void onDataGetVoteRoomItems(ArrayList<ListItem> items);
     }
 
     /////////////////////* LISTS *////////////////////
@@ -561,15 +573,17 @@ public abstract class DatabaseHandler {
         });
     }
 
+    public static void removeVoteRoom(VoteRoom voteRoom) {
+        dbVoteRooms.child(voteRoom.getDbID()).removeValue();
+    }
+
     public static void changeVoteRoomState(VoteRoom voteRoom, String state) {
-        voteRoom.setState(state);
+        dbVoteRooms.child(voteRoom.getDbID()).child("state").setValue(state);
+    }
 
-        Map<String, Object> listValues = voteRoom.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put(voteRoom.getDbID(), listValues);
-
-        dbVoteRooms.updateChildren(childUpdates);
+    public static void getVoteRoomState(VoteRoom voteRoom, ValueEventListener listener) {
+        DatabaseReference state = dbVoteRooms.child(voteRoom.getDbID()).child("state");
+        state.addValueEventListener(listener);
     }
 
     public static void connectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
@@ -600,7 +614,7 @@ public abstract class DatabaseHandler {
         dbProfiles.child(profile.getDbID()).removeValue();
     }
 
-    public static void addItemsToVoteRoom(VoteRoom voteRoom, ArrayList<ListItem> items) {
+    public static void addItemsToVoteRoom(final VoteRoom voteRoom, ArrayList<ListItem> items) {
         DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_ITEMS);
         Map<String, Object> childUpdates = new HashMap<>();
 
@@ -613,9 +627,41 @@ public abstract class DatabaseHandler {
             childUpdates.put(item.getDbID(), listValues);
         }
 
-        // NOT WORKING AT THE MOMENT
         // When items are added, change room state to inform other users so they can load items
-        dbOnlineItems.updateChildren(childUpdates).
-                addOnSuccessListener((success) -> changeVoteRoomState(voteRoom, VoteRoom.VOTING_FIRST));
+        dbOnlineItems.updateChildren(childUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        changeVoteRoomState(voteRoom, VoteRoom.VOTING_FIRST);
+                    }
+                });
+    }
+
+    public static void getVoteRoomItems(VoteRoom voteRoom, VoteRoomGetItemsListener listener) {
+        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_ITEMS);
+
+        dbOnlineItems.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getVoteRoomItems",
+                        "items: " + snapshot.getChildrenCount(), 1);
+
+                ArrayList<ListItem> items = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    ListItem item = dataSnapshot.getValue(ListItem.class);
+                    item.setDbID(dataSnapshot.getKey());
+                    items.add(item);
+                }
+
+                listener.onDataGetVoteRoomItems(items);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
     }
 }
