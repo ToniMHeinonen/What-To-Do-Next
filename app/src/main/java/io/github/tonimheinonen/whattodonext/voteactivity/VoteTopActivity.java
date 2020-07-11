@@ -234,6 +234,10 @@ public class VoteTopActivity extends AppCompatActivity {
             // Add voted items to the vote room
             DatabaseHandler.addVoteRoomVotedItems(voteRoom, onlineVotedItems, () -> {
                 // Move to waiting room
+                Intent intent = new Intent(this, VoteLobbyActivity.class);
+                intent.putExtra("voteRoom", voteRoom);
+                intent.putExtra("onlineProfile", onlineProfile);
+                startActivity(intent);
             });
         } else {
             currentProfileIndex++;

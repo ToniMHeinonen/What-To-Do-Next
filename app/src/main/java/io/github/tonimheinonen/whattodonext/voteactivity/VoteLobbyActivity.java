@@ -1,5 +1,6 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +26,6 @@ import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.tools.Debug;
 
 public class VoteLobbyActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,6 +35,9 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
     private DatabaseValueListAdapter usersAdapter;
+
+    private int LOBBY = 1, WAITING = 2;
+    private int votingState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +49,16 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         voteRoom = intent.getParcelableExtra("voteRoom");
         onlineProfile = intent.getParcelableExtra("onlineProfile");
 
-        // Set onClick listeners for buttons
-        findViewById(R.id.back).setOnClickListener(this);
-        findViewById(R.id.start).setOnClickListener(this);
+        if (voteRoom.getState().equals(VoteRoom.LOBBY))
+            votingState = LOBBY;
+        else
+            votingState = WAITING;
+
+        if (votingState == LOBBY) {
+            // Set onClick listeners for buttons
+            findViewById(R.id.back).setOnClickListener(this);
+            findViewById(R.id.start).setOnClickListener(this);
+        }
 
         Buddy.showLoadingBar(this);
         setupLobby();
@@ -59,7 +69,10 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         setupUsersList();
 
         // Add user's profile to the voteroom
-        DatabaseHandler.connectOnlineProfile(voteRoom, onlineProfile);
+        if (votingState == LOBBY)
+            DatabaseHandler.connectOnlineProfile(voteRoom, onlineProfile);
+        else
+            DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, true);
 
         createUsersListener();
         createRoomStateListener();
@@ -72,15 +85,25 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Buddy.hideLoadingBar(_this);
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-                users.add(onlineProfile);
-                usersAdapter.notifyDataSetChanged();
-                Debug.print("listener", "onChildAdded", onlineProfile.getNickName(), 1);
+                if (votingState == LOBBY) {
+                    users.add(onlineProfile);
+                    usersAdapter.notifyDataSetChanged();
+                } else {
+                    // If it's not the users profile
+                    if (!onlineProfile.getUserID().equals(_this.onlineProfile.getUserID())) {
+                        // If user is not ready yet, add it to the list
+                        if (!onlineProfile.isReady()) {
+                            users.add(onlineProfile);
+                            usersAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-                Debug.print("listener", "onChildRemoved", onlineProfile.getNickName(), 1);
+
                 for (OnlineProfile pro : users) {
                     // Check user id and nick name, in finished product id check is enough
                     if (pro.getUserID().equals(onlineProfile.getUserID()) &&
@@ -92,9 +115,53 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
                 usersAdapter.notifyDataSetChanged();
             }
 
-            // Unused
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (votingState != WAITING)
+                    return;
+
+                // Remove from list when user becomes ready
+                OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
+                if (onlineProfile.isReady()) {
+                    for (OnlineProfile pro : users) {
+                        // Check user id and nick name, in finished product id check is enough
+                        if (pro.getUserID().equals(onlineProfile.getUserID()) &&
+                                pro.getNickName().equals(onlineProfile.getNickName())) {
+                            users.remove(pro);
+                            break;
+                        }
+                    }
+                    usersAdapter.notifyDataSetChanged();
+                }
+
+                // Check if all users ready, then move host to results to calculate them
+                if (_this.onlineProfile.isHost()) {
+                    boolean allReady = true;
+
+                    // Loop through all the users, if someone is not ready, set false
+                    for (OnlineProfile pro : users) {
+                        if (!pro.isReady()) {
+                            allReady = false;
+                            break;
+                        }
+                    }
+
+                    if (allReady) {
+                        Buddy.showLoadingBar(_this);
+
+                        // Set correct voteroom state locally for VoteResultsActivity
+                        if (voteRoom.getState().equals(VoteRoom.VOTING_FIRST))
+                            voteRoom.setState(VoteRoom.RESULTS_FIRST);
+                        else if (voteRoom.getState().equals(VoteRoom.VOTING_LAST))
+                            voteRoom.setState(VoteRoom.RESULTS_LAST);
+
+                        DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
+                                moveToNextActivity(items, VoteResultsActivity.class));
+                    }
+                }
+            }
+
+            // Unused
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
@@ -110,10 +177,22 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String state = dataSnapshot.getValue(String.class);
 
-                if (state != null && state.equals(VoteRoom.VOTING_FIRST)) {
-                    Buddy.showLoadingBar(_this);
-                    voteRoom.setState(state);
-                    DatabaseHandler.getVoteRoomItems(voteRoom, (items) -> moveToVoting(items));
+                if (votingState == LOBBY) {
+                    // Move to voting first when state is correct
+                    if (state != null && state.equals(VoteRoom.VOTING_FIRST)) {
+                        Buddy.showLoadingBar(_this);
+                        voteRoom.setState(state);
+                        DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
+                                moveToNextActivity(items, VoteTopActivity.class));
+                    }
+                } else if (votingState == WAITING) {
+                    if (state != null && (state.equals(VoteRoom.RESULTS_FIRST) ||
+                            state.equals(VoteRoom.RESULTS_LAST))) {
+                        Buddy.showLoadingBar(_this);
+                        voteRoom.setState(state);
+                        DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
+                                moveToNextActivity(items, VoteResultsActivity.class));
+                    }
                 }
             }
 
@@ -160,13 +239,16 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         Buddy.showLoadingBar(this);
     }
 
-    private void moveToVoting(ArrayList<ListItem> items) {
+    private void moveToNextActivity(ArrayList<ListItem> items, Class<? extends Activity> activity) {
+        // Reset user's ready state
+        DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, false);
+
         // Create list of items so code does not have to be modified so much
         ListOfItems selectedList = new ListOfItems(voteRoom.getListName());
         selectedList.setDbID(items.get(0).getListID());
         selectedList.setItems(items);
 
-        Intent intent = new Intent(this, VoteTopActivity.class);
+        Intent intent = new Intent(this, activity);
         intent.putExtra("onlineProfile", onlineProfile);
         intent.putExtra("voteRoom", voteRoom);
         intent.putExtra("isOnline", true);

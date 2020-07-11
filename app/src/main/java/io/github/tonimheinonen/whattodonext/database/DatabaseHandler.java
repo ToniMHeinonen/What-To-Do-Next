@@ -691,4 +691,10 @@ public abstract class DatabaseHandler {
         dbOnlineVotedItems.updateChildren(childUpdates)
                 .addOnCompleteListener(complete -> listener.onDataAddedComplete());
     }
+
+    public static void setOnlineProfileReady(VoteRoom voteRoom, OnlineProfile onlineProfile,
+                                             boolean isReady) {
+        dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES).
+                child(onlineProfile.getDbID()).child("ready").setValue(isReady);
+    }
 }

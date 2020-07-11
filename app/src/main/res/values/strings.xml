@@ -50,6 +50,10 @@
     <string name="lobby_start">Start</string>
     <string name="host_allowed_start">Only the room host can start the vote!</string>
 
+    <!-- VOTE WAITING -->
+    <string name="voting_success">Voting successful</string>
+    <string name="waiting_for">Waiting for users</string>
+
     <!-- VOTING -->
     <string name="alert_exit_title">Exit</string>
     <string name="alert_exit_message">Are you sure you want to exit?</string>
@@ -69,7 +73,6 @@
     <string name="results_extra">Extra</string>
     <string name="results_total">Total</string>
     <string name="save_and_exit">Save and exit</string>
-
     <string name="save_successful">Save successful, points have been calculated</string>
 
     <!-- RESULTS_ACTIVITY -->
