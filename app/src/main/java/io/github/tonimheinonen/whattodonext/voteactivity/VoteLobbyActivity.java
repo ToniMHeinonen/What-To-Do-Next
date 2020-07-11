@@ -112,6 +112,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
 
                 if (state != null && state.equals(VoteRoom.VOTING_FIRST)) {
                     Buddy.showLoadingBar(_this);
+                    voteRoom.setState(state);
                     DatabaseHandler.getVoteRoomItems(voteRoom, (items) -> moveToVoting(items));
                 }
             }

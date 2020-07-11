@@ -40,6 +40,7 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbVoteRooms;
     private static String ONLINE_PROFILES = "profiles";
     private static String ONLINE_ITEMS = "items";
+    private static String ONLINE_VOTED_ITEMS = "voted_items";
 
     private static int MAX_SAVED_RESULTS = 7;
 
@@ -140,6 +141,14 @@ public abstract class DatabaseHandler {
          * @param items retrieved items
          */
         void onDataGetVoteRoomItems(ArrayList<ListItem> items);
+    }
+
+    public interface DatabaseAddListener {
+
+        /**
+         * Listens when adding data is complete.
+         */
+        void onDataAddedComplete();
     }
 
     /////////////////////* LISTS *////////////////////
@@ -663,5 +672,23 @@ public abstract class DatabaseHandler {
                 databaseError.toException().printStackTrace();
             }
         });
+    }
+
+    public static void addVoteRoomVotedItems(VoteRoom voteRoom, ArrayList<OnlineVotedItem> items,
+                                             DatabaseAddListener listener) {
+        DatabaseReference dbOnlineVotedItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS);
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        for (OnlineVotedItem item : items) {
+            String key = dbOnlineVotedItems.push().getKey();
+
+            Map<String, Object> listValues = item.toMap();
+
+            childUpdates.put(key, listValues);
+        }
+
+        // When items are added, change room state to inform other users so they can load items
+        dbOnlineVotedItems.updateChildren(childUpdates)
+                .addOnCompleteListener(complete -> listener.onDataAddedComplete());
     }
 }

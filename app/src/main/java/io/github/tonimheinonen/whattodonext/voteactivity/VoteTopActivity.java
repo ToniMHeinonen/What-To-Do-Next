@@ -13,10 +13,12 @@ import java.util.Collections;
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.ListItemFragment;
 import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
+import io.github.tonimheinonen.whattodonext.database.OnlineVotedItem;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -172,7 +174,11 @@ public class VoteTopActivity extends AppCompatActivity {
         votePoints = new ArrayList<>();
         votedItems = new ArrayList<>();
 
-        currentProfile = selectedProfiles.get(currentProfileIndex);
+        if (isOnline) {
+            currentProfile = new Profile(onlineProfile.getNickName());
+        } else {
+            currentProfile = selectedProfiles.get(currentProfileIndex);
+        }
         currentProfile.initVoteSize(topAmount);
 
         profileView.setText(currentProfile.getName());
@@ -214,18 +220,35 @@ public class VoteTopActivity extends AppCompatActivity {
      * @param v next button view
      */
     public void nextPressed(View v) {
-        currentProfileIndex++;
+        if (isOnline) {
+            Buddy.showLoadingBar(this);
 
-        if (currentProfileIndex == selectedProfiles.size()) {
-            finish();
-            // Move to results screen
-            Intent intent = new Intent(this, VoteResultsActivity.class);
-            intent.putExtra("topAmount", topAmount);
-            intent.putExtra("selectedList", selectedList);
-            intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
-            startActivity(intent);
+            // Convert voted items to OnlineVotedItem'
+            ArrayList<OnlineVotedItem> onlineVotedItems = new ArrayList<>();
+            for (int i = 0; i < currentProfile.getVotedItems().length; i++) {
+                OnlineVotedItem votedItem = new OnlineVotedItem(onlineProfile.getUserID(),
+                        currentProfile.getVoteItem(i).getDbID(), i + 1);
+                onlineVotedItems.add(votedItem);
+            }
+
+            // Add voted items to the vote room
+            DatabaseHandler.addVoteRoomVotedItems(voteRoom, onlineVotedItems, () -> {
+                // Move to waiting room
+            });
         } else {
-            startVoting();
+            currentProfileIndex++;
+
+            if (currentProfileIndex == selectedProfiles.size()) {
+                finish();
+                // Move to results screen
+                Intent intent = new Intent(this, VoteResultsActivity.class);
+                intent.putExtra("topAmount", topAmount);
+                intent.putExtra("selectedList", selectedList);
+                intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
+                startActivity(intent);
+            } else {
+                startVoting();
+            }
         }
     }
 }

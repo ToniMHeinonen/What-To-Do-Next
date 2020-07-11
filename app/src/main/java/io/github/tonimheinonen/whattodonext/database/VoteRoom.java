@@ -13,8 +13,8 @@ import java.util.Map;
  * Represents a vote room.
  * @author Toni Heinonen
  * @author toni1.heinonen@gmail.com
- * @version 1.0
- * @since 1.0
+ * @version 1.3
+ * @since 1.3
  */
 @IgnoreExtraProperties
 public class VoteRoom implements DatabaseValue, Parcelable {

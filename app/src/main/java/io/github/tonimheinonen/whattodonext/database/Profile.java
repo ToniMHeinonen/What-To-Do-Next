@@ -94,6 +94,26 @@ public class Profile implements DatabaseValue, Parcelable {
     }
 
     /**
+     * Returns voted items.
+     *
+     * Used when voting online to convert items to OnlineVotedItem.
+     * @return voted items
+     */
+    public ListItem[] getVotedItems() {
+        return votedItems;
+    }
+
+    /**
+     * Sets voted items.
+     *
+     * Used when voting online to load items from database.
+     * @param votedItems voted items
+     */
+    public void setVotedItems(ListItem[] votedItems) {
+        this.votedItems = votedItems;
+    }
+
+    /**
      * Maps values for database handling.
      * @return mapped values
      */
