@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -13,6 +14,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +26,8 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
+import io.github.tonimheinonen.whattodonext.database.OnlineVotedItem;
+import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
@@ -36,25 +40,32 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<OnlineProfile> users = new ArrayList<>();
     private DatabaseValueListAdapter usersAdapter;
 
+    // Used when moving to results
+    private ArrayList<OnlineVotedItem> votedItems;
+
     private int LOBBY = 1, WAITING = 2;
     private int votingState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_vote_lobby);
         _this = this;
 
         Intent intent = getIntent();
         voteRoom = intent.getParcelableExtra("voteRoom");
         onlineProfile = intent.getParcelableExtra("onlineProfile");
 
-        if (voteRoom.getState().equals(VoteRoom.LOBBY))
+        if (voteRoom.getState().equals(VoteRoom.LOBBY)) {
             votingState = LOBBY;
-        else
+            setContentView(R.layout.activity_vote_lobby);
+        } else {
             votingState = WAITING;
+            setContentView(R.layout.activity_vote_waiting);
+        }
 
         if (votingState == LOBBY) {
+            // Set room code
+            ((TextView) findViewById(R.id.codeForRoom)).setText(voteRoom.getRoomCode());
             // Set onClick listeners for buttons
             findViewById(R.id.back).setOnClickListener(this);
             findViewById(R.id.start).setOnClickListener(this);
@@ -149,14 +160,18 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
                     if (allReady) {
                         Buddy.showLoadingBar(_this);
 
+                        // Loop through all profiles and reset the ready state
+                        for (OnlineProfile pro : users) {
+                            DatabaseHandler.setOnlineProfileReady(voteRoom, pro, false);
+                        }
+
                         // Set correct voteroom state locally for VoteResultsActivity
                         if (voteRoom.getState().equals(VoteRoom.VOTING_FIRST))
                             voteRoom.setState(VoteRoom.RESULTS_FIRST);
                         else if (voteRoom.getState().equals(VoteRoom.VOTING_LAST))
                             voteRoom.setState(VoteRoom.RESULTS_LAST);
 
-                        DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
-                                moveToNextActivity(items, VoteResultsActivity.class));
+                        retrieveVotedItemsAndMoveToResults();
                     }
                 }
             }
@@ -190,8 +205,8 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
                             state.equals(VoteRoom.RESULTS_LAST))) {
                         Buddy.showLoadingBar(_this);
                         voteRoom.setState(state);
-                        DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
-                                moveToNextActivity(items, VoteResultsActivity.class));
+
+                        retrieveVotedItemsAndMoveToResults();
                     }
                 }
             }
@@ -239,10 +254,15 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         Buddy.showLoadingBar(this);
     }
 
-    private void moveToNextActivity(ArrayList<ListItem> items, Class<? extends Activity> activity) {
-        // Reset user's ready state
-        DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, false);
+    private void retrieveVotedItemsAndMoveToResults() {
+        DatabaseHandler.getVoteRoomVotedItems(voteRoom, (votedItems) -> {
+            this.votedItems = votedItems;
+            DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
+                    moveToNextActivity(items, VoteResultsActivity.class));
+        });
+    }
 
+    private void moveToNextActivity(ArrayList<ListItem> items, Class<? extends Activity> activity) {
         // Create list of items so code does not have to be modified so much
         ListOfItems selectedList = new ListOfItems(voteRoom.getListName());
         selectedList.setDbID(items.get(0).getListID());
@@ -253,6 +273,56 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         intent.putExtra("voteRoom", voteRoom);
         intent.putExtra("isOnline", true);
         intent.putExtra("selectedList", selectedList);
+
+        // If moving to results, create SelectedProfiles
+        if (activity.equals(VoteResultsActivity.class)) {
+            ArrayList selectedProfiles = createProfilesFromOnlineProfile(items);
+
+            intent.putExtra("selectedProfiles", selectedProfiles);
+        }
+
         startActivity(intent);
+    }
+
+    private ArrayList<Profile> createProfilesFromOnlineProfile(ArrayList<ListItem> items) {
+        ArrayList<Profile> selectedProfiles = new ArrayList<>();
+
+        // Create normal profile from online users so the same code can be used in results
+        for (OnlineProfile pro : users) {
+            // Create profile from the user's nickname
+            Profile profile = new Profile(pro.getNickName());
+
+            // Set correct vote points size depending on if it's the firs or last results
+            if (voteRoom.getState().equals(VoteRoom.RESULTS_FIRST))
+                profile.initVoteSize(voteRoom.getFirstVoteSize());
+            else
+                profile.initVoteSize(voteRoom.getLastVoteSize());
+
+            // Iterate through all of the voted items so they can be deleted during iteration
+            Iterator<OnlineVotedItem> iterator = votedItems.iterator();
+            while (iterator.hasNext()) {
+                OnlineVotedItem votedItem = iterator.next();
+
+                // If voted item belongs to the current user, proceed...
+                if (votedItem.getUserID().equals(pro.getUserID())) {
+                    // Loop through all the items and find which item has the same id as voted item
+                    for (ListItem item : items) {
+                        // If item has the same id, add it to the profile's vote items
+                        if (item.getDbID().equals(votedItem.getItemID())) {
+                            int index = votedItem.getVotePoints() - 1; // -1 since array starts from 0
+                            profile.addVoteItem(index, item);
+                            break;
+                        }
+                    }
+
+                    // Remove the item afterwards so it does not need to be looped through again
+                    iterator.remove();
+                }
+            }
+
+            selectedProfiles.add(profile);
+        }
+
+        return selectedProfiles;
     }
 }

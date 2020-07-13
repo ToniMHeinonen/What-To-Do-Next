@@ -143,6 +143,16 @@ public abstract class DatabaseHandler {
         void onDataGetVoteRoomItems(ArrayList<ListItem> items);
     }
 
+    public interface VoteRoomGetVotedItemsListener {
+
+        /**
+         * Gets vote room voted items.
+         *
+         * @param items retrieved items
+         */
+        void onDataGetVoteRoomVotedItems(ArrayList<OnlineVotedItem> items);
+    }
+
     public interface DatabaseAddListener {
 
         /**
@@ -586,6 +596,22 @@ public abstract class DatabaseHandler {
         dbVoteRooms.child(voteRoom.getDbID()).removeValue();
     }
 
+    public static void removeAllVoteRooms() {
+        dbVoteRooms.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getVoteRoom",
+                        "rooms: " + snapshot.getChildrenCount(), 1);
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    dataSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        });
+    }
+
     public static void changeVoteRoomState(VoteRoom voteRoom, String state) {
         dbVoteRooms.child(voteRoom.getDbID()).child("state").setValue(state);
     }
@@ -690,6 +716,33 @@ public abstract class DatabaseHandler {
         // When items are added, change room state to inform other users so they can load items
         dbOnlineVotedItems.updateChildren(childUpdates)
                 .addOnCompleteListener(complete -> listener.onDataAddedComplete());
+    }
+
+    public static void getVoteRoomVotedItems(VoteRoom voteRoom, VoteRoomGetVotedItemsListener listener) {
+        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS);
+
+        dbOnlineItems.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getVoteRoomVotedItems",
+                        "items: " + snapshot.getChildrenCount(), 1);
+
+                ArrayList<OnlineVotedItem> items = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    OnlineVotedItem item = dataSnapshot.getValue(OnlineVotedItem.class);
+                    items.add(item);
+                }
+
+                listener.onDataGetVoteRoomVotedItems(items);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
     }
 
     public static void setOnlineProfileReady(VoteRoom voteRoom, OnlineProfile onlineProfile,

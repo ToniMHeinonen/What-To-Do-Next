@@ -35,7 +35,7 @@
                 android:text="@string/lobby_room_code"/>
 
             <TextView
-                android:id="@+id/noLists"
+                android:id="@+id/codeForRoom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

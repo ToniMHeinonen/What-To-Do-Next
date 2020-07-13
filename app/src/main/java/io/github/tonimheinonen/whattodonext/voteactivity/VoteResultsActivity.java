@@ -70,6 +70,11 @@ public class VoteResultsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra("isOnline", false);
         selectedList = intent.getParcelableExtra("selectedList");
+        selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
+
+        for (Profile p : selectedProfiles) {
+            Debug.print(this, "onCreate", p.getVotedItems().toString(), 1);
+        }
 
         if (isOnline) {
             onlineProfile = intent.getParcelableExtra("onlineProfile");
@@ -82,7 +87,6 @@ public class VoteResultsActivity extends AppCompatActivity {
                 topAmount = voteRoom.getLastVoteSize();
         } else {
             topAmount = intent.getIntExtra("topAmount", -1);
-            selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
         }
 
         setOptions();
@@ -96,12 +100,15 @@ public class VoteResultsActivity extends AppCompatActivity {
             findViewById(R.id.resultsInfoText).setVisibility(View.VISIBLE);
         }
 
-        // If activity has not been recreated (by screen rotation)
-        if (savedInstanceState == null) {
-            calculateVotePoints();
-        } else {
-            // Load items to reset before orientation change
-            itemsToReset = savedInstanceState.getParcelableArrayList("itemsToReset");
+        // Do these if vote is local or if vote is online and the user is the host
+        if (!isOnline || (isOnline && onlineProfile.isHost())) {
+            // If activity has not been recreated (by screen rotation)
+            if (savedInstanceState == null) {
+                calculateVotePoints();
+            } else {
+                // Load items to reset before orientation change
+                itemsToReset = savedInstanceState.getParcelableArrayList("itemsToReset");
+            }
         }
 
         setupItemList();
