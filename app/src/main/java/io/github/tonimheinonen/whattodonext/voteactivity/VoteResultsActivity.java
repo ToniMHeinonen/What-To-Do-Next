@@ -1,21 +1,5 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.database.SavedResultItem;
-import io.github.tonimheinonen.whattodonext.ResultsShowVotesAdapter;
-import io.github.tonimheinonen.whattodonext.database.SavedResult;
-import io.github.tonimheinonen.whattodonext.database.DatabaseType;
-import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
-import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
-import io.github.tonimheinonen.whattodonext.tools.Debug;
-import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
-import io.github.tonimheinonen.whattodonext.MainActivity;
-import io.github.tonimheinonen.whattodonext.database.Profile;
-import io.github.tonimheinonen.whattodonext.R;
-import io.github.tonimheinonen.whattodonext.database.ListItem;
-import io.github.tonimheinonen.whattodonext.database.ListOfItems;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +14,24 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.MainActivity;
+import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.ResultsShowVotesAdapter;
+import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
+import io.github.tonimheinonen.whattodonext.database.DatabaseType;
+import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.ListItem;
+import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
+import io.github.tonimheinonen.whattodonext.database.Profile;
+import io.github.tonimheinonen.whattodonext.database.SavedResult;
+import io.github.tonimheinonen.whattodonext.database.SavedResultItem;
+import io.github.tonimheinonen.whattodonext.database.VoteRoom;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.Debug;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 /**
  * Handles showing results of voting.
@@ -46,6 +48,16 @@ public class VoteResultsActivity extends AppCompatActivity {
     private ArrayList<Profile> selectedProfiles;
     private ArrayList<ListItem> itemsToReset = new ArrayList<>();
 
+    // Online
+    private boolean isOnline;
+    private VoteRoom voteRoom;
+    private OnlineProfile onlineProfile;
+
+    // Options
+    private int listVoteSizeLast;
+    private boolean ignoreUnselected;
+    private boolean showVotes;
+
     /**
      * Initializes VoteResultsActivity.
      * @param savedInstanceState previous activity state
@@ -56,12 +68,27 @@ public class VoteResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vote_results);
 
         Intent intent = getIntent();
-        topAmount = intent.getIntExtra("topAmount", -1);
-        selectedList = intent.getExtras().getParcelable("selectedList");
-        selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
+        isOnline = intent.getBooleanExtra("isOnline", false);
+        selectedList = intent.getParcelableExtra("selectedList");
+
+        if (isOnline) {
+            onlineProfile = intent.getParcelableExtra("onlineProfile");
+            voteRoom = intent.getParcelableExtra("voteRoom");
+
+            // Get correct vote amount
+            if (voteRoom.getState().equals(VoteRoom.RESULTS_FIRST))
+                topAmount = voteRoom.getFirstVoteSize();
+            else
+                topAmount = voteRoom.getLastVoteSize();
+        } else {
+            topAmount = intent.getIntExtra("topAmount", -1);
+            selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
+        }
+
+        setOptions();
 
         // If current topAmount is the same as last vote size
-        lastResults = topAmount == GlobalPrefs.loadListVoteSizeSecond();
+        lastResults = topAmount == listVoteSizeLast;
 
         if (lastResults) {
             Button next = findViewById(R.id.nextButton);
@@ -78,6 +105,23 @@ public class VoteResultsActivity extends AppCompatActivity {
         }
 
         setupItemList();
+    }
+
+    /**
+     * Sets options for voting.
+     *
+     * Online and local vote retrieves options from different places.
+     */
+    private void setOptions() {
+        if (isOnline) {
+            listVoteSizeLast = voteRoom.getLastVoteSize();
+            ignoreUnselected = voteRoom.isIgnoreUnselected();
+            showVotes = voteRoom.isShowVotes();
+        } else {
+            listVoteSizeLast = GlobalPrefs.loadListVoteSizeSecond();
+            ignoreUnselected = GlobalPrefs.loadIgnoreUnselected();
+            showVotes = GlobalPrefs.loadShowVoted();
+        }
     }
 
     /**
@@ -119,7 +163,7 @@ public class VoteResultsActivity extends AppCompatActivity {
         // Add extra points to total vote points
         for (ListItem item : items) {
             // If first vote, user wants to ignore unselected and item was not voted at all
-            if (!lastResults && GlobalPrefs.loadIgnoreUnselected() && item.getVotePoints() == 0)
+            if (!lastResults && ignoreUnselected && item.getVotePoints() == 0)
                 continue;
 
             item.addVotePoints(item.getTotal());
@@ -177,7 +221,7 @@ public class VoteResultsActivity extends AppCompatActivity {
         LinearLayout viewHolder = findViewById(R.id.listHolder);
         BaseAdapter adapter;
         View child;
-        if (GlobalPrefs.loadShowVoted()) {
+        if (showVotes) {
             // Inflate list which shows vote points
             child = getLayoutInflater().inflate(R.layout.result_show_votes_list, null);
             viewHolder.addView(child);
@@ -237,7 +281,7 @@ public class VoteResultsActivity extends AppCompatActivity {
         } else {
             // Proceed to next voting
             Intent intent = new Intent(this, VoteTopActivity.class);
-            intent.putExtra("topAmount", GlobalPrefs.loadListVoteSizeSecond());
+            intent.putExtra("topAmount", listVoteSizeLast);
             intent.putExtra("selectedList", selectedList);
             intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
             startActivity(intent);

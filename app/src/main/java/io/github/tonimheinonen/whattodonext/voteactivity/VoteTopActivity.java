@@ -51,6 +51,11 @@ public class VoteTopActivity extends AppCompatActivity {
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
 
+    // Options
+    private int listVoteSizeLast;
+    private boolean showExtra;
+    private boolean halveExtra;
+
     /**
      * Initializes VoteTopActivity.
      * @param savedInstanceState previous activity state
@@ -80,13 +85,14 @@ public class VoteTopActivity extends AppCompatActivity {
             selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
         }
 
+        setOptions();
+
         profileView = findViewById(R.id.profileName);
         infoView = findViewById(R.id.voteInfoText);
         nextButton = findViewById(R.id.nextButton);
 
         // If it's the last vote and halve is selected, halve the total bonus points on item
-        if (topAmount == GlobalPrefs.loadListVoteSizeSecond() &&
-            GlobalPrefs.loadHalveExtra()) {
+        if (topAmount == listVoteSizeLast && halveExtra) {
             for (ListItem item : selectedList.getItems()) {
                 item.setTotal((int) Math.ceil((double) item.getTotal() / 2));
             }
@@ -94,10 +100,27 @@ public class VoteTopActivity extends AppCompatActivity {
 
         // Setup voting items
         itemsFragment = Buddy.createListItemFragment(this,
-                GlobalPrefs.loadShowExtra() ? DatabaseType.VOTE_SHOW_EXTRA : DatabaseType.VOTE_HIDE_EXTRA,
+                showExtra ? DatabaseType.VOTE_SHOW_EXTRA : DatabaseType.VOTE_HIDE_EXTRA,
                 selectedList);
 
         startVoting();
+    }
+
+    /**
+     * Sets options for voting.
+     *
+     * Online and local vote retrieves options from different places.
+     */
+    private void setOptions() {
+        if (isOnline) {
+            listVoteSizeLast = voteRoom.getLastVoteSize();
+            showExtra = voteRoom.isShowExtra();
+            halveExtra = voteRoom.isHalveExtra();
+        } else {
+            listVoteSizeLast = GlobalPrefs.loadListVoteSizeSecond();
+            showExtra = GlobalPrefs.loadShowExtra();
+            halveExtra = GlobalPrefs.loadHalveExtra();
+        }
     }
 
     public void itemClicked(ListItem item) {
