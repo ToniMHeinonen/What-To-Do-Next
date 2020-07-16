@@ -38,6 +38,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
+    private ArrayList<OnlineProfile> notReadyUsers = new ArrayList<>();
     private DatabaseValueListAdapter usersAdapter;
 
     // Used when moving to results
@@ -96,19 +97,18 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Buddy.hideLoadingBar(_this);
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-                if (votingState == LOBBY) {
-                    users.add(onlineProfile);
-                    usersAdapter.notifyDataSetChanged();
-                } else {
+                onlineProfile.setDbID(dataSnapshot.getKey());
+                users.add(onlineProfile);
+                if (votingState == WAITING) {
                     // If it's not the users profile
                     if (!onlineProfile.getUserID().equals(_this.onlineProfile.getUserID())) {
                         // If user is not ready yet, add it to the list
                         if (!onlineProfile.isReady()) {
-                            users.add(onlineProfile);
-                            usersAdapter.notifyDataSetChanged();
+                            notReadyUsers.add(onlineProfile);
                         }
                     }
                 }
+                usersAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -121,6 +121,18 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
                             pro.getNickName().equals(onlineProfile.getNickName())) {
                         users.remove(pro);
                         break;
+                    }
+                }
+
+                // Remove not ready users if user disconnects
+                if (votingState == WAITING) {
+                    for (OnlineProfile pro : notReadyUsers) {
+                        // Check user id and nick name, in finished product id check is enough
+                        if (pro.getUserID().equals(onlineProfile.getUserID()) &&
+                                pro.getNickName().equals(onlineProfile.getNickName())) {
+                            notReadyUsers.remove(pro);
+                            break;
+                        }
                     }
                 }
                 usersAdapter.notifyDataSetChanged();
@@ -138,7 +150,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
                         // Check user id and nick name, in finished product id check is enough
                         if (pro.getUserID().equals(onlineProfile.getUserID()) &&
                                 pro.getNickName().equals(onlineProfile.getNickName())) {
-                            users.remove(pro);
+                            notReadyUsers.remove(pro);
                             break;
                         }
                     }
@@ -147,17 +159,8 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
 
                 // Check if all users ready, then move host to results to calculate them
                 if (_this.onlineProfile.isHost()) {
-                    boolean allReady = true;
-
-                    // Loop through all the users, if someone is not ready, set false
-                    for (OnlineProfile pro : users) {
-                        if (!pro.isReady()) {
-                            allReady = false;
-                            break;
-                        }
-                    }
-
-                    if (allReady) {
+                    // If all the users are ready
+                    if (notReadyUsers.isEmpty()) {
                         Buddy.showLoadingBar(_this);
 
                         // Loop through all profiles and reset the ready state
@@ -220,8 +223,15 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     private void setupUsersList() {
         // Add users to ListView
         final ListView listView = findViewById(R.id.usersList);
-        usersAdapter = new DatabaseValueListAdapter(this, users, null,
-                DatabaseType.ONLINE_PROFILE);
+        if (votingState == LOBBY) {
+            // Show all users in lobby
+            usersAdapter = new DatabaseValueListAdapter(this, users, null,
+                    DatabaseType.ONLINE_PROFILE);
+        } else {
+            // Show not ready users in waiting room
+            usersAdapter = new DatabaseValueListAdapter(this, notReadyUsers, null,
+                    DatabaseType.ONLINE_PROFILE);
+        }
         listView.setAdapter(usersAdapter);
     }
 
