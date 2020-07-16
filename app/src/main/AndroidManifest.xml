@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".voteactivity.VoteWaitingActivity"></activity>
         <activity android:name=".StartVoteActivity" />
         <activity android:name=".voteactivity.VoteLobbyActivity" />
         <activity android:name=".ResultsActivity" />

@@ -162,6 +162,16 @@ public abstract class DatabaseHandler {
         void onDataAddedComplete();
     }
 
+    public interface VoteRoomGetOnlineProfilesListener {
+
+        /**
+         * Gets vote room online profiles
+         *
+         * @param onlineProfiles retrieved profiles
+         */
+        void onDataGetOnlineProfiles(ArrayList<OnlineProfile> onlineProfiles);
+    }
+
     /////////////////////* LISTS *////////////////////
 
     /**
@@ -639,6 +649,34 @@ public abstract class DatabaseHandler {
     public static void getOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
         dbProfiles.addChildEventListener(listener);
+    }
+
+    public static void getOnlineProfilesOnce(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+
+        dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getOnlineProfiles",
+                        "profiles: " + snapshot.getChildrenCount(), 1);
+
+                ArrayList<OnlineProfile> onlineProfiles = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
+                    onlineProfile.setDbID(dataSnapshot.getKey());
+                    onlineProfiles.add(onlineProfile);
+                }
+
+                listener.onDataGetOnlineProfiles(onlineProfiles);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
     }
 
     /**

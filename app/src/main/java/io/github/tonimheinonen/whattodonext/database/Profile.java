@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -134,10 +135,11 @@ public class Profile implements DatabaseValue, Parcelable {
         return "Profile{" +
                 "name='" + name + '\'' +
                 ", dbID='" + dbID + '\'' +
+                ", selected=" + selected +
+                ", votedItems=" + Arrays.toString(votedItems) +
                 '}';
     }
-
-    ////////////////////////// VOTING //////////////////////////
+////////////////////////// VOTING //////////////////////////
 
     /**
      * Initializes voting item amount.

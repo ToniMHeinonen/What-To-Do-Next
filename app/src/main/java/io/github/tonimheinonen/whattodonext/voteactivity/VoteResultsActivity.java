@@ -74,7 +74,7 @@ public class VoteResultsActivity extends AppCompatActivity {
         selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
 
         for (Profile p : selectedProfiles) {
-            Debug.print(this, "onCreate", p.getVotedItems().toString(), 1);
+            Debug.print(this, "onCreate", p.toString(), 1);
         }
 
         if (isOnline) {

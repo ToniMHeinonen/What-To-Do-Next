@@ -82,4 +82,13 @@ public class OnlineVotedItem implements DatabaseValue {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "OnlineVotedItem{" +
+                "userID='" + userID + '\'' +
+                ", itemID='" + itemID + '\'' +
+                ", votePoints=" + votePoints +
+                '}';
+    }
 }
