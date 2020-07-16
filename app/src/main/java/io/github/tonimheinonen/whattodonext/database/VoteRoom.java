@@ -22,7 +22,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     private String roomCode;
     private String listName;
     private String state;
-    private int firstVoteSize, lastVoteSize;
+    private int firstVoteSize, lastVoteSize, maxPerilPoints;
     private boolean ignoreUnselected, halveExtra, showExtra, showVotes;
 
     public static final String
@@ -50,13 +50,14 @@ public class VoteRoom implements DatabaseValue, Parcelable {
      * @param roomCode room code
      * @param firstVoteSize size of the first vote
      * @param lastVoteSize size of the last vote
+     * @param maxPerilPoints max peril points before item drops
      * @param ignoreUnselected whether to ignore unselected or not
      * @param halveExtra whether to halve extra or not
      * @param showExtra whether to show extra or not
      * @param showVotes whether to show votes or not
      */
     public VoteRoom(String roomCode, String listName, int firstVoteSize, int lastVoteSize,
-                    boolean ignoreUnselected, boolean halveExtra, boolean showExtra,
+                    int maxPerilPoints, boolean ignoreUnselected, boolean halveExtra, boolean showExtra,
                     boolean showVotes) {
         this.roomCode = roomCode;
         this.listName = listName;
@@ -189,6 +190,14 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         this.showVotes = showVotes;
     }
 
+    public int getMaxPerilPoints() {
+        return maxPerilPoints;
+    }
+
+    public void setMaxPerilPoints(int maxPerilPoints) {
+        this.maxPerilPoints = maxPerilPoints;
+    }
+
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -201,6 +210,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         result.put("state", state);
         result.put("firstVoteSize", firstVoteSize);
         result.put("lastVoteSize", lastVoteSize);
+        result.put("maxPerilPoints", maxPerilPoints);
         result.put("ignoreUnselected", ignoreUnselected);
         result.put("halveExtra", halveExtra);
         result.put("showExtra", showExtra);
@@ -233,6 +243,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         dest.writeString(listName);
         dest.writeInt(firstVoteSize);
         dest.writeInt(lastVoteSize);
+        dest.writeInt(maxPerilPoints);
         dest.writeInt(ignoreUnselected ? 1 : 0);
         dest.writeInt(halveExtra ? 1 : 0);
         dest.writeInt(showExtra ? 1 : 0);
@@ -250,6 +261,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         listName = in.readString();
         firstVoteSize = in.readInt();
         lastVoteSize = in.readInt();
+        maxPerilPoints = in.readInt();
         ignoreUnselected = in.readInt() == 1;
         halveExtra = in.readInt() == 1;
         showExtra = in.readInt() == 1;

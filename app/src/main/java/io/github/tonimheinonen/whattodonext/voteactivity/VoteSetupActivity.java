@@ -373,7 +373,7 @@ public class VoteSetupActivity extends AppCompatActivity implements
         String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
         // Create vote room
         final VoteRoom voteRoom = new VoteRoom(roomCode, selectedList.getName(), firstVoteSize,
-                GlobalPrefs.loadListVoteSizeSecond(),
+                GlobalPrefs.loadListVoteSizeSecond(), GlobalPrefs.loadMaxPerilPoints(),
                 GlobalPrefs.loadIgnoreUnselected(), GlobalPrefs.loadHalveExtra(),
                 GlobalPrefs.loadShowExtra(), GlobalPrefs.loadShowVoted());
 

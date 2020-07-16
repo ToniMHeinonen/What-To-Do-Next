@@ -69,6 +69,7 @@ public abstract class DatabaseHandler {
 
         // Init online voting references
         dbVoteRooms = FirebaseDatabase.getInstance().getReference().child("vote_rooms");
+        dbVoteRooms.keepSynced(true);
     }
 
     /////////////////////* LISTENER INTERFACES *////////////////////

@@ -55,6 +55,7 @@ public class VoteResultsActivity extends AppCompatActivity {
 
     // Options
     private int listVoteSizeLast;
+    private int maxPerilPoints;
     private boolean ignoreUnselected;
     private boolean showVotes;
 
@@ -122,10 +123,12 @@ public class VoteResultsActivity extends AppCompatActivity {
     private void setOptions() {
         if (isOnline) {
             listVoteSizeLast = voteRoom.getLastVoteSize();
+            maxPerilPoints = voteRoom.getMaxPerilPoints();
             ignoreUnselected = voteRoom.isIgnoreUnselected();
             showVotes = voteRoom.isShowVotes();
         } else {
             listVoteSizeLast = GlobalPrefs.loadListVoteSizeSecond();
+            maxPerilPoints = GlobalPrefs.loadMaxPerilPoints();
             ignoreUnselected = GlobalPrefs.loadIgnoreUnselected();
             showVotes = GlobalPrefs.loadShowVoted();
         }
@@ -367,7 +370,7 @@ public class VoteResultsActivity extends AppCompatActivity {
             item.setPeril(item.getPeril() + 1);
 
             // If peril points are over maximum peril points, drop item from list
-            if (item.getPeril() > GlobalPrefs.loadMaxPerilPoints()) {
+            if (item.getPeril() > maxPerilPoints) {
                 item.setPeril(0);
                 item.setFallen(true);
             }
