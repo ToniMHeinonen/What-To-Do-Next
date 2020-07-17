@@ -31,6 +31,7 @@ import io.github.tonimheinonen.whattodonext.tools.Debug;
 public class VoteWaitingActivity extends AppCompatActivity {
 
     private VoteWaitingActivity _this;
+    private ListOfItems selectedList;
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
 
@@ -50,6 +51,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
         _this = this;
 
         Intent intent = getIntent();
+        selectedList = intent.getParcelableExtra("selectedList");
         voteRoom = intent.getParcelableExtra("voteRoom");
         onlineProfile = intent.getParcelableExtra("onlineProfile");
 
@@ -86,15 +88,15 @@ public class VoteWaitingActivity extends AppCompatActivity {
             if (onlineProfile.isHost()) {
                 if (notReadyUsers.isEmpty()) {
                     // If all other users are ready, move to results
-                    moveHostToResults();
+                    prepareMoveToResults();
                 } else {
                     // Else wait and listen for other user ready changes
                     createUsersListener();
                 }
-            } else {
-                // Listen for room state changes if not host
-                createRoomStateListener();
             }
+
+            // Listen for room state changes to know when to move to results
+            createRoomStateListener();
         }));
     }
 
@@ -129,7 +131,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
 
                 // If all the users are ready, move host to results to calculate them
                 if (notReadyUsers.isEmpty())
-                    moveHostToResults();
+                    prepareMoveToResults();
             }
 
             // Unused
@@ -167,7 +169,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
         DatabaseHandler.getVoteRoomState(voteRoom, eventListener);
     }
 
-    private void moveHostToResults() {
+    private void prepareMoveToResults() {
         Buddy.showLoadingBar(_this);
 
         // Loop through all profiles and reset the ready state
@@ -175,32 +177,25 @@ public class VoteWaitingActivity extends AppCompatActivity {
             DatabaseHandler.setOnlineProfileReady(voteRoom, pro, false);
         }
 
-        // Set correct voteroom state locally for VoteResultsActivity
+        // Change vote room state
         if (voteRoom.getState().equals(VoteRoom.VOTING_FIRST))
-            voteRoom.setState(VoteRoom.RESULTS_FIRST);
+            DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.RESULTS_FIRST);
         else if (voteRoom.getState().equals(VoteRoom.VOTING_LAST))
-            voteRoom.setState(VoteRoom.RESULTS_LAST);
-
-        retrieveVotedItemsAndMoveToResults();
+            DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.RESULTS_LAST);
     }
 
     private void retrieveVotedItemsAndMoveToResults() {
         DatabaseHandler.getVoteRoomVotedItems(voteRoom, (votedItems) -> {
             this.votedItems = votedItems;
-            DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
-                    moveToNextActivity(items));
+            moveToNextActivity();
         });
     }
 
-    private void moveToNextActivity(ArrayList<ListItem> items) {
+    private void moveToNextActivity() {
         if (movingToResults)
             return;
 
         movingToResults = true;
-        // Create list of items so code does not have to be modified so much
-        ListOfItems selectedList = new ListOfItems(voteRoom.getListName());
-        selectedList.setDbID(items.get(0).getListID());
-        selectedList.setItems(items);
 
         Intent intent = new Intent(this, VoteResultsActivity.class);
         intent.putExtra("onlineProfile", onlineProfile);
@@ -209,7 +204,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
         intent.putExtra("selectedList", selectedList);
 
         // Create SelectedProfiles so code does not have to be modified so much
-        ArrayList<Profile> selectedProfiles = createProfilesFromOnlineProfile(items);
+        ArrayList<Profile> selectedProfiles = createProfilesFromOnlineProfile(selectedList.getItems());
         Debug.print(this, "add intent", selectedProfiles.toString(), 1);
 
         intent.putExtra("selectedProfiles", selectedProfiles);

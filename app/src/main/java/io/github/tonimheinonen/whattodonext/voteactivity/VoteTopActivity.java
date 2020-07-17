@@ -260,6 +260,7 @@ public class VoteTopActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, VoteWaitingActivity.class);
                 intent.putExtra("voteRoom", voteRoom);
                 intent.putExtra("onlineProfile", onlineProfile);
+                intent.putExtra("selectedList", selectedList);
                 startActivity(intent);
             });
         } else {
