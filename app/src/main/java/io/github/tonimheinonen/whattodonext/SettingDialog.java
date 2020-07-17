@@ -118,7 +118,7 @@ public class SettingDialog extends Dialog implements
                 topic.setText(activity.getString(R.string.show_votes));
                 text.setText(activity.getString(R.string.show_votes_text));
                 onOffSwitch.setVisibility(View.VISIBLE);
-                onOffSwitch.setChecked(GlobalPrefs.loadShowExtra());
+                onOffSwitch.setChecked(GlobalPrefs.loadShowVoted());
                 break;
         }
     }

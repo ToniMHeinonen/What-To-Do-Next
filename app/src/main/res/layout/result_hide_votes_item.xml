@@ -12,13 +12,13 @@
     </TextView>
 
     <TextView
-        android:id="@+id/resultsBonus"
+        android:id="@+id/resultsVotePoints"
         style="@style/resultsItemPoints"
         android:layout_weight="@dimen/results_points_weight">
     </TextView>
 
     <TextView
-        android:id="@+id/resultsVotePoints"
+        android:id="@+id/resultsBonus"
         style="@style/resultsItemPoints"
         android:layout_weight="@dimen/results_points_weight">
     </TextView>

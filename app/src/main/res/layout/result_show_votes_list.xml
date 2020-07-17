@@ -25,12 +25,12 @@
             <TextView
                 style="@style/resultsTopicPoints"
                 android:layout_width="@dimen/results_show_votes_points_width"
-                android:text="@string/results_extra" />
+                android:text="@string/results_total" />
 
             <TextView
                 style="@style/resultsTopicPoints"
                 android:layout_width="@dimen/results_show_votes_points_width"
-                android:text="@string/results_total" />
+                android:text="@string/results_extra" />
 
         </LinearLayout>
 
