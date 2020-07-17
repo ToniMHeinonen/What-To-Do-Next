@@ -2,6 +2,7 @@ package io.github.tonimheinonen.whattodonext.tools;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import io.github.tonimheinonen.whattodonext.InitializeActivity;
 import io.github.tonimheinonen.whattodonext.ListItemFragment;
+import io.github.tonimheinonen.whattodonext.MainActivity;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
@@ -128,7 +130,12 @@ public abstract class Buddy {
         showAlert(activity, getString(R.string.alert_exit_title),
                 getString(R.string.alert_exit_message),
                 getString(R.string.alert_exit_yes), null,
-                () -> { activity.finish(); }, null);
+                () -> {
+                    // Clear all other activities
+                    Intent intent = new Intent(activity, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    activity.startActivity(intent);
+                    }, null);
     }
 
     /**
