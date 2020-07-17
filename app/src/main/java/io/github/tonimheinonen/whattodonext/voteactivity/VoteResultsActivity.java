@@ -101,15 +101,12 @@ public class VoteResultsActivity extends AppCompatActivity {
             findViewById(R.id.resultsInfoText).setVisibility(View.VISIBLE);
         }
 
-        // Do these if vote is local or if vote is online and the user is the host
-        if (!isOnline || (isOnline && onlineProfile.isHost())) {
-            // If activity has not been recreated (by screen rotation)
-            if (savedInstanceState == null) {
-                calculateVotePoints();
-            } else {
-                // Load items to reset before orientation change
-                itemsToReset = savedInstanceState.getParcelableArrayList("itemsToReset");
-            }
+        // If activity has not been recreated (by screen rotation)
+        if (savedInstanceState == null) {
+            calculateVotePoints();
+        } else {
+            // Load items to reset before orientation change
+            itemsToReset = savedInstanceState.getParcelableArrayList("itemsToReset");
         }
 
         setupItemList();
