@@ -401,11 +401,13 @@ public class VoteResultsActivity extends AppCompatActivity {
 
             // If user selected item, reset it, else add bonus to it
             if (resetItem) {
-                resultsSaving.add(new SavedResultItem(votePosition, item, SavedResultItem.RESET));
+                resultsSaving.add(new SavedResultItem(votePosition, item,
+                        SavedResultItem.RESET, maxPerilPoints));
                 item.setBonus(0);
                 item.setPeril(0);
             } else {
-                resultsSaving.add(new SavedResultItem(votePosition, item, SavedResultItem.BONUS));
+                resultsSaving.add(new SavedResultItem(votePosition, item,
+                        SavedResultItem.BONUS, maxPerilPoints));
                 item.setBonus(item.getBonus() + 1);
             }
 
@@ -418,7 +420,8 @@ public class VoteResultsActivity extends AppCompatActivity {
         // Loop through all of the rest database items and add peril point to them,
         // since they did not make it in to the last vote
         for (ListItem item: items) {
-            resultsSaving.add(new SavedResultItem(-1, item, SavedResultItem.PERIL));
+            resultsSaving.add(new SavedResultItem(-1, item,
+                    SavedResultItem.PERIL, maxPerilPoints));
             item.setPeril(item.getPeril() + 1);
 
             // If peril points are over maximum peril points, drop item from list

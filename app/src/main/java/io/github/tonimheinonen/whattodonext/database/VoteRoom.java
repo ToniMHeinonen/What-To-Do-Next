@@ -64,6 +64,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         this.state = LOBBY;
         this.firstVoteSize = firstVoteSize;
         this.lastVoteSize = lastVoteSize;
+        this.maxPerilPoints = maxPerilPoints;
         this.ignoreUnselected = ignoreUnselected;
         this.halveExtra = halveExtra;
         this.showExtra = showExtra;

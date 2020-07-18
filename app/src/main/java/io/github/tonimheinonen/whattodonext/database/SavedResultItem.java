@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
-
 /**
  * Represents a voted item in result.
  * @author Toni Heinonen
@@ -45,7 +43,7 @@ public class SavedResultItem implements Serializable, DatabaseValue {
      * @param item voted item
      * @param destiny what happened to the item during vote (RESET, BONUS or PERIL)
      */
-    public SavedResultItem(int position, ListItem item, int destiny) {
+    public SavedResultItem(int position, ListItem item, int destiny, int maxPerilPoints) {
         this.position = position;
         this.name = item.getName();
         oldBonus = item.getBonus();
@@ -65,7 +63,7 @@ public class SavedResultItem implements Serializable, DatabaseValue {
             case PERIL:
                 newBonus = oldBonus;
                 int peril = oldPeril + 1;
-                if (peril > GlobalPrefs.loadMaxPerilPoints()) {
+                if (peril > maxPerilPoints) {
                     newPeril = 0;
                     dropped = true;
                 } else {
