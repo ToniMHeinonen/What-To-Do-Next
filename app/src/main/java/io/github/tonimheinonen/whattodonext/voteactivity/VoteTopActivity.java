@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -246,22 +247,13 @@ public class VoteTopActivity extends AppCompatActivity {
         if (isOnline) {
             Buddy.showLoadingBar(this);
 
-            // Convert voted items to OnlineVotedItem'
-            ArrayList<OnlineVotedItem> onlineVotedItems = new ArrayList<>();
-            for (int i = 0; i < currentProfile.getVotedItems().length; i++) {
-                OnlineVotedItem votedItem = new OnlineVotedItem(onlineProfile.getUserID(),
-                        currentProfile.getVoteItem(i).getDbID(), i + 1);
-                onlineVotedItems.add(votedItem);
-            }
-
-            // Add voted items to the vote room
-            DatabaseHandler.addVoteRoomVotedItems(voteRoom, onlineVotedItems, () -> {
-                // Move to waiting room
-                Intent intent = new Intent(this, VoteWaitingActivity.class);
-                intent.putExtra("voteRoom", voteRoom);
-                intent.putExtra("onlineProfile", onlineProfile);
-                intent.putExtra("selectedList", selectedList);
-                startActivity(intent);
+            DatabaseHandler.getVoteRoomState(voteRoom, (state) -> {
+                if (state.equals(VoteRoom.RESULTS_FIRST)) {
+                    Buddy.showToast(getString(R.string.waiting_for_host), Toast.LENGTH_LONG);
+                    Buddy.hideLoadingBar(this);
+                } else {
+                    moveToWaitingRoom();
+                }
             });
         } else {
             currentProfileIndex++;
@@ -278,5 +270,28 @@ public class VoteTopActivity extends AppCompatActivity {
                 startVoting();
             }
         }
+    }
+
+    private void moveToWaitingRoom() {
+        // Convert voted items to OnlineVotedItem
+        ArrayList<OnlineVotedItem> onlineVotedItems = new ArrayList<>();
+        for (int i = 0; i < currentProfile.getVotedItems().length; i++) {
+            OnlineVotedItem votedItem = new OnlineVotedItem(onlineProfile.getUserID(),
+                    currentProfile.getVoteItem(i).getDbID(), i + 1);
+            onlineVotedItems.add(votedItem);
+        }
+
+        // Add voted items to the vote room
+        DatabaseHandler.addVoteRoomVotedItems(voteRoom, onlineVotedItems, () -> {
+            // Change user's ready state
+            DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, true, () -> {
+                // Move to waiting room when ready has changed
+                Intent intent = new Intent(this, VoteWaitingActivity.class);
+                intent.putExtra("voteRoom", voteRoom);
+                intent.putExtra("onlineProfile", onlineProfile);
+                intent.putExtra("selectedList", selectedList);
+                startActivity(intent);
+            });
+        });
     }
 }

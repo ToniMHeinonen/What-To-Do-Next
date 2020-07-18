@@ -104,7 +104,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
-        DatabaseHandler.getOnlineProfiles(voteRoom, childEventListener);
+        DatabaseHandler.listenForOnlineProfiles(voteRoom, childEventListener);
     }
 
     private void createRoomStateListener() {
@@ -125,7 +125,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
-        DatabaseHandler.getVoteRoomState(voteRoom, eventListener);
+        DatabaseHandler.listenForVoteRoomState(voteRoom, eventListener);
     }
 
     private void setupUsersList() {

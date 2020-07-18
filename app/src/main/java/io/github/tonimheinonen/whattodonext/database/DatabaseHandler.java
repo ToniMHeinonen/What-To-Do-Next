@@ -41,6 +41,7 @@ public abstract class DatabaseHandler {
     private static String ONLINE_PROFILES = "profiles";
     private static String ONLINE_ITEMS = "items";
     private static String ONLINE_VOTED_ITEMS = "voted_items";
+    private static String ONLINE_STATE = "state";
 
     private static int MAX_SAVED_RESULTS = 7;
 
@@ -170,6 +171,16 @@ public abstract class DatabaseHandler {
          * @param onlineProfiles retrieved profiles
          */
         void onDataGetOnlineProfiles(ArrayList<OnlineProfile> onlineProfiles);
+    }
+
+    public interface DatabaseGetStringValueListener {
+
+        /**
+         * Gets a single string value from database.
+         *
+         * @param value retrieved value
+         */
+        void onDataGetString(String value);
     }
 
     /////////////////////* LISTS *////////////////////
@@ -607,29 +618,30 @@ public abstract class DatabaseHandler {
         dbVoteRooms.child(voteRoom.getDbID()).removeValue();
     }
 
-    public static void removeAllVoteRooms() {
-        dbVoteRooms.addListenerForSingleValueEvent(new ValueEventListener() {
+    public static void changeVoteRoomState(VoteRoom voteRoom, String state) {
+        dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE).setValue(state);
+    }
+
+    public static void listenForVoteRoomState(VoteRoom voteRoom, ValueEventListener listener) {
+        DatabaseReference state = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE);
+        state.addValueEventListener(listener);
+    }
+
+    public static void getVoteRoomState(VoteRoom voteRoom, DatabaseGetStringValueListener listener) {
+        DatabaseReference state = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE);
+        state.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Debug.print("DatabaseHandler", "getVoteRoom",
-                        "rooms: " + snapshot.getChildrenCount(), 1);
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    dataSnapshot.getRef().removeValue();
-                }
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String value = dataSnapshot.getValue(String.class);
+                listener.onDataGetString(value);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {}
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
         });
-    }
-
-    public static void changeVoteRoomState(VoteRoom voteRoom, String state) {
-        dbVoteRooms.child(voteRoom.getDbID()).child("state").setValue(state);
-    }
-
-    public static void getVoteRoomState(VoteRoom voteRoom, ValueEventListener listener) {
-        DatabaseReference state = dbVoteRooms.child(voteRoom.getDbID()).child("state");
-        state.addValueEventListener(listener);
     }
 
     public static void connectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
@@ -646,12 +658,12 @@ public abstract class DatabaseHandler {
         dbProfiles.updateChildren(childUpdates);
     }
 
-    public static void getOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
+    public static void listenForOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
         dbProfiles.addChildEventListener(listener);
     }
 
-    public static void getOnlineProfilesOnce(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
+    public static void getOnlineProfiles(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
 
         dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -784,9 +796,16 @@ public abstract class DatabaseHandler {
         });
     }
 
+    public static void clearVoteRoomVotedItems(VoteRoom voteRoom) {
+        dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS).removeValue();
+    }
+
     public static void setOnlineProfileReady(VoteRoom voteRoom, OnlineProfile onlineProfile,
-                                             boolean isReady) {
+                                             boolean isReady, DatabaseAddListener listener) {
         dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES).
-                child(onlineProfile.getDbID()).child("ready").setValue(isReady);
+                child(onlineProfile.getDbID()).child("ready").setValue(isReady)
+                .addOnCompleteListener(complete ->  {
+                    if(listener != null)
+                        listener.onDataAddedComplete(); });
     }
 }

@@ -73,13 +73,11 @@ public class VoteResultsActivity extends AppCompatActivity {
         selectedList = intent.getParcelableExtra("selectedList");
         selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
 
-        for (Profile p : selectedProfiles) {
-            Debug.print(this, "onCreate", p.toString(), 1);
-        }
-
         if (isOnline) {
             onlineProfile = intent.getParcelableExtra("onlineProfile");
             voteRoom = intent.getParcelableExtra("voteRoom");
+            // Set ready to false to inform others that user has loaded the results
+            DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, false, null);
 
             // Get correct vote amount
             if (voteRoom.getState().equals(VoteRoom.RESULTS_FIRST))
@@ -283,16 +281,59 @@ public class VoteResultsActivity extends AppCompatActivity {
      */
     public void nextPressed(View v) {
         if (lastResults) {
-            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+            Buddy.showLoadingBar(this);
             DatabaseHandler.getItems(this::itemsLoaded, selectedList);
         } else {
-            // Proceed to next voting
-            Intent intent = new Intent(this, VoteTopActivity.class);
-            intent.putExtra("topAmount", listVoteSizeLast);
-            intent.putExtra("selectedList", selectedList);
-            intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
-            startActivity(intent);
+            if (isOnline) {
+                Buddy.showLoadingBar(this);
+                if (onlineProfile.isHost()) {
+                    DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles) -> {
+                        boolean allInResults = true;
+                        for (OnlineProfile pro : onlineProfiles) {
+                            // If user is ready, he has not yet loaded the VoteResultsActivity which
+                            // resets the value to false
+                            if (pro.isReady()) {
+                                allInResults = false;
+                            }
+                        }
+
+                        // If all users have loaded the results, clear vote room items and change state
+                        if (allInResults) {
+                            DatabaseHandler.clearVoteRoomVotedItems(voteRoom);
+                            DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.VOTING_LAST);
+                            moveToOnlineLastVote();
+                        } else {
+                            Buddy.hideLoadingBar(this);
+                            Buddy.showToast(getString(R.string.waiting_for_users), Toast.LENGTH_LONG);
+                        }
+                    });
+                } else {
+                    // Normal users can move to voting when ever they want, if for some reason
+                    // all users have not loaded results when normal user has finished the next
+                    // vote, the normal user is unable to move to next waiting room before that
+                    moveToOnlineLastVote();
+                }
+            } else {
+                // Proceed to next voting
+                Intent intent = new Intent(this, VoteTopActivity.class);
+                intent.putExtra("topAmount", listVoteSizeLast);
+                intent.putExtra("selectedList", selectedList);
+                intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
+                startActivity(intent);
+            }
         }
+    }
+
+    private void moveToOnlineLastVote() {
+        // Proceed to next voting
+        Intent intent = new Intent(this, VoteTopActivity.class);
+        intent.putExtra("isOnline", true);
+        intent.putExtra("voteRoom", voteRoom);
+        intent.putExtra("onlineProfile", onlineProfile);
+        intent.putExtra("topAmount", listVoteSizeLast);
+        intent.putExtra("selectedList", selectedList);
+        intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
+        startActivity(intent);
     }
 
     /**

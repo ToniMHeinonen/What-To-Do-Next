@@ -63,22 +63,16 @@ public class VoteWaitingActivity extends AppCompatActivity {
         // Setup list before adding and retrieving users
         setupUsersList();
 
-        // Change user's ready state
-        DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, true);
-
         // Get all the users
-        DatabaseHandler.getOnlineProfilesOnce(voteRoom, (onlineProfiles -> {
+        DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
             Buddy.hideLoadingBar(_this);
             users = onlineProfiles;
 
             // Add not ready users
             for (OnlineProfile pro : users) {
-                // If it's not the users profile
-                if (!pro.getUserID().equals(onlineProfile.getUserID())) {
-                    // If user is not ready yet, add it to the list
-                    if (!pro.isReady()) {
-                        notReadyUsers.add(pro);
-                    }
+                // If user is not ready yet, add it to the list
+                if (!pro.isReady()) {
+                    notReadyUsers.add(pro);
                 }
             }
 
@@ -88,6 +82,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
             if (onlineProfile.isHost()) {
                 if (notReadyUsers.isEmpty()) {
                     // If all other users are ready, move to results
+                    Debug.print(this, "setupLobby", "prepareMoveToResults", 1);
                     prepareMoveToResults();
                 } else {
                     // Else wait and listen for other user ready changes
@@ -122,16 +117,22 @@ public class VoteWaitingActivity extends AppCompatActivity {
                         // Check user id and nick name, in finished product id check is enough
                         if (pro.getUserID().equals(onlineProfile.getUserID()) &&
                                 pro.getNickName().equals(onlineProfile.getNickName())) {
+                            Debug.print(_this, "remove ", pro.getNickName(), 1);
                             notReadyUsers.remove(pro);
+                            Debug.print(_this, "size ", "" + notReadyUsers.size(), 1);
+
+                            // If all the users are ready, move host to results to calculate them
+                            if (notReadyUsers.isEmpty()) {
+                                Debug.print(_this, "createUsersListener", "prepareMoveToResults", 1);
+                                prepareMoveToResults();
+                            }
                             break;
                         }
                     }
                     usersAdapter.notifyDataSetChanged();
                 }
 
-                // If all the users are ready, move host to results to calculate them
-                if (notReadyUsers.isEmpty())
-                    prepareMoveToResults();
+
             }
 
             // Unused
@@ -144,7 +145,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
-        DatabaseHandler.getOnlineProfiles(voteRoom, childEventListener);
+        DatabaseHandler.listenForOnlineProfiles(voteRoom, childEventListener);
     }
 
     private void createRoomStateListener() {
@@ -166,22 +167,19 @@ public class VoteWaitingActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
-        DatabaseHandler.getVoteRoomState(voteRoom, eventListener);
+        DatabaseHandler.listenForVoteRoomState(voteRoom, eventListener);
     }
 
     private void prepareMoveToResults() {
         Buddy.showLoadingBar(_this);
 
-        // Loop through all profiles and reset the ready state
-        for (OnlineProfile pro : users) {
-            DatabaseHandler.setOnlineProfileReady(voteRoom, pro, false);
-        }
-
-        // Change vote room state
-        if (voteRoom.getState().equals(VoteRoom.VOTING_FIRST))
-            DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.RESULTS_FIRST);
-        else if (voteRoom.getState().equals(VoteRoom.VOTING_LAST))
-            DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.RESULTS_LAST);
+        DatabaseHandler.getVoteRoomState(voteRoom, (state) -> {
+            // Change vote room state
+            if (state.equals(VoteRoom.VOTING_FIRST))
+                DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.RESULTS_FIRST);
+            else if (state.equals(VoteRoom.VOTING_LAST))
+                DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.RESULTS_LAST);
+        });
     }
 
     private void retrieveVotedItemsAndMoveToResults() {
@@ -205,7 +203,6 @@ public class VoteWaitingActivity extends AppCompatActivity {
 
         // Create SelectedProfiles so code does not have to be modified so much
         ArrayList<Profile> selectedProfiles = createProfilesFromOnlineProfile(selectedList.getItems());
-        Debug.print(this, "add intent", selectedProfiles.toString(), 1);
 
         intent.putExtra("selectedProfiles", selectedProfiles);
 
@@ -231,17 +228,14 @@ public class VoteWaitingActivity extends AppCompatActivity {
             while (iterator.hasNext()) {
                 OnlineVotedItem votedItem = iterator.next();
 
-                Debug.print(this, "createProfile", "has next", 1);
                 // If voted item belongs to the current user, proceed...
                 if (votedItem.getUserID().equals(pro.getUserID())) {
                     // Loop through all the items and find which item has the same id as voted item
-                    Debug.print(this, "createProfile", "Equals " + votedItem.toString(), 1);
                     for (ListItem item : items) {
                         // If item has the same id, add it to the profile's vote items
                         if (item.getDbID().equals(votedItem.getItemID())) {
                             int index = votedItem.getVotePoints() - 1; // -1 since array starts from 0
                             profile.addVoteItem(index, item);
-                            Debug.print(this, "createProfile", "Same id " + item.toString(), 1);
                             break;
                         }
                     }
@@ -250,7 +244,6 @@ public class VoteWaitingActivity extends AppCompatActivity {
                     iterator.remove();
                 }
             }
-            Debug.print(this, "createProfile", profile.toString(), 1);
 
             selectedProfiles.add(profile);
         }

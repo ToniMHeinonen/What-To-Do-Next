@@ -51,6 +51,8 @@
     <string name="host_allowed_start">Only the room host can start the vote!</string>
 
     <!-- VOTE WAITING -->
+    <string name="waiting_for_host">Waiting for host to start voting...</string>
+    <string name="waiting_for_users">Waiting for all users to load results...</string>
     <string name="voting_success">Voting successful</string>
     <string name="waiting_for">Waiting for users</string>
 
