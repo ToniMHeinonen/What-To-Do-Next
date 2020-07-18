@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import androidx.appcompat.app.AppCompatActivity;
-import io.github.tonimheinonen.whattodonext.MainActivity;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.ResultsShowVotesAdapter;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
@@ -47,6 +46,8 @@ public class VoteResultsActivity extends AppCompatActivity {
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
     private ArrayList<ListItem> itemsToReset = new ArrayList<>();
+
+    private boolean isOfflineOrIsOnlineHost;
 
     // Online
     private boolean isOnline;
@@ -88,6 +89,7 @@ public class VoteResultsActivity extends AppCompatActivity {
             topAmount = intent.getIntExtra("topAmount", -1);
         }
 
+        isOfflineOrIsOnlineHost = !isOnline || (isOnline && onlineProfile.isHost());
         setOptions();
 
         // If current topAmount is the same as last vote size
@@ -280,11 +282,12 @@ public class VoteResultsActivity extends AppCompatActivity {
      * @param v next button view
      */
     public void nextPressed(View v) {
-        if (lastResults) {
-            Buddy.showLoadingBar(this);
-            DatabaseHandler.getItems(this::itemsLoaded, selectedList);
-        } else {
-            if (isOnline) {
+        if (isOnline) {
+            // Online
+            if (lastResults) {
+                Buddy.showLoadingBar(this);
+                DatabaseHandler.getVoteRoomItems(voteRoom, this::itemsLoaded);
+            } else {
                 Buddy.showLoadingBar(this);
                 if (onlineProfile.isHost()) {
                     DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles) -> {
@@ -313,6 +316,12 @@ public class VoteResultsActivity extends AppCompatActivity {
                     // vote, the normal user is unable to move to next waiting room before that
                     moveToOnlineLastVote();
                 }
+            }
+        } else {
+            // Local
+            if (lastResults) {
+                Buddy.showLoadingBar(this);
+                DatabaseHandler.getItems(this::itemsLoaded, selectedList);
             } else {
                 // Proceed to next voting
                 Intent intent = new Intent(this, VoteTopActivity.class);
@@ -357,7 +366,10 @@ public class VoteResultsActivity extends AppCompatActivity {
      * @param items loaded lists from database
      */
     public void itemsLoaded(ArrayList<ListItem> items) {
-        Buddy.filterListByFallen(items, false); // Ignore fallen items
+        if (!isOnline)
+            Buddy.filterListByFallen(items, false); // Ignore fallen items
+
+        // Set items left in the last results
         ArrayList<ListItem> itemsLeft = selectedList.getItems();
 
         // Saving results
@@ -397,7 +409,9 @@ public class VoteResultsActivity extends AppCompatActivity {
                 item.setBonus(item.getBonus() + 1);
             }
 
-            DatabaseHandler.modifyItem(item);
+            if (isOfflineOrIsOnlineHost)
+                DatabaseHandler.modifyItem(item);
+
             votePosition++;
         }
 
@@ -413,15 +427,15 @@ public class VoteResultsActivity extends AppCompatActivity {
                 item.setFallen(true);
             }
 
-            DatabaseHandler.modifyItem(item);
+            if (isOfflineOrIsOnlineHost)
+                DatabaseHandler.modifyItem(item);
         }
 
         SavedResult result = new SavedResult(selectedList.getName(), selectedProfiles);
         DatabaseHandler.addResult(result);
         DatabaseHandler.addResultItems(result, resultsSaving);
 
-        startActivity(new Intent(this, MainActivity.class));
         Buddy.showToast(getString(R.string.save_successful), Toast.LENGTH_LONG);
-        finish();
+        Buddy.resetToMenuScreen(this);
     }
 }

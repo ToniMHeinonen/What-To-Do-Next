@@ -130,12 +130,17 @@ public abstract class Buddy {
         showAlert(activity, getString(R.string.alert_exit_title),
                 getString(R.string.alert_exit_message),
                 getString(R.string.alert_exit_yes), null,
-                () -> {
-                    // Clear all other activities
-                    Intent intent = new Intent(activity, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    activity.startActivity(intent);
-                    }, null);
+                () -> { resetToMenuScreen(activity); }, null);
+    }
+
+    /**
+     * Clears all other activities and moves to menu screen.
+     * @param activity current activity
+     */
+    public static void resetToMenuScreen(final Activity activity) {
+        Intent intent = new Intent(activity, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
     }
 
     /**

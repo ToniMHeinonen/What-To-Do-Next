@@ -75,7 +75,7 @@
     <string name="results_extra">Extra</string>
     <string name="results_total">Total</string>
     <string name="save_and_exit">Save and exit</string>
-    <string name="save_successful">Save successful, points have been calculated</string>
+    <string name="save_successful">Points have been calculated and the result has been saved</string>
 
     <!-- RESULTS_ACTIVITY -->
     <string name="resultsTopic">Results</string>
