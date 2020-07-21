@@ -31,6 +31,10 @@ public abstract class GlobalPrefs {
     // Tutorial
     private static String keyFirstTutorial = "first_tutorial";
 
+    // Online
+    private static String keyOnlineNickname = "online_nick_name";
+    private static String keyOnlineRoomCode = "online_room_code";
+
     /**
      * Gets access to the correct prefs depending on the user.
      * @param aContext activity context
@@ -183,5 +187,37 @@ public abstract class GlobalPrefs {
      */
     public static void saveFirstTutorial(boolean show) {
         prefs.edit().putBoolean(keyFirstTutorial, show).apply();
+    }
+
+    /**
+     * Loads previously used nickname from memory.
+     * @return nickname
+     */
+    public static String loadOnlineNickname() {
+        return prefs.getString(keyOnlineNickname, "");
+    }
+
+    /**
+     * Saves current nickname as previously used nickname.
+     * @param nickname nickname
+     */
+    public static void saveOnlineNickname(String nickname) {
+        prefs.edit().putString(keyOnlineNickname, nickname).apply();
+    }
+
+    /**
+     * Loads previously used room code from memory.
+     * @return room code
+     */
+    public static String loadOnlineRoomCode() {
+        return prefs.getString(keyOnlineRoomCode, "");
+    }
+
+    /**
+     * Saves current room code as previously used room code.
+     * @param roomCode room code
+     */
+    public static void saveOnlineRoomCode(String roomCode) {
+        prefs.edit().putString(keyOnlineRoomCode, roomCode).apply();
     }
 }

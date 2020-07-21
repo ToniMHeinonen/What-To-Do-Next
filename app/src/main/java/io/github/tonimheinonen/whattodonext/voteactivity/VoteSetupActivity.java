@@ -56,6 +56,7 @@ public class VoteSetupActivity extends AppCompatActivity implements
 
     // Online values
     private String roomCode, nickname;
+    private EditText roomCodeView, nicknameView;
 
     /**
      * Initializes StartVoteActivity.
@@ -176,6 +177,12 @@ public class VoteSetupActivity extends AppCompatActivity implements
 
         if (!lists.isEmpty())
             setupListsSpinner();
+
+        // Load previously saved values to nickname and room code
+        roomCodeView = findViewById(R.id.roomCode);
+        roomCodeView.setText(GlobalPrefs.loadOnlineRoomCode());
+        nicknameView = findViewById(R.id.nickName);
+        nicknameView.setText(GlobalPrefs.loadOnlineNickname());
 
         // Set listeners for buttons
         findViewById(R.id.back).setOnClickListener(this);
@@ -338,8 +345,8 @@ public class VoteSetupActivity extends AppCompatActivity implements
     }
 
     private boolean onlineDetailsValid() {
-        roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
-        nickname = ((EditText) findViewById(R.id.nickName)).getText().toString();
+        roomCode = roomCodeView.getText().toString();
+        nickname = nicknameView.getText().toString();
 
         if (roomCode.isEmpty()) {
             Buddy.showToast(getString(R.string.room_code_empty), Toast.LENGTH_SHORT);
@@ -350,6 +357,10 @@ public class VoteSetupActivity extends AppCompatActivity implements
             Buddy.showToast(getString(R.string.nickname_empty), Toast.LENGTH_SHORT);
             return false;
         }
+
+        // Save name and code to memory
+        GlobalPrefs.saveOnlineRoomCode(roomCode);
+        GlobalPrefs.saveOnlineNickname(nickname);
 
         return true;
     }

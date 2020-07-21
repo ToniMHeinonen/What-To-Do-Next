@@ -584,9 +584,15 @@ public abstract class DatabaseHandler {
                             public void onComplete(@NonNull Task<Void> task) {
                                 checkDuplicateVoteRooms((duplicate) -> {
                                     // If there are duplicate room codes, return false
-                                    listener.onDataAddVoteRoom(duplicate ? false : true);
-                                    // Remove the vote room
-                                    removeVoteRoom(voteRoom);
+                                    if (duplicate) {
+                                        listener.onDataAddVoteRoom(false);
+                                        // Remove the vote room
+                                        removeVoteRoom(voteRoom);
+                                    } else {
+                                        // Else there is only this newly created room, return true
+                                        listener.onDataAddVoteRoom(true);
+                                    }
+
                                 }, voteRoom.getRoomCode());
                             }
                         });
@@ -634,6 +640,8 @@ public abstract class DatabaseHandler {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "checkDuplicate",
+                        "rooms: " + snapshot.getChildrenCount(), 1);
                 boolean duplicate = snapshot.getChildrenCount() > 1;
 
                 // Returns true if there are duplicate values
