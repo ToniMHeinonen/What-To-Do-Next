@@ -575,16 +575,31 @@ public abstract class DatabaseHandler {
                 Map<String, Object> childUpdates = new HashMap<>();
                 childUpdates.put(key, values);
 
-                dbVoteRooms.updateChildren(childUpdates);
-                listener.onDataAddVoteRoom(true);
+                // Add new vote room
+                dbVoteRooms.updateChildren(childUpdates)
+                        // Listen for if someone else added a voteroom
+                        // with the same code at the same time
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                checkDuplicateVoteRooms((duplicate) -> {
+                                    // If there are duplicate room codes, return false
+                                    listener.onDataAddVoteRoom(duplicate ? false : true);
+                                    // Remove the vote room
+                                    removeVoteRoom(voteRoom);
+                                }, voteRoom.getRoomCode());
+                            }
+                        });
             } else {
+                // Room code is already taken, return false
                 listener.onDataAddVoteRoom(false);
             }
         }, voteRoom.getRoomCode());
     }
 
     public static void getVoteRoom(VoteRoomGetListener listener, String roomCode) {
-        dbVoteRooms.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query query = dbVoteRooms.orderByChild("roomCode").equalTo(roomCode);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Debug.print("DatabaseHandler", "getVoteRoom",
@@ -605,6 +620,25 @@ public abstract class DatabaseHandler {
                 // Returns null if room is not found
                 listener.onDataGetVoteRoom(voteRoom);
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    public static void checkDuplicateVoteRooms(VoteRoomAddListener listener, String roomCode) {
+        Query query = dbVoteRooms.orderByChild("roomCode").equalTo(roomCode);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean duplicate = snapshot.getChildrenCount() > 1;
+
+                // Returns true if there are duplicate values
+                listener.onDataAddVoteRoom(duplicate);
+        }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
