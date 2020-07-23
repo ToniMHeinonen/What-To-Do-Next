@@ -10,11 +10,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
@@ -42,8 +45,10 @@ public abstract class DatabaseHandler {
     private static String ONLINE_ITEMS = "items";
     private static String ONLINE_VOTED_ITEMS = "voted_items";
     private static String ONLINE_STATE = "state";
+    private static String ONLINE_TIMESTAMP = "timestamp";
 
     private static int MAX_SAVED_RESULTS = 7;
+    private static int VOTEROOM_EXPIRE_TIME = 2; // Hours
 
     /**
      * Initializes necessary values.
@@ -591,6 +596,8 @@ public abstract class DatabaseHandler {
                                     } else {
                                         // Else there is only this newly created room, return true
                                         listener.onDataAddVoteRoom(true);
+                                        // Set timestamp to the voteroom
+                                        dbVoteRooms.child(key).child(ONLINE_TIMESTAMP).setValue(ServerValue.TIMESTAMP);
                                     }
 
                                 }, voteRoom.getRoomCode());
@@ -658,6 +665,24 @@ public abstract class DatabaseHandler {
 
     public static void removeVoteRoom(VoteRoom voteRoom) {
         dbVoteRooms.child(voteRoom.getDbID()).removeValue();
+    }
+
+    public static void removeExpiredVoteRooms() {
+        long cutoff = new Date().getTime() - TimeUnit.MILLISECONDS.convert(VOTEROOM_EXPIRE_TIME, TimeUnit.HOURS);
+        Query oldVoteRooms = dbVoteRooms.orderByChild(ONLINE_TIMESTAMP).endAt(cutoff);
+        oldVoteRooms.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot itemSnapshot: snapshot.getChildren()) {
+                    itemSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                throw databaseError.toException();
+            }
+        });
     }
 
     public static void changeVoteRoomState(VoteRoom voteRoom, String state) {

@@ -70,10 +70,13 @@ public class VoteSetupActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         isOnlineVote = intent.getBooleanExtra("isOnline", false);
 
-        if (isOnlineVote)
+        if (isOnlineVote) {
             setContentView(R.layout.activity_vote_online);
-        else
+            // Remove old vote rooms
+            DatabaseHandler.removeExpiredVoteRooms();
+        } else {
             setContentView(R.layout.activity_vote_local);
+        }
 
         firstVoteSize = GlobalPrefs.loadListVoteSizeFirst();
     }
