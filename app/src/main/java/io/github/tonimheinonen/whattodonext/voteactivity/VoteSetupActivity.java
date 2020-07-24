@@ -184,6 +184,8 @@ public class VoteSetupActivity extends AppCompatActivity implements
         // Load previously saved values to nickname and room code
         roomCodeView = findViewById(R.id.roomCode);
         roomCodeView.setText(GlobalPrefs.loadOnlineRoomCode());
+        Buddy.forceUpperCaseEditText(roomCodeView);
+
         nicknameView = findViewById(R.id.nickName);
         nicknameView.setText(GlobalPrefs.loadOnlineNickname());
 
@@ -350,9 +352,10 @@ public class VoteSetupActivity extends AppCompatActivity implements
     private boolean onlineDetailsValid() {
         roomCode = roomCodeView.getText().toString();
         nickname = nicknameView.getText().toString();
+        int roomCodeLength = getResources().getInteger(R.integer.room_code_length);
 
-        if (roomCode.isEmpty()) {
-            Buddy.showToast(getString(R.string.room_code_empty), Toast.LENGTH_SHORT);
+        if (roomCode.length() < roomCodeLength) {
+            Buddy.showToast(getString(R.string.room_code_empty, roomCodeLength), Toast.LENGTH_SHORT);
             return false;
         }
 

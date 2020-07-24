@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -120,6 +121,22 @@ public abstract class Buddy {
             if (item.isFallen() != getFallen)
                 i.remove();
         }
+    }
+
+    /**
+     * Forces the edit text to change all letters to caps.
+     *
+     * If you want to force only alphabets, you need to add
+     * this to the EditText xml:
+     * android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+     * @param editText edit text to force
+     */
+    public static void forceUpperCaseEditText(EditText editText) {
+        InputFilter[] editFilters = editText.getFilters();
+        InputFilter[] newFilters = new InputFilter[editFilters.length + 1];
+        System.arraycopy(editFilters, 0, newFilters, 0, editFilters.length);
+        newFilters[editFilters.length] = new InputFilter.AllCaps();
+        editText.setFilters(newFilters);
     }
 
     /**

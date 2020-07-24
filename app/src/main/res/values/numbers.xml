@@ -17,5 +17,5 @@
     <item name="list_name_max_length" format="integer" type="integer">30</item>
     <item name="activity_name_max_length" format="integer" type="integer">50</item>
     <item name="profile_name_max_length" format="integer" type="integer">20</item>
-    <item name="room_code_max_length" format="integer" type="integer">10</item>
+    <item name="room_code_length" format="integer" type="integer">4</item>
 </resources>

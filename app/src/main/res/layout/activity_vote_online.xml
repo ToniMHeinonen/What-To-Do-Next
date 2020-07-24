@@ -68,13 +68,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 android:gravity="center"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
                 android:hint="@string/online_room_code"
                 android:textSize="25sp"
-                android:maxLength="@integer/room_code_max_length"/>
+                android:maxLength="@integer/room_code_length"/>
 
             <EditText
                 android:id="@+id/nickName"
@@ -83,8 +84,8 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
                 android:hint="@string/online_nickname"
                 android:textSize="25sp"
                 android:maxLength="@integer/profile_name_max_length"/>
