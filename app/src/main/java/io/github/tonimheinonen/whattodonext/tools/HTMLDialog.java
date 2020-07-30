@@ -23,8 +23,7 @@ public class HTMLDialog extends Dialog implements
 
     public enum HTMLText {
         FIRST,
-        BETA_ONLINE,
-        VOTE_ROOM_DELETE
+        BETA_ONLINE
     }
 
     private Activity activity;

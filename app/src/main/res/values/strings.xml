@@ -181,7 +181,7 @@
     &lt;h1&gt;Online Beta!&lt;/h1&gt;
     &lt;p&gt;Online voting is still in beta stage. Don\'t worry, your activities will not get lost or
         altered if something goes wrong. Enjoy!&lt;/p&gt;
-</string>
+    &lt;h2&gt;Note: Vote rooms will be removed after 2 hours has passed from their creation.&lt;/h2&gt;</string>
 
     <!-- CUSTOM ALERT DIALOG -->
     <string name="alertTopic">Alert!</string>

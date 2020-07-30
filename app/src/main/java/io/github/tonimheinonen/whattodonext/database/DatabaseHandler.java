@@ -764,7 +764,28 @@ public abstract class DatabaseHandler {
      */
     public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-        dbProfiles.child(profile.getDbID()).removeValue();
+        dbProfiles.child(profile.getDbID()).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    // Remove vote rooms if all users disconnect from the room
+                    DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+
+                    dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.getChildrenCount() == 0)
+                                removeVoteRoom(voteRoom);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                            databaseError.toException().printStackTrace();
+                        }
+                    });
+                }
+            });
     }
 
     public static void addItemsToVoteRoom(final VoteRoom voteRoom, ArrayList<ListItem> items) {
