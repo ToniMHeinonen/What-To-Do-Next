@@ -140,14 +140,24 @@ public abstract class Buddy {
     }
 
     /**
+     * Listen for if the player exits voting.
+     */
+    public interface VoteExitListener {
+        void VoteExitConfirmed();
+    }
+
+    /**
      * Creates Alert Dialog when exiting voting.
      * @param activity
      */
-    public static void exitVoting(final Activity activity) {
+    public static void exitVoting(final Activity activity, VoteExitListener listener) {
         showAlert(activity, getString(R.string.alert_exit_title),
                 getString(R.string.alert_exit_message),
                 getString(R.string.alert_exit_yes), null,
-                () -> { resetToMenuScreen(activity); }, null);
+                () -> {
+                    listener.VoteExitConfirmed();
+                    resetToMenuScreen(activity);
+                }, null);
     }
 
     /**

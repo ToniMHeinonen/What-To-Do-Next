@@ -414,7 +414,13 @@ public class VoteSetupActivity extends AppCompatActivity implements
 
         DatabaseHandler.getVoteRoom((voteRoom) -> {
             if (voteRoom != null) {
-                moveToOnlineLobby(voteRoom, false);
+                // If vote has already started, don't allow joining
+                if (!voteRoom.getState().equals(VoteRoom.LOBBY)) {
+                    Buddy.showToast(getString(R.string.vote_already_started), Toast.LENGTH_LONG);
+                    Buddy.hideLoadingBar(this);
+                } else {
+                    moveToOnlineLobby(voteRoom, false);
+                }
             } else {
                 Buddy.showToast(getString(R.string.room_not_found), Toast.LENGTH_LONG);
                 Buddy.hideLoadingBar(this);

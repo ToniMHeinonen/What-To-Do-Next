@@ -236,7 +236,10 @@ public class VoteTopActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        Buddy.exitVoting(this);
+        if (isOnline)
+            Buddy.exitVoting(this, () -> DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile));
+        else
+            Buddy.exitVoting(this, null);
     }
 
     /**

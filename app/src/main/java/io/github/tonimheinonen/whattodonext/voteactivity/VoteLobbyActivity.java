@@ -161,6 +161,11 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void startVoting() {
+        if (users.size() <= 1) {
+            Buddy.showToast(getString(R.string.online_vote_solo), Toast.LENGTH_SHORT);
+            return;
+        }
+
         ArrayList<ListItem> items = getIntent().getParcelableArrayListExtra("items");
         DatabaseHandler.addItemsToVoteRoom(voteRoom, items);
         Buddy.showLoadingBar(this);

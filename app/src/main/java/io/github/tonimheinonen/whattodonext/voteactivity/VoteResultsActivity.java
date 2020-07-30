@@ -358,7 +358,10 @@ public class VoteResultsActivity extends AppCompatActivity {
      */
     @Override
     public void onBackPressed() {
-        Buddy.exitVoting(this);
+        if (isOnline)
+            Buddy.exitVoting(this, () -> DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile));
+        else
+            Buddy.exitVoting(this, null);
     }
 
     /**
@@ -437,6 +440,10 @@ public class VoteResultsActivity extends AppCompatActivity {
         SavedResult result = new SavedResult(selectedList.getName(), selectedProfiles);
         DatabaseHandler.addResult(result);
         DatabaseHandler.addResultItems(result, resultsSaving);
+
+        // Disconnect the user from the vote room
+        if (isOnline)
+            DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile);
 
         Buddy.showToast(getString(R.string.save_successful), Toast.LENGTH_LONG);
         Buddy.resetToMenuScreen(this);

@@ -43,6 +43,9 @@
     <string name="room_code_empty">Room code needs to have %1$d letters!</string>
     <string name="nickname_empty">Nickname can\'t be empty!</string>
     <string name="room_not_found">Room not found! Please check your provided room code.</string>
+    <string name="vote_already_started">Vote already started! Beta version does not support joining
+        the vote room later.</string>
+    <string name="online_vote_solo">You can\'t vote online alone. Start a local vote instead!</string>
 
     <!-- VOTE_LOBBY -->
     <string name="lobby_room_code">Room Code</string>
