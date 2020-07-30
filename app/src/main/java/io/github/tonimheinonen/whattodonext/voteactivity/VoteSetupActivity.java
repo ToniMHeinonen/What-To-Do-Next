@@ -28,6 +28,7 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
 /**
  * Handles setting up voting.
@@ -74,6 +75,9 @@ public class VoteSetupActivity extends AppCompatActivity implements
             setContentView(R.layout.activity_vote_online);
             // Remove old vote rooms
             DatabaseHandler.removeExpiredVoteRooms();
+            // Show beta info if not yet confirmed
+            if (GlobalPrefs.loadPopupInfo(GlobalPrefs.BETA_ONLINE))
+                new HTMLDialog(this, HTMLDialog.HTMLText.BETA_ONLINE).show();
         } else {
             setContentView(R.layout.activity_vote_local);
         }

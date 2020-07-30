@@ -28,8 +28,10 @@ public abstract class GlobalPrefs {
     private static String keyShowExtra = "show_extra";
     private static String keyShowVoted = "show_voted";
 
-    // Tutorial
-    private static String keyFirstTutorial = "first_tutorial";
+    // Popup information box
+    private static String keyPopup = "popup_";
+    public static final String FIRST_TUTORIAL = "first_tutorial123414";
+    public static final String BETA_ONLINE = "beta_online12537311";
 
     // Online
     private static String keyOnlineNickname = "online_nick_name";
@@ -174,19 +176,19 @@ public abstract class GlobalPrefs {
     }
 
     /**
-     * Loads whether to show first tutorial or not.
+     * Loads whether to show provided popup info type.
      * @return true if to show
      */
-    public static boolean loadFirstTutorial() {
-        return prefs.getBoolean(keyFirstTutorial, true);
+    public static boolean loadPopupInfo(String type) {
+        return prefs.getBoolean(keyPopup + type, true);
     }
 
     /**
-     * Saves whether to show first tutorial or not.
+     * Saves whether to show provided popup info type.
      * @param show true if to show
      */
-    public static void saveFirstTutorial(boolean show) {
-        prefs.edit().putBoolean(keyFirstTutorial, show).apply();
+    public static void savePopupInfo(String type, boolean show) {
+        prefs.edit().putBoolean(keyPopup + type, show).apply();
     }
 
     /**

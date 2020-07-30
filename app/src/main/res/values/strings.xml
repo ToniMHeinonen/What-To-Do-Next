@@ -149,35 +149,39 @@
     <string name="first_vote_same_as_last">Points has to be higher than in last vote!</string>
     <string name="points_at_zero">Points has to be at least 1!</string>
 
-    <!-- TUTORIAL -->
+    <!-- HTMLDialog -->
+    <string name="htmlDialogOk">OK</string>
     <string name="show_later">Show Later</string>
 
-    <string name="first_tutorial">Welcome to the app!</string>
-
-    <string name="first_tutorial_text">Have you ever been in a situation with your friends when you
+    <string name="first_tutorial_text">
+    &lt;h1&gt;Welcome to the app!&lt;/h1&gt;
+    &lt;p&gt;Have you ever been in a situation with your friends when you
         can\'t decide what to do? With this app, your everyday decisions will flow like a charm and
-        you never have to argue again.\n
-        \n
-        Using the app is as simple as this:\n
-        1. Create a new list\n
-        2. Add all the activities you consider doing on that list (you can ignore bonus and peril
-        points for now)\n
-        3. Every voter lists their top 7 activities\n
-        4. Activities that receive the most amount of points will move on to the next voting round\n
-        5. Every voter lists their top 5 activities from the remaining list\n
-        6. Select all the activities which your group of friends will do today\n
-        7. Save and enjoy!\n
-        \n
-        If you are already used to the concept of voting and want to use the app regularly, there
-        are some extra steps which can improve your voting experience:\n
-        \n
-        - Every activity that makes it into the top 7 list will gain 1 "bonus" point\n
-        - Every other activity will gain 1 "peril" point\n
-        - When activity gains over 5 peril points, it will be removed from the list
-        (you can return it back by clicking the fallen button)\n
-        - You can alter all of these point thresholds and other settings from the setting menu\n
-        \n
-        Note: You can read this tutorial at any time from the Google Play Store</string>
+        you never have to argue again.&lt;/p&gt;
+    &lt;p&gt;Using the app is as simple as this:&lt;/p&gt;
+    &lt;p&gt;1. Create a new list&lt;/p&gt;
+    &lt;p&gt;2. Add all the activities you consider doing on that list (you can ignore bonus and peril
+        points for now)&lt;/p&gt;
+    &lt;p&gt;3. Every voter lists their top 7 activities&lt;/p&gt;
+    &lt;p&gt;4. Activities that receive the most amount of points will move on to the next voting round&lt;/p&gt;
+    &lt;p&gt;5. Every voter lists their top 5 activities from the remaining list&lt;/p&gt;
+    &lt;p&gt;6. Select all the activities which your group of friends will do today&lt;/p&gt;
+    &lt;p&gt;7. Save and enjoy!&lt;/p&gt;
+    &lt;h2&gt;Advanced:&lt;/h2&gt;
+    &lt;p&gt;If you are already used to the concept of voting and want to use the app regularly, there
+        are some extra steps which can improve your voting experience:&lt;/p&gt;
+    &lt;p&gt;- Every activity that makes it into the top 7 list will gain 1 "bonus" point&lt;/p&gt;
+    &lt;p&gt;- Every other activity will gain 1 "peril" point&lt;/p&gt;
+    &lt;p&gt;- When activity gains over 5 peril points, it will be removed from the list
+        (you can return it back by clicking the fallen button)&lt;/p&gt;
+    &lt;p&gt;- You can alter all of these point thresholds and other settings from the setting menu&lt;/p&gt;
+    &lt;h2&gt;Note: You can read this tutorial at any time from the Google Play Store.&lt;/h2&gt;</string>
+
+    <string name="beta_online">
+    &lt;h1&gt;Online Beta!&lt;/h1&gt;
+    &lt;p&gt;Online voting is still in beta stage. Don\'t worry, your activities will not get lost or
+        altered if something goes wrong. Enjoy!&lt;/p&gt;
+</string>
 
     <!-- CUSTOM ALERT DIALOG -->
     <string name="alertTopic">Alert!</string>

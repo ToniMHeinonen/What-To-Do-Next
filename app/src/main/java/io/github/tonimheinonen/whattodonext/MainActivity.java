@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.registration.LoginActivity;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
 /**
  * Handles moving from one activity to another.
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
             GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
 
             // If first tutorial has not been confirmed yet, show it
-            if (GlobalPrefs.loadFirstTutorial())
-                new TutorialDialog(this, TutorialDialog.FIRST_TUTORIAL).show();
+            if (GlobalPrefs.loadPopupInfo(GlobalPrefs.FIRST_TUTORIAL))
+                new HTMLDialog(this, HTMLDialog.HTMLText.FIRST).show();
         }
     }
 
