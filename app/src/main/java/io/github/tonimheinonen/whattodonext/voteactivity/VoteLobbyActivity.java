@@ -1,6 +1,7 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -36,10 +37,15 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<OnlineProfile> users = new ArrayList<>();
     private DatabaseValueListAdapter usersAdapter;
 
+    private boolean debug = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         _this = this;
+
+        // Lock orientation during voting to prevent million different problems
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         Intent intent = getIntent();
         voteRoom = intent.getParcelableExtra("voteRoom");
@@ -161,7 +167,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void startVoting() {
-        if (users.size() <= 1) {
+        if (users.size() <= 1 && !debug) {
             Buddy.showToast(getString(R.string.online_vote_solo), Toast.LENGTH_SHORT);
             return;
         }
