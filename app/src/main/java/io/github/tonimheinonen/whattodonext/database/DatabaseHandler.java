@@ -120,8 +120,9 @@ public abstract class DatabaseHandler {
         void onDataGetResultItems(ArrayList<SavedResultItem> resultItems);
     }
 
-    public interface VoteRoomAddListener {
+    /////////////////////* VOTE ROOM INTERFACES *////////////////////
 
+    public interface VoteRoomAddListener {
         /**
          * Adds a vote room.
          *
@@ -131,7 +132,6 @@ public abstract class DatabaseHandler {
     }
 
     public interface VoteRoomGetListener {
-
         /**
          * Gets vote room based on the room code.
          *
@@ -141,7 +141,6 @@ public abstract class DatabaseHandler {
     }
 
     public interface VoteRoomGetItemsListener {
-
         /**
          * Gets vote room items.
          *
@@ -151,7 +150,6 @@ public abstract class DatabaseHandler {
     }
 
     public interface VoteRoomGetVotedItemsListener {
-
         /**
          * Gets vote room voted items.
          *
@@ -160,16 +158,7 @@ public abstract class DatabaseHandler {
         void onDataGetVoteRoomVotedItems(ArrayList<OnlineVotedItem> items);
     }
 
-    public interface DatabaseAddListener {
-
-        /**
-         * Listens when adding data is complete.
-         */
-        void onDataAddedComplete();
-    }
-
     public interface VoteRoomGetOnlineProfilesListener {
-
         /**
          * Gets vote room online profiles
          *
@@ -178,8 +167,14 @@ public abstract class DatabaseHandler {
         void onDataGetOnlineProfiles(ArrayList<OnlineProfile> onlineProfiles);
     }
 
-    public interface DatabaseGetStringValueListener {
+    public interface DatabaseAddListener {
+        /**
+         * Listens when adding data is complete.
+         */
+        void onDataAddedComplete();
+    }
 
+    public interface DatabaseGetStringValueListener {
         /**
          * Gets a single string value from database.
          *

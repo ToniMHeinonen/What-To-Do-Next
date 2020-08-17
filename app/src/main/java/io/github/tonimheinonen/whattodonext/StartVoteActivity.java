@@ -3,8 +3,10 @@ package io.github.tonimheinonen.whattodonext;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.voteactivity.VoteSetupActivity;
 
 public class StartVoteActivity extends AppCompatActivity
@@ -43,6 +45,14 @@ public class StartVoteActivity extends AppCompatActivity
     }
 
     private void SetupVote(boolean online) {
+        // Checks if the user is connected to the internet
+        if (online) {
+             if (!Buddy.isOnline(this)) {
+                 Buddy.showToast(getString(R.string.no_internet), Toast.LENGTH_LONG);
+                 return;
+             }
+        }
+
         // Move to setting up vote
         Intent intent = new Intent(this, VoteSetupActivity.class);
         intent.putExtra("isOnline", online);

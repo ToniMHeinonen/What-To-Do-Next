@@ -3,6 +3,8 @@ package io.github.tonimheinonen.whattodonext.tools;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -310,5 +312,20 @@ public abstract class Buddy {
         }
 
         return date;
+    }
+
+    /**
+     * Checks whether the user is connected to the internet or not.
+     * @param activity current activity
+     * @return true if is connected
+     */
+    public static boolean isOnline(Activity activity) {
+        ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
