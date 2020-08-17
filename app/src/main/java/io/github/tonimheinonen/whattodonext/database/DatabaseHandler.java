@@ -567,6 +567,11 @@ public abstract class DatabaseHandler {
 
     /////////////////////* VOTE ROOMS *////////////////////
 
+    /**
+     * Adds vote room if room does not exist yet.
+     * @param listener listens for vote room add completion
+     * @param voteRoom vote room to add
+     */
     public static void addVoteRoom(final VoteRoomAddListener listener, final VoteRoom voteRoom) {
         // Check if room code is already taken
         getVoteRoom((room) -> {
@@ -610,6 +615,11 @@ public abstract class DatabaseHandler {
         }, voteRoom.getRoomCode());
     }
 
+    /**
+     * Retrieves a vote room with the provided room code if it exists.
+     * @param listener listener for retrieving the vote room, null if room does not exist
+     * @param roomCode code for the room to retrieve
+     */
     public static void getVoteRoom(VoteRoomGetListener listener, String roomCode) {
         Query query = dbVoteRooms.orderByChild("roomCode").equalTo(roomCode);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -642,6 +652,11 @@ public abstract class DatabaseHandler {
         });
     }
 
+    /**
+     * Checks if multiple users have created a vote room with the same code at the same time.
+     * @param listener listens if duplicate rooms are created
+     * @param roomCode room code to check
+     */
     public static void checkDuplicateVoteRooms(VoteRoomAddListener listener, String roomCode) {
         Query query = dbVoteRooms.orderByChild("roomCode").equalTo(roomCode);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -663,10 +678,17 @@ public abstract class DatabaseHandler {
         });
     }
 
+    /**
+     * Removes the given vote room from the database.
+     * @param voteRoom vote room to remove
+     */
     public static void removeVoteRoom(VoteRoom voteRoom) {
         dbVoteRooms.child(voteRoom.getDbID()).removeValue();
     }
 
+    /**
+     * Removes all vote room which have surpassed the maximum time limit from creation.
+     */
     public static void removeExpiredVoteRooms() {
         long cutoff = new Date().getTime() - TimeUnit.MILLISECONDS.convert(VOTEROOM_EXPIRE_TIME, TimeUnit.HOURS);
         Query oldVoteRooms = dbVoteRooms.orderByChild(ONLINE_TIMESTAMP).endAt(cutoff);
@@ -685,15 +707,30 @@ public abstract class DatabaseHandler {
         });
     }
 
+    /**
+     * Changes the state for the given vote room.
+     * @param voteRoom vote room to change the state from
+     * @param state new state
+     */
     public static void changeVoteRoomState(VoteRoom voteRoom, String state) {
         dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE).setValue(state);
     }
 
+    /**
+     * Listens for the vote room state changes.
+     * @param voteRoom vote room to listen for
+     * @param listener listener for vote room state changes
+     */
     public static void listenForVoteRoomState(VoteRoom voteRoom, ValueEventListener listener) {
         DatabaseReference state = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE);
         state.addValueEventListener(listener);
     }
 
+    /**
+     * Retrieves the current state of the vote room.
+     * @param voteRoom vote room to listen
+     * @param listener listens for the state of the vote room
+     */
     public static void getVoteRoomState(VoteRoom voteRoom, DatabaseGetStringValueListener listener) {
         DatabaseReference state = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE);
         state.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -711,6 +748,11 @@ public abstract class DatabaseHandler {
         });
     }
 
+    /**
+     * Connects a online profile to the vote room.
+     * @param voteRoom vote room to connect to
+     * @param profile profile to connect
+     */
     public static void connectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
 
@@ -725,11 +767,21 @@ public abstract class DatabaseHandler {
         dbProfiles.updateChildren(childUpdates);
     }
 
+    /**
+     * Listens for changes in online profiles.
+     * @param voteRoom vote room to listen for
+     * @param listener listens for online profile changes
+     */
     public static void listenForOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
         dbProfiles.addChildEventListener(listener);
     }
 
+    /**
+     * Return all current online profiles connected to the provided vote room.
+     * @param voteRoom vote room to get the profiles from
+     * @param listener listens for connected online profiles
+     */
     public static void getOnlineProfiles(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
 
@@ -788,6 +840,11 @@ public abstract class DatabaseHandler {
             });
     }
 
+    /**
+     * Adds items which users will vote to the provided vote room.
+     * @param voteRoom vote room to add the items to
+     * @param items items to add
+     */
     public static void addItemsToVoteRoom(final VoteRoom voteRoom, ArrayList<ListItem> items) {
         DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_ITEMS);
         Map<String, Object> childUpdates = new HashMap<>();
@@ -811,6 +868,11 @@ public abstract class DatabaseHandler {
                 });
     }
 
+    /**
+     * Retrieves the items to vote in the provided vote room.
+     * @param voteRoom vote room to retrieve the items from
+     * @param listener listens for the items in the vote room
+     */
     public static void getVoteRoomItems(VoteRoom voteRoom, VoteRoomGetItemsListener listener) {
         DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_ITEMS);
 
@@ -839,6 +901,12 @@ public abstract class DatabaseHandler {
         });
     }
 
+    /**
+     * Adds voted items to the vote room.
+     * @param voteRoom vote room to add the voted items to
+     * @param items voted items to add
+     * @param listener listens for completion of adding the items
+     */
     public static void addVoteRoomVotedItems(VoteRoom voteRoom, ArrayList<OnlineVotedItem> items,
                                              DatabaseAddListener listener) {
         DatabaseReference dbOnlineVotedItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS);
@@ -857,6 +925,11 @@ public abstract class DatabaseHandler {
                 .addOnCompleteListener(complete -> listener.onDataAddedComplete());
     }
 
+    /**
+     * Retrieves all of the voted items in provided vote room.
+     * @param voteRoom vote room to retrieve the items from
+     * @param listener listens for added vote items on the vote room
+     */
     public static void getVoteRoomVotedItems(VoteRoom voteRoom, VoteRoomGetVotedItemsListener listener) {
         DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS);
 
@@ -884,10 +957,21 @@ public abstract class DatabaseHandler {
         });
     }
 
+    /**
+     * Removes all the voted items in provided vote room.
+     * @param voteRoom vote room to remove the voted items from
+     */
     public static void clearVoteRoomVotedItems(VoteRoom voteRoom) {
         dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS).removeValue();
     }
 
+    /**
+     * Changes the ready state of the provided only profile in the provided vote room.
+     * @param voteRoom vote room to change the online profile state
+     * @param onlineProfile online profile to change the ready state
+     * @param isReady whether the online profile is ready or not
+     * @param listener listens for state change completion
+     */
     public static void setOnlineProfileReady(VoteRoom voteRoom, OnlineProfile onlineProfile,
                                              boolean isReady, DatabaseAddListener listener) {
         dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES).

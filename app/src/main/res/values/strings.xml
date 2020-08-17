@@ -170,7 +170,7 @@
     &lt;p&gt;5. Every voter lists their top 5 activities from the remaining list&lt;/p&gt;
     &lt;p&gt;6. Select all the activities which your group of friends will do today&lt;/p&gt;
     &lt;p&gt;7. Save and enjoy!&lt;/p&gt;
-    &lt;h2&gt;Advanced:&lt;/h2&gt;
+    &lt;h3&gt;Advanced:&lt;/h3&gt;
     &lt;p&gt;If you are already used to the concept of voting and want to use the app regularly, there
         are some extra steps which can improve your voting experience:&lt;/p&gt;
     &lt;p&gt;- Every activity that makes it into the top 7 list will gain 1 "bonus" point&lt;/p&gt;
@@ -178,13 +178,13 @@
     &lt;p&gt;- When activity gains over 5 peril points, it will be removed from the list
         (you can return it back by clicking the fallen button)&lt;/p&gt;
     &lt;p&gt;- You can alter all of these point thresholds and other settings from the setting menu&lt;/p&gt;
-    &lt;h2&gt;Note: You can read this tutorial at any time from the Google Play Store.&lt;/h2&gt;</string>
+    &lt;h5&gt;Note: You can read this tutorial at any time from the Google Play Store.&lt;/h5&gt;</string>
 
     <string name="beta_online">
     &lt;h1&gt;Online Beta!&lt;/h1&gt;
     &lt;p&gt;Online voting is still in beta stage. Don\'t worry, your activities will not get lost or
         altered if something goes wrong. Enjoy!&lt;/p&gt;
-    &lt;h2&gt;Note: Vote rooms will be removed after 2 hours has passed from their creation.&lt;/h2&gt;</string>
+    &lt;h5&gt;Note: Vote rooms will be removed after 2 hours has passed from their creation.&lt;/h5&gt;</string>
 
     <!-- CUSTOM ALERT DIALOG -->
     <string name="alertTopic">Alert!</string>
