@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.ResultsShowVotesAdapter;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
@@ -39,7 +38,7 @@ import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
  * @version 1.0
  * @since 1.0
  */
-public class VoteResultsActivity extends AppCompatActivity {
+public class VoteResultsActivity extends VotingParentActivity {
 
     private boolean lastResults;
     private int topAmount;
@@ -284,11 +283,11 @@ public class VoteResultsActivity extends AppCompatActivity {
     public void nextPressed(View v) {
         if (isOnline) {
             // Online
+            Buddy.showOnlineVoteLoadingBar(this);
+
             if (lastResults) {
-                Buddy.showLoadingBar(this);
                 DatabaseHandler.getVoteRoomItems(voteRoom, this::itemsLoaded);
             } else {
-                Buddy.showLoadingBar(this);
                 if (onlineProfile.isHost()) {
                     DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles) -> {
                         boolean allInResults = true;
@@ -306,7 +305,7 @@ public class VoteResultsActivity extends AppCompatActivity {
                             DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.VOTING_LAST);
                             moveToOnlineLastVote();
                         } else {
-                            Buddy.hideLoadingBar(this);
+                            Buddy.hideOnlineVoteLoadingBar(this);
                             Buddy.showToast(getString(R.string.waiting_for_users), Toast.LENGTH_LONG);
                         }
                     });
@@ -320,7 +319,7 @@ public class VoteResultsActivity extends AppCompatActivity {
         } else {
             // Local
             if (lastResults) {
-                Buddy.showLoadingBar(this);
+                Buddy.showOnlineVoteLoadingBar(this);
                 DatabaseHandler.getItems(this::itemsLoaded, selectedList);
             } else {
                 // Proceed to next voting

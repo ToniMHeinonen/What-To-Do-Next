@@ -11,7 +11,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.ListItemFragment;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
@@ -32,7 +31,7 @@ import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
  * @version 1.0
  * @since 1.0
  */
-public class VoteTopActivity extends AppCompatActivity {
+public class VoteTopActivity extends VotingParentActivity {
 
     private int topAmount;
     private ListOfItems selectedList;
@@ -248,12 +247,12 @@ public class VoteTopActivity extends AppCompatActivity {
      */
     public void nextPressed(View v) {
         if (isOnline) {
-            Buddy.showLoadingBar(this);
+            Buddy.showOnlineVoteLoadingBar(this);
 
             DatabaseHandler.getVoteRoomState(voteRoom, (state) -> {
                 if (state.equals(VoteRoom.RESULTS_FIRST)) {
                     Buddy.showToast(getString(R.string.waiting_for_host), Toast.LENGTH_LONG);
-                    Buddy.hideLoadingBar(this);
+                    Buddy.hideOnlineVoteLoadingBar(this);
                 } else {
                     moveToWaitingRoom();
                 }

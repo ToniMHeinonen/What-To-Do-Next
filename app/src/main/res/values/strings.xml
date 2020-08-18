@@ -31,6 +31,7 @@
 
     <!-- START_VOTE_ONLINE -->
     <string name="no_internet">You need to be connected to the internet in order to vote online!</string>
+    <string name="long_loading_time">Check your internet connection!</string>
     <string name="online_detail">Online Detail</string>
     <string name="online_nickname">Nickname</string>
     <string name="online_room_code">Room Code</string>

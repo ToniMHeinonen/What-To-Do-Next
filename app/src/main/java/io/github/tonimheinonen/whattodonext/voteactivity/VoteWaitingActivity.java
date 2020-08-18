@@ -15,7 +15,6 @@ import java.util.Iterator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
@@ -29,7 +28,14 @@ import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 
-public class VoteWaitingActivity extends AppCompatActivity {
+/**
+ * Handles showing the waiting room between VoteTopActivity and VoteResultsActivity.
+ * @author Toni Heinonen
+ * @author toni1.heinonen@gmail.com
+ * @version 1.3
+ * @since 1.3
+ */
+public class VoteWaitingActivity extends VotingParentActivity {
 
     private VoteWaitingActivity _this;
     private ListOfItems selectedList;
@@ -59,7 +65,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
         voteRoom = intent.getParcelableExtra("voteRoom");
         onlineProfile = intent.getParcelableExtra("onlineProfile");
 
-        Buddy.showLoadingBar(this);
+        Buddy.showOnlineVoteLoadingBar(this);
         setupLobby();
     }
 
@@ -69,7 +75,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
 
         // Get all the users
         DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
-            Buddy.hideLoadingBar(_this);
+            Buddy.hideOnlineVoteLoadingBar(_this);
             users = onlineProfiles;
 
             // Add not ready users
@@ -162,7 +168,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
 
                 if (state != null && (state.equals(VoteRoom.RESULTS_FIRST) ||
                             state.equals(VoteRoom.RESULTS_LAST))) {
-                    Buddy.showLoadingBar(_this);
+                    Buddy.showOnlineVoteLoadingBar(_this);
                     voteRoom.setState(state);
 
                     retrieveVotedItemsAndMoveToResults();
@@ -176,7 +182,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
     }
 
     private void prepareMoveToResults() {
-        Buddy.showLoadingBar(_this);
+        Buddy.showOnlineVoteLoadingBar(_this);
 
         DatabaseHandler.getVoteRoomState(voteRoom, (state) -> {
             // Change vote room state

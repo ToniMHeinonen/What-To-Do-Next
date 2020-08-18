@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.MainActivity;
 import io.github.tonimheinonen.whattodonext.R;
@@ -35,7 +34,7 @@ import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
  * @version 1.0
  * @since 1.0
  */
-public class VoteSetupActivity extends AppCompatActivity implements
+public class VoteSetupActivity extends VotingParentActivity implements
         View.OnClickListener {
 
     private VoteSetupActivity _this = this;
@@ -387,7 +386,7 @@ public class VoteSetupActivity extends AppCompatActivity implements
             return;
         }
 
-        Buddy.showLoadingBar(this);
+        Buddy.showOnlineVoteLoadingBar(this);
 
         String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
         // Create vote room
@@ -402,26 +401,26 @@ public class VoteSetupActivity extends AppCompatActivity implements
                 moveToOnlineLobby(voteRoom, true);
             } else {
                 Buddy.showToast(getString(R.string.online_host_duplicate), Toast.LENGTH_LONG);
-                Buddy.hideLoadingBar(this);
+                Buddy.hideOnlineVoteLoadingBar(this);
             }
         }, voteRoom);
     }
 
     private void joinVoteRoom() {
-        Buddy.showLoadingBar(this);
+        Buddy.showOnlineVoteLoadingBar(this);
 
         DatabaseHandler.getVoteRoom((voteRoom) -> {
             if (voteRoom != null) {
                 // If vote has already started, don't allow joining
                 if (!voteRoom.getState().equals(VoteRoom.LOBBY)) {
                     Buddy.showToast(getString(R.string.vote_already_started), Toast.LENGTH_LONG);
-                    Buddy.hideLoadingBar(this);
+                    Buddy.hideOnlineVoteLoadingBar(this);
                 } else {
                     moveToOnlineLobby(voteRoom, false);
                 }
             } else {
                 Buddy.showToast(getString(R.string.room_not_found), Toast.LENGTH_LONG);
-                Buddy.hideLoadingBar(this);
+                Buddy.hideOnlineVoteLoadingBar(this);
             }
         }, roomCode);
     }

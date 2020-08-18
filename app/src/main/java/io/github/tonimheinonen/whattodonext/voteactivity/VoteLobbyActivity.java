@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
@@ -28,7 +27,7 @@ import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
-public class VoteLobbyActivity extends AppCompatActivity implements View.OnClickListener {
+public class VoteLobbyActivity extends VotingParentActivity implements View.OnClickListener {
 
     private VoteLobbyActivity _this;
     private VoteRoom voteRoom;
@@ -59,7 +58,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.back).setOnClickListener(this);
         findViewById(R.id.start).setOnClickListener(this);
 
-        Buddy.showLoadingBar(this);
+        Buddy.showOnlineVoteLoadingBar(this);
         setupLobby();
     }
 
@@ -79,7 +78,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Buddy.hideLoadingBar(_this);
+                Buddy.hideOnlineVoteLoadingBar(_this);
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
                 onlineProfile.setDbID(dataSnapshot.getKey());
                 users.add(onlineProfile);
@@ -118,7 +117,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
                 String state = dataSnapshot.getValue(String.class);
                 // Move to voting first when state is correct
                 if (state != null && state.equals(VoteRoom.VOTING_FIRST)) {
-                    Buddy.showLoadingBar(_this);
+                    Buddy.showOnlineVoteLoadingBar(_this);
                     voteRoom.setState(state);
                     DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
                             moveToNextActivity(items));
@@ -171,7 +170,7 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
 
         ArrayList<ListItem> items = getIntent().getParcelableArrayListExtra("items");
         DatabaseHandler.addItemsToVoteRoom(voteRoom, items);
-        Buddy.showLoadingBar(this);
+        Buddy.showOnlineVoteLoadingBar(this);
     }
 
     private void moveToNextActivity(ArrayList<ListItem> items) {

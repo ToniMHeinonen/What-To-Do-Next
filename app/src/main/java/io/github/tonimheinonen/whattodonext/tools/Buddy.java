@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +47,8 @@ import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 public abstract class Buddy {
 
     public static final String FIREBASE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:sss'Z'";
+    public static Timer onlineVoteTimer;
+    private static final int ONLINE_ERROR_TIME = 5000;  // 5 seconds
 
     /**
      * Hides keyboard, clears focus on view and clears it's text.
@@ -258,6 +262,45 @@ public abstract class Buddy {
     public static void hideLoadingBar(Activity activity, int viewIDToShow) {
         activity.findViewById(R.id.loadingPanel).setVisibility(View.GONE);
         activity.findViewById(viewIDToShow).setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Shows the loading bar and starts counting for online connection errors.
+     * @param activity current activity
+     */
+    public static void showOnlineVoteLoadingBar(Activity activity) {
+        showLoadingBar(activity);
+
+        // Show online error message after a specific time and repeat until canceled
+        cancelOnlineVoteTimer();    // Cancel old timer if it exists
+
+        onlineVoteTimer = new Timer();
+        onlineVoteTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                activity.runOnUiThread(() -> {
+                    // Show online error toast
+                    Buddy.showToast(getString(R.string.long_loading_time), Toast.LENGTH_SHORT);
+                });
+            }
+        }, ONLINE_ERROR_TIME, ONLINE_ERROR_TIME);
+    }
+
+    /**
+     * Hides the loading bar and cancels online connection check timer.
+     * @param activity current activity
+     */
+    public static void hideOnlineVoteLoadingBar(Activity activity) {
+        hideLoadingBar(activity);
+        cancelOnlineVoteTimer();
+    }
+
+    /**
+     * Cancels the online connection error timer if it exists.
+     */
+    private static void cancelOnlineVoteTimer() {
+        if (onlineVoteTimer != null)
+            onlineVoteTimer.cancel();
     }
 
     /**
