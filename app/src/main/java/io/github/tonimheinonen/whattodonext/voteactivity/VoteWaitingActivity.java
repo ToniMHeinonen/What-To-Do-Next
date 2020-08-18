@@ -116,11 +116,12 @@ public class VoteWaitingActivity extends AppCompatActivity {
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 // Remove from list when user becomes ready
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
+                onlineProfile.setDbID(dataSnapshot.getKey());
+
                 if (onlineProfile.isReady()) {
                     for (OnlineProfile pro : notReadyUsers) {
-                        // Check user id and nick name, in finished product id check is enough
-                        if (pro.getUserID().equals(onlineProfile.getUserID()) &&
-                                pro.getNickName().equals(onlineProfile.getNickName())) {
+                        // Check by db id
+                        if (pro.getDbID().equals(onlineProfile.getDbID())) {
                             Debug.print(_this, "remove ", pro.getNickName(), 1);
                             notReadyUsers.remove(pro);
                             Debug.print(_this, "size ", "" + notReadyUsers.size(), 1);
@@ -233,7 +234,7 @@ public class VoteWaitingActivity extends AppCompatActivity {
                 OnlineVotedItem votedItem = iterator.next();
 
                 // If voted item belongs to the current user, proceed...
-                if (votedItem.getUserID().equals(pro.getUserID())) {
+                if (votedItem.getUserID().equals(pro.getDbID())) {
                     // Loop through all the items and find which item has the same id as voted item
                     for (ListItem item : items) {
                         // If item has the same id, add it to the profile's vote items

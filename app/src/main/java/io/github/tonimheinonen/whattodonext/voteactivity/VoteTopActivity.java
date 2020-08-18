@@ -279,7 +279,7 @@ public class VoteTopActivity extends AppCompatActivity {
         // Convert voted items to OnlineVotedItem
         ArrayList<OnlineVotedItem> onlineVotedItems = new ArrayList<>();
         for (int i = 0; i < currentProfile.getVotedItems().length; i++) {
-            OnlineVotedItem votedItem = new OnlineVotedItem(onlineProfile.getUserID(),
+            OnlineVotedItem votedItem = new OnlineVotedItem(onlineProfile.getDbID(),
                     currentProfile.getVoteItem(i).getDbID(), i + 1);
             onlineVotedItems.add(votedItem);
         }

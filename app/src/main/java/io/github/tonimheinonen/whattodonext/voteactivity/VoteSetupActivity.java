@@ -10,8 +10,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -430,9 +428,7 @@ public class VoteSetupActivity extends AppCompatActivity implements
 
     private void moveToOnlineLobby(VoteRoom voteRoom, boolean host) {
         // Create online profile
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        String UID = auth.getUid();
-        OnlineProfile profile = new OnlineProfile(UID, nickname, host);
+        OnlineProfile profile = new OnlineProfile(nickname, host);
 
         // Move to lobby
         Intent intent = new Intent(this, VoteLobbyActivity.class);

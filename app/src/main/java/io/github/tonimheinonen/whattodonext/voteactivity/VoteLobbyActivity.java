@@ -88,12 +88,9 @@ public class VoteLobbyActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-
                 for (OnlineProfile pro : users) {
-                    // Check user id and nick name, in finished product id check is enough
-                    if (pro.getUserID().equals(onlineProfile.getUserID()) &&
-                            pro.getNickName().equals(onlineProfile.getNickName())) {
+                    // Check by database id
+                    if (pro.getDbID().equals(dataSnapshot.getKey())) {
                         users.remove(pro);
                         break;
                     }

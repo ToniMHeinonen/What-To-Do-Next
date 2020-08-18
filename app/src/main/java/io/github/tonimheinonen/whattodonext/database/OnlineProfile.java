@@ -19,7 +19,6 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class OnlineProfile implements DatabaseValue, Parcelable {
 
-    private String userID;
     private String nickName;
     private boolean isHost;
     private boolean ready;
@@ -34,18 +33,9 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         // Default constructor required for calls to DataSnapshot.getValue(OnlineProfile.class)
     }
 
-    public OnlineProfile(String userID, String nickName, boolean isHost) {
-        this.userID = userID;
+    public OnlineProfile(String nickName, boolean isHost) {
         this.nickName = nickName;
         this.isHost = isHost;
-    }
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
     }
 
     public String getNickName() {
@@ -87,7 +77,6 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("userID", userID);
         result.put("nickName", nickName);
         result.put("isHost", isHost);
         result.put("ready", ready);
@@ -114,7 +103,6 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
-        dest.writeString(userID);
         dest.writeString(nickName);
         dest.writeInt(isHost ? 1 : 0);
     }
@@ -125,7 +113,6 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
      */
     public OnlineProfile(Parcel in) {
         dbID = in.readString();
-        userID = in.readString();
         nickName = in.readString();
         isHost = in.readInt() == 1;
     }
