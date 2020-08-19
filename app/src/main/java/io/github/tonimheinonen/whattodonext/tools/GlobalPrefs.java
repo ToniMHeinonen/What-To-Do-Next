@@ -30,8 +30,22 @@ public abstract class GlobalPrefs {
 
     // Popup information box
     private static String keyPopup = "popup_";
-    public static final String FIRST_TUTORIAL = "first_tutorial123414";
     public static final String BETA_ONLINE = "beta_online12537311";
+    // Tutorial
+    public static final String TUTORIAL_WELCOME = "welcome_tutorial";
+    public static final String TUTORIAL_CREATE_LIST = "create_list_tutorial";
+    public static final String TUTORIAL_ADD_ITEM = "add_item_tutorial";
+    public static final String TUTORIAL_ITEM_INFO = "item_info_tutorial";
+    public static final String TUTORIAL_VOTE_TYPE = "vote_type_tutorial";
+    public static final String TUTORIAL_ONLINE_VOTE = "online_vote_tutorial";
+    public static final String TUTORIAL_OFFLINE_VOTE = "offline_vote_tutorial";
+    public static final String TUTORIAL_VOTE_TOP = "vote_top_tutorial";
+    public static final String TUTORIAL_LAST_RESULTS = "last_results_tutorial";
+    public static final String TUTORIAL_VOTE_COMPLETE = "vote_complete_tutorial";
+    public static final String[] TUTORIAL_TEXTS = new String[] {
+            TUTORIAL_WELCOME, TUTORIAL_CREATE_LIST, TUTORIAL_ADD_ITEM, TUTORIAL_ITEM_INFO,
+            TUTORIAL_VOTE_TYPE, TUTORIAL_ONLINE_VOTE, TUTORIAL_OFFLINE_VOTE,
+            TUTORIAL_VOTE_TOP, TUTORIAL_LAST_RESULTS, TUTORIAL_VOTE_COMPLETE};
 
     // Online
     private static String keyOnlineNickname = "online_nick_name";

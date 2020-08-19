@@ -166,30 +166,77 @@
     <!-- HTMLDialog -->
     <string name="htmlDialogOk">OK</string>
     <string name="show_later">Show Later</string>
+    <string name="skip_tutorial">Skip Tutorial</string>
 
-    <string name="first_tutorial_text">
+    <string name="welcome_tutorial_text">
     &lt;h1&gt;Welcome to the app!&lt;/h1&gt;
-    &lt;p&gt;Have you ever been in a situation with your friends when you
-        can\'t decide what to do? With this app, your everyday decisions will flow like a charm and
-        you never have to argue again.&lt;/p&gt;
-    &lt;p&gt;Using the app is as simple as this:&lt;/p&gt;
-    &lt;p&gt;1. Create a new list&lt;/p&gt;
-    &lt;p&gt;2. Add all the activities you consider doing on that list (you can ignore bonus and peril
-        points for now)&lt;/p&gt;
-    &lt;p&gt;3. Every voter lists their top 7 activities&lt;/p&gt;
-    &lt;p&gt;4. Activities that receive the most amount of points will move on to the next voting round&lt;/p&gt;
-    &lt;p&gt;5. Every voter lists their top 5 activities from the remaining list&lt;/p&gt;
-    &lt;p&gt;6. Select all the activities which your group of friends will do today&lt;/p&gt;
-    &lt;p&gt;7. Save and enjoy!&lt;/p&gt;
-    &lt;h3&gt;Advanced:&lt;/h3&gt;
-    &lt;p&gt;If you are already used to the concept of voting and want to use the app regularly, there
-        are some extra steps which can improve your voting experience:&lt;/p&gt;
-    &lt;p&gt;- Every activity that makes it into the top 7 list will gain 1 "bonus" point&lt;/p&gt;
-    &lt;p&gt;- Every other activity will gain 1 "peril" point&lt;/p&gt;
-    &lt;p&gt;- When activity gains over 5 peril points, it will be removed from the list
-        (you can return it back by clicking the fallen button)&lt;/p&gt;
-    &lt;p&gt;- You can alter all of these point thresholds and other settings from the setting menu&lt;/p&gt;
-    &lt;h5&gt;Note: You can read this tutorial at any time from the Google Play Store.&lt;/h5&gt;</string>
+    &lt;p&gt;Start by creating a new list by clicking the \"Lists\" button. &lt;/p&gt;</string>
+
+    <string name="add_list_tutorial_text">
+    &lt;h1&gt;Creating lists&lt;/h1&gt;
+    &lt;p&gt;First create a new list by clicking the \"List\" button.&lt;/p&gt;</string>
+
+    <string name="add_item_tutorial_text">
+    &lt;h1&gt;Adding Activities&lt;/h1&gt;
+    &lt;p&gt;Add new activity by clicking the \"Add\" button. You need to add at least 7 activities in
+        order to vote, if you are using the default settings. Once you have added 7 activities, you
+        can go back and start voting.&lt;/p&gt;</string>
+
+    <string name="item_info_tutorial_text">
+    &lt;h1&gt;Activity Info&lt;/h1&gt;
+    &lt;p&gt;All you need to do is give your activity a name. You can skip the bonus and peril points if
+        this is your first time voting. Usage of bonus and peril points will be explained once you
+        have finished your first vote.&lt;/p&gt;</string>
+
+    <string name="vote_type_tutorial_text">
+    &lt;h1&gt;Offline or Online?&lt;/h1&gt;
+    &lt;p&gt;You can vote locally by using the same phone and passing it around. You can also vote online
+        if all of the voters have downloaded this app.&lt;/p&gt;</string>
+
+    <string name="offline_vote_tutorial_text">
+    &lt;h1&gt;Offline Vote&lt;/h1&gt;
+    &lt;p&gt;Select the correct list which contains all of the activities which you want to vote on. After
+        that create a new profile for each voter.&lt;/p&gt;</string>
+
+    <string name="online_vote_tutorial_text">
+    &lt;h1&gt;Online Vote&lt;/h1&gt;
+    &lt;p&gt;Voting online requires that all of the voters have installed this app. You need to give
+        a nickname for yourself in order to vote, regardless of if you are hosting or joining.&lt;/p&gt;
+    &lt;h5&gt;Hosting:&lt;/h5&gt;
+    &lt;p&gt;If you want to host a new vote room, just give a random 4 letter sequence as the room code.
+        You also need to have enough activities in your selected list in order to start hosting.&lt;/p&gt;
+    &lt;h5&gt;Joining:&lt;/h5&gt;
+    &lt;p&gt;If you want to join a vote room, you need to use the same room code as the one who has
+        hosted the room. Ask your friends if anyone has already made a vote room.&lt;/p&gt;</string>
+
+    <string name="vote_top_tutorial_text">
+    &lt;h1&gt;Voting&lt;/h1&gt;
+    &lt;p&gt;If you are using the default settings, you need to vote top 7 activities from the list. The
+        activities which receive the most points will move on to the next round. Only 7 activities
+        can move on to the next round (except if activity 8 and so on has the same amount of points
+        as the 7th activity).&lt;/p&gt;
+    &lt;p&gt;After that you vote again on the remaining activities, but this time you will vote the top
+        5 from that list, if you are using the default settings.&lt;/p&gt;</string>
+
+    <string name="last_results_tutorial_text">
+    &lt;h1&gt;Last Results&lt;/h1&gt;
+    &lt;p&gt;Now that you have finished the last vote, you get to see the final results. Select the
+        activities which you and your friends are going to do and click the \"Save and Exit\"
+        button.&lt;/p&gt;</string>
+
+    <string name="vote_complete_tutorial_text">
+    &lt;h1&gt;Voting Complete&lt;/h1&gt;
+    &lt;p&gt;Congratulations! You have now finished your first vote.&lt;/p&gt;
+    &lt;p&gt;All of the activities that made it to the last vote received 1 bonus point and all of the rest
+        activities received 1 peril point. If you are using the default settings, then the
+        activities which have more than 5 peril points will drop out of the list and you can\'t
+        vote on them on the next vote.&lt;/p&gt;
+    &lt;p&gt;If you want to vote on a dropped activity, you can retrieve it from the \"Fallen\" list,
+        which can be opened from the \"Lists\" menu. By dropping the activities which do not make
+        it into the last vote ensures that the activities which the majority don\'t want to do will
+        fall away from the list.&lt;/p&gt;
+    &lt;p&gt;You should now know the basics pretty well. Make sure to check out the settings so that you
+        can customize the app to your liking. Keep on voting!&lt;/p&gt;</string>
 
     <string name="beta_online">
     &lt;h1&gt;Online Beta!&lt;/h1&gt;

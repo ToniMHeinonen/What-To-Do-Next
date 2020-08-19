@@ -5,6 +5,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
 public class StartVoteActivity extends AppCompatActivity
         implements View.OnClickListener {
@@ -13,6 +15,10 @@ public class StartVoteActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_vote);
+
+        // If tutorial has not been confirmed yet, show it
+        if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_VOTE_TYPE))
+            new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_VOTE_TYPE).show();
 
         // Set listeners for buttons
         findViewById(R.id.back).setOnClickListener(this);

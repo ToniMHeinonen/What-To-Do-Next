@@ -23,6 +23,7 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
 /**
  * Handles voting top list with List Items.
@@ -66,6 +67,10 @@ public class VoteTopActivity extends VotingParentActivity {
         setContentView(R.layout.activity_vote_top);
         // Lock orientation during voting to prevent million different problems
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+
+        // If tutorial has not been confirmed yet, show it
+        if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_VOTE_TOP))
+            new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_VOTE_TOP).show();
 
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra("isOnline", false);

@@ -175,6 +175,10 @@ public class VoteSetupActivity extends VotingParentActivity implements
     //////////////////////// INITIALIZE VIEWS ////////////////////////
 
     private void initializeVotingSetupOffline() {
+        // If tutorial has not been confirmed yet, show it
+        if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_OFFLINE_VOTE))
+            new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_OFFLINE_VOTE).show();
+
         Buddy.hideLoadingBar(this);
         setupListsSpinner();
 
@@ -191,6 +195,10 @@ public class VoteSetupActivity extends VotingParentActivity implements
     }
 
     private void initializeVotingSetupOnline() {
+        // If tutorial has not been confirmed yet, show it
+        if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_ONLINE_VOTE))
+            new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_ONLINE_VOTE).show();
+
         Buddy.hideLoadingBar(this);
 
         if (!lists.isEmpty())

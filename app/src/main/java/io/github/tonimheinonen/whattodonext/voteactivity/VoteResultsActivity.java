@@ -30,6 +30,7 @@ import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
 /**
  * Handles showing results of voting.
@@ -95,6 +96,10 @@ public class VoteResultsActivity extends VotingParentActivity {
         lastResults = topAmount == listVoteSizeLast;
 
         if (lastResults) {
+            // If tutorial has not been confirmed yet, show it
+            if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_LAST_RESULTS))
+                new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_LAST_RESULTS).show();
+
             Button next = findViewById(R.id.nextButton);
             next.setText(getString(R.string.save_and_exit));
             findViewById(R.id.resultsInfoText).setVisibility(View.VISIBLE);
@@ -287,7 +292,13 @@ public class VoteResultsActivity extends VotingParentActivity {
 
             if (lastResults) {
                 if (Buddy.isRegistered) {
-                    DatabaseHandler.getVoteRoomItems(voteRoom, this::itemsLoaded);
+                    // If tutorial has not been confirmed yet, show it
+                    if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_VOTE_COMPLETE)) {
+                        Buddy.hideOnlineVoteLoadingBar(this);
+                        showVoteCompleteTutorial();
+                    } else {
+                        DatabaseHandler.getVoteRoomItems(voteRoom, this::itemsLoaded);
+                    }
                 } else {
                     endVoting(getString(R.string.unregistered_vote_ended));
                 }
@@ -324,8 +335,13 @@ public class VoteResultsActivity extends VotingParentActivity {
         } else {
             // Local
             if (lastResults) {
-                Buddy.showOnlineVoteLoadingBar(this);
-                DatabaseHandler.getItems(this::itemsLoaded, selectedList);
+                // If tutorial has not been confirmed yet, show it
+                if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_VOTE_COMPLETE)) {
+                    showVoteCompleteTutorial();
+                } else {
+                    Buddy.showLoadingBar(this);
+                    DatabaseHandler.getItems(this::itemsLoaded, selectedList);
+                }
             } else {
                 // Proceed to next voting
                 Intent intent = new Intent(this, VoteTopActivity.class);
@@ -335,6 +351,12 @@ public class VoteResultsActivity extends VotingParentActivity {
                 startActivity(intent);
             }
         }
+    }
+
+    private void showVoteCompleteTutorial() {
+        HTMLDialog tutorial = new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_VOTE_COMPLETE);
+        tutorial.show();
+        tutorial.setOnDismissListener((complete) -> nextPressed(null));
     }
 
     private void moveToOnlineLastVote() {

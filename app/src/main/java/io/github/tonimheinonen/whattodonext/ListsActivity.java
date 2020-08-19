@@ -20,6 +20,7 @@ import io.github.tonimheinonen.whattodonext.listsactivity.ListDialog;
 import io.github.tonimheinonen.whattodonext.listsactivity.ListItemDialog;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
 /**
  * Handles modifying of ListOfViews and ListItems.
@@ -51,6 +52,10 @@ public class ListsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lists);
+
+        // If tutorial has not been confirmed yet, show it
+        if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_CREATE_LIST))
+            new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_CREATE_LIST).show();
 
         // Setup list fragment
         itemsFragment = Buddy.createListItemFragment(this,
@@ -165,6 +170,10 @@ public class ListsActivity extends AppCompatActivity {
 
         lists.add(list);
         DatabaseHandler.addList(list);
+
+        // If tutorial has not been confirmed yet, show it
+        if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_ADD_ITEM))
+            new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_ADD_ITEM).show();
     }
 
     /**
@@ -282,6 +291,10 @@ public class ListsActivity extends AppCompatActivity {
         item.setFallen(fallenList); // Set fallen status to current fallenList status
         ListItemDialog dialog = new ListItemDialog(this, item);
         dialog.show();
+
+        // If tutorial has not been confirmed yet, show it
+        if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_ITEM_INFO))
+            new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_ITEM_INFO).show();
     }
 
     /**

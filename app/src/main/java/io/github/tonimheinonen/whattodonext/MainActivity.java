@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
             Buddy.isRegistered = true;
 
             // If first tutorial has not been confirmed yet, show it
-            if (GlobalPrefs.loadPopupInfo(GlobalPrefs.FIRST_TUTORIAL))
-                new HTMLDialog(this, HTMLDialog.HTMLText.FIRST).show();
+            if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_WELCOME))
+                new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_WELCOME).show();
         }
     }
 
