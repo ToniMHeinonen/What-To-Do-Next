@@ -1,5 +1,9 @@
 package io.github.tonimheinonen.whattodonext.database;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,6 +24,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import io.github.tonimheinonen.whattodonext.MainActivity;
+import io.github.tonimheinonen.whattodonext.R;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
@@ -49,6 +57,9 @@ public abstract class DatabaseHandler {
 
     private static int MAX_SAVED_RESULTS = 7;
     private static int VOTEROOM_EXPIRE_TIME = 2; // Hours
+
+    // Used to listen for vote room removal if host disconnects from the vote room
+    public static ChildEventListener voteRoomRemovalListener;
 
     /**
      * Initializes necessary user database values.
@@ -752,6 +763,41 @@ public abstract class DatabaseHandler {
     }
 
     /**
+     * Listens for the vote room removal.
+     *
+     * If host disconnects before the last results, the vote room will be removed. If that
+     * happens, move to MainActivity and show a toast message.
+     * @param activity current activity
+     * @param roomCode code for the vote room to listen for
+     */
+    public static void listenForVoteRoomDeletion(Activity activity, String roomCode) {
+        voteRoomRemovalListener = new ChildEventListener() {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                VoteRoom room = dataSnapshot.getValue(VoteRoom.class);
+
+                if (room.getRoomCode().equals(roomCode)) {
+                    activity.startActivity(new Intent(activity, MainActivity.class));
+                    Buddy.showToast(activity.getString(R.string.host_disconnected), Toast.LENGTH_LONG);
+                    dbVoteRooms.removeEventListener(voteRoomRemovalListener);
+                    voteRoomRemovalListener = null;
+                }
+            }
+
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        dbVoteRooms.addChildEventListener(voteRoomRemovalListener);
+    }
+
+    /**
      * Connects a online profile to the vote room.
      * @param voteRoom vote room to connect to
      * @param profile profile to connect
@@ -818,6 +864,18 @@ public abstract class DatabaseHandler {
      * @param profile profile to remove
      */
     public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
+        // Stop listening for vote room removal
+        if (voteRoomRemovalListener != null) {
+            dbVoteRooms.removeEventListener(voteRoomRemovalListener);
+            voteRoomRemovalListener = null;
+        }
+
+        // If host disconnects from the room and it's not the last results, remove the vote room
+        if (profile.isHost() && !voteRoom.getState().equals(VoteRoom.RESULTS_LAST)) {
+            removeVoteRoom(voteRoom);
+            return;
+        }
+
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
         dbProfiles.child(profile.getDbID()).removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

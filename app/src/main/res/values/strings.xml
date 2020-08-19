@@ -54,6 +54,7 @@
     <string name="vote_already_started">Vote already started! Beta version does not support joining
         the vote room later.</string>
     <string name="online_vote_solo">You can\'t vote online alone. Start a local vote instead!</string>
+    <string name="host_disconnected">Host disconnected from the vote room!</string>
 
     <!-- VOTE_LOBBY -->
     <string name="lobby_room_code">Room Code</string>

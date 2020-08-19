@@ -52,6 +52,10 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
         setContentView(R.layout.activity_vote_lobby);
 
+        // Listen for vote room removal if not host
+        if (!onlineProfile.isHost())
+            DatabaseHandler.listenForVoteRoomDeletion(this, voteRoom.getRoomCode());
+
         // Set room code
         ((TextView) findViewById(R.id.codeForRoom)).setText(voteRoom.getRoomCode());
         // Set onClick listeners for buttons
