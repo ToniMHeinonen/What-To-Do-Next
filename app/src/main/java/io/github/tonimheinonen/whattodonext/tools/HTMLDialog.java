@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import io.github.tonimheinonen.whattodonext.R;
@@ -22,12 +23,14 @@ public class HTMLDialog extends Dialog implements
         View.OnClickListener {
 
     public enum HTMLText {
+        NO_REGISTRATION,
         FIRST,
         BETA_ONLINE
     }
 
     private Activity activity;
     private HTMLText htmlText;
+    private Button cancelButton;
 
     /**
      * Initializes necessary values.
@@ -55,17 +58,26 @@ public class HTMLDialog extends Dialog implements
         //int height = (int)(activity.getResources().getDisplayMetrics().heightPixels);
         getWindow().setLayout(width, getWindow().getAttributes().height);
 
-        initializeViews();
-
-        // Set listeners for ok button
+        // Set listeners for buttons
         findViewById(R.id.confirm).setOnClickListener(this);
+        cancelButton = findViewById(R.id.cancel);
+        cancelButton.setOnClickListener(this);
+
+        initializeViews();
     }
 
     /**
      * Changes texts of views and shows necessary views.
      */
     private void initializeViews() {
+        // Hide usually hidden buttons
+        cancelButton.setVisibility(View.GONE);
+
         switch (htmlText) {
+            case NO_REGISTRATION:
+                setTutorialText(activity.getString(R.string.no_registration_text));
+                cancelButton.setVisibility(View.VISIBLE);
+                break;
             case FIRST:
                 setTutorialText(activity.getString(R.string.first_tutorial_text));
                 break;
@@ -99,16 +111,23 @@ public class HTMLDialog extends Dialog implements
             case R.id.confirm:
                 confirm();
                 break;
+            case R.id.cancel:
+                cancel();
+                break;
             default:
                 break;
         }
     }
 
     /**
-     * Checks tutorial as read.
+     * Does necessary stuff when clicking the ok button.
      */
     private void confirm() {
         switch (htmlText) {
+            case NO_REGISTRATION:
+                Buddy.isRegistered = false;
+                Buddy.moveToVoteSetup(activity, true);
+                break;
             case FIRST:
                 GlobalPrefs.savePopupInfo(GlobalPrefs.FIRST_TUTORIAL, false);
                 break;

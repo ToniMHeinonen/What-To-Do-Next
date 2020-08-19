@@ -5,6 +5,10 @@
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
         ultrices mattis nunc vitae dignissim. Cras finibus libero vel pulvinar finibus.</string>
 
+    <!-- PRE LOGIN -->
+    <string name="continue_unregistered">I don\'t want to register</string>
+    <string name="login_or_register">Login / Register</string>
+
     <!-- MAIN_ACTIVITY -->
     <string name="menu_vote">Vote</string>
     <string name="menu_lists">Lists</string>
@@ -32,6 +36,8 @@
     <!-- START_VOTE_ONLINE -->
     <string name="no_internet">You need to be connected to the internet in order to vote online!</string>
     <string name="long_loading_time">Check your internet connection!</string>
+    <string name="unregistered_hosting">You need to be registered in order to host vote rooms!</string>
+    <string name="unregistered_lists_locked">Lists are locked for unregistered users!</string>
     <string name="online_detail">Online Detail</string>
     <string name="online_nickname">Nickname</string>
     <string name="online_room_code">Room Code</string>
@@ -81,6 +87,8 @@
     <string name="results_total">Total</string>
     <string name="save_and_exit">Save and exit</string>
     <string name="save_successful">Points have been calculated and the result has been saved</string>
+    <string name="unregistered_vote_ended">Thank you for using this app! I hope that this experience
+    has made you want to register and leave a feedback to the Google Play Store!</string>
 
     <!-- RESULTS_ACTIVITY -->
     <string name="resultsTopic">Results</string>
@@ -187,6 +195,12 @@
     &lt;p&gt;Online voting is still in beta stage. Don\'t worry, your activities will not get lost or
         altered if something goes wrong. Enjoy!&lt;/p&gt;
     &lt;h5&gt;Note: Vote rooms will be removed after 2 hours has passed from their creation.&lt;/h5&gt;</string>
+
+    <string name="no_registration_text">
+    &lt;h1&gt;No Registration&lt;/h1&gt;
+    &lt;p&gt;If you don\'t register, you can only join online votes. If you want to enjoy all of the
+        features that this app has to offer, you need to register an account.&lt;/p&gt;
+    &lt;h5&gt;Note: Registration is completely free!&lt;/h5&gt;</string>
 
     <!-- CUSTOM ALERT DIALOG -->
     <string name="alertTopic">Alert!</string>

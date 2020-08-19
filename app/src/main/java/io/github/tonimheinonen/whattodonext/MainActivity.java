@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
-import io.github.tonimheinonen.whattodonext.registration.LoginActivity;
+import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
@@ -33,12 +33,13 @@ public class MainActivity extends AppCompatActivity {
         FirebaseAuth auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser() == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, PreLoginActivity.class);
             startActivity(intent);
             finish();
         } else {
             DatabaseHandler.initializeUserDatabase();
             GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
+            Buddy.isRegistered = true;
 
             // If first tutorial has not been confirmed yet, show it
             if (GlobalPrefs.loadPopupInfo(GlobalPrefs.FIRST_TUTORIAL))
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void logOutClicked(View v) {
         FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, PreLoginActivity.class));
         finish();
     }
 }

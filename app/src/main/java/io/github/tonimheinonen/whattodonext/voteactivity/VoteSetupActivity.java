@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -90,8 +91,21 @@ public class VoteSetupActivity extends VotingParentActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        Buddy.showLoadingBar(this);
-        DatabaseHandler.getLists(this::loadLists);
+
+        // Check if user has registered
+        if (Buddy.isRegistered) {
+            // Load user's lists from database
+            Buddy.showLoadingBar(this);
+            DatabaseHandler.getLists(this::loadLists);
+        } else {
+            // Initialize unregistered voting
+            // Hide lists spinner
+            findViewById(R.id.listsSpinner).setVisibility(View.GONE);
+            TextView noListsView = findViewById(R.id.noLists);
+            noListsView.setVisibility(View.VISIBLE);
+            noListsView.setText(getString(R.string.unregistered_lists_locked));
+            initializeVotingSetupOnline();
+        }
     }
 
     /**
@@ -101,8 +115,8 @@ public class VoteSetupActivity extends VotingParentActivity implements
     public void loadLists(ArrayList<ListOfItems> lists) {
         this.lists = lists;
 
-        // Online
         if (isOnlineVote) {
+            // Online (Remember to modify unregistered behaviour if you modify this)
             if (lists.isEmpty()) {
                 // Hide lists spinner
                 findViewById(R.id.listsSpinner).setVisibility(View.GONE);
@@ -111,20 +125,20 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
             initializeVotingSetupOnline();
             return;
-        }
-
-        // Offline
-        if (lists.isEmpty()) {
-            // If there are no lists, show alert message
-            Buddy.showAlert(this, getString(R.string.alert_no_lists_title),
-                    getString(R.string.alert_no_lists_message),
-                    getString(R.string.alert_no_lists_move),
-                    getString(R.string.alert_no_lists_back),
-                    () -> startActivity(new Intent(_this, ListsActivity.class)),
-                    () -> startActivity(new Intent(_this, MainActivity.class)));
         } else {
-            // Else start loading profiles
-            DatabaseHandler.getProfiles(this::profilesLoaded);
+            // Offline
+            if (lists.isEmpty()) {
+                // If there are no lists, show alert message
+                Buddy.showAlert(this, getString(R.string.alert_no_lists_title),
+                        getString(R.string.alert_no_lists_message),
+                        getString(R.string.alert_no_lists_move),
+                        getString(R.string.alert_no_lists_back),
+                        () -> startActivity(new Intent(_this, ListsActivity.class)),
+                        () -> startActivity(new Intent(_this, MainActivity.class)));
+            } else {
+                // Else start loading profiles
+                DatabaseHandler.getProfiles(this::profilesLoaded);
+            }
         }
     }
 
@@ -256,8 +270,13 @@ public class VoteSetupActivity extends VotingParentActivity implements
                 break;
             // Online
             case R.id.host:
-                if (onlineDetailsValid())
+                if (!Buddy.isRegistered) {
+                    // Don't allow hosting for unregistered users
+                    Buddy.showToast(getString(R.string.unregistered_hosting), Toast.LENGTH_LONG);
+                } else if (onlineDetailsValid()) {
+                    // If all online details are valid, host new room
                     hostVoteRoom();
+                }
                 break;
             case R.id.join:
                 if (onlineDetailsValid())

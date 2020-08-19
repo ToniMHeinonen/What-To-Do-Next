@@ -286,7 +286,11 @@ public class VoteResultsActivity extends VotingParentActivity {
             Buddy.showOnlineVoteLoadingBar(this);
 
             if (lastResults) {
-                DatabaseHandler.getVoteRoomItems(voteRoom, this::itemsLoaded);
+                if (Buddy.isRegistered) {
+                    DatabaseHandler.getVoteRoomItems(voteRoom, this::itemsLoaded);
+                } else {
+                    endVoting(getString(R.string.unregistered_vote_ended));
+                }
             } else {
                 if (onlineProfile.isHost()) {
                     DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles) -> {
@@ -440,11 +444,15 @@ public class VoteResultsActivity extends VotingParentActivity {
         DatabaseHandler.addResult(result);
         DatabaseHandler.addResultItems(result, resultsSaving);
 
+        endVoting(getString(R.string.save_successful));
+    }
+
+    private void endVoting(String toastToShow) {
         // Disconnect the user from the vote room
         if (isOnline)
             DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile);
 
-        Buddy.showToast(getString(R.string.save_successful), Toast.LENGTH_LONG);
+        Buddy.showToast(toastToShow, Toast.LENGTH_LONG);
         Buddy.resetToMenuScreen(this);
     }
 }

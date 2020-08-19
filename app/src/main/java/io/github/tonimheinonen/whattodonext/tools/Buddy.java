@@ -36,6 +36,7 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.voteactivity.VoteSetupActivity;
 
 /**
  * Handles often used helpful methods.
@@ -47,8 +48,13 @@ import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 public abstract class Buddy {
 
     public static final String FIREBASE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:sss'Z'";
+
+    // Timer for online voting
     public static Timer onlineVoteTimer;
     private static final int ONLINE_ERROR_TIME = 5000;  // 5 seconds
+
+    // Used for checking if user is registered or not
+    public static boolean isRegistered;
 
     /**
      * Hides keyboard, clears focus on view and clears it's text.
@@ -161,7 +167,9 @@ public abstract class Buddy {
                 getString(R.string.alert_exit_message),
                 getString(R.string.alert_exit_yes), null,
                 () -> {
-                    listener.VoteExitConfirmed();
+                    if (listener != null)
+                        listener.VoteExitConfirmed();
+
                     resetToMenuScreen(activity);
                 }, null);
     }
@@ -370,5 +378,20 @@ public abstract class Buddy {
         } else {
             return false;
         }
+    }
+
+    public static void moveToVoteSetup(Activity activity, boolean online) {
+        // Checks if the user is connected to the internet
+        if (online) {
+            if (!isOnline(activity)) {
+                showToast(getString(R.string.no_internet), Toast.LENGTH_LONG);
+                return;
+            }
+        }
+
+        // Move to setting up vote
+        Intent intent = new Intent(activity, VoteSetupActivity.class);
+        intent.putExtra("isOnline", online);
+        activity.startActivity(intent);
     }
 }

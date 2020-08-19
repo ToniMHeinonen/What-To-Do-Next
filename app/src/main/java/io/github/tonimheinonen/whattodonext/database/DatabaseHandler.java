@@ -51,7 +51,7 @@ public abstract class DatabaseHandler {
     private static int VOTEROOM_EXPIRE_TIME = 2; // Hours
 
     /**
-     * Initializes necessary values.
+     * Initializes necessary user database values.
      */
     public static void initializeUserDatabase() {
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -74,6 +74,14 @@ public abstract class DatabaseHandler {
         dbResultItems.keepSynced(true);
 
         // Init online voting references
+        dbVoteRooms = FirebaseDatabase.getInstance().getReference().child("vote_rooms");
+        dbVoteRooms.keepSynced(true);
+    }
+
+    /**
+     * Initializes necessary vote room database values.
+     */
+    public static void initializeVoteRoomDatabase() {
         dbVoteRooms = FirebaseDatabase.getInstance().getReference().child("vote_rooms");
         dbVoteRooms.keepSynced(true);
     }

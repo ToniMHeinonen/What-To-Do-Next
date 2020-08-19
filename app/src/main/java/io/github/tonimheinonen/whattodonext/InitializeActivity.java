@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
+import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
 /**
  * Runs once when app starts, initializes necessary values.
@@ -28,6 +30,12 @@ public class InitializeActivity extends AppCompatActivity {
 
         // Set static context
         InitializeActivity.context = getApplicationContext();
+
+        // Initialize vote room database
+        DatabaseHandler.initializeVoteRoomDatabase();
+
+        // Initialize default global prefs
+        GlobalPrefs.initialize(this, "anonymous");
 
         // Start MainActivity and close this activity
         startActivity(new Intent(this, MainActivity.class));
