@@ -12,7 +12,8 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_for_layouts"
         android:background="@drawable/custom_bg"
-        tools:context=".voteactivity.VoteTopActivity">
+        tools:context=".voteactivity.VoteTopActivity"
+        android:baselineAligned="false">
 
         <RelativeLayout
             style="@style/GenericProgressBackground"

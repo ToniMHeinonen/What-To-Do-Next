@@ -11,7 +11,8 @@
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_for_layouts"
         tools:context=".ResultsActivity"
-        android:background="@drawable/custom_bg">
+        android:background="@drawable/custom_bg"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:layout_width="0dp"

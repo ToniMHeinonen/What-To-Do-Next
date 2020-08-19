@@ -300,6 +300,7 @@ public class VoteResultsActivity extends VotingParentActivity {
                             // resets the value to false
                             if (pro.isReady()) {
                                 allInResults = false;
+                                break;
                             }
                         }
 
