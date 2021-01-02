@@ -21,11 +21,16 @@
     </style>
 
     <style name="listViewStyle" parent="Widget.AppCompat.ListView">
-        <item name="android:divider">@drawable/list_divider</item>
-        <item name="android:dividerHeight">1dp</item>
         <item name="android:requiresFadingEdge">vertical</item>
         <item name="android:fadingEdgeLength">24dp</item>
         <item name="android:scrollbarThumbVertical">@drawable/custom_scroll_bar</item>
+        <item name="android:divider">@null</item>
+        <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="resultListViewStyle" parent="listViewStyle">
+        <item name="android:divider">@drawable/list_divider</item>
+        <item name="android:dividerHeight">1dp</item>
     </style>
 
     <style name="NestedScrollBarStyle">
