@@ -29,6 +29,7 @@
     </LinearLayout>
 
     <ListView
+        style="@style/resultListViewStyle"
         android:id = "@+id/resultItems"
         android:layout_width = "match_parent"
         android:layout_height = "match_parent"/>
