@@ -165,6 +165,7 @@ public class VoteResultsActivity extends VotingParentActivity {
                 for (ListItem item : items) {
                     if (item.equalsTo(votedItem)) {
                         item.addVotePoints(votePoints);
+                        item.addVoterAmount();
                         break;
                     }
                 }
@@ -182,10 +183,10 @@ public class VoteResultsActivity extends VotingParentActivity {
             Debug.print(this, "item", "points: " + item.getVotePoints(), 1);
         }
 
-        // Sort items by vote points
+        // Sort items by vote points and voters
         Collections.sort(items, new Comparator<ListItem>() {
             public int compare(ListItem o1, ListItem o2) {
-                return ((Integer)o2.getVotePoints()).compareTo(o1.getVotePoints());
+                return o2.compareTo(o1);
             }
         });
 

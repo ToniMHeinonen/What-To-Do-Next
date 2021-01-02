@@ -17,7 +17,7 @@ import java.util.Map;
  * @since 1.0
  */
 @IgnoreExtraProperties
-public class ListItem implements DatabaseValue, Parcelable {
+public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem> {
 
     private String listID;
     private String name;
@@ -30,8 +30,11 @@ public class ListItem implements DatabaseValue, Parcelable {
     @Exclude
     private int total;
 
+    // These values do not need to be reset since they are always recreated
     @Exclude
     private int votePoints;
+    @Exclude
+    private int voterAmount = 0;
     @Exclude
     private boolean selected;
 
@@ -104,6 +107,14 @@ public class ListItem implements DatabaseValue, Parcelable {
     public void setBonus(int bonus) {
         this.bonus = bonus;
         this.total = this.bonus + this.peril;
+    }
+
+    /**
+     * Returns the amount of voters who voted this item.
+     * @return the amount of voters who voted this item
+     */
+    public int getVoterAmount() {
+        return voterAmount;
     }
 
     /**
@@ -228,6 +239,16 @@ public class ListItem implements DatabaseValue, Parcelable {
     }
 
     /**
+     * Add + 1 to voterAmount.
+     *
+     * Used when calculating what items profile has voted
+     * in VoteResultsActivity.
+     */
+    public void addVoterAmount() {
+        voterAmount ++;
+    }
+
+    /**
      * Returns vote points and resets value.
      *
      * Used in VoteTopActivity.
@@ -341,4 +362,26 @@ public class ListItem implements DatabaseValue, Parcelable {
             return new ListItem[size];
         }
     };
+
+    /**
+     * Compares 2 list items based on their values.
+     *
+     * 1. Check which one has the most vote points, including bonus points.
+     * 2. If equal, check which one has the most number of players voted.
+     * 3. If equal, check which one has the most vote points, excluding bonus points.
+     * @param other other list item
+     * @return -1 if less than, 0 if equal, 1 if greater than
+     */
+    @Override
+    public int compareTo(ListItem other) {
+        if (this.votePoints == other.getVotePoints()) {
+            if (this.voterAmount == other.getVoterAmount()) {
+                return Integer.compare(this.votePoints - this.total, other.getVotePoints() - other.getTotal());
+            } else {
+                return Integer.compare(this.voterAmount, other.getVoterAmount());
+            }
+        } else {
+            return Integer.compare(this.votePoints, other.getVotePoints());
+        }
+    }
 }
