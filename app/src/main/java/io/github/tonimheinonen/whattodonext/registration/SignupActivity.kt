@@ -4,7 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.view.View
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
@@ -36,6 +40,8 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var signUpBtn: Button
     private lateinit var loginBtn: Button
 
+    private lateinit var showPasswordView: CheckBox
+
     /**
      * Initializes SignupActivity.
      * @param savedInstanceState previous instance state
@@ -52,6 +58,8 @@ class SignupActivity : AppCompatActivity() {
 
         loginBtn = findViewById(R.id.login_btn)
         signUpBtn = findViewById(R.id.signup_btn)
+
+        showPasswordView = findViewById(R.id.showPassword)
 
         signUpBtn.setOnClickListener{
             var email: String = emailEt.text.toString()
@@ -127,5 +135,15 @@ class SignupActivity : AppCompatActivity() {
     private fun writeNewUser(userId: String, name: String, email: String?) {
         val user = User(name, email)
         database.child("users").child(userId).setValue(user)
+    }
+
+    /**
+     * Shows and hides the password.
+     */
+    fun showPassword(v : View) {
+        if (showPasswordView.isChecked)
+            passwordEt.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        else
+            passwordEt.transformationMethod = PasswordTransformationMethod.getInstance()
     }
 }

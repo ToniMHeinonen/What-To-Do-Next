@@ -3,10 +3,10 @@ package io.github.tonimheinonen.whattodonext.registration
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
@@ -36,6 +36,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var loginBtn: Button
 
     private lateinit var resetPasswordTv: TextView
+    private lateinit var showPasswordView: CheckBox
 
     /**
      * Initializes LoginActivity.
@@ -52,6 +53,7 @@ class LoginActivity : AppCompatActivity() {
         loginBtn = findViewById(R.id.login_btn)
 
         resetPasswordTv = findViewById(R.id.reset_pass_tv)
+        showPasswordView = findViewById(R.id.showPassword)
 
         auth = FirebaseAuth.getInstance()
 
@@ -97,5 +99,15 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    /**
+     * Shows and hides the password.
+     */
+    fun showPassword(v : View) {
+        if (showPasswordView.isChecked)
+            passwordEt.transformationMethod = HideReturnsTransformationMethod.getInstance()
+        else
+            passwordEt.transformationMethod = PasswordTransformationMethod.getInstance()
     }
 }

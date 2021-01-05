@@ -24,17 +24,21 @@
     <LinearLayout
         android:id="@+id/informationBox"
         style="@style/registrationLayout"
-        android:layout_width="441dp"
-        android:layout_height="262dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ScrollView
+            style="@style/scrollViewStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            style="@style/scrollViewStyle">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,6 +71,8 @@
                         android:inputType="textPassword" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <CheckBox android:id="@+id/showPassword" style="@style/showPassword"/>
 
                 <Button
                     android:id="@+id/login_btn"

@@ -107,6 +107,16 @@
         <item name="android:text">@string/or_text</item>
     </style>
 
+    <style name="showPassword">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:checked">false</item>
+        <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:text">@string/show_password</item>
+        <item name="android:onClick">showPassword</item>
+    </style>
+
     <!-- LIST AND PROFILE -->
     <style name="listAndProfile">
         <item name="android:layout_height">match_parent</item>

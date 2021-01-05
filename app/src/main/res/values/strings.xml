@@ -9,6 +9,39 @@
     <string name="continue_unregistered">I don\'t want to register</string>
     <string name="login_or_register">Login / Register</string>
 
+    <!-- REGISTRATION -->
+    <string name="signup_btn">Sign up</string>
+    <string name="login_btn">Login</string>
+    <string name="get_password_link">Reset password</string>
+    <string name="back">Back</string>
+    <string name="new_password">New password</string>
+    <string name="update_password">Update password</string>
+    <string name="logout">Log out</string>
+    <string name="email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="registration_password_hint">Password</string>
+    <string name="or_text">OR</string>
+    <string name="show_password">Show password</string>
+
+    <string name="firebase_no_internet">Request failed: Check your internet connection</string>
+    <string name="firebase_unusual_error">Something unusual went wrong: Contact developer
+        toni1.heinonen@gmail.com</string>
+    <string name="fields_empty">Please fill all the fields</string>
+
+    <string name="login_success">Successfully logged in</string>
+    <string name="login_failed">Login failed: Check email and password</string>
+    <string name="login_invalid_user">Email has not been registered: Sign up instead</string>
+    <string name="login_invalid_password">Email or password is incorrect</string>
+
+    <string name="registration_success">Successfully registered</string>
+    <string name="registration_weak_password">Password is too weak (min 6 characters)</string>
+    <string name="registration_user_collision">Email already exists</string>
+    <string name="registration_invalid_credentials">Give valid email address</string>
+
+    <string name="email_empty">Please enter email id</string>
+    <string name="password_reset_success">Reset link sent to your email</string>
+    <string name="password_reset_failed">Unable to send reset mail: Use valid email</string>
+
     <!-- MAIN_ACTIVITY -->
     <string name="menu_vote">Vote</string>
     <string name="menu_lists">Lists</string>
@@ -255,36 +288,4 @@
     <string name="alertMessage">Are you sure?</string>
     <string name="alertPositiveButton">Ok</string>
     <string name="alertNegativeButton">Cancel</string>
-
-    <!-- REGISTRATION -->
-    <string name="signup_btn">Sign up</string>
-    <string name="login_btn">Login</string>
-    <string name="get_password_link">Reset password</string>
-    <string name="back">Back</string>
-    <string name="new_password">New password</string>
-    <string name="update_password">Update password</string>
-    <string name="logout">Log out</string>
-    <string name="email_hint">Email</string>
-    <string name="login_password_hint">Password</string>
-    <string name="registration_password_hint">Password</string>
-    <string name="or_text">OR</string>
-
-    <string name="firebase_no_internet">Request failed: Check your internet connection</string>
-    <string name="firebase_unusual_error">Something unusual went wrong: Contact developer
-        toni1.heinonen@gmail.com</string>
-    <string name="fields_empty">Please fill all the fields</string>
-
-    <string name="login_success">Successfully logged in</string>
-    <string name="login_failed">Login failed: Check email and password</string>
-    <string name="login_invalid_user">Email has not been registered: Sign up instead</string>
-    <string name="login_invalid_password">Email or password is incorrect</string>
-
-    <string name="registration_success">Successfully registered</string>
-    <string name="registration_weak_password">Password is too weak (min 6 characters)</string>
-    <string name="registration_user_collision">Email already exists</string>
-    <string name="registration_invalid_credentials">Give valid email address</string>
-
-    <string name="email_empty">Please enter email id</string>
-    <string name="password_reset_success">Reset link sent to your email</string>
-    <string name="password_reset_failed">Unable to send reset mail: Use valid email</string>
 </resources>

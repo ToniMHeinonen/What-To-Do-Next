@@ -56,6 +56,8 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <CheckBox android:id="@+id/showPassword" style="@style/showPassword"/>
+
         <Button
             android:id="@+id/login_btn"
             style="@style/registrationButtons"
