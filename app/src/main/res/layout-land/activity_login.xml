@@ -49,13 +49,9 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:layout_marginTop="16dp">
+                    android:layout_marginTop="8dp">
 
-                    <EditText
-                        android:id="@+id/email_edt_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/email_hint" />
+                    <EditText android:id="@+id/email_edt_text" style="@style/emailView"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,12 +59,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp">
 
-                    <EditText
-                        android:id="@+id/pass_edt_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/login_password_hint"
-                        android:inputType="textPassword" />
+                    <EditText android:id="@+id/pass_edt_text" style="@style/passwordView"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 

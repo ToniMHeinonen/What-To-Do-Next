@@ -117,6 +117,23 @@
         <item name="android:onClick">showPassword</item>
     </style>
 
+    <style name="emailView">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:hint">@string/email_hint</item>
+    </style>
+
+    <style name="passwordView">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:hint">@string/login_password_hint</item>
+        <item name="android:inputType">textPassword</item>
+    </style>
+
     <!-- LIST AND PROFILE -->
     <style name="listAndProfile">
         <item name="android:layout_height">match_parent</item>
