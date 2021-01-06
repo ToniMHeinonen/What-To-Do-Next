@@ -213,11 +213,16 @@ public class ListsActivity extends AppCompatActivity {
 
     public void duplicateList(ListOfItems selectedList) {
         ListOfItems list = addList(selectedList.getName() + getString(R.string.copy_name));
-        DatabaseHandler.addMultipleItems(curList, selectedList.getItems());
 
-        // Refresh list
-        curList = null;
-        loadList(list);
+        // Retrieve items which belong to the selected list
+        // (selectedList.getItems() does not work, since it does not contain fallen and not fallen)
+        DatabaseHandler.getItems((items) -> {
+            // Add the items to the newly created list
+            DatabaseHandler.addMultipleItems(curList, items);
+            // Refresh list
+            curList = null; // Set curList null, otherwise it skips the loadList() code
+            loadList(list);
+        }, selectedList);
     }
 
     /*//////////////////// ITEM DIALOG ////////////////////*/
