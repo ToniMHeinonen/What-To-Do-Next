@@ -39,7 +39,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
     static {
         layouts.put(DatabaseType.LIST_ITEM, R.layout.list_item);
         layouts.put(DatabaseType.LIST_OF_ITEMS, R.layout.saved_list);
-        layouts.put(DatabaseType.PROFILE, R.layout.saved_list_and_profile);
+        layouts.put(DatabaseType.PROFILE, R.layout.saved_profile);
         layouts.put(DatabaseType.VOTE_HIDE_EXTRA, R.layout.vote_item);
         layouts.put(DatabaseType.VOTE_SHOW_EXTRA, R.layout.vote_item_show_extra);
         layouts.put(DatabaseType.VOTE_RESULTS, R.layout.result_hide_votes_item);
