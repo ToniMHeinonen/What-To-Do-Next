@@ -162,8 +162,9 @@ public class ListsActivity extends AppCompatActivity {
     /**
      * Adds new list.
      * @param name name of the list
+     * @return created list
      */
-    public void addList(String name) {
+    public ListOfItems addList(String name) {
         ListOfItems list = new ListOfItems(name);
         setCurrentList(list);
         itemsFragment.updateListItems();
@@ -174,6 +175,8 @@ public class ListsActivity extends AppCompatActivity {
         // If tutorial has not been confirmed yet, show it
         if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_ADD_ITEM))
             new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_ADD_ITEM).show();
+
+        return list;
     }
 
     /**
@@ -206,6 +209,15 @@ public class ListsActivity extends AppCompatActivity {
             setCurrentList(null);
             GlobalPrefs.saveCurrentList("");
         }
+    }
+
+    public void duplicateList(ListOfItems selectedList) {
+        ListOfItems list = addList(selectedList.getName() + getString(R.string.copy_name));
+        DatabaseHandler.addMultipleItems(curList, selectedList.getItems());
+
+        // Refresh list
+        curList = null;
+        loadList(list);
     }
 
     /*//////////////////// ITEM DIALOG ////////////////////*/

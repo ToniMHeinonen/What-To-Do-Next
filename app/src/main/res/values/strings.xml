@@ -169,6 +169,7 @@
     <!-- LIST_MODIFY_DIALOG -->
     <string name="open_list">Open</string>
     <string name="duplicate_list">Duplicate</string>
+    <string name="copy_name"> -copy</string>
 
     <!-- SETTINGS_ACTIVITY -->
     <string name="settings">Settings</string>

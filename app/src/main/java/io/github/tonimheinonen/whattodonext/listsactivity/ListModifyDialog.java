@@ -64,29 +64,24 @@ public class ListModifyDialog extends Dialog implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.open:
-                loadList();
+                listsActivity.loadList(selectedList);
+                dismiss();
                 break;
             case R.id.duplicate:
-
+                listsActivity.duplicateList(selectedList);
+                dismiss();
                 break;
             case R.id.delete:
                 deleteList(v);
                 break;
             case R.id.cancel:
                 cancel();
+                // Reopen list dialog
                 listsActivity.listClicked(null);
                 break;
             default:
                 break;
         }
-    }
-
-    /**
-     * Loads selected list.
-     */
-    private void loadList() {
-        listsActivity.loadList(selectedList);
-        dismiss();
     }
 
     /**
@@ -102,6 +97,7 @@ public class ListModifyDialog extends Dialog implements
                 () -> {
                     listsActivity.deleteList(selectedList);
                     dismiss();
+                    // Reopen list dialog
                     listsActivity.listClicked(null);
                 }, null);
     }

@@ -319,6 +319,27 @@ public abstract class DatabaseHandler {
     }
 
     /**
+     * Adds multiple new items to a list.
+     * @param list list to add the items to
+     * @param items items to add
+     */
+    public static void addMultipleItems(ListOfItems list, ArrayList<ListItem> items) {
+        Map<String, Object> childUpdates = new HashMap<>();
+
+        for (ListItem item : items) {
+            String key = dbItems.push().getKey();   // Add new key to path
+
+            item.setDbID(key);
+            item.setListID(list.getDbID());
+            Map<String, Object> listValues = item.toMap();
+
+            childUpdates.put(key, listValues);
+        }
+
+        dbItems.updateChildren(childUpdates);
+    }
+
+    /**
      * Modifies item values.
      * @param item item to modify
      */
