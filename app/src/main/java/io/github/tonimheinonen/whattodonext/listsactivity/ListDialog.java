@@ -9,13 +9,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import io.github.tonimheinonen.whattodonext.ListsActivity;
+import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
-import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.tools.Debug;
-import io.github.tonimheinonen.whattodonext.ListsActivity;
-import io.github.tonimheinonen.whattodonext.R;
 
 /**
  * Handles list of items.
@@ -75,10 +73,7 @@ public class ListDialog extends Dialog implements
                 cancel();
                 break;
             case R.id.savedName:
-                loadList(v);
-                break;
-            case R.id.savedDelete:
-                deleteList(v);
+                modifyList(v);
                 break;
             default:
                 break;
@@ -99,27 +94,9 @@ public class ListDialog extends Dialog implements
      * Loads list.
      * @param v selected list
      */
-    private void loadList(View v) {
-        Debug.print("ListDialog", "loadList", "", 1);
-        activity.loadList((int) v.getTag());
+    private void modifyList(View v) {
+        ListOfItems list = lists.get((int) v.getTag());
+        new ListModifyDialog(activity, list).show();
         dismiss();
-    }
-
-    /**
-     * Deletes list.
-     * @param v selected list
-     */
-    private void deleteList(View v) {
-        Debug.print("ListDialog", "deleteList", "", 1);
-        final int index = (int) v.getTag();
-        String name = lists.get(index).getName();
-
-        Buddy.showAlert(activity, activity.getString(R.string.alert_delete_topic, name),
-                activity.getString(R.string.alert_delete_message),
-                activity.getString(R.string.alert_delete_confirm), null,
-                () -> {
-                    activity.deleteList(index);
-                    dismiss();
-                }, null);
     }
 }

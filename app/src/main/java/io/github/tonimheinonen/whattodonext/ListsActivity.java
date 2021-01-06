@@ -178,12 +178,12 @@ public class ListsActivity extends AppCompatActivity {
 
     /**
      * Loads selected list.
-     * @param listIndex selected list
+     * @param selectedList selected list
      */
-    public void loadList(int listIndex) {
+    public void loadList(ListOfItems selectedList) {
         // If selection is not the same as current list
-        if (curList != lists.get(listIndex)) {
-            setCurrentList(lists.get(listIndex));
+        if (curList != selectedList) {
+            setCurrentList(selectedList);
             setFallenStatus(false);
             Buddy.filterListByFallen(curList.getItems(), fallenList);
 
@@ -195,15 +195,14 @@ public class ListsActivity extends AppCompatActivity {
 
     /**
      * Deletes selected list.
-     * @param listIndex selected list
+     * @param selectedList selected list
      */
-    public void deleteList(int listIndex) {
-        ListOfItems list = lists.get(listIndex);
-        lists.remove(list);
-        DatabaseHandler.removeList(list);
+    public void deleteList(ListOfItems selectedList) {
+        lists.remove(selectedList);
+        DatabaseHandler.removeList(selectedList);
 
         // If current list is the deleted one
-        if (curList == list) {
+        if (curList == selectedList) {
             setCurrentList(null);
             GlobalPrefs.saveCurrentList("");
         }
