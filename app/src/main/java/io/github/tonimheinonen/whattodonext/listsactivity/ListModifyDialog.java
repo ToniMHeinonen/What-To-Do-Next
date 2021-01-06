@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.R;
@@ -43,6 +44,10 @@ public class ListModifyDialog extends Dialog implements
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.list_modify_dialog);
+
+        // Change the title according to the name of the list
+        TextView name = findViewById(R.id.listName);
+        name.setText(selectedList.getName());
 
         // Set listeners for buttons
         findViewById(R.id.open).setOnClickListener(this);
