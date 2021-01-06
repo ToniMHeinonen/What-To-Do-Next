@@ -38,7 +38,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
     // Set correct resources for types in HashMap
     static {
         layouts.put(DatabaseType.LIST_ITEM, R.layout.list_item);
-        layouts.put(DatabaseType.LIST_OF_ITEMS, R.layout.saved_list_and_profile);
+        layouts.put(DatabaseType.LIST_OF_ITEMS, R.layout.saved_list);
         layouts.put(DatabaseType.PROFILE, R.layout.saved_list_and_profile);
         layouts.put(DatabaseType.VOTE_HIDE_EXTRA, R.layout.vote_item);
         layouts.put(DatabaseType.VOTE_SHOW_EXTRA, R.layout.vote_item_show_extra);
@@ -160,7 +160,7 @@ public class DatabaseValueListAdapter extends BaseAdapter {
     /**
      * Displays ListOfItems in a ListView in ListsActivity.
      *
-     * Displays the name and delete button.
+     * Displays the name.
      */
     private void listOfItems() {
         ListOfItems item = (ListOfItems) getItem(position);
@@ -169,15 +169,6 @@ public class DatabaseValueListAdapter extends BaseAdapter {
         listName.setText(item.getName());
         listName.setOnClickListener(listener);
         listName.setTag(position);
-
-        if (item.isSelected())
-            listName.setTextColor(context.getResources().getColor(R.color.colorPrimary));
-        else
-            listName.setTextColor(context.getResources().getColor(R.color.profileAndListOfItemsTextColor));
-
-        Button listDelete = view.findViewById(R.id.savedDelete);
-        listDelete.setOnClickListener(listener);
-        listDelete.setTag(position);
     }
 
     /**
