@@ -1,0 +1,69 @@
+<resources>
+    <string name="patch_notes">
+    &lt;h1&gt;Patch Notes&lt;/h1&gt;
+    &lt;h5&gt;Version 8 / v1.3.2 / January 3, 2021&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Modify the priority how results are sorted (1. Most vote points 2. Most number of users
+    voted 3. Most vote points by users, bonus points excluded&lt;br/&gt;
+    &#8226; Change the graphics of list and vote activities&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
+    &lt;h5&gt;Version 7 / v1.3.1 / August 19, 2020&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Allow online voting using the same account&lt;br/&gt;
+    &#8226; Allow online voting without registration&lt;br/&gt;
+    &#8226; Add landscape layouts to online voting&lt;br/&gt;
+    &#8226; Add full tutorial&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
+    &lt;h5&gt;Version 6 / v1.3.0 / July 30, 2020&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Add beta version of online voting&lt;br/&gt;
+    &#8226; Customize Toast popups&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
+    &lt;h5&gt;Version 5 / v1.2.0 / May 15, 2020&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Add option to show how many points every voter gave to an activity&lt;br/&gt;
+    &#8226; Save 7 latest results to cloud and add ability to see those results&lt;br/&gt;
+    &#8226; Add splash screen&lt;br/&gt;
+    &#8226; Optimize activity deletion when removing lists&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
+    &lt;h5&gt;Version 4 / v1.1.0 / April 28, 2020&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Add basic tutorial when user logs in for the first time&lt;br/&gt;
+    &#8226; Add option to show total, bonus and peril points when voting&lt;br/&gt;
+    &#8226; Adjustments to the landscape layouts&lt;br/&gt;
+    &#8226; Prevent giving negative numbers to List Items&lt;br/&gt;
+    &#8226; Lock device orientation during voting&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
+    &lt;h5&gt;Version 3 / v1.0.2 / April 20, 2020&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Fix app crashing when relaunching app&lt;br/&gt;
+    &#8226; Modify Settings and Lists landscape to better fit on screen&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
+    &lt;h5&gt;Version 2 / v1.0.1 / April 20, 2020&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Fix app crashing with devices which are lower than API level 24&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
+    &lt;h5&gt;Version 1 / v1.0.0 / April 18, 2020&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; All the basic functionality of the app is now working&lt;br/&gt;
+    &#8226; User interface has been changed drastically&lt;br/&gt;
+    &#8226; App can be used in landscape&lt;br/&gt;
+    &#8226; User can adjust point thresholds and other options from settings page&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+    </string>
+</resources>

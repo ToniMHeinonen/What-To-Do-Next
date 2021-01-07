@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import io.github.tonimheinonen.whattodonext.BuildConfig;
 import io.github.tonimheinonen.whattodonext.R;
 
 /**
@@ -34,7 +35,8 @@ public class HTMLDialog extends Dialog implements
         TUTORIAL_VOTE_TOP,
         TUTORIAL_LAST_RESULTS,
         TUTORIAL_VOTE_COMPLETE,
-        BETA_ONLINE
+        BETA_ONLINE,
+        PATCH_NOTES
     }
 
     private Activity activity;
@@ -134,6 +136,9 @@ public class HTMLDialog extends Dialog implements
             case BETA_ONLINE:
                 setTutorialText(activity.getString(R.string.beta_online));
                 break;
+            case PATCH_NOTES:
+                setTutorialText(activity.getString(R.string.patch_notes));
+                break;
         }
     }
 
@@ -213,6 +218,10 @@ public class HTMLDialog extends Dialog implements
                 break;
             case BETA_ONLINE:
                 GlobalPrefs.savePopupInfo(GlobalPrefs.BETA_ONLINE, false);
+                break;
+            case PATCH_NOTES:
+                String versionName = BuildConfig.VERSION_NAME;
+                GlobalPrefs.savePopupInfo(GlobalPrefs.PATCH_NOTES + versionName, false);
                 break;
         }
 

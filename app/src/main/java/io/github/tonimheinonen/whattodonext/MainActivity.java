@@ -41,9 +41,13 @@ public class MainActivity extends AppCompatActivity {
             GlobalPrefs.initialize(this, auth.getCurrentUser().getEmail());
             Buddy.isRegistered = true;
 
-            // If first tutorial has not been confirmed yet, show it
-            if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_WELCOME))
+            if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_WELCOME)) {
+                // If first tutorial has not been confirmed yet, show it
                 new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_WELCOME).show();
+            } else if (GlobalPrefs.loadPopupInfo(GlobalPrefs.PATCH_NOTES + BuildConfig.VERSION_NAME)) {
+                // If newest patch notes has not been confirmed, show it
+                new HTMLDialog(this, HTMLDialog.HTMLText.PATCH_NOTES).show();
+            }
         }
     }
 
