@@ -19,14 +19,9 @@
 
             <ImageButton
                 android:id="@+id/close"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
+                style="@style/closeButtonLinear"
                 android:layout_gravity="end"
-                android:src="@drawable/ic_close_32dp"
-                android:background="@android:color/transparent"/>
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tutorialText"

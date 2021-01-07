@@ -80,6 +80,21 @@
         <item name="android:background">@drawable/button_selector</item>
     </style>
 
+    <!-- GLOBAL -->
+    <style name="closeButtonLinear">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_gravity">end</item>
+        <item name="android:src">@drawable/ic_close</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="closeButtonRelative" parent="closeButtonLinear">
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
+
     <!-- REGISTRATION -->
     <style name="registrationLayout">
         <item name="android:layout_height">wrap_content</item>

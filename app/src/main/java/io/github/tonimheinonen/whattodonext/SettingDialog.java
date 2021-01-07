@@ -26,9 +26,18 @@ public class SettingDialog extends Dialog implements
 
     private Activity activity;
 
-    public static final int MAX_PERIL = 0, FIRST_VOTE = 1, LAST_VOTE = 2, IGNORE_UNSELECTED = 3,
-    HALVE_EXTRA = 4, SHOW_EXTRA = 5, SHOW_VOTES = 6;
-    private int setting;
+    public enum Setting {
+        MAX_PERIL,
+        FIRST_VOTE,
+        LAST_VOTE,
+        IGNORE_UNSELECTED,
+        HALVE_EXTRA,
+        SHOW_EXTRA,
+        SHOW_VOTES,
+        RESET_TUTORIAL
+    }
+
+    private Setting setting;
     private EditText points;
     private SwitchCompat onOffSwitch;
 
@@ -37,7 +46,7 @@ public class SettingDialog extends Dialog implements
      * @param a current activity
      * @param setting selected setting
      */
-    public SettingDialog(Activity a, int setting) {
+    public SettingDialog(Activity a, Setting setting) {
         super(a);
         this.activity = a;
         this.setting = setting;

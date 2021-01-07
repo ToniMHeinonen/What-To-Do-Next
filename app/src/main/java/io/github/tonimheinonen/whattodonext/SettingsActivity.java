@@ -1,9 +1,9 @@
 package io.github.tonimheinonen.whattodonext;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Handles controlling of global values.
@@ -33,29 +33,29 @@ public class SettingsActivity extends AppCompatActivity {
 
         switch (v.getId()) {
             case R.id.maxPeril:
-                dialog = new SettingDialog(this, SettingDialog.MAX_PERIL);
+                dialog = new SettingDialog(this, SettingDialog.Setting.MAX_PERIL);
                 break;
             case R.id.firstVote:
-                dialog = new SettingDialog(this, SettingDialog.FIRST_VOTE);
+                dialog = new SettingDialog(this, SettingDialog.Setting.FIRST_VOTE);
                 break;
             case R.id.lastVote:
-                dialog = new SettingDialog(this, SettingDialog.LAST_VOTE);
+                dialog = new SettingDialog(this, SettingDialog.Setting.LAST_VOTE);
                 break;
             case R.id.ignoreUnselected:
-                dialog = new SettingDialog(this, SettingDialog.IGNORE_UNSELECTED);
+                dialog = new SettingDialog(this, SettingDialog.Setting.IGNORE_UNSELECTED);
                 break;
             case R.id.halveExtra:
-                dialog = new SettingDialog(this, SettingDialog.HALVE_EXTRA);
+                dialog = new SettingDialog(this, SettingDialog.Setting.HALVE_EXTRA);
                 break;
             case R.id.showExtra:
-                dialog = new SettingDialog(this, SettingDialog.SHOW_EXTRA);
+                dialog = new SettingDialog(this, SettingDialog.Setting.SHOW_EXTRA);
                 break;
             case R.id.showVotes:
-                dialog = new SettingDialog(this, SettingDialog.SHOW_VOTES);
+                dialog = new SettingDialog(this, SettingDialog.Setting.SHOW_VOTES);
                 break;
             default:
                 // Add default to suppress error dialog not initialized
-                dialog = new SettingDialog(this, -1);
+                dialog = new SettingDialog(this, null);
                 break;
         }
 
