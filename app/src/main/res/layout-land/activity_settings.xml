@@ -77,6 +77,11 @@
                             style="@style/settingsButtons"
                             android:text="@string/last_vote"/>
 
+                        <Button
+                            android:id="@+id/resetTutorial"
+                            style="@style/settingsButtons"
+                            android:text="@string/reset_tutorial"/>
+
                     </LinearLayout>
 
                 </ScrollView>

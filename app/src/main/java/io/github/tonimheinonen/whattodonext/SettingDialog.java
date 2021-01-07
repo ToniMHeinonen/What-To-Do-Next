@@ -1,7 +1,8 @@
 package io.github.tonimheinonen.whattodonext;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -24,7 +25,7 @@ import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 public class SettingDialog extends Dialog implements
         View.OnClickListener {
 
-    private Activity activity;
+    private SettingsActivity activity;
 
     public enum Setting {
         MAX_PERIL,
@@ -46,7 +47,7 @@ public class SettingDialog extends Dialog implements
      * @param a current activity
      * @param setting selected setting
      */
-    public SettingDialog(Activity a, Setting setting) {
+    public SettingDialog(SettingsActivity a, Setting setting) {
         super(a);
         this.activity = a;
         this.setting = setting;
@@ -62,10 +63,13 @@ public class SettingDialog extends Dialog implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.setting_dialog);
 
-        // Set dialog window size to 90% of the screen width and height
-        int width = (int)(activity.getResources().getDisplayMetrics().widthPixels*0.90);
-        int height = (int)(activity.getResources().getDisplayMetrics().heightPixels*0.90);
-        getWindow().setLayout(width, height);
+        // Fill the entire screen if the orientation is landscape
+        if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Set dialog window size to 90% of the screen width and height
+            int width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.90);
+            int height = (int) (activity.getResources().getDisplayMetrics().heightPixels * 0.90);
+            getWindow().setLayout(width, height);
+        }
 
         initializeViews();
 
@@ -253,6 +257,9 @@ public class SettingDialog extends Dialog implements
                     GlobalPrefs.savePopupInfo(tutorial, true);
                 }
                 dismiss();
+                // Start new MainActivity so the first part of tutorial is shown
+                activity.startActivity(new Intent(activity, MainActivity.class));
+                activity.finish();
                 break;
         }
     }
