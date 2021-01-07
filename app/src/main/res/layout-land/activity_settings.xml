@@ -158,8 +158,10 @@
                                 style="@style/settingsButtons"
                                 android:text="@string/reset_tutorial"/>
 
-                            <!-- SPACEHOLDER INVISIBLE BUTTON -->
-                            <Button style="@style/settingsButtons" android:visibility="invisible"/>
+                            <Button
+                                android:id="@+id/patch_notes"
+                                style="@style/settingsButtons"
+                                android:text="@string/settings_patch_notes"/>
 
                         </LinearLayout>
 

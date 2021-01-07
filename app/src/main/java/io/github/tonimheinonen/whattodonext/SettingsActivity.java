@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
 /**
  * Handles controlling of global values.
@@ -29,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @param v selected setting
      */
     public void settingSelected(View v) {
-        SettingDialog dialog;
+        SettingDialog dialog = null;
 
         switch (v.getId()) {
             case R.id.maxPeril:
@@ -56,13 +57,13 @@ public class SettingsActivity extends AppCompatActivity {
             case R.id.resetTutorial:
                 dialog = new SettingDialog(this, SettingDialog.Setting.RESET_TUTORIAL);
                 break;
-            default:
-                // Add default to suppress error dialog not initialized
-                dialog = new SettingDialog(this, null);
+            case R.id.patchNotes:
+                new HTMLDialog(this, HTMLDialog.HTMLText.PATCH_NOTES).show();
                 break;
         }
 
-        dialog.show();
+        if (dialog != null)
+            dialog.show();
     }
 
     /**

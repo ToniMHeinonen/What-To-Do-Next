@@ -184,6 +184,7 @@
     <string name="show_votes">Show Votes</string>
     <string name="ignore_unselected">Ignore Unselected</string>
     <string name="reset_tutorial">Reset Tutorial</string>
+    <string name="settings_patch_notes">Patch Notes</string>
 
     <string name="max_peril_text">Adjust the threshold of how many peril points activity can receive
     before it drops out of the list to the fallen category. Activities will be dropped after voting.
