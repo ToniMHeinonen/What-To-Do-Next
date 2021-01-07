@@ -17,6 +17,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <ImageButton
+                android:id="@+id/close"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="end"
+                android:src="@drawable/ic_close_32dp"
+                android:background="@android:color/transparent"/>
+
             <TextView
                 android:id="@+id/tutorialText"
                 android:layout_width="wrap_content"
@@ -41,9 +52,9 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:textSize="17sp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:text="@string/skip_tutorial"
                     android:background="@drawable/orange_button" />
@@ -54,7 +65,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:text="@string/back"
                     android:background="@drawable/cancel_button" />
@@ -65,7 +76,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:textSize="17sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:text="@string/htmlDialogOk"
                     android:background="@drawable/confirm_button" />

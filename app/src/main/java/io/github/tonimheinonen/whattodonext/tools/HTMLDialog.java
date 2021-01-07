@@ -8,6 +8,7 @@ import android.text.Html;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import io.github.tonimheinonen.whattodonext.BuildConfig;
@@ -41,6 +42,7 @@ public class HTMLDialog extends Dialog implements
 
     private Activity activity;
     private HTMLText htmlText;
+    private ImageButton closeButton;
     private Button cancelButton, skipTutorialButton;
 
     /**
@@ -73,6 +75,8 @@ public class HTMLDialog extends Dialog implements
         findViewById(R.id.confirm).setOnClickListener(this);
         cancelButton = findViewById(R.id.cancel);
         cancelButton.setOnClickListener(this);
+        closeButton = findViewById(R.id.close);
+        closeButton.setOnClickListener(this);
         skipTutorialButton = findViewById(R.id.skipTutorial);
         skipTutorialButton.setOnClickListener(this);
 
@@ -137,6 +141,7 @@ public class HTMLDialog extends Dialog implements
                 setTutorialText(activity.getString(R.string.beta_online));
                 break;
             case PATCH_NOTES:
+                closeButton.setVisibility(View.VISIBLE);
                 setTutorialText(activity.getString(R.string.patch_notes));
                 break;
         }
@@ -164,6 +169,7 @@ public class HTMLDialog extends Dialog implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.confirm:
+            case R.id.close:
                 confirm();
                 break;
             case R.id.cancel:
