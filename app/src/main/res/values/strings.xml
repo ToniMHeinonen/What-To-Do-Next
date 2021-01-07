@@ -196,6 +196,8 @@
         has when voting.</string>
     <string name="show_votes_text">Enabling this will show the individual points each activity
         received from every voter.</string>
+    <string name="reset_tutorial_text">Resets the whole tutorial so you can follow the tutorial
+        again.</string>
 
     <string name="last_vote_same_as_first">Points has to be lower than in first vote!</string>
     <string name="first_vote_same_as_last">Points has to be higher than in last vote!</string>

@@ -14,35 +14,27 @@
         android:background="@drawable/custom_bg">
 
         <!-- TOP -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/settings"
                 android:textSize="40sp"
                 android:textStyle="bold"
                 android:textColor="@color/defaultTextColor"
-                android:gravity="center" />
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_horizontal"/>
 
-            <Button
-                android:id="@+id/back"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.3"
-                android:layout_margin="5dp"
-                android:textSize="20sp"
-                android:background="@drawable/button_selector"
-                android:text="@string/back"
+            <ImageButton
+                android:id="@+id/close"
+                style="@style/closeButtonRelative"
                 android:onClick="backSelected"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <!-- BOTTOM -->
         <LinearLayout

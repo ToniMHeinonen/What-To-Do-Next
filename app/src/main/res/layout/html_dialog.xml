@@ -17,21 +17,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/close"
-                style="@style/closeButtonLinear"
-                android:layout_gravity="end"
-                android:visibility="gone"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tutorialText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:text="{Info text}"
-                android:textSize="20sp"
-                android:textColor="@color/defaultTextColor"/>
+                <TextView
+                    android:id="@+id/tutorialText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="{Info text}"
+                    android:textSize="20sp"
+                    android:textColor="@color/defaultTextColor"/>
+
+                <ImageButton
+                    android:id="@+id/close"
+                    style="@style/closeButtonRelative"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
 
             <!-- BUTTONS -->
             <LinearLayout
