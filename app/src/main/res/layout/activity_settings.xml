@@ -82,6 +82,11 @@
                     style="@style/settingsButtons"
                     android:text="@string/show_votes"/>
 
+                <Button
+                    android:id="@+id/resetTutorial"
+                    style="@style/settingsButtons"
+                    android:text="@string/reset_tutorial"/>
+
             </LinearLayout>
 
         </ScrollView>

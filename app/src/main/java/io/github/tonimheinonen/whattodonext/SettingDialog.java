@@ -129,6 +129,10 @@ public class SettingDialog extends Dialog implements
                 onOffSwitch.setVisibility(View.VISIBLE);
                 onOffSwitch.setChecked(GlobalPrefs.loadShowVoted());
                 break;
+            case RESET_TUTORIAL:
+                topic.setText(activity.getString(R.string.reset_tutorial));
+                text.setText(activity.getString(R.string.reset_tutorial_text));
+                break;
         }
     }
 
@@ -241,6 +245,13 @@ public class SettingDialog extends Dialog implements
                 break;
             case SHOW_VOTES:
                 GlobalPrefs.saveShowVoted(onOffSwitch.isChecked());
+                dismiss();
+                break;
+            case RESET_TUTORIAL:
+                // Mark all tutorials unread
+                for (String tutorial : GlobalPrefs.TUTORIAL_TEXTS) {
+                    GlobalPrefs.savePopupInfo(tutorial, true);
+                }
                 dismiss();
                 break;
         }
