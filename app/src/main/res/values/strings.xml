@@ -173,6 +173,9 @@
 
     <!-- SETTINGS_ACTIVITY -->
     <string name="settings">Settings</string>
+    <string name="settings_voting">Voting</string>
+    <string name="settings_other">Other</string>
+
     <string name="max_peril">Max Peril</string>
     <string name="first_vote">First Vote</string>
     <string name="last_vote">Last Vote</string>

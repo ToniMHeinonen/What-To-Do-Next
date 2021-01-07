@@ -26,7 +26,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/defaultTextColor"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:gravity="center_horizontal"/>
 
             <ImageButton
@@ -48,7 +47,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:layout_margin="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
                 android:orientation="vertical">
 
                 <!-- Wrap inside Scroll View just in case -->
@@ -62,25 +62,64 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/maxPeril"
-                            style="@style/settingsButtons"
-                            android:text="@string/max_peril"/>
+                        <TextView
+                            style="@style/settingsSubtitles"
+                            android:text="@string/settings_voting"/>
 
-                        <Button
-                            android:id="@+id/firstVote"
-                            style="@style/settingsButtons"
-                            android:text="@string/first_vote"/>
+                        <LinearLayout style="@style/settingsButtonsLayout">
 
-                        <Button
-                            android:id="@+id/lastVote"
-                            style="@style/settingsButtons"
-                            android:text="@string/last_vote"/>
+                            <Button
+                                android:id="@+id/firstVote"
+                                style="@style/settingsButtons"
+                                android:text="@string/first_vote"/>
 
-                        <Button
-                            android:id="@+id/resetTutorial"
-                            style="@style/settingsButtons"
-                            android:text="@string/reset_tutorial"/>
+                            <Button
+                                android:id="@+id/lastVote"
+                                style="@style/settingsButtons"
+                                android:text="@string/last_vote"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout style="@style/settingsButtonsLayout">
+
+                            <Button
+                                android:id="@+id/maxPeril"
+                                style="@style/settingsButtons"
+                                android:text="@string/max_peril"/>
+
+                            <Button
+                                android:id="@+id/ignoreUnselected"
+                                style="@style/settingsButtons"
+                                android:text="@string/ignore_unselected"/>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout style="@style/settingsButtonsLayout">
+
+                            <Button
+                                android:id="@+id/showExtra"
+                                style="@style/settingsButtons"
+                                android:text="@string/show_extra"/>
+
+                            <Button
+                                android:id="@+id/halveExtra"
+                                style="@style/settingsButtons"
+                                android:text="@string/halve_extra"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout style="@style/settingsButtonsLayout">
+
+                            <Button
+                                android:id="@+id/showVotes"
+                                style="@style/settingsButtons"
+                                android:text="@string/show_votes"/>
+
+                            <!-- SPACEHOLDER INVISIBLE BUTTON -->
+                            <Button style="@style/settingsButtons" android:visibility="invisible"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -93,7 +132,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:layout_margin="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="10dp"
                 android:orientation="vertical">
 
                 <!-- Wrap inside Scroll View just in case -->
@@ -107,25 +147,21 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/ignoreUnselected"
-                            style="@style/settingsButtons"
-                            android:text="@string/ignore_unselected"/>
+                        <TextView
+                            style="@style/settingsSubtitles"
+                            android:text="@string/settings_other"/>
 
-                        <Button
-                            android:id="@+id/halveExtra"
-                            style="@style/settingsButtons"
-                            android:text="@string/halve_extra"/>
+                        <LinearLayout style="@style/settingsButtonsLayout">
 
-                        <Button
-                            android:id="@+id/showExtra"
-                            style="@style/settingsButtons"
-                            android:text="@string/show_extra"/>
+                            <Button
+                                android:id="@+id/resetTutorial"
+                                style="@style/settingsButtons"
+                                android:text="@string/reset_tutorial"/>
 
-                        <Button
-                            android:id="@+id/showVotes"
-                            style="@style/settingsButtons"
-                            android:text="@string/show_votes"/>
+                            <!-- SPACEHOLDER INVISIBLE BUTTON -->
+                            <Button style="@style/settingsButtons" android:visibility="invisible"/>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
