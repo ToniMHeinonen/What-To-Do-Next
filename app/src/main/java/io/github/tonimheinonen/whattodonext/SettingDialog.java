@@ -22,15 +22,13 @@ import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
  * @version 1.0.2
  * @since 1.0
  */
-public class SettingDialog extends Dialog implements
-        View.OnClickListener {
+public class SettingDialog extends Dialog {
 
     private SettingsActivity activity;
 
     public enum Setting {
         MAX_PERIL,
-        FIRST_VOTE,
-        LAST_VOTE,
+        VOTE_POINTS,
         IGNORE_UNSELECTED,
         HALVE_EXTRA,
         SHOW_EXTRA,
@@ -39,8 +37,9 @@ public class SettingDialog extends Dialog implements
     }
 
     private Setting setting;
-    private EditText points;
+    private EditText points, firstPoints, lastPoints;
     private SwitchCompat onOffSwitch;
+    private LinearLayout inflateLayout;
 
     /**
      * Initializes necessary values.
@@ -74,10 +73,10 @@ public class SettingDialog extends Dialog implements
         initializeViews();
 
         // Set listeners for confirm and cancel
-        findViewById(R.id.minus).setOnClickListener(this);
-        findViewById(R.id.plus).setOnClickListener(this);
-        findViewById(R.id.cancel).setOnClickListener(this);
-        findViewById(R.id.confirm).setOnClickListener(this);
+        findViewById(R.id.minus).setOnClickListener(v -> plusMinusPressed(points, -1));
+        findViewById(R.id.plus).setOnClickListener(v -> plusMinusPressed(points, 1));
+        findViewById(R.id.cancel).setOnClickListener(v -> cancel());
+        findViewById(R.id.confirm).setOnClickListener(v -> confirm());
     }
 
     /**
@@ -89,6 +88,7 @@ public class SettingDialog extends Dialog implements
         LinearLayout adjustingPoints = findViewById(R.id.adjustingPoints);
         points = findViewById(R.id.points);
         onOffSwitch = findViewById(R.id.onOffSwitch);
+        inflateLayout = findViewById(R.id.inflateLayout);
 
         switch (setting) {
             case MAX_PERIL:
@@ -97,17 +97,22 @@ public class SettingDialog extends Dialog implements
                 text.setText(activity.getString(R.string.max_peril_text));
                 adjustingPoints.setVisibility(View.VISIBLE);
                 break;
-            case FIRST_VOTE:
+            case VOTE_POINTS:
                 points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeFirst()));
-                topic.setText(activity.getString(R.string.first_vote));
-                text.setText(activity.getString(R.string.first_vote_text));
-                adjustingPoints.setVisibility(View.VISIBLE);
-                break;
-            case LAST_VOTE:
-                points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeSecond()));
-                topic.setText(activity.getString(R.string.last_vote));
-                text.setText(activity.getString(R.string.last_vote_text));
-                adjustingPoints.setVisibility(View.VISIBLE);
+                topic.setText(activity.getString(R.string.vote_points));
+                text.setText(activity.getString(R.string.vote_points_text));
+                // Inflate vote points layout
+                View child = getLayoutInflater().inflate(R.layout.settings_vote_points, null);
+                inflateLayout.addView(child);
+                firstPoints = child.findViewById(R.id.firstPoints);
+                firstPoints.setText(String.valueOf(GlobalPrefs.loadListVoteSizeFirst()));
+                lastPoints = child.findViewById(R.id.lastPoints);
+                lastPoints.setText(String.valueOf(GlobalPrefs.loadListVoteSizeSecond()));
+                // Listen for plus and minus clicks
+                child.findViewById(R.id.firstPlus).setOnClickListener(v -> plusMinusPressed(firstPoints, 1));
+                child.findViewById(R.id.firstMinus).setOnClickListener(v -> plusMinusPressed(firstPoints, -1));
+                child.findViewById(R.id.lastPlus).setOnClickListener(v -> plusMinusPressed(lastPoints, 1));
+                child.findViewById(R.id.lastMinus).setOnClickListener(v -> plusMinusPressed(lastPoints, -1));
                 break;
             case IGNORE_UNSELECTED:
                 topic.setText(activity.getString(R.string.ignore_unselected));
@@ -140,32 +145,9 @@ public class SettingDialog extends Dialog implements
         }
     }
 
-    /**
-     * Listens for view clicks.
-     * @param v clicked view
-     */
-    @Override
-    public void onClick(View v) {
-        int p;
-
-        switch (v.getId()) {
-            case R.id.plus:
-                p = Integer.parseInt(points.getText().toString());
-                checkPoints(p + 1);
-                break;
-            case R.id.minus:
-                p = Integer.parseInt(points.getText().toString());
-                checkPoints(p - 1);
-                break;
-            case R.id.cancel:
-                cancel();
-                break;
-            case R.id.confirm:
-                confirm();
-                break;
-            default:
-                break;
-        }
+    private void plusMinusPressed(EditText points, int adjustment) {
+        int p = Integer.parseInt(points.getText().toString());
+        checkPoints(points, p + adjustment);
     }
 
     /**
@@ -173,7 +155,7 @@ public class SettingDialog extends Dialog implements
      * @param p amount of points
      * @return true if points are allowed
      */
-    private boolean checkPoints(int p) {
+    private boolean checkPoints(EditText pointsEdit, int p) {
         switch (setting) {
             case MAX_PERIL:
                 if (p <= 0) {
@@ -181,32 +163,39 @@ public class SettingDialog extends Dialog implements
                     points.setText("1");
                     return false;
                 }
-                break;
-            case LAST_VOTE:
-                // If last vote is the same size as first vote
-                if (p >= GlobalPrefs.loadListVoteSizeFirst()) {
-                    Buddy.showToast(activity.getString(R.string.last_vote_same_as_first), Toast.LENGTH_LONG);
-                    points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeFirst() - 1));
-                    return false;
-                }
 
-                if (p <= 0) {
-                    Buddy.showToast(activity.getString(R.string.points_at_zero), Toast.LENGTH_LONG);
-                    points.setText("1");
-                    return false;
-                }
+                points.setText(String.valueOf(p));
                 break;
-            case FIRST_VOTE:
-                // If first vote is the same size as last vote
-                if (p <= GlobalPrefs.loadListVoteSizeSecond()) {
-                    Buddy.showToast(activity.getString(R.string.first_vote_same_as_last), Toast.LENGTH_LONG);
-                    points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeSecond() + 1));
-                    return false;
+            case VOTE_POINTS:
+                if (pointsEdit == firstPoints) {
+                    // If first vote is the same size as last vote
+                    int lastP = Integer.parseInt(lastPoints.getText().toString());
+                    if (p <= lastP) {
+                        Buddy.showToast(activity.getString(R.string.first_vote_same_as_last), Toast.LENGTH_LONG);
+                        firstPoints.setText(String.valueOf(lastP + 1));
+                        return false;
+                    }
+
+                    firstPoints.setText(String.valueOf(p));
+                } else if (pointsEdit == lastPoints) {
+                    // If last vote is the same size as first vote
+                    int firstP = Integer.parseInt(firstPoints.getText().toString());
+                    if (p >= firstP) {
+                        Buddy.showToast(activity.getString(R.string.last_vote_same_as_first), Toast.LENGTH_LONG);
+                        lastPoints.setText(String.valueOf(firstP - 1));
+                        return false;
+                    }
+
+                    if (p <= 0) {
+                        Buddy.showToast(activity.getString(R.string.points_at_zero), Toast.LENGTH_LONG);
+                        lastPoints.setText("1");
+                        return false;
+                    }
+
+                    lastPoints.setText(String.valueOf(p));
                 }
                 break;
         }
-
-        points.setText(String.valueOf(p));
         return true;
     }
 
@@ -214,24 +203,20 @@ public class SettingDialog extends Dialog implements
      * Checks whether to dismiss dialog and save new values.
      */
     private void confirm() {
-        int p = Integer.parseInt(points.getText().toString());
-
         switch (setting) {
             case MAX_PERIL:
-                if (checkPoints(p)) {
+                int p = Integer.parseInt(points.getText().toString());
+                if (checkPoints(points, p)) {
                     GlobalPrefs.saveMaxPerilPoints(p);
                     dismiss();
                 }
                 break;
-            case FIRST_VOTE:
-                if (checkPoints(p)) {
-                    GlobalPrefs.saveListVoteSizeFirst(p);
-                    dismiss();
-                }
-                break;
-            case LAST_VOTE:
-                if (checkPoints(p)) {
-                    GlobalPrefs.saveListVoteSizeSecond(p);
+            case VOTE_POINTS:
+                int firstP = Integer.parseInt(firstPoints.getText().toString());
+                int lastP = Integer.parseInt(lastPoints.getText().toString());
+                if (checkPoints(firstPoints, firstP) && checkPoints(lastPoints, lastP)) {
+                    GlobalPrefs.saveListVoteSizeFirst(firstP);
+                    GlobalPrefs.saveListVoteSizeSecond(lastP);
                     dismiss();
                 }
                 break;

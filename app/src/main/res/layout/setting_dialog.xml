@@ -37,6 +37,13 @@
                 android:textSize="20sp"
                 android:textColor="@color/defaultTextColor"/>
 
+            <!-- INFLATE LAYOUT -->
+            <LinearLayout
+                android:id="@+id/inflateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
             <!-- ADJUSTING POINTS -->
             <LinearLayout
                 android:id="@+id/adjustingPoints"

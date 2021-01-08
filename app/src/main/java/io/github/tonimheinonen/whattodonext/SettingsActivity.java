@@ -36,11 +36,8 @@ public class SettingsActivity extends AppCompatActivity {
             case R.id.maxPeril:
                 dialog = new SettingDialog(this, SettingDialog.Setting.MAX_PERIL);
                 break;
-            case R.id.firstVote:
-                dialog = new SettingDialog(this, SettingDialog.Setting.FIRST_VOTE);
-                break;
-            case R.id.lastVote:
-                dialog = new SettingDialog(this, SettingDialog.Setting.LAST_VOTE);
+            case R.id.votePoints:
+                dialog = new SettingDialog(this, SettingDialog.Setting.VOTE_POINTS);
                 break;
             case R.id.ignoreUnselected:
                 dialog = new SettingDialog(this, SettingDialog.Setting.IGNORE_UNSELECTED);

@@ -69,23 +69,23 @@
                         <LinearLayout style="@style/settingsButtonsLayout">
 
                             <Button
-                                android:id="@+id/firstVote"
+                                android:id="@+id/votePoints"
                                 style="@style/settingsButtons"
-                                android:text="@string/first_vote"/>
+                                android:text="@string/vote_points"/>
 
                             <Button
-                                android:id="@+id/lastVote"
+                                android:id="@+id/maxPeril"
                                 style="@style/settingsButtons"
-                                android:text="@string/last_vote"/>
+                                android:text="@string/max_peril"/>
 
                         </LinearLayout>
 
                         <LinearLayout style="@style/settingsButtonsLayout">
 
                             <Button
-                                android:id="@+id/maxPeril"
+                                android:id="@+id/showVotes"
                                 style="@style/settingsButtons"
-                                android:text="@string/max_peril"/>
+                                android:text="@string/show_votes"/>
 
                             <Button
                                 android:id="@+id/ignoreUnselected"
@@ -106,18 +106,6 @@
                                 android:id="@+id/halveExtra"
                                 style="@style/settingsButtons"
                                 android:text="@string/halve_extra"/>
-
-                        </LinearLayout>
-
-                        <LinearLayout style="@style/settingsButtonsLayout">
-
-                            <Button
-                                android:id="@+id/showVotes"
-                                style="@style/settingsButtons"
-                                android:text="@string/show_votes"/>
-
-                            <!-- SPACEHOLDER INVISIBLE BUTTON -->
-                            <Button style="@style/settingsButtons" android:visibility="invisible"/>
 
                         </LinearLayout>
 

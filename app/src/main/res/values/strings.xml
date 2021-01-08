@@ -177,6 +177,7 @@
     <string name="settings_other">Other</string>
 
     <string name="max_peril">Max Peril</string>
+    <string name="vote_points">Vote Points</string>
     <string name="first_vote">First Vote</string>
     <string name="last_vote">Last Vote</string>
     <string name="halve_extra">Halve Extra</string>
@@ -189,8 +190,8 @@
     <string name="max_peril_text">Adjust the threshold of how many peril points activity can receive
     before it drops out of the list to the fallen category. Activities will be dropped after voting.
     </string>
-    <string name="first_vote_text">Adjust how many points will be given in the first vote.</string>
-    <string name="last_vote_text">Adjust how many points will be given in the last vote.</string>
+    <string name="vote_points_text">Adjust how many points will be given in the first and last
+        vote.</string>
     <string name="ignore_unselected_text">Enabling this will ignore all the activities which no one
         voted when counting the vote points in the first vote.</string>
     <string name="halve_extra_text">All activities receive extra points when voting by the amount of
