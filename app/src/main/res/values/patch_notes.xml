@@ -1,10 +1,27 @@
+<!DOCTYPE resources [
+    <!ENTITY tab "\u0009\u0009\u0009\u0009">
+    ]>
+
 <resources>
     <string name="patch_notes">
     &lt;h1&gt;Patch Notes&lt;/h1&gt;
+
+    &lt;h5&gt;Version 9 / v1.4.0 / January 8, 2021&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Add "Show Password" switch to login and sign up screens&lt;br/&gt;
+    &#8226; Add ability to duplicate lists&lt;br/&gt;
+    &#8226; Add "Reset Tutorial" and "Patch Notes" to settings&lt;br/&gt;
+    &#8226; Modify settings UI&lt;br/&gt;
+    &#8226; Merge "First Vote" and "Last Vote" to "Vote Points" in settings&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
     &lt;h5&gt;Version 8 / v1.3.2 / January 3, 2021&lt;/h5&gt;
     &lt;p&gt;
-    &#8226; Modify results sorting priority (1. Most vote points 2. Most number of users
-    voted 3. Most vote points by users, bonus points excluded&lt;br/&gt;
+    &#8226; Modify results sorting priority:&lt;br/&gt;
+        &tab;1. Most vote points&lt;br/&gt;
+        &tab;2. Most number of users voted&lt;br/&gt;
+        &tab;3. Most vote points by users, bonus points excluded&lt;br/&gt;
     &#8226; Change the graphics of list and vote activities&lt;br/&gt;
     &lt;/p&gt;
     &lt;br/&gt;
