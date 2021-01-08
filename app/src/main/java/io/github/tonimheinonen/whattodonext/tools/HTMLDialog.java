@@ -75,8 +75,8 @@ public class HTMLDialog extends Dialog implements
             height = getWindow().getAttributes().height;
         } else {
             // Set dialog window size to 70% of the screen width and height
-            width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.7);
-            height = (int) (activity.getResources().getDisplayMetrics().heightPixels * 0.7);
+            width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.8);
+            height = (int) (activity.getResources().getDisplayMetrics().heightPixels * 0.8);
         }
 
         getWindow().setLayout(width, height);

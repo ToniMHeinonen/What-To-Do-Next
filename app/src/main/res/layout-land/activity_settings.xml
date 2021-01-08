@@ -159,7 +159,7 @@
                                 android:text="@string/reset_tutorial"/>
 
                             <Button
-                                android:id="@+id/patch_notes"
+                                android:id="@+id/patchNotes"
                                 style="@style/settingsButtons"
                                 android:text="@string/settings_patch_notes"/>
 
