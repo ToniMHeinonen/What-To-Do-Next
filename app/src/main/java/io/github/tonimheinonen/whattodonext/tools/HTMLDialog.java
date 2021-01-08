@@ -2,6 +2,7 @@ package io.github.tonimheinonen.whattodonext.tools;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
@@ -66,10 +67,19 @@ public class HTMLDialog extends Dialog implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.html_dialog);
 
-        // Set dialog window size to 90% of the screen width and height
-        int width = (int)(activity.getResources().getDisplayMetrics().widthPixels);
-        //int height = (int)(activity.getResources().getDisplayMetrics().heightPixels);
-        getWindow().setLayout(width, getWindow().getAttributes().height);
+        int width = 0;
+        int height = 0;
+        if (activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Set dialog window size to 100% of the screen width and height
+            width = activity.getResources().getDisplayMetrics().widthPixels;
+            height = getWindow().getAttributes().height;
+        } else {
+            // Set dialog window size to 70% of the screen width and height
+            width = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.7);
+            height = (int) (activity.getResources().getDisplayMetrics().heightPixels * 0.7);
+        }
+
+        getWindow().setLayout(width, height);
 
         // Set listeners for buttons
         findViewById(R.id.confirm).setOnClickListener(this);
