@@ -8,7 +8,8 @@
         android:id="@+id/voteAmount"
         style="@style/listItemPoints"
         android:layout_weight="@dimen/vote_show_extra_voteAmount_weight"
-        android:textColor="@color/colorPrimary">
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold">
     </TextView>
 
     <TextView
