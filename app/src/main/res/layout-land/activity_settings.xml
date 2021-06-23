@@ -35,8 +35,20 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.75"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
         <!-- BOTTOM -->
         <LinearLayout
+            android:id="@+id/settingsLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"

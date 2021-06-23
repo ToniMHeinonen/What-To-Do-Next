@@ -51,6 +51,7 @@
             android:visibility="gone"
             android:maxLength="@integer/list_name_max_length"/>
 
+
         <Button
             android:id="@+id/fallenButton"
             android:layout_width="0dp"

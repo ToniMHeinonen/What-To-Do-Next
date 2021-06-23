@@ -34,6 +34,17 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            style="@style/GenericProgressBackground"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.75"
+            android:id="@+id/loadingPanel">
+
+            <ProgressBar
+                style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
         <!-- Wrap inside Scroll View just in case -->
         <ScrollView
             android:layout_width="match_parent"
@@ -42,6 +53,7 @@
             style="@style/scrollViewStyle">
 
             <LinearLayout
+                android:id="@+id/settingsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">

@@ -21,6 +21,7 @@ import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.OnlineVotedItem;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
+import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
@@ -52,6 +53,9 @@ public class VoteTopActivity extends VotingParentActivity {
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
 
+    // Offline
+    private VoteSettings voteSettings;
+
     // Options
     private int listVoteSizeLast;
     private boolean showExtra;
@@ -73,12 +77,12 @@ public class VoteTopActivity extends VotingParentActivity {
             new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_VOTE_TOP).show();
 
         Intent intent = getIntent();
-        isOnline = intent.getBooleanExtra("isOnline", false);
-        selectedList = intent.getParcelableExtra("selectedList");
+        isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
+        selectedList = intent.getParcelableExtra(VoteIntents.LIST);
 
         if (isOnline) {
-            onlineProfile = intent.getParcelableExtra("onlineProfile");
-            voteRoom = intent.getParcelableExtra("voteRoom");
+            onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
+            voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
 
             // Get correct vote amount
             if (voteRoom.getState().equals(VoteRoom.VOTING_FIRST))
@@ -86,8 +90,9 @@ public class VoteTopActivity extends VotingParentActivity {
             else
                 topAmount = voteRoom.getLastVoteSize();
         } else {
-            topAmount = intent.getIntExtra("topAmount", -1);
-            selectedProfiles = intent.getParcelableArrayListExtra("selectedProfiles");
+            voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
+            topAmount = intent.getIntExtra(VoteIntents.TOP_AMOUNT, -1);
+            selectedProfiles = intent.getParcelableArrayListExtra(VoteIntents.PROFILES);
         }
 
         setOptions();
@@ -122,9 +127,9 @@ public class VoteTopActivity extends VotingParentActivity {
             showExtra = voteRoom.isShowExtra();
             halveExtra = voteRoom.isHalveExtra();
         } else {
-            listVoteSizeLast = GlobalPrefs.loadListVoteSizeSecond();
-            showExtra = GlobalPrefs.loadShowExtra();
-            halveExtra = GlobalPrefs.loadHalveExtra();
+            listVoteSizeLast = voteSettings.getLastVote();
+            showExtra = voteSettings.isShowExtra();
+            halveExtra = voteSettings.isHalveExtra();
         }
     }
 
@@ -269,9 +274,10 @@ public class VoteTopActivity extends VotingParentActivity {
                 finish();
                 // Move to results screen
                 Intent intent = new Intent(this, VoteResultsActivity.class);
-                intent.putExtra("topAmount", topAmount);
-                intent.putExtra("selectedList", selectedList);
-                intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
+                intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+                intent.putExtra(VoteIntents.TOP_AMOUNT, topAmount);
+                intent.putExtra(VoteIntents.LIST, selectedList);
+                intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
                 startActivity(intent);
             } else {
                 startVoting();
@@ -294,9 +300,9 @@ public class VoteTopActivity extends VotingParentActivity {
             DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, true, () -> {
                 // Move to waiting room when ready has changed
                 Intent intent = new Intent(this, VoteWaitingActivity.class);
-                intent.putExtra("voteRoom", voteRoom);
-                intent.putExtra("onlineProfile", onlineProfile);
-                intent.putExtra("selectedList", selectedList);
+                intent.putExtra(VoteIntents.ROOM, voteRoom);
+                intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+                intent.putExtra(VoteIntents.LIST, selectedList);
                 startActivity(intent);
             });
         });

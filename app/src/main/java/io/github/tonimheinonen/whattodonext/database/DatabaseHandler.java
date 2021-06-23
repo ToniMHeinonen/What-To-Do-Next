@@ -46,6 +46,7 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbProfiles;
     private static DatabaseReference dbSavedResults;
     private static DatabaseReference dbResultItems;
+    private static DatabaseReference dbVoteSettings;
 
     // Online voting
     private static DatabaseReference dbVoteRooms;
@@ -54,6 +55,8 @@ public abstract class DatabaseHandler {
     private static String ONLINE_VOTED_ITEMS = "voted_items";
     private static String ONLINE_STATE = "state";
     private static String ONLINE_TIMESTAMP = "timestamp";
+
+    private final static String DEFAULT_VOTE_SETTINGS = "default";
 
     private static int MAX_SAVED_RESULTS = 7;
     private static int VOTEROOM_EXPIRE_TIME = 2; // Hours
@@ -83,6 +86,9 @@ public abstract class DatabaseHandler {
         dbResultItems = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("result_items");
         dbResultItems.keepSynced(true);
+        dbVoteSettings = FirebaseDatabase.getInstance().getReference().child("users").
+                child(user.getUid()).child("vote_settings");
+        dbVoteSettings.keepSynced(true);
 
         // Init online voting references
         dbVoteRooms = FirebaseDatabase.getInstance().getReference().child("vote_rooms");
@@ -97,6 +103,7 @@ public abstract class DatabaseHandler {
         dbVoteRooms.keepSynced(true);
     }
 
+    //region Interfaces
     /////////////////////* LISTENER INTERFACES *////////////////////
 
     public interface ListsListener {
@@ -109,7 +116,7 @@ public abstract class DatabaseHandler {
 
     public interface ItemsListener {
         /**
-         * gets loaded items from database.
+         * Gets loaded items from database.
          * @param items loaded items from database
          */
         void onDataGetItems(ArrayList<ListItem> items);
@@ -137,6 +144,14 @@ public abstract class DatabaseHandler {
          * @param resultItems loaded result items from database
          */
         void onDataGetResultItems(ArrayList<SavedResultItem> resultItems);
+    }
+
+    public interface VoteSettingsListener {
+        /**
+         * Gets loaded vote settings from database.
+         * @param voteSettings loaded vote settings from database
+         */
+        void onDataGetVoteSettings(VoteSettings voteSettings);
     }
 
     /////////////////////* VOTE ROOM INTERFACES *////////////////////
@@ -201,7 +216,9 @@ public abstract class DatabaseHandler {
          */
         void onDataGetString(String value);
     }
+    //endregion
 
+    //region Lists
     /////////////////////* LISTS *////////////////////
 
     /**
@@ -297,7 +314,9 @@ public abstract class DatabaseHandler {
             }
         });
     }
+    //endregion
 
+    //region Items
     /////////////////////* ITEMS *////////////////////
 
     /**
@@ -396,7 +415,9 @@ public abstract class DatabaseHandler {
             }
         });
     }
+    //endregion
 
+    //region Profiles
     /////////////////////* PROFILES *////////////////////
 
     /**
@@ -455,7 +476,9 @@ public abstract class DatabaseHandler {
             }
         });
     }
+    //endregion
 
+    //region SavedResults
     /////////////////////* SAVED RESULTS *////////////////////
 
     /**
@@ -546,7 +569,9 @@ public abstract class DatabaseHandler {
             }
         });
     }
+    //endregion
 
+    //region ResultItems
     /////////////////////* RESULT ITEMS *////////////////////
 
     /**
@@ -599,7 +624,9 @@ public abstract class DatabaseHandler {
             }
         });
     }
+    //endregion
 
+    //region VoteRooms
     /////////////////////* VOTE ROOMS *////////////////////
 
     /**
@@ -817,110 +844,10 @@ public abstract class DatabaseHandler {
 
         dbVoteRooms.addChildEventListener(voteRoomRemovalListener);
     }
+    //endregion
 
-    /**
-     * Connects a online profile to the vote room.
-     * @param voteRoom vote room to connect to
-     * @param profile profile to connect
-     */
-    public static void connectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
-        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-
-        String key = dbProfiles.push().getKey();   // Add new key to profiles
-        profile.setDbID(key);
-
-        Map<String, Object> values = profile.toMap();
-
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put(key, values);
-
-        dbProfiles.updateChildren(childUpdates);
-    }
-
-    /**
-     * Listens for changes in online profiles.
-     * @param voteRoom vote room to listen for
-     * @param listener listens for online profile changes
-     */
-    public static void listenForOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
-        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-        dbProfiles.addChildEventListener(listener);
-    }
-
-    /**
-     * Return all current online profiles connected to the provided vote room.
-     * @param voteRoom vote room to get the profiles from
-     * @param listener listens for connected online profiles
-     */
-    public static void getOnlineProfiles(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
-        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-
-        dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Debug.print("DatabaseHandler", "getOnlineProfiles",
-                        "profiles: " + snapshot.getChildrenCount(), 1);
-
-                ArrayList<OnlineProfile> onlineProfiles = new ArrayList<>();
-
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-                    onlineProfile.setDbID(dataSnapshot.getKey());
-                    onlineProfiles.add(onlineProfile);
-                }
-
-                listener.onDataGetOnlineProfiles(onlineProfiles);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Debug.print("DatabaseHandler", "onCancelled", "", 1);
-                databaseError.toException().printStackTrace();
-            }
-        });
-    }
-
-    /**
-     * Removes profile.
-     * @param profile profile to remove
-     */
-    public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
-        // Stop listening for vote room removal
-        if (voteRoomRemovalListener != null) {
-            dbVoteRooms.removeEventListener(voteRoomRemovalListener);
-            voteRoomRemovalListener = null;
-        }
-
-        // If host disconnects from the room and it's not the last results, remove the vote room
-        if (profile.isHost() && !voteRoom.getState().equals(VoteRoom.RESULTS_LAST)) {
-            removeVoteRoom(voteRoom);
-            return;
-        }
-
-        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-        dbProfiles.child(profile.getDbID()).removeValue()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    // Remove vote rooms if all users disconnect from the room
-                    DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-
-                    dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.getChildrenCount() == 0)
-                                removeVoteRoom(voteRoom);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Debug.print("DatabaseHandler", "onCancelled", "", 1);
-                            databaseError.toException().printStackTrace();
-                        }
-                    });
-                }
-            });
-    }
+    //region VoteRoomItems
+    /////////////////////* VOTE ROOM ITEMS *////////////////////
 
     /**
      * Adds items which users will vote to the provided vote room.
@@ -1046,9 +973,116 @@ public abstract class DatabaseHandler {
     public static void clearVoteRoomVotedItems(VoteRoom voteRoom) {
         dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS).removeValue();
     }
+    //endregion
+
+    //region OnlineProfile
+    /////////////////////* ONLINE PROFILE *////////////////////
+    /**
+     * Connects a online profile to the vote room.
+     * @param voteRoom vote room to connect to
+     * @param profile profile to connect
+     */
+    public static void connectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+
+        String key = dbProfiles.push().getKey();   // Add new key to profiles
+        profile.setDbID(key);
+
+        Map<String, Object> values = profile.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, values);
+
+        dbProfiles.updateChildren(childUpdates);
+    }
 
     /**
-     * Changes the ready state of the provided only profile in the provided vote room.
+     * Listens for changes in online profiles.
+     * @param voteRoom vote room to listen for
+     * @param listener listens for online profile changes
+     */
+    public static void listenForOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        dbProfiles.addChildEventListener(listener);
+    }
+
+    /**
+     * Return all current online profiles connected to the provided vote room.
+     * @param voteRoom vote room to get the profiles from
+     * @param listener listens for connected online profiles
+     */
+    public static void getOnlineProfiles(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+
+        dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getOnlineProfiles",
+                        "profiles: " + snapshot.getChildrenCount(), 1);
+
+                ArrayList<OnlineProfile> onlineProfiles = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
+                    onlineProfile.setDbID(dataSnapshot.getKey());
+                    onlineProfiles.add(onlineProfile);
+                }
+
+                listener.onDataGetOnlineProfiles(onlineProfiles);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Removes profile.
+     * @param profile profile to remove
+     */
+    public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
+        // Stop listening for vote room removal
+        if (voteRoomRemovalListener != null) {
+            dbVoteRooms.removeEventListener(voteRoomRemovalListener);
+            voteRoomRemovalListener = null;
+        }
+
+        // If host disconnects from the room and it's not the last results, remove the vote room
+        if (profile.isHost() && !voteRoom.getState().equals(VoteRoom.RESULTS_LAST)) {
+            removeVoteRoom(voteRoom);
+            return;
+        }
+
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        dbProfiles.child(profile.getDbID()).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    // Remove vote rooms if all users disconnect from the room
+                    DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+
+                    dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.getChildrenCount() == 0)
+                                removeVoteRoom(voteRoom);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                            databaseError.toException().printStackTrace();
+                        }
+                    });
+                }
+            });
+    }
+
+    /**
+     * Changes the ready state of the provided online profile in the provided vote room.
      * @param voteRoom vote room to change the online profile state
      * @param onlineProfile online profile to change the ready state
      * @param isReady whether the online profile is ready or not
@@ -1062,4 +1096,78 @@ public abstract class DatabaseHandler {
                     if(listener != null)
                         listener.onDataAddedComplete(); });
     }
+    //endregion
+
+    //region VoteSettings
+    /////////////////////* VOTE SETTINGS *////////////////////
+
+    /**
+     * Adds new VoteSettings.
+     * @param list list to add settings to
+     * @param settings settings to add
+     */
+    public static void addVoteSettings(ListOfItems list, VoteSettings settings) {
+        String key = dbVoteSettings.push().getKey();   // Add new key to path
+
+        settings.setDbID(key);
+        settings.setListID(list == null ? DEFAULT_VOTE_SETTINGS : list.getDbID());
+        Map<String, Object> listValues = settings.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, listValues);
+
+        dbVoteSettings.updateChildren(childUpdates);
+    }
+
+    /**
+     * Loads VoteSettings which are part of the given list from database.
+     * @param listener listener to send data to
+     * @param list list where items must belong to
+     */
+    public static void getVoteSettings(final VoteSettingsListener listener, final ListOfItems list) {
+        String listId = list == null ? DEFAULT_VOTE_SETTINGS : list.getDbID();
+        Query query = dbVoteSettings.orderByChild("listID").equalTo(listId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "onDataChange",
+                        "Settings count: " + snapshot.getChildrenCount(), 1);
+
+                VoteSettings settings = null;
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    VoteSettings value = dataSnapshot.getValue(VoteSettings.class);
+                    Debug.print("DatabaseHandler", "onDataChange",
+                            "ListID: " + value.getListID(), 1);
+                    value.setDbID(key);
+                    settings = value;
+                    break;
+                }
+
+                listener.onDataGetVoteSettings(settings);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Modifies vote settings values.
+     * @param settings vote settings to modify
+     */
+    public static void modifyVoteSettings(VoteSettings settings) {
+        Map<String, Object> listValues = settings.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(settings.getDbID(), listValues);
+
+        dbVoteSettings.updateChildren(childUpdates);
+    }
+
+    //endregion
 }

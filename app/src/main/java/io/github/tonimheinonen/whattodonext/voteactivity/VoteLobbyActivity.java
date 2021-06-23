@@ -47,8 +47,8 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         Intent intent = getIntent();
-        voteRoom = intent.getParcelableExtra("voteRoom");
-        onlineProfile = intent.getParcelableExtra("onlineProfile");
+        voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
+        onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
 
         setContentView(R.layout.activity_vote_lobby);
 
@@ -172,7 +172,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
             return;
         }
 
-        ArrayList<ListItem> items = getIntent().getParcelableArrayListExtra("items");
+        ArrayList<ListItem> items = getIntent().getParcelableArrayListExtra(VoteIntents.ITEMS);
         DatabaseHandler.addItemsToVoteRoom(voteRoom, items);
         Buddy.showOnlineVoteLoadingBar(this);
     }
@@ -184,10 +184,10 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         selectedList.setItems(items);
 
         Intent intent = new Intent(this, VoteTopActivity.class);
-        intent.putExtra("onlineProfile", onlineProfile);
-        intent.putExtra("voteRoom", voteRoom);
-        intent.putExtra("isOnline", true);
-        intent.putExtra("selectedList", selectedList);
+        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+        intent.putExtra(VoteIntents.ROOM, voteRoom);
+        intent.putExtra(VoteIntents.IS_ONLINE, true);
+        intent.putExtra(VoteIntents.LIST, selectedList);
 
         startActivity(intent);
     }

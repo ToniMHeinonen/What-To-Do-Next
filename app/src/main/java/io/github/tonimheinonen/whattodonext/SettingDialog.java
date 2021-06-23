@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
+import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 
@@ -36,6 +37,7 @@ public class SettingDialog extends Dialog {
         RESET_TUTORIAL
     }
 
+    private VoteSettings voteSettings;
     private Setting setting;
     private EditText points, firstPoints, lastPoints;
     private SwitchCompat onOffSwitch;
@@ -46,10 +48,11 @@ public class SettingDialog extends Dialog {
      * @param a current activity
      * @param setting selected setting
      */
-    public SettingDialog(SettingsActivity a, Setting setting) {
+    public SettingDialog(SettingsActivity a, Setting setting, VoteSettings voteSettings) {
         super(a);
         this.activity = a;
         this.setting = setting;
+        this.voteSettings = voteSettings;
     }
 
     /**
@@ -92,22 +95,22 @@ public class SettingDialog extends Dialog {
 
         switch (setting) {
             case MAX_PERIL:
-                points.setText(String.valueOf(GlobalPrefs.loadMaxPerilPoints()));
+                points.setText(String.valueOf(voteSettings.getMaxPeril()));
                 topic.setText(activity.getString(R.string.max_peril));
                 text.setText(activity.getString(R.string.max_peril_text));
                 adjustingPoints.setVisibility(View.VISIBLE);
                 break;
             case VOTE_POINTS:
-                points.setText(String.valueOf(GlobalPrefs.loadListVoteSizeFirst()));
+                points.setText(String.valueOf(voteSettings.getFirstVote()));
                 topic.setText(activity.getString(R.string.vote_points));
                 text.setText(activity.getString(R.string.vote_points_text));
                 // Inflate vote points layout
                 View child = getLayoutInflater().inflate(R.layout.settings_vote_points, null);
                 inflateLayout.addView(child);
                 firstPoints = child.findViewById(R.id.firstPoints);
-                firstPoints.setText(String.valueOf(GlobalPrefs.loadListVoteSizeFirst()));
+                firstPoints.setText(String.valueOf(voteSettings.getFirstVote()));
                 lastPoints = child.findViewById(R.id.lastPoints);
-                lastPoints.setText(String.valueOf(GlobalPrefs.loadListVoteSizeSecond()));
+                lastPoints.setText(String.valueOf(voteSettings.getLastVote()));
                 // Listen for plus and minus clicks
                 child.findViewById(R.id.firstPlus).setOnClickListener(v -> plusMinusPressed(firstPoints, 1));
                 child.findViewById(R.id.firstMinus).setOnClickListener(v -> plusMinusPressed(firstPoints, -1));
@@ -118,25 +121,25 @@ public class SettingDialog extends Dialog {
                 topic.setText(activity.getString(R.string.ignore_unselected));
                 text.setText(activity.getString(R.string.ignore_unselected_text));
                 onOffSwitch.setVisibility(View.VISIBLE);
-                onOffSwitch.setChecked(GlobalPrefs.loadIgnoreUnselected());
+                onOffSwitch.setChecked(voteSettings.isIgnoreUnselected());
                 break;
             case HALVE_EXTRA:
                 topic.setText(activity.getString(R.string.halve_extra));
                 text.setText(activity.getString(R.string.halve_extra_text));
                 onOffSwitch.setVisibility(View.VISIBLE);
-                onOffSwitch.setChecked(GlobalPrefs.loadHalveExtra());
+                onOffSwitch.setChecked(voteSettings.isHalveExtra());
                 break;
             case SHOW_EXTRA:
                 topic.setText(activity.getString(R.string.show_extra));
                 text.setText(  activity.getString(R.string.show_extra_text));
                 onOffSwitch.setVisibility(View.VISIBLE);
-                onOffSwitch.setChecked(GlobalPrefs.loadShowExtra());
+                onOffSwitch.setChecked(voteSettings.isShowExtra());
                 break;
             case SHOW_VOTES:
                 topic.setText(activity.getString(R.string.show_votes));
                 text.setText(activity.getString(R.string.show_votes_text));
                 onOffSwitch.setVisibility(View.VISIBLE);
-                onOffSwitch.setChecked(GlobalPrefs.loadShowVoted());
+                onOffSwitch.setChecked(voteSettings.isShowVoted());
                 break;
             case RESET_TUTORIAL:
                 topic.setText(activity.getString(R.string.reset_tutorial));
@@ -207,7 +210,7 @@ public class SettingDialog extends Dialog {
             case MAX_PERIL:
                 int p = Integer.parseInt(points.getText().toString());
                 if (checkPoints(points, p)) {
-                    GlobalPrefs.saveMaxPerilPoints(p);
+                    voteSettings.setMaxPeril(p);
                     dismiss();
                 }
                 break;
@@ -215,25 +218,25 @@ public class SettingDialog extends Dialog {
                 int firstP = Integer.parseInt(firstPoints.getText().toString());
                 int lastP = Integer.parseInt(lastPoints.getText().toString());
                 if (checkPoints(firstPoints, firstP) && checkPoints(lastPoints, lastP)) {
-                    GlobalPrefs.saveListVoteSizeFirst(firstP);
-                    GlobalPrefs.saveListVoteSizeSecond(lastP);
+                    voteSettings.setFirstVote(firstP);
+                    voteSettings.setLastVote(lastP);
                     dismiss();
                 }
                 break;
             case IGNORE_UNSELECTED:
-                GlobalPrefs.saveIgnoreUnselected(onOffSwitch.isChecked());
+                voteSettings.setIgnoreUnselected(onOffSwitch.isChecked());
                 dismiss();
                 break;
             case HALVE_EXTRA:
-                GlobalPrefs.saveHalveExtra(onOffSwitch.isChecked());
+                voteSettings.setHalveExtra(onOffSwitch.isChecked());
                 dismiss();
                 break;
             case SHOW_EXTRA:
-                GlobalPrefs.saveShowExtra(onOffSwitch.isChecked());
+                voteSettings.setShowExtra(onOffSwitch.isChecked());
                 dismiss();
                 break;
             case SHOW_VOTES:
-                GlobalPrefs.saveShowVoted(onOffSwitch.isChecked());
+                voteSettings.setShowVoted(onOffSwitch.isChecked());
                 dismiss();
                 break;
             case RESET_TUTORIAL:

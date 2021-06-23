@@ -24,6 +24,7 @@ import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
+import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
@@ -44,6 +45,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
     private ArrayList<Profile> profiles = new ArrayList<>();
 
     private boolean listBigEnough = false;
+    private VoteSettings voteSettings;
     private int firstVoteSize;
 
     // Setup voting options
@@ -67,7 +69,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         // Get if vote is online
         Intent intent = getIntent();
-        isOnlineVote = intent.getBooleanExtra("isOnline", false);
+        isOnlineVote = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
 
         if (isOnlineVote) {
             setContentView(R.layout.activity_vote_online);
@@ -79,8 +81,6 @@ public class VoteSetupActivity extends VotingParentActivity implements
         } else {
             setContentView(R.layout.activity_vote_local);
         }
-
-        firstVoteSize = GlobalPrefs.loadListVoteSizeFirst();
     }
 
     //////////////////////// LOAD DATA FROM FIREBASE ////////////////////////
@@ -96,7 +96,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
         if (Buddy.isRegistered) {
             // Load user's lists from database
             Buddy.showLoadingBar(this);
-            DatabaseHandler.getLists(this::loadLists);
+            DatabaseHandler.getVoteSettings(this::loadVoteSettings, null);
         } else {
             // Initialize unregistered voting
             // Hide lists spinner
@@ -106,6 +106,17 @@ public class VoteSetupActivity extends VotingParentActivity implements
             noListsView.setText(getString(R.string.unregistered_lists_locked));
             initializeVotingSetupOnline();
         }
+    }
+
+    public void loadVoteSettings(VoteSettings voteSettings) {
+        if (voteSettings == null) {
+            voteSettings = new VoteSettings();
+        }
+
+        this.voteSettings = voteSettings;
+        firstVoteSize = voteSettings.getFirstVote();
+
+        DatabaseHandler.getLists(this::loadLists);
     }
 
     /**
@@ -371,9 +382,10 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         // Move to voting top list
         Intent intent = new Intent(this, VoteTopActivity.class);
-        intent.putExtra("topAmount", GlobalPrefs.loadListVoteSizeFirst());
-        intent.putExtra("selectedList", selectedList);
-        intent.putParcelableArrayListExtra("selectedProfiles", selectedProfiles);
+        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+        intent.putExtra(VoteIntents.TOP_AMOUNT, firstVoteSize);
+        intent.putExtra(VoteIntents.LIST, selectedList);
+        intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
         startActivity(intent);
     }
 
@@ -418,9 +430,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
         String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
         // Create vote room
         final VoteRoom voteRoom = new VoteRoom(roomCode, selectedList.getName(), firstVoteSize,
-                GlobalPrefs.loadListVoteSizeSecond(), GlobalPrefs.loadMaxPerilPoints(),
-                GlobalPrefs.loadIgnoreUnselected(), GlobalPrefs.loadHalveExtra(),
-                GlobalPrefs.loadShowExtra(), GlobalPrefs.loadShowVoted());
+                voteSettings.getLastVote(), voteSettings.getMaxPeril(),
+                voteSettings.isIgnoreUnselected(), voteSettings.isHalveExtra(),
+                voteSettings.isShowExtra(), voteSettings.isShowVoted());
 
         // Add created vote room to database
         DatabaseHandler.addVoteRoom((added) -> {
@@ -458,10 +470,10 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         // Move to lobby
         Intent intent = new Intent(this, VoteLobbyActivity.class);
-        intent.putExtra("voteRoom", voteRoom);
-        intent.putExtra("onlineProfile", profile);
+        intent.putExtra(VoteIntents.ROOM, voteRoom);
+        intent.putExtra(VoteIntents.ONLINE_PROFILE, profile);
         if (host)
-            intent.putParcelableArrayListExtra("items", selectedList.getItems());
+            intent.putParcelableArrayListExtra(VoteIntents.ITEMS, selectedList.getItems());
 
         startActivity(intent);
     }

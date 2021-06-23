@@ -61,9 +61,9 @@ public class VoteWaitingActivity extends VotingParentActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         Intent intent = getIntent();
-        selectedList = intent.getParcelableExtra("selectedList");
-        voteRoom = intent.getParcelableExtra("voteRoom");
-        onlineProfile = intent.getParcelableExtra("onlineProfile");
+        selectedList = intent.getParcelableExtra(VoteIntents.LIST);
+        voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
+        onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
 
         Buddy.showOnlineVoteLoadingBar(this);
         setupLobby();
@@ -207,15 +207,15 @@ public class VoteWaitingActivity extends VotingParentActivity {
         movingToResults = true;
 
         Intent intent = new Intent(this, VoteResultsActivity.class);
-        intent.putExtra("onlineProfile", onlineProfile);
-        intent.putExtra("voteRoom", voteRoom);
-        intent.putExtra("isOnline", true);
-        intent.putExtra("selectedList", selectedList);
+        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+        intent.putExtra(VoteIntents.ROOM, voteRoom);
+        intent.putExtra(VoteIntents.IS_ONLINE, true);
+        intent.putExtra(VoteIntents.LIST, selectedList);
 
         // Create SelectedProfiles so code does not have to be modified so much
         ArrayList<Profile> selectedProfiles = createProfilesFromOnlineProfile(selectedList.getItems());
 
-        intent.putExtra("selectedProfiles", selectedProfiles);
+        intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
 
         startActivity(intent);
     }
