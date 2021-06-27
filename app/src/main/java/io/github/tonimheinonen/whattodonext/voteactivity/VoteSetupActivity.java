@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import io.github.tonimheinonen.whattodonext.ListSettingDialog;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.MainActivity;
 import io.github.tonimheinonen.whattodonext.R;
@@ -46,7 +47,8 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
     private boolean listBigEnough = false;
     private VoteSettings voteSettings;
-    private int firstVoteSize;
+
+    private int minimumItemCount = 2;
 
     // Setup voting options
     private ListOfItems selectedList;
@@ -96,7 +98,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
         if (Buddy.isRegistered) {
             // Load user's lists from database
             Buddy.showLoadingBar(this);
-            DatabaseHandler.getVoteSettings(this::loadVoteSettings, null);
+            DatabaseHandler.getLists(this::loadLists);
         } else {
             // Initialize unregistered voting
             // Hide lists spinner
@@ -106,17 +108,6 @@ public class VoteSetupActivity extends VotingParentActivity implements
             noListsView.setText(getString(R.string.unregistered_lists_locked));
             initializeVotingSetupOnline();
         }
-    }
-
-    public void loadVoteSettings(VoteSettings voteSettings) {
-        if (voteSettings == null) {
-            voteSettings = new VoteSettings();
-        }
-
-        this.voteSettings = voteSettings;
-        firstVoteSize = voteSettings.getFirstVote();
-
-        DatabaseHandler.getLists(this::loadLists);
     }
 
     /**
@@ -170,11 +161,11 @@ public class VoteSetupActivity extends VotingParentActivity implements
     public void itemsLoaded(ArrayList<ListItem> items) {
         Buddy.filterListByFallen(items, false);
 
-        if (items.size() < firstVoteSize) {
+        if (items.size() < minimumItemCount) {
             // If offline, show toast
             if (!isOnlineVote) {
                 Buddy.showToast(getString(R.string.toast_not_enough_activities,
-                        String.valueOf(firstVoteSize)), Toast.LENGTH_LONG);
+                        minimumItemCount), Toast.LENGTH_LONG);
             }
             return;
         }
@@ -276,7 +267,13 @@ public class VoteSetupActivity extends VotingParentActivity implements
                 onBackPressed();
                 break;
             case R.id.start:
-                startLocalVoting();
+                // If user has not selected profiles, return
+                if (selectedProfiles.isEmpty()) {
+                    Buddy.showToast(Buddy.getString(R.string.toast_selected_profiles_empty), Toast.LENGTH_LONG);
+                    return;
+                }
+
+                showListSettingDialog();
                 break;
             case R.id.addProfile:
                 addNewProfile();
@@ -292,9 +289,12 @@ public class VoteSetupActivity extends VotingParentActivity implements
                 if (!Buddy.isRegistered) {
                     // Don't allow hosting for unregistered users
                     Buddy.showToast(getString(R.string.unregistered_hosting), Toast.LENGTH_LONG);
+                } else if (lists.isEmpty()) {
+                    // If there are no lists, show toast
+                    Buddy.showToast(getString(R.string.online_no_lists), Toast.LENGTH_LONG);
                 } else if (onlineDetailsValid()) {
-                    // If all online details are valid, host new room
-                    hostVoteRoom();
+                    // If all online details are valid, show list settings
+                    showListSettingDialog();
                 }
                 break;
             case R.id.join:
@@ -366,29 +366,49 @@ public class VoteSetupActivity extends VotingParentActivity implements
     }
 
     /**
-     * Checks whether to start voting or not.
+     * Shows settings dialog for current list.
      */
-    private void startLocalVoting() {
-        if (selectedProfiles.isEmpty()) {
-            Buddy.showToast(Buddy.getString(R.string.toast_selected_profiles_empty), Toast.LENGTH_LONG);
-            return;
-        }
-
+    private void showListSettingDialog() {
+        // If list is not big enough, return
         if (!listBigEnough) {
             Buddy.showToast(getString(R.string.toast_not_enough_activities,
-                    String.valueOf(firstVoteSize)), Toast.LENGTH_LONG);
+                    minimumItemCount), Toast.LENGTH_LONG);
             return;
         }
 
+        new ListSettingDialog(this, selectedList).show();
+    }
+
+    /**
+     * Starts the correct voting after settings has been confirmed.
+     * @param voteSettings
+     */
+    public void listSettingDialogConfirmed(VoteSettings voteSettings) {
+        this.voteSettings = voteSettings;
+
+        if (isOnlineVote)
+            hostVoteRoom();
+        else
+            startLocalVoting();
+    }
+
+    /**
+     * Starts local voting.
+     */
+    private void startLocalVoting() {
         // Move to voting top list
         Intent intent = new Intent(this, VoteTopActivity.class);
         intent.putExtra(VoteIntents.SETTINGS, voteSettings);
-        intent.putExtra(VoteIntents.TOP_AMOUNT, firstVoteSize);
+        intent.putExtra(VoteIntents.TOP_AMOUNT, voteSettings.getFirstVote());
         intent.putExtra(VoteIntents.LIST, selectedList);
         intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
         startActivity(intent);
     }
 
+    /**
+     * Checks if room code and nickname is valid.
+     * @return true if valid
+     */
     private boolean onlineDetailsValid() {
         roomCode = roomCodeView.getText().toString();
         nickname = nicknameView.getText().toString();
@@ -411,25 +431,15 @@ public class VoteSetupActivity extends VotingParentActivity implements
         return true;
     }
 
+    /**
+     * Hosts new vote room with given room code.
+     */
     private void hostVoteRoom() {
-        // If there are no lists, show toast
-        if (lists.isEmpty()) {
-            Buddy.showToast(getString(R.string.online_no_lists), Toast.LENGTH_LONG);
-            return;
-        }
-
-        // If selected list is not big enough, show toast
-        if (!listBigEnough) {
-            Buddy.showToast(getString(R.string.toast_not_enough_activities,
-                    String.valueOf(firstVoteSize)), Toast.LENGTH_LONG);
-            return;
-        }
-
         Buddy.showOnlineVoteLoadingBar(this);
 
         String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
         // Create vote room
-        final VoteRoom voteRoom = new VoteRoom(roomCode, selectedList.getName(), firstVoteSize,
+        final VoteRoom voteRoom = new VoteRoom(roomCode, selectedList.getName(), voteSettings.getFirstVote(),
                 voteSettings.getLastVote(), voteSettings.getMaxPeril(),
                 voteSettings.isIgnoreUnselected(), voteSettings.isHalveExtra(),
                 voteSettings.isShowExtra(), voteSettings.isShowVoted());
@@ -445,6 +455,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
         }, voteRoom);
     }
 
+    /**
+     * Joins vote room with given room code.
+     */
     private void joinVoteRoom() {
         Buddy.showOnlineVoteLoadingBar(this);
 
@@ -464,6 +477,11 @@ public class VoteSetupActivity extends VotingParentActivity implements
         }, roomCode);
     }
 
+    /**
+     * Moves to online lobby.
+     * @param voteRoom vote room to move to
+     * @param host true if user is host
+     */
     private void moveToOnlineLobby(VoteRoom voteRoom, boolean host) {
         // Create online profile
         OnlineProfile profile = new OnlineProfile(nickname, host);

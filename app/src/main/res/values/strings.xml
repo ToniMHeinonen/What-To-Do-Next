@@ -64,7 +64,7 @@
     <string name="toast_cant_delete_selected">Selected profiles can\'t be deleted!</string>
     <string name="toast_selected_profiles_empty">You need to select at least 1 profile!</string>
     <string name="toast_not_enough_activities">Selected list does not have enough activities!
-        (%1$s required)</string>
+        (%1$d required)</string>
 
     <!-- START_VOTE_ONLINE -->
     <string name="no_internet">You need to be connected to the internet in order to vote online!</string>
@@ -204,9 +204,17 @@
         received from every voter.</string>
     <string name="reset_tutorial_text">Resets the whole tutorial.</string>
 
-    <string name="last_vote_same_as_first">Points has to be lower than in first vote!</string>
-    <string name="first_vote_same_as_last">Points has to be higher than in last vote!</string>
+    <string name="last_vote_same_as_first">Last Vote: Points has to be lower than in first vote!</string>
+    <string name="first_vote_same_as_last">First vote: Points has to be higher than in last vote!</string>
     <string name="points_at_zero">Points has to be at least 1!</string>
+    <string name="points_over_list_size">First Vote: Points has to be equal or less than selected
+        list size!</string>
+
+    <string name="list_settings_title">%1$s Settings</string>
+    <string name="points_must_be_higher">%1$s: Points has to be higher than %2$d or equal!</string>
+    <string name="points_must_be_lower">%1$s: Points has to be lower than %2$d or equal!</string>
+
+    <string name="list_setting_info">Details about each setting can be found from the Settings menu.</string>
 
     <!-- HTMLDialog -->
     <string name="htmlDialogOk">OK</string>

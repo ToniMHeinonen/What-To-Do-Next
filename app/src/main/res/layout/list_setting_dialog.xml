@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/custom_bg"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <TextView
+        android:id="@+id/settingTopic"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:text="{Setting}"
+        android:textColor="@color/defaultTextColor"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/settingText"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.05"
+        android:layout_gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/list_setting_info"
+        android:textSize="13sp"
+        android:textStyle="italic"
+        android:textColor="@color/defaultTextColor"/>
+
+    <!-- LOADING BAR -->
+    <RelativeLayout
+        style="@style/GenericProgressBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
+        android:id="@+id/loadingPanel">
+
+        <ProgressBar
+            style="@style/GenericProgressIndicator"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        style="@style/scrollViewStyle"
+        android:layout_weight="0.75">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- INFLATE LAYOUT -->
+            <LinearLayout
+                android:id="@+id/inflateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- CONFIRM & CANCEL-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:layout_margin="20dp">
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/listItemButtons"
+            android:text="@string/list_item_dialog_cancel"
+            android:background="@drawable/cancel_button" />
+
+        <Button
+            android:id="@+id/confirm"
+            style="@style/listItemButtons"
+            android:text="@string/start_vote"
+            android:background="@drawable/orange_button" />
+    </LinearLayout>
+
+</LinearLayout>
