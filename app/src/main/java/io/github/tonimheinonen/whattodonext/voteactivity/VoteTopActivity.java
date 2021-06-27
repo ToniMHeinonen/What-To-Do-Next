@@ -36,6 +36,7 @@ import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 public class VoteTopActivity extends VotingParentActivity {
 
     private int topAmount;
+    private VoteSettings voteSettings;
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
 
@@ -52,9 +53,6 @@ public class VoteTopActivity extends VotingParentActivity {
     private boolean isOnline;
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
-
-    // Offline
-    private VoteSettings voteSettings;
 
     // Options
     private int listVoteSizeLast;
@@ -79,6 +77,7 @@ public class VoteTopActivity extends VotingParentActivity {
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
         selectedList = intent.getParcelableExtra(VoteIntents.LIST);
+        voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
 
         if (isOnline) {
             onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
@@ -86,11 +85,10 @@ public class VoteTopActivity extends VotingParentActivity {
 
             // Get correct vote amount
             if (voteRoom.getState().equals(VoteRoom.VOTING_FIRST))
-                topAmount = voteRoom.getFirstVoteSize();
+                topAmount = voteSettings.getFirstVote();
             else
-                topAmount = voteRoom.getLastVoteSize();
+                topAmount = voteSettings.getLastVote();
         } else {
-            voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
             topAmount = intent.getIntExtra(VoteIntents.TOP_AMOUNT, -1);
             selectedProfiles = intent.getParcelableArrayListExtra(VoteIntents.PROFILES);
         }
@@ -118,19 +116,11 @@ public class VoteTopActivity extends VotingParentActivity {
 
     /**
      * Sets options for voting.
-     *
-     * Online and local vote retrieves options from different places.
      */
     private void setOptions() {
-        if (isOnline) {
-            listVoteSizeLast = voteRoom.getLastVoteSize();
-            showExtra = voteRoom.isShowExtra();
-            halveExtra = voteRoom.isHalveExtra();
-        } else {
-            listVoteSizeLast = voteSettings.getLastVote();
-            showExtra = voteSettings.isShowExtra();
-            halveExtra = voteSettings.isHalveExtra();
-        }
+        listVoteSizeLast = voteSettings.getLastVote();
+        showExtra = voteSettings.isShowExtra();
+        halveExtra = voteSettings.isHalveExtra();
     }
 
     public void itemClicked(ListItem item) {
@@ -301,6 +291,7 @@ public class VoteTopActivity extends VotingParentActivity {
                 // Move to waiting room when ready has changed
                 Intent intent = new Intent(this, VoteWaitingActivity.class);
                 intent.putExtra(VoteIntents.ROOM, voteRoom);
+                intent.putExtra(VoteIntents.SETTINGS, voteSettings);
                 intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
                 intent.putExtra(VoteIntents.LIST, selectedList);
                 startActivity(intent);

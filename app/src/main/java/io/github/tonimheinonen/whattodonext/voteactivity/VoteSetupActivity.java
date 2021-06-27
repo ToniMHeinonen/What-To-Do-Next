@@ -439,15 +439,14 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
         // Create vote room
-        final VoteRoom voteRoom = new VoteRoom(roomCode, selectedList.getName(), voteSettings.getFirstVote(),
-                voteSettings.getLastVote(), voteSettings.getMaxPeril(),
-                voteSettings.isIgnoreUnselected(), voteSettings.isHalveExtra(),
-                voteSettings.isShowExtra(), voteSettings.isShowVoted());
+        final VoteRoom voteRoom = new VoteRoom(roomCode, selectedList.getName());
 
         // Add created vote room to database
         DatabaseHandler.addVoteRoom((added) -> {
             if (added) {
-                moveToOnlineLobby(voteRoom, true);
+                // Add settings to vote room
+                DatabaseHandler.addVoteRoomSettings(() -> moveToOnlineLobby(voteRoom, true),
+                        voteRoom, voteSettings);
             } else {
                 Buddy.showToast(getString(R.string.online_host_duplicate), Toast.LENGTH_LONG);
                 Buddy.hideOnlineVoteLoadingBar(this);
@@ -468,7 +467,11 @@ public class VoteSetupActivity extends VotingParentActivity implements
                     Buddy.showToast(getString(R.string.vote_already_started), Toast.LENGTH_LONG);
                     Buddy.hideOnlineVoteLoadingBar(this);
                 } else {
-                    moveToOnlineLobby(voteRoom, false);
+                    // Load vote room settings and move to lobby
+                    DatabaseHandler.getVoteRoomSettings((settings) -> {
+                        voteSettings = settings;
+                        moveToOnlineLobby(voteRoom, false);
+                    }, voteRoom);
                 }
             } else {
                 Buddy.showToast(getString(R.string.room_not_found), Toast.LENGTH_LONG);
@@ -489,6 +492,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
         // Move to lobby
         Intent intent = new Intent(this, VoteLobbyActivity.class);
         intent.putExtra(VoteIntents.ROOM, voteRoom);
+        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
         intent.putExtra(VoteIntents.ONLINE_PROFILE, profile);
         if (host)
             intent.putParcelableArrayListExtra(VoteIntents.ITEMS, selectedList.getItems());

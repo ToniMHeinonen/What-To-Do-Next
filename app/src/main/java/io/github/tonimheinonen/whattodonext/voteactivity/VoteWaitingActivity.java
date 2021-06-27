@@ -25,6 +25,7 @@ import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.OnlineVotedItem;
 import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
+import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 
@@ -40,6 +41,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
     private VoteWaitingActivity _this;
     private ListOfItems selectedList;
     private VoteRoom voteRoom;
+    private VoteSettings voteSettings;
     private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
@@ -63,6 +65,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
         Intent intent = getIntent();
         selectedList = intent.getParcelableExtra(VoteIntents.LIST);
         voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
+        voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
         onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
 
         Buddy.showOnlineVoteLoadingBar(this);
@@ -209,6 +212,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
         Intent intent = new Intent(this, VoteResultsActivity.class);
         intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
         intent.putExtra(VoteIntents.ROOM, voteRoom);
+        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
         intent.putExtra(VoteIntents.IS_ONLINE, true);
         intent.putExtra(VoteIntents.LIST, selectedList);
 
@@ -230,9 +234,9 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
             // Set correct vote points size depending on if it's the firs or last results
             if (voteRoom.getState().equals(VoteRoom.RESULTS_FIRST))
-                profile.initVoteSize(voteRoom.getFirstVoteSize());
+                profile.initVoteSize(voteSettings.getFirstVote());
             else
-                profile.initVoteSize(voteRoom.getLastVoteSize());
+                profile.initVoteSize(voteSettings.getLastVote());
 
             // Iterate through all of the voted items so they can be deleted during iteration
             Iterator<OnlineVotedItem> iterator = votedItems.iterator();

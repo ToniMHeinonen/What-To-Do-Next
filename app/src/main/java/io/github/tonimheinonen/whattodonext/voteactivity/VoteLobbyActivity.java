@@ -25,12 +25,14 @@ import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
+import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 public class VoteLobbyActivity extends VotingParentActivity implements View.OnClickListener {
 
     private VoteLobbyActivity _this;
     private VoteRoom voteRoom;
+    private VoteSettings voteSettings;
     private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
@@ -48,6 +50,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
         Intent intent = getIntent();
         voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
+        voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
         onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
 
         setContentView(R.layout.activity_vote_lobby);
@@ -186,6 +189,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         Intent intent = new Intent(this, VoteTopActivity.class);
         intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
         intent.putExtra(VoteIntents.ROOM, voteRoom);
+        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
         intent.putExtra(VoteIntents.IS_ONLINE, true);
         intent.putExtra(VoteIntents.LIST, selectedList);
 

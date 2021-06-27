@@ -43,6 +43,7 @@ import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 public class VoteResultsActivity extends VotingParentActivity {
 
     private boolean lastResults;
+    private VoteSettings voteSettings;
     private int topAmount;
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
@@ -54,9 +55,6 @@ public class VoteResultsActivity extends VotingParentActivity {
     private boolean isOnline;
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
-
-    // Offline
-    private VoteSettings voteSettings;
 
     // Options
     private int listVoteSizeLast;
@@ -77,6 +75,7 @@ public class VoteResultsActivity extends VotingParentActivity {
         isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
         selectedList = intent.getParcelableExtra(VoteIntents.LIST);
         selectedProfiles = intent.getParcelableArrayListExtra(VoteIntents.PROFILES);
+        voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
 
         if (isOnline) {
             onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
@@ -86,11 +85,10 @@ public class VoteResultsActivity extends VotingParentActivity {
 
             // Get correct vote amount
             if (voteRoom.getState().equals(VoteRoom.RESULTS_FIRST))
-                topAmount = voteRoom.getFirstVoteSize();
+                topAmount = voteSettings.getFirstVote();
             else
-                topAmount = voteRoom.getLastVoteSize();
+                topAmount = voteSettings.getLastVote();
         } else {
-            voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
             topAmount = intent.getIntExtra(VoteIntents.TOP_AMOUNT, -1);
         }
 
@@ -123,21 +121,12 @@ public class VoteResultsActivity extends VotingParentActivity {
 
     /**
      * Sets options for voting.
-     *
-     * Online and local vote retrieves options from different places.
      */
     private void setOptions() {
-        if (isOnline) {
-            listVoteSizeLast = voteRoom.getLastVoteSize();
-            maxPerilPoints = voteRoom.getMaxPerilPoints();
-            ignoreUnselected = voteRoom.isIgnoreUnselected();
-            showVotes = voteRoom.isShowVotes();
-        } else {
-            listVoteSizeLast = voteSettings.getLastVote();
-            maxPerilPoints = voteSettings.getMaxPeril();
-            ignoreUnselected = voteSettings.isIgnoreUnselected();
-            showVotes = voteSettings.isShowVoted();
-        }
+        listVoteSizeLast = voteSettings.getLastVote();
+        maxPerilPoints = voteSettings.getMaxPeril();
+        ignoreUnselected = voteSettings.isIgnoreUnselected();
+        showVotes = voteSettings.isShowVoted();
     }
 
     /**
@@ -371,6 +360,7 @@ public class VoteResultsActivity extends VotingParentActivity {
         Intent intent = new Intent(this, VoteTopActivity.class);
         intent.putExtra(VoteIntents.IS_ONLINE, true);
         intent.putExtra(VoteIntents.ROOM, voteRoom);
+        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
         intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
         intent.putExtra(VoteIntents.TOP_AMOUNT, listVoteSizeLast);
         intent.putExtra(VoteIntents.LIST, selectedList);

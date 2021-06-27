@@ -17,6 +17,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,6 +57,7 @@ public abstract class DatabaseHandler {
     private static String ONLINE_VOTED_ITEMS = "voted_items";
     private static String ONLINE_STATE = "state";
     private static String ONLINE_TIMESTAMP = "timestamp";
+    private static String ONLINE_SETTINGS = "vote_settings";
 
     private final static String DEFAULT_VOTE_SETTINGS = "default";
 
@@ -851,6 +854,57 @@ public abstract class DatabaseHandler {
         dbVoteRooms.addChildEventListener(voteRoomRemovalListener);
     }
     //endregion
+
+    //region VoteRoomSettings
+    /////////////////////* VOTE ROOM SETTINGS *////////////////////
+
+    public static void addVoteRoomSettings(final DatabaseAddListener listener, VoteRoom voteRoom, VoteSettings settings) {
+        DatabaseReference dbSettings = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_SETTINGS);
+
+        String key = dbSettings.push().getKey();   // Add new key to vote settings
+
+        Map<String, Object> values = settings.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, values);
+
+        // Listen for completion
+        dbSettings.updateChildren(childUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                        listener.onDataAddedComplete();
+                    }
+                });
+    }
+
+    public static void getVoteRoomSettings(final VoteSettingsListener listener, VoteRoom voteRoom) {
+        DatabaseReference dbSettings = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_SETTINGS);
+
+        dbSettings.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getVoteRoomSettings",
+                        "settings: " + snapshot.getChildrenCount(), 1);
+
+                VoteSettings settings = null;
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    VoteSettings value = dataSnapshot.getValue(VoteSettings.class);
+                    settings = value;
+                    break;
+                }
+
+                listener.onDataGetVoteSettings(settings);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
 
     //region VoteRoomItems
     /////////////////////* VOTE ROOM ITEMS *////////////////////
