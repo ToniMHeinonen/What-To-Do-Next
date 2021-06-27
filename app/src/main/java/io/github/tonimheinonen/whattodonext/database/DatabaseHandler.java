@@ -280,6 +280,12 @@ public abstract class DatabaseHandler {
                 databaseError.toException().printStackTrace();
             }
         });
+
+        // Remove list settings for this list
+        getVoteSettings((settings) -> {
+            if (settings != null)
+                dbVoteSettings.child(settings.getDbID()).removeValue();
+        }, list);
     }
 
     /**
