@@ -89,6 +89,11 @@
     <string name="online_vote_solo">You can\'t vote online alone. Start a local vote instead!</string>
     <string name="host_disconnected">Host disconnected from the vote room!</string>
 
+    <string name="host_update_required">Version mismatch: Host needs to update the app if you want
+        to join the vote room!</string>
+    <string name="joiner_update_required">Version mismatch: You need to update the app in order to
+        join the vote room!</string>
+
     <!-- VOTE_LOBBY -->
     <string name="lobby_room_code">Room Code</string>
     <string name="lobby_users">Users</string>

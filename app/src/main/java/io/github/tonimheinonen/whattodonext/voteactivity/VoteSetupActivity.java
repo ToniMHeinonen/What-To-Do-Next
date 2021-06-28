@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import io.github.tonimheinonen.whattodonext.BuildConfig;
 import io.github.tonimheinonen.whattodonext.ListSettingDialog;
 import io.github.tonimheinonen.whattodonext.ListsActivity;
 import io.github.tonimheinonen.whattodonext.MainActivity;
@@ -467,11 +468,21 @@ public class VoteSetupActivity extends VotingParentActivity implements
                     Buddy.showToast(getString(R.string.vote_already_started), Toast.LENGTH_LONG);
                     Buddy.hideOnlineVoteLoadingBar(this);
                 } else {
-                    // Load vote room settings and move to lobby
-                    DatabaseHandler.getVoteRoomSettings((settings) -> {
-                        voteSettings = settings;
-                        moveToOnlineLobby(voteRoom, false);
-                    }, voteRoom);
+                    // Check that version code is correct
+                    int ownVersionCode = BuildConfig.VERSION_CODE;
+                    if (voteRoom.getVersionCode() == ownVersionCode) {
+                        // Load vote room settings and move to lobby
+                        DatabaseHandler.getVoteRoomSettings((settings) -> {
+                            voteSettings = settings;
+                            moveToOnlineLobby(voteRoom, false);
+                        }, voteRoom);
+                    } else if (ownVersionCode < voteRoom.getVersionCode()) {
+                        Buddy.showToast(getString(R.string.joiner_update_required), Toast.LENGTH_LONG);
+                        Buddy.hideOnlineVoteLoadingBar(this);
+                    } else {
+                        Buddy.showToast(getString(R.string.host_update_required), Toast.LENGTH_LONG);
+                        Buddy.hideOnlineVoteLoadingBar(this);
+                    }
                 }
             } else {
                 Buddy.showToast(getString(R.string.room_not_found), Toast.LENGTH_LONG);

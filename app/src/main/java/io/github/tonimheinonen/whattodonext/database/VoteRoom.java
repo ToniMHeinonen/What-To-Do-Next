@@ -9,6 +9,8 @@ import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.tonimheinonen.whattodonext.BuildConfig;
+
 /**
  * Represents a vote room.
  * @author Toni Heinonen
@@ -22,6 +24,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     private String roomCode;
     private String listName;
     private String state;
+    private int versionCode;
 
     public static final String
             LOBBY = "lobby",
@@ -52,6 +55,8 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         this.roomCode = roomCode;
         this.listName = listName;
         this.state = LOBBY;
+
+        versionCode = BuildConfig.VERSION_CODE;
     }
 
     /**
@@ -126,6 +131,10 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         this.state = state;
     }
 
+    public int getVersionCode() {
+        return versionCode;
+    }
+
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -136,6 +145,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         result.put("roomCode", roomCode);
         result.put("listName", listName);
         result.put("state", state);
+        result.put("versionCode", versionCode);
 
         return result;
     }
@@ -162,6 +172,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         dest.writeString(state);
         dest.writeString(roomCode);
         dest.writeString(listName);
+        dest.writeInt(versionCode);
     }
 
     /**
@@ -173,6 +184,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         state = in.readString();
         roomCode = in.readString();
         listName = in.readString();
+        versionCode = in.readInt();
     }
 
     /**
