@@ -793,7 +793,7 @@ public abstract class DatabaseHandler {
      * @param voteRoom vote room to change the state from
      * @param state new state
      */
-    public static void changeVoteRoomState(VoteRoom voteRoom, int state, DatabaseAddListener listener) {
+    private static void changeVoteRoomState(VoteRoom voteRoom, int state, DatabaseAddListener listener) {
         // Set state to local voteRoom
         voteRoom.setState(state);
 

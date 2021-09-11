@@ -49,8 +49,6 @@ public class VoteWaitingActivity extends VotingParentActivity {
     private ArrayList<OnlineVotedItem> votedItems;
 
     // Firebase listeners
-    // TODO: Remove room state listener and it's related code from this class
-    private ValueEventListener roomStateListener;
     private ValueEventListener usersStateListener;
 
     // Used so moving does not get called multiple times
@@ -78,9 +76,6 @@ public class VoteWaitingActivity extends VotingParentActivity {
     private void setupLobby() {
         // Setup list before adding and retrieving users
         setupUsersList();
-
-        // Listen for room state changes to know when to move to results
-        createRoomStateListener();
 
         // Get all users and listen for changes
         createUsersListener();
@@ -130,9 +125,9 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
                 usersAdapter.notifyDataSetChanged();
 
-                // Move to next activity if user is host and everyone is ready
-                if (onlineProfile.isHost() && notReadyUsers.isEmpty())
-                    prepareMoveToResults();
+                // Move to next activity if everyone is ready
+                if (notReadyUsers.isEmpty())
+                    retrieveVotedItemsAndMoveToResults();
             }
 
             @Override
@@ -145,39 +140,9 @@ public class VoteWaitingActivity extends VotingParentActivity {
         DatabaseHandler.listenForOnlineProfiles(voteRoom, usersStateListener);
     }
 
-    private void createRoomStateListener() {
-        // TODO: Listen only if profile state is same as vote room state
-        // Create listener for users who are not the host
-        roomStateListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Integer state = dataSnapshot.getValue(Integer.class);
-
-                // If vote room is ahead in states than current profile
-                if (state != null && state > onlineProfile.getState()) {
-                    Buddy.showOnlineVoteLoadingBar(_this);
-                    voteRoom.setState(state);
-
-                    retrieveVotedItemsAndMoveToResults();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        };
-        DatabaseHandler.listenForVoteRoomState(voteRoom, roomStateListener);
-    }
-
-    private void prepareMoveToResults() {
+    private void retrieveVotedItemsAndMoveToResults() {
         Buddy.showOnlineVoteLoadingBar(_this);
 
-        DatabaseHandler.getVoteRoomState(voteRoom, (state) -> {
-            // Change vote room state
-            DatabaseHandler.changeVoteRoomState(voteRoom,state + 1, null);
-        });
-    }
-
-    private void retrieveVotedItemsAndMoveToResults() {
         DatabaseHandler.getVoteRoomVotedItems(voteRoom, (votedItems) -> {
             this.votedItems = votedItems;
             moveToNextActivity();
@@ -190,11 +155,8 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
         movingToResults = true;
 
-        // Remove listeners
-        if (roomStateListener != null)
-            DatabaseHandler.stopListeningForVoteRoomState(voteRoom, roomStateListener);
-        if (usersStateListener != null)
-            DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersStateListener);
+        // Remove listener
+        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersStateListener);
 
         // Change state and move to next activity
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
