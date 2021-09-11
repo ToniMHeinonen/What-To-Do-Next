@@ -463,8 +463,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         DatabaseHandler.getVoteRoom((voteRoom) -> {
             if (voteRoom != null) {
+                // TODO: Add ability to join started room with disconnected profile
                 // If vote has already started, don't allow joining
-                if (!voteRoom.getState().equals(VoteRoom.LOBBY)) {
+                if (voteRoom.getState() != VoteRoom.LOBBY) {
                     Buddy.showToast(getString(R.string.vote_already_started), Toast.LENGTH_LONG);
                     Buddy.hideOnlineVoteLoadingBar(this);
                 } else {

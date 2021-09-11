@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
@@ -45,10 +43,15 @@ public class VoteWaitingActivity extends VotingParentActivity {
     private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
-    private ArrayList<OnlineProfile> notReadyUsers = new ArrayList<>();
+    private ArrayList<OnlineProfile> notReadyUsers = new ArrayList();
     private DatabaseValueListAdapter usersAdapter;
 
     private ArrayList<OnlineVotedItem> votedItems;
+
+    // Firebase listeners
+    // TODO: Remove room state listener and it's related code from this class
+    private ValueEventListener roomStateListener;
+    private ValueEventListener usersStateListener;
 
     // Used so moving does not get called multiple times
     private boolean movingToResults = false;
@@ -76,36 +79,11 @@ public class VoteWaitingActivity extends VotingParentActivity {
         // Setup list before adding and retrieving users
         setupUsersList();
 
-        // Get all the users
-        DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
-            Buddy.hideOnlineVoteLoadingBar(_this);
-            users = onlineProfiles;
+        // Listen for room state changes to know when to move to results
+        createRoomStateListener();
 
-            // Add not ready users
-            for (OnlineProfile pro : users) {
-                // If user is not ready yet, add it to the list
-                if (!pro.isReady()) {
-                    notReadyUsers.add(pro);
-                }
-            }
-
-            usersAdapter.notifyDataSetChanged();
-
-            // Listen for ready states if host
-            if (onlineProfile.isHost()) {
-                if (notReadyUsers.isEmpty()) {
-                    // If all other users are ready, move to results
-                    Debug.print(this, "setupLobby", "prepareMoveToResults", 1);
-                    prepareMoveToResults();
-                } else {
-                    // Else wait and listen for other user ready changes
-                    createUsersListener();
-                }
-            }
-
-            // Listen for room state changes to know when to move to results
-            createRoomStateListener();
-        }));
+        // Get all users and listen for changes
+        createUsersListener();
     }
 
     private void setupUsersList() {
@@ -119,58 +97,64 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
     private void createUsersListener() {
         // Create listener for users who connect to the room
-        ChildEventListener childEventListener = new ChildEventListener() {
-
+        usersStateListener = new ValueEventListener() {
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                // Remove from list when user becomes ready
-                OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
-                onlineProfile.setDbID(dataSnapshot.getKey());
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print(_this, "createUsersListener", "onDataChange", 1);
 
-                if (onlineProfile.isReady()) {
-                    for (OnlineProfile pro : notReadyUsers) {
-                        // Check by db id
-                        if (pro.getDbID().equals(onlineProfile.getDbID())) {
-                            Debug.print(_this, "remove ", pro.getNickName(), 1);
-                            notReadyUsers.remove(pro);
-                            Debug.print(_this, "size ", "" + notReadyUsers.size(), 1);
+                // Check if this is the first time that users are retrieved
+                boolean firstTime = users.isEmpty();
 
-                            // If all the users are ready, move host to results to calculate them
-                            if (notReadyUsers.isEmpty()) {
-                                Debug.print(_this, "createUsersListener", "prepareMoveToResults", 1);
-                                prepareMoveToResults();
-                            }
-                            break;
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    OnlineProfile loadedProfile = dataSnapshot.getValue(OnlineProfile.class);
+                    loadedProfile.setDbID(dataSnapshot.getKey());
+
+                    if (firstTime) {
+                        Debug.print(_this, "createUsersListener", "First time", 1);
+                        Buddy.hideOnlineVoteLoadingBar(_this);
+                        users.add(loadedProfile);
+
+                        // Add user to notReadyUsers if it is not ready
+                        if (loadedProfile.getState() != voteRoom.getState())
+                            notReadyUsers.add(loadedProfile);
+                    }
+
+                    if (notReadyUsers.contains(loadedProfile)) {
+                        Debug.print(_this, "setupLobby", "Checking if ready: " + loadedProfile, 1);
+                        if (loadedProfile.getState() == voteRoom.getState()) {
+                            Debug.print(_this, "setupLobby", "Removing: " + loadedProfile, 1);
+                            notReadyUsers.remove(loadedProfile);
                         }
                     }
-                    usersAdapter.notifyDataSetChanged();
                 }
 
+                usersAdapter.notifyDataSetChanged();
 
+                // Move to next activity if user is host and everyone is ready
+                if (onlineProfile.isHost() && notReadyUsers.isEmpty())
+                    prepareMoveToResults();
             }
 
-            // Unused
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {}
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print(_this, "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
         };
-        DatabaseHandler.listenForOnlineProfiles(voteRoom, childEventListener);
+
+        DatabaseHandler.listenForOnlineProfiles(voteRoom, usersStateListener);
     }
 
     private void createRoomStateListener() {
+        // TODO: Listen only if profile state is same as vote room state
         // Create listener for users who are not the host
-        ValueEventListener eventListener = new ValueEventListener() {
+        roomStateListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String state = dataSnapshot.getValue(String.class);
+                Integer state = dataSnapshot.getValue(Integer.class);
 
-                if (state != null && (state.equals(VoteRoom.RESULTS_FIRST) ||
-                            state.equals(VoteRoom.RESULTS_LAST))) {
+                // If vote room is ahead in states than current profile
+                if (state != null && state > onlineProfile.getState()) {
                     Buddy.showOnlineVoteLoadingBar(_this);
                     voteRoom.setState(state);
 
@@ -181,7 +165,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
-        DatabaseHandler.listenForVoteRoomState(voteRoom, eventListener);
+        DatabaseHandler.listenForVoteRoomState(voteRoom, roomStateListener);
     }
 
     private void prepareMoveToResults() {
@@ -189,10 +173,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
         DatabaseHandler.getVoteRoomState(voteRoom, (state) -> {
             // Change vote room state
-            if (state.equals(VoteRoom.VOTING_FIRST))
-                DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.RESULTS_FIRST);
-            else if (state.equals(VoteRoom.VOTING_LAST))
-                DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.RESULTS_LAST);
+            DatabaseHandler.changeVoteRoomState(voteRoom,state + 1, null);
         });
     }
 
@@ -209,19 +190,30 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
         movingToResults = true;
 
-        Intent intent = new Intent(this, VoteResultsActivity.class);
-        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-        intent.putExtra(VoteIntents.ROOM, voteRoom);
-        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
-        intent.putExtra(VoteIntents.IS_ONLINE, true);
-        intent.putExtra(VoteIntents.LIST, selectedList);
+        // Remove listeners
+        if (roomStateListener != null)
+            DatabaseHandler.stopListeningForVoteRoomState(voteRoom, roomStateListener);
+        if (usersStateListener != null)
+            DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersStateListener);
 
-        // Create SelectedProfiles so code does not have to be modified so much
-        ArrayList<Profile> selectedProfiles = createProfilesFromOnlineProfile(selectedList.getItems());
+        // Change state and move to next activity
+        DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
+            Intent intent = new Intent(this, VoteResultsActivity.class);
+            intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+            intent.putExtra(VoteIntents.ROOM, voteRoom);
+            intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.IS_ONLINE, true);
+            intent.putExtra(VoteIntents.LIST, selectedList);
 
-        intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
+            // Create SelectedProfiles so code does not have to be modified so much
+            ArrayList<Profile> selectedProfiles = createProfilesFromOnlineProfile(selectedList.getItems());
 
-        startActivity(intent);
+            intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
+
+            Buddy.hideOnlineVoteLoadingBar(_this);
+
+            startActivity(intent);
+        });
     }
 
     private ArrayList<Profile> createProfilesFromOnlineProfile(ArrayList<ListItem> items) {
@@ -233,7 +225,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
             Profile profile = new Profile(pro.getNickName());
 
             // Set correct vote points size depending on if it's the firs or last results
-            if (voteRoom.getState().equals(VoteRoom.RESULTS_FIRST))
+            if (voteRoom.getState() == VoteRoom.RESULTS_FIRST)
                 profile.initVoteSize(voteSettings.getFirstVote());
             else
                 profile.initVoteSize(voteSettings.getLastVote());

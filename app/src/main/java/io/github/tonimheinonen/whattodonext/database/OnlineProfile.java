@@ -21,7 +21,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
 
     private String nickName;
     private boolean isHost;
-    private boolean ready;
+    private int state;
 
     @Exclude
     private String dbID;
@@ -36,6 +36,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     public OnlineProfile(String nickName, boolean isHost) {
         this.nickName = nickName;
         this.isHost = isHost;
+        state = VoteRoom.LOBBY;
     }
 
     public String getNickName() {
@@ -54,20 +55,20 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         this.isHost = isHost;
     }
 
-    public boolean isReady() {
-        return ready;
-    }
-
-    public void setReady(boolean ready) {
-        this.ready = ready;
-    }
-
     public String getDbID() {
         return dbID;
     }
 
     public void setDbID(String dbID) {
         this.dbID = dbID;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     /**
@@ -79,9 +80,18 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         HashMap<String, Object> result = new HashMap<>();
         result.put("nickName", nickName);
         result.put("isHost", isHost);
-        result.put("ready", ready);
+        result.put("state", state);
 
         return result;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof OnlineProfile) {
+            return dbID.equals(((OnlineProfile) object).getDbID());
+        }
+
+        return false;
     }
 
     ////////////////////////// PARCELABLE //////////////////////////
@@ -105,6 +115,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         dest.writeString(dbID);
         dest.writeString(nickName);
         dest.writeInt(isHost ? 1 : 0);
+        dest.writeInt(state);
     }
 
     /**
@@ -115,6 +126,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         dbID = in.readString();
         nickName = in.readString();
         isHost = in.readInt() == 1;
+        state = in.readInt();
     }
 
     /**
@@ -139,4 +151,14 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
             return new OnlineProfile[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "OnlineProfile{" +
+                "nickName='" + nickName + '\'' +
+                ", isHost=" + isHost +
+                ", state=" + state +
+                ", dbID='" + dbID + '\'' +
+                '}';
+    }
 }

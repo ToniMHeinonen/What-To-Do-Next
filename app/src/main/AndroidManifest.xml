@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PreLoginActivity"></activity>
+        <activity android:name=".PreLoginActivity"/>
         <activity android:name=".voteactivity.VotingParentActivity" />
         <activity android:name=".voteactivity.VoteWaitingActivity" />
         <activity android:name=".StartVoteActivity" />

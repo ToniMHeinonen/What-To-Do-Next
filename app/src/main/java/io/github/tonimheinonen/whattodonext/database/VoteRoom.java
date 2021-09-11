@@ -23,15 +23,17 @@ public class VoteRoom implements DatabaseValue, Parcelable {
 
     private String roomCode;
     private String listName;
-    private String state;
+    private int state;
     private int versionCode;
 
-    public static final String
-            LOBBY = "lobby",
-            VOTING_FIRST = "voting_first",
-            RESULTS_FIRST = "results_first",
-            VOTING_LAST = "voting_last",
-            RESULTS_LAST = "results_last";
+    public static final int
+            LOBBY = 0,
+            VOTING_FIRST = 1,
+            WAITING_FIRST = 2,
+            RESULTS_FIRST = 3,
+            VOTING_LAST = 4,
+            WAITING_LAST = 5,
+            RESULTS_LAST = 6;
 
     @Exclude
     private String dbID;
@@ -123,11 +125,11 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         this.dbID = dbID;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 
@@ -169,7 +171,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
-        dest.writeString(state);
+        dest.writeInt(state);
         dest.writeString(roomCode);
         dest.writeString(listName);
         dest.writeInt(versionCode);
@@ -181,7 +183,7 @@ public class VoteRoom implements DatabaseValue, Parcelable {
      */
     public VoteRoom(Parcel in) {
         dbID = in.readString();
-        state = in.readString();
+        state = in.readInt();
         roomCode = in.readString();
         listName = in.readString();
         versionCode = in.readInt();
@@ -209,4 +211,16 @@ public class VoteRoom implements DatabaseValue, Parcelable {
             return new VoteRoom[size];
         }
     };
+
+    @Override
+    public String toString() {
+        return "VoteRoom{" +
+                "roomCode='" + roomCode + '\'' +
+                ", listName='" + listName + '\'' +
+                ", state=" + state +
+                ", versionCode=" + versionCode +
+                ", dbID='" + dbID + '\'' +
+                ", list=" + list +
+                '}';
+    }
 }

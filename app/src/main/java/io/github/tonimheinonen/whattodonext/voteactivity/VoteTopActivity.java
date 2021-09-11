@@ -84,7 +84,7 @@ public class VoteTopActivity extends VotingParentActivity {
             voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
 
             // Get correct vote amount
-            if (voteRoom.getState().equals(VoteRoom.VOTING_FIRST))
+            if (voteRoom.getState() == VoteRoom.VOTING_FIRST)
                 topAmount = voteSettings.getFirstVote();
             else
                 topAmount = voteSettings.getLastVote();
@@ -247,16 +247,8 @@ public class VoteTopActivity extends VotingParentActivity {
      */
     public void nextPressed(View v) {
         if (isOnline) {
-            Buddy.showOnlineVoteLoadingBar(this);
-
-            DatabaseHandler.getVoteRoomState(voteRoom, (state) -> {
-                if (state.equals(VoteRoom.RESULTS_FIRST)) {
-                    Buddy.showToast(getString(R.string.waiting_for_host), Toast.LENGTH_LONG);
-                    Buddy.hideOnlineVoteLoadingBar(this);
-                } else {
-                    moveToWaitingRoom();
-                }
-            });
+            Buddy.showLoadingBar(this);
+            moveToWaitingRoom();
         } else {
             currentProfileIndex++;
 
@@ -286,9 +278,9 @@ public class VoteTopActivity extends VotingParentActivity {
 
         // Add voted items to the vote room
         DatabaseHandler.addVoteRoomVotedItems(voteRoom, onlineVotedItems, () -> {
-            // Change user's ready state
-            DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, true, () -> {
-                // Move to waiting room when ready has changed
+            // Change user's state
+            DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
+                // Move to waiting room when state has changed
                 Intent intent = new Intent(this, VoteWaitingActivity.class);
                 intent.putExtra(VoteIntents.ROOM, voteRoom);
                 intent.putExtra(VoteIntents.SETTINGS, voteSettings);

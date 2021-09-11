@@ -27,6 +27,7 @@ import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.Debug;
 
 public class VoteLobbyActivity extends VotingParentActivity implements View.OnClickListener {
 
@@ -37,8 +38,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
     private DatabaseValueListAdapter usersAdapter;
-
-    private boolean debug = false;
+    private ChildEventListener usersListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,12 +82,16 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
     private void createUsersListener() {
         // Create listener for users who connect to the room
-        ChildEventListener childEventListener = new ChildEventListener() {
+        usersListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
                 Buddy.hideOnlineVoteLoadingBar(_this);
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
                 onlineProfile.setDbID(dataSnapshot.getKey());
+
+                Debug.print(_this, "createUsersListener", "Added: " + onlineProfile, 1);
+
                 users.add(onlineProfile);
                 usersAdapter.notifyDataSetChanged();
             }
@@ -107,13 +111,13 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
             // Unused
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
-        DatabaseHandler.listenForOnlineProfiles(voteRoom, childEventListener);
+        DatabaseHandler.listenForOnlineProfiles(voteRoom, usersListener);
     }
 
     private void createRoomStateListener() {
@@ -121,9 +125,9 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String state = dataSnapshot.getValue(String.class);
+                Integer state = dataSnapshot.getValue(Integer.class);
                 // Move to voting first when state is correct
-                if (state != null && state.equals(VoteRoom.VOTING_FIRST)) {
+                if (state != null && state == VoteRoom.VOTING_FIRST) {
                     Buddy.showOnlineVoteLoadingBar(_this);
                     voteRoom.setState(state);
                     DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
@@ -170,7 +174,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
     }
 
     private void startVoting() {
-        if (users.size() <= 1 && !debug) {
+        if (users.size() <= 1) {
             Buddy.showToast(getString(R.string.online_vote_solo), Toast.LENGTH_SHORT);
             return;
         }
@@ -186,13 +190,18 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         selectedList.setDbID(items.get(0).getListID());
         selectedList.setItems(items);
 
-        Intent intent = new Intent(this, VoteTopActivity.class);
-        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-        intent.putExtra(VoteIntents.ROOM, voteRoom);
-        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
-        intent.putExtra(VoteIntents.IS_ONLINE, true);
-        intent.putExtra(VoteIntents.LIST, selectedList);
+        // Stop listening for new users
+        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersListener);
 
-        startActivity(intent);
+        DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
+            Intent intent = new Intent(this, VoteTopActivity.class);
+            intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+            intent.putExtra(VoteIntents.ROOM, voteRoom);
+            intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.IS_ONLINE, true);
+            intent.putExtra(VoteIntents.LIST, selectedList);
+
+            startActivity(intent);
+        });
     }
 }

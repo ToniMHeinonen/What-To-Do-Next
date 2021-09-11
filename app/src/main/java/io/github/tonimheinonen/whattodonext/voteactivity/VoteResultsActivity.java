@@ -80,11 +80,9 @@ public class VoteResultsActivity extends VotingParentActivity {
         if (isOnline) {
             onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
             voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
-            // Set ready to false to inform others that user has loaded the results
-            DatabaseHandler.setOnlineProfileReady(voteRoom, onlineProfile, false, null);
 
             // Get correct vote amount
-            if (voteRoom.getState().equals(VoteRoom.RESULTS_FIRST))
+            if (voteRoom.getState() == VoteRoom.RESULTS_FIRST)
                 topAmount = voteSettings.getFirstVote();
             else
                 topAmount = voteSettings.getLastVote();
@@ -298,34 +296,8 @@ public class VoteResultsActivity extends VotingParentActivity {
                     endVoting(getString(R.string.unregistered_vote_ended));
                 }
             } else {
-                if (onlineProfile.isHost()) {
-                    DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles) -> {
-                        boolean allInResults = true;
-                        for (OnlineProfile pro : onlineProfiles) {
-                            // If user is ready, he has not yet loaded the VoteResultsActivity which
-                            // resets the value to false
-                            if (pro.isReady()) {
-                                allInResults = false;
-                                break;
-                            }
-                        }
-
-                        // If all users have loaded the results, clear vote room items and change state
-                        if (allInResults) {
-                            DatabaseHandler.clearVoteRoomVotedItems(voteRoom);
-                            DatabaseHandler.changeVoteRoomState(voteRoom, VoteRoom.VOTING_LAST);
-                            moveToOnlineLastVote();
-                        } else {
-                            Buddy.hideOnlineVoteLoadingBar(this);
-                            Buddy.showToast(getString(R.string.waiting_for_users), Toast.LENGTH_LONG);
-                        }
-                    });
-                } else {
-                    // Normal users can move to voting when ever they want, if for some reason
-                    // all users have not loaded results when normal user has finished the next
-                    // vote, the normal user is unable to move to next waiting room before that
-                    moveToOnlineLastVote();
-                }
+                // Move to last voting state
+                moveToOnlineLastVote();
             }
         } else {
             // Local
@@ -356,16 +328,17 @@ public class VoteResultsActivity extends VotingParentActivity {
     }
 
     private void moveToOnlineLastVote() {
-        // Proceed to next voting
-        Intent intent = new Intent(this, VoteTopActivity.class);
-        intent.putExtra(VoteIntents.IS_ONLINE, true);
-        intent.putExtra(VoteIntents.ROOM, voteRoom);
-        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
-        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-        intent.putExtra(VoteIntents.TOP_AMOUNT, listVoteSizeLast);
-        intent.putExtra(VoteIntents.LIST, selectedList);
-        intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
-        startActivity(intent);
+        DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
+            Intent intent = new Intent(this, VoteTopActivity.class);
+            intent.putExtra(VoteIntents.IS_ONLINE, true);
+            intent.putExtra(VoteIntents.ROOM, voteRoom);
+            intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+            intent.putExtra(VoteIntents.TOP_AMOUNT, listVoteSizeLast);
+            intent.putExtra(VoteIntents.LIST, selectedList);
+            intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
+            startActivity(intent);
+        });
     }
 
     /**

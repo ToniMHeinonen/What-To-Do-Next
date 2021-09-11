@@ -52,12 +52,13 @@ public abstract class DatabaseHandler {
 
     // Online voting
     private static DatabaseReference dbVoteRooms;
-    private static String ONLINE_PROFILES = "profiles";
-    private static String ONLINE_ITEMS = "items";
-    private static String ONLINE_VOTED_ITEMS = "voted_items";
-    private static String ONLINE_STATE = "state";
-    private static String ONLINE_TIMESTAMP = "timestamp";
-    private static String ONLINE_SETTINGS = "vote_settings";
+    private static final String ONLINE_PROFILES = "profiles";
+    private static final String ONLINE_ITEMS = "items";
+    private static final String ONLINE_VOTED_ITEMS_FIRST = "voted_items_first";
+    private static final String ONLINE_VOTED_ITEMS_LAST = "voted_items_last";
+    private static final String ONLINE_STATE = "state";
+    private static final String ONLINE_TIMESTAMP = "timestamp";
+    private static final String ONLINE_SETTINGS = "vote_settings";
 
     private final static String DEFAULT_VOTE_SETTINGS = "default";
 
@@ -218,6 +219,15 @@ public abstract class DatabaseHandler {
          * @param value retrieved value
          */
         void onDataGetString(String value);
+    }
+
+    public interface DatabaseGetIntValueListener {
+        /**
+         * Gets a single int value from database.
+         *
+         * @param value retrieved value
+         */
+        void onDataGetString(int value);
     }
     //endregion
 
@@ -783,8 +793,18 @@ public abstract class DatabaseHandler {
      * @param voteRoom vote room to change the state from
      * @param state new state
      */
-    public static void changeVoteRoomState(VoteRoom voteRoom, String state) {
-        dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE).setValue(state);
+    public static void changeVoteRoomState(VoteRoom voteRoom, int state, DatabaseAddListener listener) {
+        // Set state to local voteRoom
+        voteRoom.setState(state);
+
+        // Set state to firebase
+        dbVoteRooms
+                .child(voteRoom.getDbID())
+                .child(ONLINE_STATE).setValue(state)
+                .addOnCompleteListener(complete ->  {
+                    if(listener != null)
+                        listener.onDataAddedComplete();
+                });
     }
 
     /**
@@ -798,16 +818,26 @@ public abstract class DatabaseHandler {
     }
 
     /**
+     * Stops listening for the vote room state changes.
+     * @param voteRoom vote room to stop listening
+     * @param listener listener for vote room state changes
+     */
+    public static void stopListeningForVoteRoomState(VoteRoom voteRoom, ValueEventListener listener) {
+        DatabaseReference state = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE);
+        state.removeEventListener(listener);
+    }
+
+    /**
      * Retrieves the current state of the vote room.
      * @param voteRoom vote room to listen
      * @param listener listens for the state of the vote room
      */
-    public static void getVoteRoomState(VoteRoom voteRoom, DatabaseGetStringValueListener listener) {
+    public static void getVoteRoomState(VoteRoom voteRoom, DatabaseGetIntValueListener listener) {
         DatabaseReference state = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_STATE);
         state.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String value = dataSnapshot.getValue(String.class);
+                int value = dataSnapshot.getValue(Integer.class);
                 listener.onDataGetString(value);
             }
 
@@ -932,7 +962,7 @@ public abstract class DatabaseHandler {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        changeVoteRoomState(voteRoom, VoteRoom.VOTING_FIRST);
+                        changeVoteRoomState(voteRoom, VoteRoom.VOTING_FIRST, null);
                     }
                 });
     }
@@ -978,7 +1008,8 @@ public abstract class DatabaseHandler {
      */
     public static void addVoteRoomVotedItems(VoteRoom voteRoom, ArrayList<OnlineVotedItem> items,
                                              DatabaseAddListener listener) {
-        DatabaseReference dbOnlineVotedItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS);
+
+        DatabaseReference dbOnlineVotedItems = dbVoteRooms.child(voteRoom.getDbID()).child(getVoteRoomItemsState(voteRoom));
         Map<String, Object> childUpdates = new HashMap<>();
 
         for (OnlineVotedItem item : items) {
@@ -1000,7 +1031,7 @@ public abstract class DatabaseHandler {
      * @param listener listens for added vote items on the vote room
      */
     public static void getVoteRoomVotedItems(VoteRoom voteRoom, VoteRoomGetVotedItemsListener listener) {
-        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS);
+        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(getVoteRoomItemsState(voteRoom));
 
         dbOnlineItems.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -1027,13 +1058,15 @@ public abstract class DatabaseHandler {
     }
 
     /**
-     * Removes all the voted items in provided vote room.
-     * @param voteRoom vote room to remove the voted items from
+     * Retrieves correct state for vote items.
+     * @param voteRoom current vote room
+     * @return correct path for vote items
      */
-    public static void clearVoteRoomVotedItems(VoteRoom voteRoom) {
-        dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS).removeValue();
+    private static String getVoteRoomItemsState(VoteRoom voteRoom) {
+        return voteRoom.getState() < VoteRoom.VOTING_LAST ?
+                ONLINE_VOTED_ITEMS_FIRST :
+                ONLINE_VOTED_ITEMS_LAST;
     }
-    //endregion
 
     //region OnlineProfile
     /////////////////////* ONLINE PROFILE *////////////////////
@@ -1064,6 +1097,36 @@ public abstract class DatabaseHandler {
     public static void listenForOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
         dbProfiles.addChildEventListener(listener);
+    }
+
+    /**
+     * Stops listening for changes in online profiles.
+     * @param voteRoom vote room to stop listen for
+     * @param listener listens for online profile changes
+     */
+    public static void stopListeningForOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        dbProfiles.removeEventListener(listener);
+    }
+
+    /**
+     * Listens for changes in online profiles.
+     * @param voteRoom vote room to listen for
+     * @param listener listens for online profile changes
+     */
+    public static void listenForOnlineProfiles(VoteRoom voteRoom, ValueEventListener listener) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        dbProfiles.addValueEventListener(listener);
+    }
+
+    /**
+     * Stops listening for changes in online profiles.
+     * @param voteRoom vote room to stop listen for
+     * @param listener listens for online profile changes
+     */
+    public static void stopListeningForOnlineProfiles(VoteRoom voteRoom, ValueEventListener listener) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        dbProfiles.removeEventListener(listener);
     }
 
     /**
@@ -1111,7 +1174,7 @@ public abstract class DatabaseHandler {
         }
 
         // If host disconnects from the room and it's not the last results, remove the vote room
-        if (profile.isHost() && !voteRoom.getState().equals(VoteRoom.RESULTS_LAST)) {
+        if (profile.isHost() && voteRoom.getState() != VoteRoom.RESULTS_LAST) {
             removeVoteRoom(voteRoom);
             return;
         }
@@ -1142,16 +1205,41 @@ public abstract class DatabaseHandler {
     }
 
     /**
-     * Changes the ready state of the provided online profile in the provided vote room.
+     * Changes the state to next state.
      * @param voteRoom vote room to change the online profile state
      * @param onlineProfile online profile to change the ready state
-     * @param isReady whether the online profile is ready or not
      * @param listener listens for state change completion
      */
-    public static void setOnlineProfileReady(VoteRoom voteRoom, OnlineProfile onlineProfile,
-                                             boolean isReady, DatabaseAddListener listener) {
+    public static void changeOnlineProfileState(VoteRoom voteRoom, OnlineProfile onlineProfile,
+                                             DatabaseAddListener listener) {
+        onlineProfile.setState(onlineProfile.getState() + 1);
+
+        final int profileState = onlineProfile.getState();
+
+        // Check if vote room is behind in states
+        getVoteRoomState(voteRoom, (state) -> {
+            // Set vote room state to profile state
+            if (state < profileState) {
+                changeVoteRoomState(voteRoom, profileState, () -> {
+                    executeOnlineProfileStateChange(voteRoom, onlineProfile, listener);
+                });
+            } else {
+                voteRoom.setState(profileState);
+                executeOnlineProfileStateChange(voteRoom, onlineProfile, listener);
+            }
+        });
+    }
+
+    /**
+     * Executes the online profile state change on firebase.
+     * @param voteRoom current vote room
+     * @param onlineProfile current profile
+     * @param listener complete listener
+     */
+    private static void executeOnlineProfileStateChange(VoteRoom voteRoom, OnlineProfile onlineProfile,
+                                                        DatabaseAddListener listener) {
         dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES).
-                child(onlineProfile.getDbID()).child("ready").setValue(isReady)
+                child(onlineProfile.getDbID()).child(ONLINE_STATE).setValue(onlineProfile.getState())
                 .addOnCompleteListener(complete ->  {
                     if(listener != null)
                         listener.onDataAddedComplete(); });
