@@ -219,4 +219,12 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
         return selectedProfiles;
     }
+
+    /**
+     * Override what happens when pressing back during voting.
+     */
+    @Override
+    public void onBackPressed() {
+        Buddy.exitVoting(this, () -> DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile));
+    }
 }
