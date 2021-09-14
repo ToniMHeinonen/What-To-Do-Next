@@ -28,6 +28,7 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
@@ -49,7 +50,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
     private boolean listBigEnough = false;
     private VoteSettings voteSettings;
 
-    private int minimumItemCount = 2;
+    private final int minimumItemCount = 2;
+
+    private enum LobbyJoinOptions { HOST_NEW, JOIN_NEW, JOIN_RECONNECT }
 
     // Setup voting options
     private ListOfItems selectedList;
@@ -57,6 +60,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
     private ArrayList<Profile> selectedProfiles = new ArrayList<>();
 
     private boolean isOnlineVote;
+    private OnlineProfile onlineProfile;
 
     // Online values
     private String roomCode, nickname;
@@ -127,7 +131,6 @@ public class VoteSetupActivity extends VotingParentActivity implements
             }
 
             initializeVotingSetupOnline();
-            return;
         } else {
             // Offline
             if (lists.isEmpty()) {
@@ -445,9 +448,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
         // Add created vote room to database
         DatabaseHandler.addVoteRoom((added) -> {
             if (added) {
-                // Add settings to vote room
-                DatabaseHandler.addVoteRoomSettings(() -> moveToOnlineLobby(voteRoom, true),
-                        voteRoom, voteSettings);
+                // Add settings to vote room and move to lobby
+                DatabaseHandler.addVoteRoomSettings(voteRoom, voteSettings,
+                        () -> moveToOnlineLobby(voteRoom, LobbyJoinOptions.HOST_NEW));
             } else {
                 Buddy.showToast(getString(R.string.online_host_duplicate), Toast.LENGTH_LONG);
                 Buddy.hideOnlineVoteLoadingBar(this);
@@ -463,28 +466,34 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         DatabaseHandler.getVoteRoom((voteRoom) -> {
             if (voteRoom != null) {
-                // TODO: Add ability to join started room with disconnected profile
-                // If vote has already started, don't allow joining
-                if (voteRoom.getState() != VoteRoom.LOBBY) {
-                    Buddy.showToast(getString(R.string.vote_already_started), Toast.LENGTH_LONG);
-                    Buddy.hideOnlineVoteLoadingBar(this);
-                } else {
-                    // Check that version code is correct
-                    int ownVersionCode = BuildConfig.VERSION_CODE;
-                    if (voteRoom.getVersionCode() == ownVersionCode) {
-                        // Load vote room settings and move to lobby
-                        DatabaseHandler.getVoteRoomSettings((settings) -> {
-                            voteSettings = settings;
-                            moveToOnlineLobby(voteRoom, false);
-                        }, voteRoom);
-                    } else if (ownVersionCode < voteRoom.getVersionCode()) {
-                        Buddy.showToast(getString(R.string.joiner_update_required), Toast.LENGTH_LONG);
-                        Buddy.hideOnlineVoteLoadingBar(this);
-                    } else {
-                        Buddy.showToast(getString(R.string.host_update_required), Toast.LENGTH_LONG);
-                        Buddy.hideOnlineVoteLoadingBar(this);
+                Debug.print(this, "joinVoteRoom", "Vote Room found", 1);
+
+                DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
+                    // Loop through all profiles and check user id
+                    for (OnlineProfile pro : onlineProfiles) {
+                        if (pro.getUserDbID().equals(DatabaseHandler.getUserDbID())) {
+                            onlineProfile = pro;
+                            break;
+                        }
                     }
-                }
+
+                    // If user was already in the vote room
+                    if (onlineProfile != null) {
+                        Debug.print(this, "joinVoteRoom", "Reconnect", 1);
+                        // Reconnect to vote room
+                        tryConnectToVoteRoom(voteRoom, true);
+                    } else {
+                        if (voteRoom.getState() == VoteRoom.LOBBY) {
+                            Debug.print(this, "joinVoteRoom", "Join as new user", 1);
+                            // If voting has not yet started, join as new user
+                            tryConnectToVoteRoom(voteRoom, false);
+                        } else {
+                            // Else vote has already started, so block joining
+                            Buddy.showToast(getString(R.string.vote_already_started), Toast.LENGTH_LONG);
+                            Buddy.hideOnlineVoteLoadingBar(this);
+                        }
+                    }
+                }));
             } else {
                 Buddy.showToast(getString(R.string.room_not_found), Toast.LENGTH_LONG);
                 Buddy.hideOnlineVoteLoadingBar(this);
@@ -492,23 +501,103 @@ public class VoteSetupActivity extends VotingParentActivity implements
         }, roomCode);
     }
 
+    private void tryConnectToVoteRoom(VoteRoom voteRoom, boolean reconnecting) {
+        int ownVersionCode = BuildConfig.VERSION_CODE;
+
+        if (voteRoom.getVersionCode() == ownVersionCode) {
+            // Load vote room settings and move to lobby
+            DatabaseHandler.getVoteRoomSettings((settings) -> {
+                voteSettings = settings;
+                if (reconnecting)
+                    reconnectToVoteRoom(voteRoom);
+                else
+                    moveToOnlineLobby(voteRoom, LobbyJoinOptions.JOIN_NEW);
+            }, voteRoom);
+        } else if (ownVersionCode < voteRoom.getVersionCode()) {
+            Buddy.showToast(getString(R.string.joiner_update_required), Toast.LENGTH_LONG);
+            Buddy.hideOnlineVoteLoadingBar(this);
+        } else {
+            Buddy.showToast(getString(R.string.host_update_required), Toast.LENGTH_LONG);
+            Buddy.hideOnlineVoteLoadingBar(this);
+        }
+    }
+
     /**
      * Moves to online lobby.
      * @param voteRoom vote room to move to
-     * @param host true if user is host
+     * @param lobbyJoinOptions how to join the vote room lobby
      */
-    private void moveToOnlineLobby(VoteRoom voteRoom, boolean host) {
-        // Create online profile
-        OnlineProfile profile = new OnlineProfile(nickname, host);
+    private void moveToOnlineLobby(VoteRoom voteRoom, LobbyJoinOptions lobbyJoinOptions) {
+        boolean host = lobbyJoinOptions == LobbyJoinOptions.HOST_NEW;
+        boolean reconnect = lobbyJoinOptions == LobbyJoinOptions.JOIN_RECONNECT;
 
-        // Move to lobby
+        // Create online profile if not reconnecting
+        if (!reconnect)
+            onlineProfile = new OnlineProfile(DatabaseHandler.getUserDbID(), nickname, host);
+
         Intent intent = new Intent(this, VoteLobbyActivity.class);
         intent.putExtra(VoteIntents.ROOM, voteRoom);
         intent.putExtra(VoteIntents.SETTINGS, voteSettings);
-        intent.putExtra(VoteIntents.ONLINE_PROFILE, profile);
-        if (host)
-            intent.putParcelableArrayListExtra(VoteIntents.ITEMS, selectedList.getItems());
+        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+        intent.putExtra(VoteIntents.RECONNECT, reconnect);
 
-        startActivity(intent);
+        Debug.print(this, "moveToOnlineLobby", onlineProfile.toString(), 1);
+
+        // If hosting, add items to vote room
+        if (host) {
+            // Add items to vote room and move to lobby when items are added
+            DatabaseHandler.addItemsToVoteRoom(voteRoom, selectedList.getItems(),
+                    () -> startActivity(intent));
+        } else {
+            startActivity(intent);
+        }
+    }
+
+    private void reconnectToVoteRoom(VoteRoom voteRoom) {
+        Debug.print(this, "reconnectToVoteRoom", onlineProfile.toString(), 1);
+
+        Intent intent;
+
+        // Move to correct Activity
+        switch (onlineProfile.getState()) {
+            case VoteRoom.LOBBY:
+                moveToOnlineLobby(voteRoom, LobbyJoinOptions.JOIN_RECONNECT);
+                return;
+            case VoteRoom.VOTING_FIRST:
+            case VoteRoom.VOTING_LAST:
+                intent = new Intent(this, VoteTopActivity.class);
+                break;
+            case VoteRoom.WAITING_FIRST:
+            case VoteRoom.WAITING_LAST:
+                intent = new Intent(this, VoteWaitingActivity.class);
+                break;
+            case VoteRoom.RESULTS_FIRST:
+            case VoteRoom.RESULTS_LAST:
+                intent = new Intent(this, VoteResultsActivity.class);
+                break;
+            default:
+                Buddy.showToast(getString(R.string.reconnect_failed), Toast.LENGTH_LONG);
+                return;
+        }
+
+        Debug.print(this, "reconnectToVoteRoom", "intent: " + intent, 1);
+
+        DatabaseHandler.getVoteRoomItems(voteRoom, (items) -> {
+            // Create temporary list of items so code does not have to be modified so much
+            ListOfItems selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, items);
+
+            intent.putExtra(VoteIntents.RECONNECT, true);
+            intent.putExtra(VoteIntents.IS_ONLINE, true);
+            intent.putExtra(VoteIntents.ROOM, voteRoom);
+            intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+            intent.putExtra(VoteIntents.LIST, selectedList);
+            intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
+
+            Buddy.hideOnlineVoteLoadingBar(_this);
+
+            startActivity(intent);
+        });
+
     }
 }

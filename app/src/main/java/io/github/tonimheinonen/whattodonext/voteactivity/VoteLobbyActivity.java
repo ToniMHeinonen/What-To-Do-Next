@@ -38,7 +38,12 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
     private DatabaseValueListAdapter usersAdapter;
+
+    // Listeners
     private ChildEventListener usersListener;
+    private ValueEventListener voteRoomListener;
+
+    private boolean reconnecting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
         voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
         onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
+        reconnecting = intent.getBooleanExtra(VoteIntents.RECONNECT, false);
 
         setContentView(R.layout.activity_vote_lobby);
 
@@ -69,23 +75,29 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         setupLobby();
     }
 
+    /**
+     * Initializes lobby activity.
+     */
     private void setupLobby() {
         // Setup list before adding and retrieving users
         setupUsersList();
 
-        // Add user's profile to the voteroom
-        DatabaseHandler.connectOnlineProfile(voteRoom, onlineProfile);
+        // Add user's profile to the vote room if not reconnecting
+        if (!reconnecting)
+            DatabaseHandler.connectOnlineProfile(voteRoom, onlineProfile);
 
         createUsersListener();
         createRoomStateListener();
     }
 
+    /**
+     * Adds and removes users from list.
+     */
     private void createUsersListener() {
         // Create listener for users who connect to the room
         usersListener = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
                 Buddy.hideOnlineVoteLoadingBar(_this);
                 OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
                 onlineProfile.setDbID(dataSnapshot.getKey());
@@ -120,27 +132,30 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         DatabaseHandler.listenForOnlineProfiles(voteRoom, usersListener);
     }
 
+    /**
+     * Listens for when vote has started.
+     */
     private void createRoomStateListener() {
         // Create listener for users who connect to the room
-        ValueEventListener eventListener = new ValueEventListener() {
+        voteRoomListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Integer state = dataSnapshot.getValue(Integer.class);
                 // Move to voting first when state is correct
-                if (state != null && state == VoteRoom.VOTING_FIRST) {
-                    Buddy.showOnlineVoteLoadingBar(_this);
-                    voteRoom.setState(state);
-                    DatabaseHandler.getVoteRoomItems(voteRoom, (items) ->
-                            moveToNextActivity(items));
+                if (state != null && state >= VoteRoom.VOTING_FIRST) {
+                    retrieveItemsAndMoveToVoting();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
-        DatabaseHandler.listenForVoteRoomState(voteRoom, eventListener);
+        DatabaseHandler.listenForVoteRoomState(voteRoom, voteRoomListener);
     }
 
+    /**
+     * Sets up list of users which are visible on screen.
+     */
     private void setupUsersList() {
         // Add users to ListView
         final ListView listView = findViewById(R.id.usersList);
@@ -173,25 +188,37 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         }
     }
 
+    /**
+     * Starts voting if able.
+     */
     private void startVoting() {
         if (users.size() <= 1) {
             Buddy.showToast(getString(R.string.online_vote_solo), Toast.LENGTH_SHORT);
             return;
         }
 
-        ArrayList<ListItem> items = getIntent().getParcelableArrayListExtra(VoteIntents.ITEMS);
-        DatabaseHandler.addItemsToVoteRoom(voteRoom, items);
-        Buddy.showOnlineVoteLoadingBar(this);
+        retrieveItemsAndMoveToVoting();
     }
 
-    private void moveToNextActivity(ArrayList<ListItem> items) {
-        // Create list of items so code does not have to be modified so much
-        ListOfItems selectedList = new ListOfItems(voteRoom.getListName());
-        selectedList.setDbID(items.get(0).getListID());
-        selectedList.setItems(items);
+    /**
+     * Retrieves vote items from database and starts voting.
+     */
+    private void retrieveItemsAndMoveToVoting() {
+        Buddy.showOnlineVoteLoadingBar(_this);
+        DatabaseHandler.getVoteRoomItems(voteRoom, this::moveToNextActivity);
+    }
 
-        // Stop listening for new users
+    /**
+     * Moves to voting activity.
+     * @param items voting items
+     */
+    private void moveToNextActivity(ArrayList<ListItem> items) {
+        // Create temporary list of items so code does not have to be modified so much
+        ListOfItems selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, items);
+
+        // Stop listeners
         DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersListener);
+        DatabaseHandler.stopListeningForVoteRoomState(voteRoom, voteRoomListener);
 
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
             Intent intent = new Intent(this, VoteTopActivity.class);

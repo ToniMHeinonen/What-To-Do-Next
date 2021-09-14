@@ -122,6 +122,13 @@ public class ListOfItems implements DatabaseValue, Parcelable {
         return result;
     }
 
+    public static ListOfItems generateOnlineListOfItems(VoteRoom voteRoom, ArrayList<ListItem> items) {
+        ListOfItems list = new ListOfItems(voteRoom.getListName());
+        list.setDbID(items.get(0).getListID());
+        list.setItems(items);
+        return list;
+    }
+
     /**
      * Prints this instead of pointer.
      * @return string to print

@@ -74,7 +74,7 @@ public class VoteResultsActivity extends VotingParentActivity {
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
         selectedList = intent.getParcelableExtra(VoteIntents.LIST);
-        selectedProfiles = intent.getParcelableArrayListExtra(VoteIntents.PROFILES);
+
         voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
 
         if (isOnline) {
@@ -82,15 +82,16 @@ public class VoteResultsActivity extends VotingParentActivity {
             voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
 
             // Get correct vote amount
-            if (voteRoom.getState() == VoteRoom.RESULTS_FIRST)
+            if (onlineProfile.getState() == VoteRoom.RESULTS_FIRST)
                 topAmount = voteSettings.getFirstVote();
             else
                 topAmount = voteSettings.getLastVote();
         } else {
             topAmount = intent.getIntExtra(VoteIntents.TOP_AMOUNT, -1);
+            selectedProfiles = intent.getParcelableArrayListExtra(VoteIntents.PROFILES);
         }
 
-        isOfflineOrIsOnlineHost = !isOnline || (isOnline && onlineProfile.isHost());
+        isOfflineOrIsOnlineHost = !isOnline || onlineProfile.isHost();
         setOptions();
 
         // If current topAmount is the same as last vote size
@@ -106,6 +107,27 @@ public class VoteResultsActivity extends VotingParentActivity {
             findViewById(R.id.resultsInfoText).setVisibility(View.VISIBLE);
         }
 
+        // Generate some values when voting online
+        if (isOnline) {
+            DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
+                DatabaseHandler.getVoteRoomVotedItems(voteRoom, onlineProfile, (votedItems) -> {
+                    try {
+                        // Create temporary SelectedProfiles so code does not have to be modified so much
+                        selectedProfiles = Profile.generateProfilesFromOnlineProfile(
+                                onlineProfiles, selectedList.getItems(), votedItems, onlineProfile, voteSettings);
+
+                        startSetup(savedInstanceState);
+                    } catch (Exception e) {
+                        Debug.error("VoteResultsActivity", "getVoteRoomVotedItems", e, 1);
+                    }
+                });
+            }));
+        } else {
+            startSetup(savedInstanceState);
+        }
+    }
+
+    private void startSetup(Bundle savedInstanceState) {
         // If activity has not been recreated (by screen rotation)
         if (savedInstanceState == null) {
             calculateVotePoints();

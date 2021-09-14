@@ -107,6 +107,10 @@ public abstract class DatabaseHandler {
         dbVoteRooms.keepSynced(true);
     }
 
+    public static String getUserDbID() {
+        return user.getUid();
+    }
+
     //region Interfaces
     /////////////////////* LISTENER INTERFACES *////////////////////
 
@@ -888,7 +892,7 @@ public abstract class DatabaseHandler {
     //region VoteRoomSettings
     /////////////////////* VOTE ROOM SETTINGS *////////////////////
 
-    public static void addVoteRoomSettings(final DatabaseAddListener listener, VoteRoom voteRoom, VoteSettings settings) {
+    public static void addVoteRoomSettings(VoteRoom voteRoom, VoteSettings settings, final DatabaseAddListener listener) {
         DatabaseReference dbSettings = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_SETTINGS);
 
         String key = dbSettings.push().getKey();   // Add new key to vote settings
@@ -935,6 +939,7 @@ public abstract class DatabaseHandler {
             }
         });
     }
+    //endregion
 
     //region VoteRoomItems
     /////////////////////* VOTE ROOM ITEMS *////////////////////
@@ -943,8 +948,10 @@ public abstract class DatabaseHandler {
      * Adds items which users will vote to the provided vote room.
      * @param voteRoom vote room to add the items to
      * @param items items to add
+     * @param listener items added listener
      */
-    public static void addItemsToVoteRoom(final VoteRoom voteRoom, ArrayList<ListItem> items) {
+    public static void addItemsToVoteRoom(final VoteRoom voteRoom, ArrayList<ListItem> items,
+                                          DatabaseAddListener listener) {
         DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_ITEMS);
         Map<String, Object> childUpdates = new HashMap<>();
 
@@ -957,14 +964,9 @@ public abstract class DatabaseHandler {
             childUpdates.put(item.getDbID(), listValues);
         }
 
-        // When items are added, change room state to inform other users so they can load items
+        // Inform that items have been added
         dbOnlineItems.updateChildren(childUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        changeVoteRoomState(voteRoom, VoteRoom.VOTING_FIRST, null);
-                    }
-                });
+                .addOnCompleteListener((complete) -> listener.onDataAddedComplete());
     }
 
     /**
@@ -1006,10 +1008,11 @@ public abstract class DatabaseHandler {
      * @param items voted items to add
      * @param listener listens for completion of adding the items
      */
-    public static void addVoteRoomVotedItems(VoteRoom voteRoom, ArrayList<OnlineVotedItem> items,
+    public static void addVoteRoomVotedItems(VoteRoom voteRoom, OnlineProfile onlineProfile,
+                                             ArrayList<OnlineVotedItem> items,
                                              DatabaseAddListener listener) {
 
-        DatabaseReference dbOnlineVotedItems = dbVoteRooms.child(voteRoom.getDbID()).child(getVoteRoomItemsState(voteRoom));
+        DatabaseReference dbOnlineVotedItems = dbVoteRooms.child(voteRoom.getDbID()).child(getVoteRoomItemsState(onlineProfile));
         Map<String, Object> childUpdates = new HashMap<>();
 
         for (OnlineVotedItem item : items) {
@@ -1030,8 +1033,8 @@ public abstract class DatabaseHandler {
      * @param voteRoom vote room to retrieve the items from
      * @param listener listens for added vote items on the vote room
      */
-    public static void getVoteRoomVotedItems(VoteRoom voteRoom, VoteRoomGetVotedItemsListener listener) {
-        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(getVoteRoomItemsState(voteRoom));
+    public static void getVoteRoomVotedItems(VoteRoom voteRoom, OnlineProfile onlineProfile, VoteRoomGetVotedItemsListener listener) {
+        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(getVoteRoomItemsState(onlineProfile));
 
         dbOnlineItems.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -1059,14 +1062,15 @@ public abstract class DatabaseHandler {
 
     /**
      * Retrieves correct state for vote items.
-     * @param voteRoom current vote room
+     * @param onlineProfile current online profile
      * @return correct path for vote items
      */
-    private static String getVoteRoomItemsState(VoteRoom voteRoom) {
-        return voteRoom.getState() < VoteRoom.VOTING_LAST ?
+    private static String getVoteRoomItemsState(OnlineProfile onlineProfile) {
+        return onlineProfile.getState() <= VoteRoom.RESULTS_FIRST ?
                 ONLINE_VOTED_ITEMS_FIRST :
                 ONLINE_VOTED_ITEMS_LAST;
     }
+    //endregion
 
     //region OnlineProfile
     /////////////////////* ONLINE PROFILE *////////////////////

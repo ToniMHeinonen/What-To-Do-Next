@@ -6,8 +6,10 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -124,6 +126,52 @@ public class Profile implements DatabaseValue, Parcelable {
         result.put("name", name);
 
         return result;
+    }
+
+    public static ArrayList<Profile> generateProfilesFromOnlineProfile(ArrayList<OnlineProfile> users,
+                                                                 ArrayList<ListItem> items,
+                                                                 ArrayList<OnlineVotedItem> votedItems,
+                                                                 OnlineProfile onlineProfile,
+                                                                 VoteSettings voteSettings) {
+        ArrayList<Profile> selectedProfiles = new ArrayList<>();
+
+        // Create normal profile from online users so the same code can be used in results
+        for (OnlineProfile pro : users) {
+            // Create profile from the user's nickname
+            Profile profile = new Profile(pro.getNickName());
+
+            // Set correct vote points size depending on if it's the firs or last results
+            if (onlineProfile.getState() == VoteRoom.RESULTS_FIRST)
+                profile.initVoteSize(voteSettings.getFirstVote());
+            else
+                profile.initVoteSize(voteSettings.getLastVote());
+
+            // Iterate through all of the voted items so they can be deleted during iteration
+            Iterator<OnlineVotedItem> iterator = votedItems.iterator();
+            while (iterator.hasNext()) {
+                OnlineVotedItem votedItem = iterator.next();
+
+                // If voted item belongs to the current user, proceed...
+                if (votedItem.getUserID().equals(pro.getDbID())) {
+                    // Loop through all the items and find which item has the same id as voted item
+                    for (ListItem item : items) {
+                        // If item has the same id, add it to the profile's vote items
+                        if (item.getDbID().equals(votedItem.getItemID())) {
+                            int index = votedItem.getVotePoints() - 1; // -1 since array starts from 0
+                            profile.addVoteItem(index, item);
+                            break;
+                        }
+                    }
+
+                    // Remove the item afterwards so it does not need to be looped through again
+                    iterator.remove();
+                }
+            }
+
+            selectedProfiles.add(profile);
+        }
+
+        return selectedProfiles;
     }
 
     /**

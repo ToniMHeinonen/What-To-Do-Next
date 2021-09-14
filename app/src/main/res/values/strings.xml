@@ -94,6 +94,8 @@
     <string name="joiner_update_required">Version mismatch: You need to update the app in order to
         join the vote room!</string>
 
+    <string name="reconnect_failed">Unable to reconnect: Something went fatally wrong!</string>
+
     <!-- VOTE_LOBBY -->
     <string name="lobby_room_code">Room Code</string>
     <string name="lobby_users">Users</string>

@@ -46,8 +46,6 @@ public class VoteWaitingActivity extends VotingParentActivity {
     private ArrayList<OnlineProfile> notReadyUsers = new ArrayList();
     private DatabaseValueListAdapter usersAdapter;
 
-    private ArrayList<OnlineVotedItem> votedItems;
-
     // Firebase listeners
     private ValueEventListener usersStateListener;
 
@@ -110,13 +108,14 @@ public class VoteWaitingActivity extends VotingParentActivity {
                         users.add(loadedProfile);
 
                         // Add user to notReadyUsers if it is not ready
-                        if (loadedProfile.getState() != voteRoom.getState())
+                        if (!checkIfProfileReady(loadedProfile))
                             notReadyUsers.add(loadedProfile);
                     }
 
+                    // Remove from notReadyUsers if profile still there and it is now ready
                     if (notReadyUsers.contains(loadedProfile)) {
                         Debug.print(_this, "setupLobby", "Checking if ready: " + loadedProfile, 1);
-                        if (loadedProfile.getState() == voteRoom.getState()) {
+                        if (checkIfProfileReady(loadedProfile)) {
                             Debug.print(_this, "setupLobby", "Removing: " + loadedProfile, 1);
                             notReadyUsers.remove(loadedProfile);
                         }
@@ -127,7 +126,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
                 // Move to next activity if everyone is ready
                 if (notReadyUsers.isEmpty())
-                    retrieveVotedItemsAndMoveToResults();
+                    moveToNextActivity();
             }
 
             @Override
@@ -140,18 +139,28 @@ public class VoteWaitingActivity extends VotingParentActivity {
         DatabaseHandler.listenForOnlineProfiles(voteRoom, usersStateListener);
     }
 
-    private void retrieveVotedItemsAndMoveToResults() {
-        Buddy.showOnlineVoteLoadingBar(_this);
+    private boolean checkIfProfileReady(OnlineProfile loadedProfile) {
+        // Check in which waiting room we currently are at
+        if (onlineProfile.getState() == VoteRoom.WAITING_FIRST) {
+            // If currently at first waiting room
+            if (loadedProfile.getState() >= VoteRoom.WAITING_FIRST)
+                // If loadedProfile is at least at same point
+                return true;
+        } else {
+            // Else we are currently at last waiting room
+            if (loadedProfile.getState() >= VoteRoom.WAITING_LAST)
+                // If loadedProfile is at least at same point
+                return true;
+        }
 
-        DatabaseHandler.getVoteRoomVotedItems(voteRoom, (votedItems) -> {
-            this.votedItems = votedItems;
-            moveToNextActivity();
-        });
+        return false;
     }
 
     private void moveToNextActivity() {
         if (movingToResults)
             return;
+
+        Buddy.showOnlineVoteLoadingBar(_this);
 
         movingToResults = true;
 
@@ -167,57 +176,10 @@ public class VoteWaitingActivity extends VotingParentActivity {
             intent.putExtra(VoteIntents.IS_ONLINE, true);
             intent.putExtra(VoteIntents.LIST, selectedList);
 
-            // Create SelectedProfiles so code does not have to be modified so much
-            ArrayList<Profile> selectedProfiles = createProfilesFromOnlineProfile(selectedList.getItems());
-
-            intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
-
             Buddy.hideOnlineVoteLoadingBar(_this);
 
             startActivity(intent);
         });
-    }
-
-    private ArrayList<Profile> createProfilesFromOnlineProfile(ArrayList<ListItem> items) {
-        ArrayList<Profile> selectedProfiles = new ArrayList<>();
-
-        // Create normal profile from online users so the same code can be used in results
-        for (OnlineProfile pro : users) {
-            // Create profile from the user's nickname
-            Profile profile = new Profile(pro.getNickName());
-
-            // Set correct vote points size depending on if it's the firs or last results
-            if (voteRoom.getState() == VoteRoom.RESULTS_FIRST)
-                profile.initVoteSize(voteSettings.getFirstVote());
-            else
-                profile.initVoteSize(voteSettings.getLastVote());
-
-            // Iterate through all of the voted items so they can be deleted during iteration
-            Iterator<OnlineVotedItem> iterator = votedItems.iterator();
-            while (iterator.hasNext()) {
-                OnlineVotedItem votedItem = iterator.next();
-
-                // If voted item belongs to the current user, proceed...
-                if (votedItem.getUserID().equals(pro.getDbID())) {
-                    // Loop through all the items and find which item has the same id as voted item
-                    for (ListItem item : items) {
-                        // If item has the same id, add it to the profile's vote items
-                        if (item.getDbID().equals(votedItem.getItemID())) {
-                            int index = votedItem.getVotePoints() - 1; // -1 since array starts from 0
-                            profile.addVoteItem(index, item);
-                            break;
-                        }
-                    }
-
-                    // Remove the item afterwards so it does not need to be looped through again
-                    iterator.remove();
-                }
-            }
-
-            selectedProfiles.add(profile);
-        }
-
-        return selectedProfiles;
     }
 
     /**

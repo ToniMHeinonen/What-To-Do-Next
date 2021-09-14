@@ -19,8 +19,9 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class OnlineProfile implements DatabaseValue, Parcelable {
 
+    private String userDbID;
     private String nickName;
-    private boolean isHost;
+    private boolean host;
     private int state;
 
     @Exclude
@@ -33,9 +34,10 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         // Default constructor required for calls to DataSnapshot.getValue(OnlineProfile.class)
     }
 
-    public OnlineProfile(String nickName, boolean isHost) {
+    public OnlineProfile(String userDbID, String nickName, boolean host) {
+        this.userDbID = userDbID;
         this.nickName = nickName;
-        this.isHost = isHost;
+        this.host = host;
         state = VoteRoom.LOBBY;
     }
 
@@ -48,11 +50,11 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     }
 
     public boolean isHost() {
-        return isHost;
+        return host;
     }
 
-    public void setHost(boolean isHost) {
-        this.isHost = isHost;
+    public void setHost(boolean host) {
+        this.host = host;
     }
 
     public String getDbID() {
@@ -71,6 +73,14 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         this.state = state;
     }
 
+    public String getUserDbID() {
+        return userDbID;
+    }
+
+    public void setUserDbID(String userDbID) {
+        this.userDbID = userDbID;
+    }
+
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -78,8 +88,9 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("userDbID", userDbID);
         result.put("nickName", nickName);
-        result.put("isHost", isHost);
+        result.put("host", host);
         result.put("state", state);
 
         return result;
@@ -113,8 +124,9 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
+        dest.writeString(userDbID);
         dest.writeString(nickName);
-        dest.writeInt(isHost ? 1 : 0);
+        dest.writeInt(host ? 1 : 0);
         dest.writeInt(state);
     }
 
@@ -124,8 +136,9 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
      */
     public OnlineProfile(Parcel in) {
         dbID = in.readString();
+        userDbID = in.readString();
         nickName = in.readString();
-        isHost = in.readInt() == 1;
+        host = in.readInt() == 1;
         state = in.readInt();
     }
 
@@ -155,8 +168,9 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     @Override
     public String toString() {
         return "OnlineProfile{" +
-                "nickName='" + nickName + '\'' +
-                ", isHost=" + isHost +
+                "userDbID='" + userDbID + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", isHost=" + host +
                 ", state=" + state +
                 ", dbID='" + dbID + '\'' +
                 '}';

@@ -12,7 +12,7 @@ public abstract class VoteIntents {
     // Online
     public final static String ROOM = "voteRoom";
     public final static String ONLINE_PROFILE = "onlineProfile";
-    public final static String ITEMS = "items";
+    public final static String RECONNECT = "reconnect";
 
     // Offline
     public final static String SETTINGS = "voteSettings";

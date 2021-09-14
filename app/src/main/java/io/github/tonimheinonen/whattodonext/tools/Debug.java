@@ -56,6 +56,21 @@ public class Debug {
     }
 
     /**
+     * Prints debug error message without context.
+     * @param callerClass name of the current class
+     * @param methodName name of the current method
+     * @param e exception
+     * @param level debug level
+     */
+    public static void error(String callerClass, String methodName, Exception e, int level) {
+        if (BuildConfig.DEBUG && level <= DEBUG_LEVEL) {
+            String msg = methodName + ", Exception: " + e;
+            Log.e(callerClass, msg);
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Loads debug level from resources.
      * @param host current context
      */

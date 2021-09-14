@@ -17,6 +17,12 @@ public class StartVoteActivity extends AppCompatActivity
         setContentView(R.layout.activity_start_vote);
 
         // If tutorial has not been confirmed yet, show it
+        /*
+        (If online vote crashes and it points to this, ignore the error, it just means
+        that the app restarted because of some unknown error and for some reason prefs
+         do not work instantly. Error is somewhere else. Use try and catch for easier
+         debugging.)
+         */
         if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_VOTE_TYPE))
             new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_VOTE_TYPE).show();
 

@@ -84,7 +84,7 @@ public class VoteTopActivity extends VotingParentActivity {
             voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
 
             // Get correct vote amount
-            if (voteRoom.getState() == VoteRoom.VOTING_FIRST)
+            if (onlineProfile.getState() == VoteRoom.VOTING_FIRST)
                 topAmount = voteSettings.getFirstVote();
             else
                 topAmount = voteSettings.getLastVote();
@@ -277,7 +277,7 @@ public class VoteTopActivity extends VotingParentActivity {
         }
 
         // Add voted items to the vote room
-        DatabaseHandler.addVoteRoomVotedItems(voteRoom, onlineVotedItems, () -> {
+        DatabaseHandler.addVoteRoomVotedItems(voteRoom, onlineProfile, onlineVotedItems, () -> {
             // Change user's state
             DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
                 // Move to waiting room when state has changed
