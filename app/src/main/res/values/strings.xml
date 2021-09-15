@@ -298,12 +298,6 @@
     &lt;p&gt;You should now know the basics pretty well. Make sure to check out the settings so that you
         can customize the app to your liking. Keep on voting!&lt;/p&gt;</string>
 
-    <string name="beta_online">
-    &lt;h1&gt;Online Beta!&lt;/h1&gt;
-    &lt;p&gt;Online voting is still in beta stage. Don\'t worry, your activities will not get lost or
-        altered if something goes wrong. Enjoy!&lt;/p&gt;
-    &lt;h5&gt;Note: Vote rooms will be removed after 2 hours has passed from their creation.&lt;/h5&gt;</string>
-
     <string name="no_registration_text">
     &lt;h1&gt;No Registration&lt;/h1&gt;
     &lt;p&gt;If you don\'t register, you can only join online votes. If you want to enjoy all of the

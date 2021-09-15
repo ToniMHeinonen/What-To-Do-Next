@@ -30,7 +30,6 @@ public abstract class GlobalPrefs {
 
     // Popup information box
     private static String keyPopup = "popup_";
-    public static final String BETA_ONLINE = "beta_online12537311";
     public static final String PATCH_NOTES = "patch_notes";
     // Tutorial
     public static final String TUTORIAL_WELCOME = "welcome_tutorial";

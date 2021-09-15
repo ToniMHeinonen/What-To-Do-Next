@@ -82,9 +82,6 @@ public class VoteSetupActivity extends VotingParentActivity implements
             setContentView(R.layout.activity_vote_online);
             // Remove old vote rooms
             DatabaseHandler.removeExpiredVoteRooms();
-            // Show beta info if not yet confirmed
-            if (GlobalPrefs.loadPopupInfo(GlobalPrefs.BETA_ONLINE))
-                new HTMLDialog(this, HTMLDialog.HTMLText.BETA_ONLINE).show();
         } else {
             setContentView(R.layout.activity_vote_local);
         }

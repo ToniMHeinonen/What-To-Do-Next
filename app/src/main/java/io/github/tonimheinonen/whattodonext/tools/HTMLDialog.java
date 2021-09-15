@@ -37,7 +37,6 @@ public class HTMLDialog extends Dialog implements
         TUTORIAL_VOTE_TOP,
         TUTORIAL_LAST_RESULTS,
         TUTORIAL_VOTE_COMPLETE,
-        BETA_ONLINE,
         PATCH_NOTES
     }
 
@@ -146,10 +145,6 @@ public class HTMLDialog extends Dialog implements
             case TUTORIAL_VOTE_COMPLETE:
                 setTutorialText(activity.getString(R.string.vote_complete_tutorial_text));
                 break;
-                // Beta
-            case BETA_ONLINE:
-                setTutorialText(activity.getString(R.string.beta_online));
-                break;
             case PATCH_NOTES:
                 closeButton.setVisibility(View.VISIBLE);
                 setTutorialText(activity.getString(R.string.patch_notes));
@@ -231,9 +226,6 @@ public class HTMLDialog extends Dialog implements
                 break;
             case TUTORIAL_VOTE_COMPLETE:
                 GlobalPrefs.savePopupInfo(GlobalPrefs.TUTORIAL_VOTE_COMPLETE, false);
-                break;
-            case BETA_ONLINE:
-                GlobalPrefs.savePopupInfo(GlobalPrefs.BETA_ONLINE, false);
                 break;
             case PATCH_NOTES:
                 String versionName = BuildConfig.VERSION_NAME;
