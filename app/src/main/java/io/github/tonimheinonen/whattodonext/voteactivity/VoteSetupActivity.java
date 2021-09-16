@@ -544,9 +544,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
         if (host) {
             // Add items to vote room and move to lobby when items are added
             DatabaseHandler.addItemsToVoteRoom(voteRoom, selectedList.getItems(),
-                    () -> startActivity(intent));
+                    () -> startVote(intent));
         } else {
-            startActivity(intent);
+            startVote(intent);
         }
     }
 
@@ -591,10 +591,14 @@ public class VoteSetupActivity extends VotingParentActivity implements
             intent.putExtra(VoteIntents.LIST, selectedList);
             intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
 
-            Buddy.hideOnlineVoteLoadingBar(_this);
-
-            startActivity(intent);
+            startVote(intent);
         });
+    }
 
+    private void startVote(Intent intent) {
+        Buddy.hideOnlineVoteLoadingBar(_this);
+
+        finish();
+        startActivity(intent);
     }
 }

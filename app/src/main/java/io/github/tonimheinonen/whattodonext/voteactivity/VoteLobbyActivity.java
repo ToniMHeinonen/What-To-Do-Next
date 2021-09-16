@@ -47,6 +47,8 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Debug.print(this, "onCreate", "", 1);
+
         super.onCreate(savedInstanceState);
         _this = this;
 
@@ -59,11 +61,9 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
         reconnecting = intent.getBooleanExtra(VoteIntents.RECONNECT, false);
 
-        setContentView(R.layout.activity_vote_lobby);
+        Debug.print(this, "onCreate", "reconnecting: " + reconnecting, 1);
 
-        // Listen for vote room removal if not host
-        if (!onlineProfile.isHost())
-            DatabaseHandler.listenForVoteRoomDeletion(this, voteRoom.getRoomCode());
+        setContentView(R.layout.activity_vote_lobby);
 
         // Set room code
         ((TextView) findViewById(R.id.codeForRoom)).setText(voteRoom.getRoomCode());
@@ -110,15 +110,28 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                for (OnlineProfile pro : users) {
-                    // Check by database id
-                    if (pro.getDbID().equals(dataSnapshot.getKey())) {
-                        users.remove(pro);
-                        break;
-                    }
-                }
+                OnlineProfile removedProfile = dataSnapshot.getValue(OnlineProfile.class);
+                removedProfile.setDbID(dataSnapshot.getKey());
 
-                usersAdapter.notifyDataSetChanged();
+                // If host disconnected, leave the room
+                if (removedProfile.isHost()) {
+                    Debug.print(_this, "createUsersListener", "Host disconnected", 1);
+                    Buddy.showToast(getString(R.string.host_disconnected), Toast.LENGTH_LONG);
+                    removeListeners();
+                    finish();
+                } else {
+                    Debug.print(_this, "createUsersListener", "User left", 1);
+                    // Else remove user from visible list
+                    for (OnlineProfile pro : users) {
+                        // Check by database id
+                        if (pro.getDbID().equals(removedProfile.getDbID())) {
+                            users.remove(pro);
+                            break;
+                        }
+                    }
+
+                    usersAdapter.notifyDataSetChanged();
+                }
             }
 
             // Unused
@@ -129,6 +142,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         };
+
         DatabaseHandler.listenForOnlineProfiles(voteRoom, usersListener);
     }
 
@@ -174,7 +188,8 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.back:
                 DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile);
-                onBackPressed();
+                removeListeners();
+                finish();
                 break;
             case R.id.start:
                 if (onlineProfile.isHost()) {
@@ -216,9 +231,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         // Create temporary list of items so code does not have to be modified so much
         ListOfItems selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, items);
 
-        // Stop listeners
-        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersListener);
-        DatabaseHandler.stopListeningForVoteRoomState(voteRoom, voteRoomListener);
+        removeListeners();
 
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
             Intent intent = new Intent(this, VoteTopActivity.class);
@@ -230,5 +243,10 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
             startActivity(intent);
         });
+    }
+
+    private void removeListeners() {
+        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersListener);
+        DatabaseHandler.stopListeningForVoteRoomState(voteRoom, voteRoomListener);
     }
 }
