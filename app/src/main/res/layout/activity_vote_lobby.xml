@@ -63,11 +63,20 @@
 
         </LinearLayout>
 
+        <!-- WAITING FOR HOST TEXT -->
+        <TextView
+            android:id="@+id/waiting_for_host_lobby"
+            style="@style/startVoteTitles"
+            android:layout_height="0dp"
+            android:layout_weight="0.07"
+            android:textSize="18sp"
+            android:text="@string/waiting_for_host_lobby"/>
+
         <!-- BACK & START -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"
+            android:layout_weight="0.13"
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginTop="10dp"
@@ -76,7 +85,7 @@
             <Button
                 android:id="@+id/back"
                 style="@style/voteButtons"
-                android:text="@string/lists_back"
+                android:text="@string/exit"
                 android:background="@drawable/cancel_button" />
 
             <Button

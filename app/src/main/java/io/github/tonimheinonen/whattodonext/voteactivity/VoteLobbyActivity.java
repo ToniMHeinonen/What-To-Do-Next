@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,8 +69,17 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         // Set room code
         ((TextView) findViewById(R.id.codeForRoom)).setText(voteRoom.getRoomCode());
         // Set onClick listeners for buttons
+        Button startBtn = findViewById(R.id.start);
+
+        // Listen to start button clicks if host
+        if (onlineProfile.isHost()) {
+            startBtn.setOnClickListener(this);
+            findViewById(R.id.waiting_for_host_lobby).setVisibility(View.GONE);
+        } else {
+            // Else hide button and show "waiting for host" text
+            startBtn.setVisibility(View.GONE);
+        }
         findViewById(R.id.back).setOnClickListener(this);
-        findViewById(R.id.start).setOnClickListener(this);
 
         Buddy.showOnlineVoteLoadingBar(this);
         setupLobby();

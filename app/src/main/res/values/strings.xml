@@ -100,6 +100,8 @@
     <string name="lobby_room_code">Room Code</string>
     <string name="lobby_users">Users</string>
     <string name="lobby_start">Start</string>
+    <string name="exit">Exit</string>
+    <string name="waiting_for_host_lobby">Waiting for host to start…</string>
     <string name="host_allowed_start">Only the room host can start the vote!</string>
 
     <!-- VOTE WAITING -->
