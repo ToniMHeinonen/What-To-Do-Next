@@ -76,6 +76,7 @@
                 android:layout_marginRight="50dp"
                 android:layout_marginLeft="50dp"
                 android:hint="@string/online_room_code"
+                android:singleLine="true"
                 android:textSize="25sp"
                 android:maxLength="@integer/room_code_length"/>
 
@@ -88,6 +89,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="50dp"
                 android:layout_marginLeft="50dp"
+                android:singleLine="true"
                 android:hint="@string/online_nickname"
                 android:textSize="25sp"
                 android:maxLength="@integer/profile_name_max_length"/>
