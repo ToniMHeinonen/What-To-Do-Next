@@ -8,8 +8,8 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_gravity="center"
         android:src="@drawable/header"/>
 
@@ -29,25 +29,61 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <Button
+            <!-- VOTE -->
+            <LinearLayout
                 android:id="@+id/voteButton"
-                style="@style/menuButtons"
-                android:text="@string/menu_vote" />
+                style="@style/iconButtonLayout" >
 
-            <Button
+                <TextView
+                    style="@style/iconButtonText"
+                    android:text="@string/menu_vote" />
+
+                <ImageView
+                    style="@style/iconButtonImage"
+                    android:src="@drawable/ic_btn_vote_24" />
+            </LinearLayout>
+
+            <!-- LISTS -->
+            <LinearLayout
                 android:id="@+id/listButton"
-                style="@style/menuButtons"
-                android:text="@string/menu_lists" />
+                style="@style/iconButtonLayout" >
 
-            <Button
-                android:id="@+id/settingsButton"
-                style="@style/menuButtons"
-                android:text="@string/menu_settings" />
+                <TextView
+                    style="@style/iconButtonText"
+                    android:text="@string/menu_lists" />
 
-            <Button
+                <ImageView
+                    style="@style/iconButtonImage"
+                    android:src="@drawable/ic_btn_lists_24" />
+            </LinearLayout>
+
+            <!-- RESULTS -->
+            <LinearLayout
                 android:id="@+id/resultsButton"
-                style="@style/menuButtons"
-                android:text="@string/menu_results" />
+                style="@style/iconButtonLayout" >
+
+                <TextView
+                    style="@style/iconButtonText"
+                    android:text="@string/menu_results" />
+
+                <ImageView
+                    style="@style/iconButtonImage"
+                    android:src="@drawable/ic_btn_results_24" />
+            </LinearLayout>
+
+            <!-- SETTINGS -->
+            <LinearLayout
+                android:id="@+id/settingsButton"
+                style="@style/iconButtonLayout" >
+
+                <TextView
+                    style="@style/iconButtonText"
+                    android:text="@string/menu_settings" />
+
+                <ImageView
+                    style="@style/iconButtonImage"
+                    android:src="@drawable/ic_btn_settings_24" />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
