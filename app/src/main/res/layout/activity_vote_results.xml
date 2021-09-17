@@ -42,12 +42,12 @@
         </LinearLayout>
 
         <TextView
-            style="@style/voteTopic"
+            style="@style/voteTitles"
             android:text="@string/results"/>
 
         <TextView
             android:id="@+id/resultsInfoText"
-            style="@style/voteInfo"
+            style="@style/voteNotes"
             android:text="@string/results_info"
             android:visibility="gone"/>
 

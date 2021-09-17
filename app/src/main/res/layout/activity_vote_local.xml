@@ -31,7 +31,7 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/startVoteTitles"
+                style="@style/voteTitles"
                 android:text="@string/select_list"/>
 
             <Spinner
@@ -51,7 +51,7 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/startVoteTitles"
+                style="@style/voteTitles"
                 android:text="@string/select_voters"/>
 
             <LinearLayout
