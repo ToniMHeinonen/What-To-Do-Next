@@ -36,12 +36,7 @@
 
             <TextView
                 android:id="@+id/noLists"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textSize="18sp"
+                style="@style/voteNotes"
                 android:text="@string/online_no_lists"
                 android:visibility="gone"/>
 
@@ -100,14 +95,14 @@
         <TextView
             style="@style/voteNotes"
             android:layout_height="0dp"
-            android:layout_weight="0.15"
+            android:layout_weight="0.1"
             android:text="@string/start_vote_expiration_note"/>
 
         <!-- HOST & JOIN -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.1"
+            android:layout_weight="0.15"
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginTop="10dp"

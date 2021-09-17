@@ -5,23 +5,21 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.widget.ListView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
-import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
-import io.github.tonimheinonen.whattodonext.database.OnlineVotedItem;
-import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
@@ -48,6 +46,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
     // Firebase listeners
     private ValueEventListener usersStateListener;
+    private ChildEventListener usersAddAndRemoveListener;
 
     // Used so moving does not get called multiple times
     private boolean movingToResults = false;
@@ -75,8 +74,11 @@ public class VoteWaitingActivity extends VotingParentActivity {
         // Setup list before adding and retrieving users
         setupUsersList();
 
-        // Get all users and listen for changes
-        createUsersListener();
+        // Retrieve all users and listen for user removal
+        createUsersAddAndRemoveListener();
+
+        // Listens for user state changes
+        createUsersStateListener();
     }
 
     private void setupUsersList() {
@@ -88,29 +90,67 @@ public class VoteWaitingActivity extends VotingParentActivity {
         listView.setAdapter(usersAdapter);
     }
 
-    private void createUsersListener() {
+    private void createUsersAddAndRemoveListener() {
+        usersAddAndRemoveListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Buddy.hideOnlineVoteLoadingBar(_this);
+                OnlineProfile loadedProfile = dataSnapshot.getValue(OnlineProfile.class);
+                loadedProfile.setDbID(dataSnapshot.getKey());
+
+                Debug.print(_this, "createUsersListener", "Added: " + onlineProfile, 1);
+
+                users.add(loadedProfile);
+
+                // Add user to notReadyUsers if it is not ready
+                if (!checkIfProfileReady(loadedProfile))
+                    notReadyUsers.add(loadedProfile);
+
+                usersAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                OnlineProfile removedProfile = dataSnapshot.getValue(OnlineProfile.class);
+                removedProfile.setDbID(dataSnapshot.getKey());
+
+                Debug.print(_this, "createUsersListener", "Removed: " + onlineProfile, 1);
+
+                users.remove(removedProfile);
+
+                // Remove profile from not ready users and check if everyone is ready
+                if (notReadyUsers.contains(removedProfile)) {
+                    Debug.print(_this, "createUsersListener", "Removed from not ready list", 1);
+                    notReadyUsers.remove(removedProfile);
+                }
+
+                checkIfEveryoneReady();
+
+                usersAdapter.notifyDataSetChanged();
+            }
+
+            // Unused
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        };
+
+        DatabaseHandler.listenForOnlineProfiles(voteRoom, usersAddAndRemoveListener);
+    }
+
+    private void createUsersStateListener() {
         // Create listener for users who connect to the room
         usersStateListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Debug.print(_this, "createUsersListener", "onDataChange", 1);
 
-                // Check if this is the first time that users are retrieved
-                boolean firstTime = users.isEmpty();
-
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     OnlineProfile loadedProfile = dataSnapshot.getValue(OnlineProfile.class);
                     loadedProfile.setDbID(dataSnapshot.getKey());
-
-                    if (firstTime) {
-                        Debug.print(_this, "createUsersListener", "First time", 1);
-                        Buddy.hideOnlineVoteLoadingBar(_this);
-                        users.add(loadedProfile);
-
-                        // Add user to notReadyUsers if it is not ready
-                        if (!checkIfProfileReady(loadedProfile))
-                            notReadyUsers.add(loadedProfile);
-                    }
 
                     // Remove from notReadyUsers if profile still there and it is now ready
                     if (notReadyUsers.contains(loadedProfile)) {
@@ -125,8 +165,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
                 usersAdapter.notifyDataSetChanged();
 
                 // Move to next activity if everyone is ready
-                if (notReadyUsers.isEmpty())
-                    moveToNextActivity();
+                checkIfEveryoneReady();
             }
 
             @Override
@@ -156,6 +195,11 @@ public class VoteWaitingActivity extends VotingParentActivity {
         return false;
     }
 
+    private void checkIfEveryoneReady() {
+        if (notReadyUsers.isEmpty())
+            moveToNextActivity();
+    }
+
     private void moveToNextActivity() {
         if (movingToResults)
             return;
@@ -166,6 +210,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
         // Remove listener
         DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersStateListener);
+        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersAddAndRemoveListener);
 
         // Change state and move to next activity
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
