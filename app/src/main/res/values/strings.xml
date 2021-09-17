@@ -76,6 +76,9 @@
     <string name="online_room_code">Room Code</string>
     <string name="online_host">Host</string>
     <string name="online_join">Join</string>
+    <string name="start_vote_expiration_note">Note: Vote rooms are automatically removed after 4
+        hours</string>
+
     <string name="online_no_lists">You have not made any lists, you need at least 1 list for
         voting!</string>
     <string name="online_toast_not_enough_activities">Unable to host, selected list does not have
@@ -103,6 +106,7 @@
     <string name="exit">Exit</string>
     <string name="waiting_for_host_lobby">Waiting for host to start…</string>
     <string name="host_allowed_start">Only the room host can start the vote!</string>
+    <string name="vote_room_expired">Vote room has expired, exiting the vote…</string>
 
     <!-- VOTE WAITING -->
     <string name="waiting_for_host">Waiting for host to start voting...</string>

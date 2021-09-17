@@ -68,8 +68,10 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
         // Set room code
         ((TextView) findViewById(R.id.codeForRoom)).setText(voteRoom.getRoomCode());
+
         // Set onClick listeners for buttons
         Button startBtn = findViewById(R.id.start);
+        findViewById(R.id.back).setOnClickListener(this);
 
         // Listen to start button clicks if host
         if (onlineProfile.isHost()) {
@@ -79,7 +81,9 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
             // Else hide button and show "waiting for host" text
             startBtn.setVisibility(View.GONE);
         }
-        findViewById(R.id.back).setOnClickListener(this);
+
+        // Start listening for vote room expiration
+        DatabaseHandler.listenForVoteRoomExpiration(this, voteRoom.getRoomCode());
 
         Buddy.showOnlineVoteLoadingBar(this);
         setupLobby();

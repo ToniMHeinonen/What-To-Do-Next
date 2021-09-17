@@ -63,7 +63,11 @@ public abstract class DatabaseHandler {
     private final static String DEFAULT_VOTE_SETTINGS = "default";
 
     private static int MAX_SAVED_RESULTS = 7;
+    // Note: If you alter this, remember to change R.string.start_vote_expiration_note
     private static int VOTEROOM_EXPIRE_TIME = 4; // Hours
+
+    // Used to listen for vote room removal if host disconnects from the vote room
+    public static ChildEventListener voteRoomRemovalListener;
 
     /**
      * Initializes necessary user database values.
@@ -849,6 +853,46 @@ public abstract class DatabaseHandler {
             }
         });
     }
+
+    /**
+     * Listens for the vote room removal.
+     *
+     * If host disconnects before the last results, the vote room will be removed. If that
+     * happens, move to MainActivity and show a toast message.
+     * @param activity current activity
+     * @param roomCode code for the vote room to listen for
+     */
+    public static void listenForVoteRoomExpiration(Activity activity, String roomCode) {
+        voteRoomRemovalListener = new ChildEventListener() {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                VoteRoom room = dataSnapshot.getValue(VoteRoom.class);
+
+                if (room.getRoomCode().equals(roomCode)) {
+                    activity.startActivity(new Intent(activity, MainActivity.class));
+                    Buddy.showToast(activity.getString(R.string.vote_room_expired), Toast.LENGTH_LONG);
+                    stopListeningForVoteRoomExpiration();
+                }
+            }
+
+            // Unused
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        dbVoteRooms.addChildEventListener(voteRoomRemovalListener);
+    }
+
+    private static void stopListeningForVoteRoomExpiration() {
+        dbVoteRooms.removeEventListener(voteRoomRemovalListener);
+        voteRoomRemovalListener = null;
+    }
     //endregion
 
     //region VoteRoomSettings
@@ -1133,6 +1177,9 @@ public abstract class DatabaseHandler {
      * @param profile profile to remove
      */
     public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
+        // Stop listening for vote room expiration
+        stopListeningForVoteRoomExpiration();
+
         // If host disconnects when vote room was in lobby, remove the vote room
         if (profile.isHost() && voteRoom.getState() == VoteRoom.LOBBY) {
             removeVoteRoom(voteRoom);
