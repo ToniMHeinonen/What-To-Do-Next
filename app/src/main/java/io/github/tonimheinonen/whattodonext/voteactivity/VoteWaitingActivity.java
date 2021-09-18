@@ -3,6 +3,7 @@ package io.github.tonimheinonen.whattodonext.voteactivity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -18,7 +19,6 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
-import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
@@ -32,10 +32,9 @@ import io.github.tonimheinonen.whattodonext.tools.Debug;
  * @version 1.3
  * @since 1.3
  */
-public class VoteWaitingActivity extends VotingParentActivity {
+public class VoteWaitingActivity extends VotingParentActivity implements View.OnClickListener {
 
     private VoteWaitingActivity _this;
-    private ListOfItems selectedList;
     private VoteRoom voteRoom;
     private VoteSettings voteSettings;
     private OnlineProfile onlineProfile;
@@ -61,10 +60,12 @@ public class VoteWaitingActivity extends VotingParentActivity {
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         Intent intent = getIntent();
-        selectedList = intent.getParcelableExtra(VoteIntents.LIST);
         voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
         voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
         onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
+
+        // Listen for back button
+        findViewById(R.id.exit).setOnClickListener(this);
 
         Buddy.showOnlineVoteLoadingBar(this);
         setupLobby();
@@ -195,6 +196,21 @@ public class VoteWaitingActivity extends VotingParentActivity {
         return false;
     }
 
+    /**
+     * Listens for clicks of views.
+     * @param v view
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.exit:
+                onBackPressed();
+                break;
+            default:
+                break;
+        }
+    }
+
     private void checkIfEveryoneReady() {
         if (notReadyUsers.isEmpty())
             moveToNextActivity();
@@ -208,9 +224,7 @@ public class VoteWaitingActivity extends VotingParentActivity {
 
         movingToResults = true;
 
-        // Remove listener
-        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersStateListener);
-        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersAddAndRemoveListener);
+        removeListeners();
 
         // Change state and move to next activity
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
@@ -219,7 +233,6 @@ public class VoteWaitingActivity extends VotingParentActivity {
             intent.putExtra(VoteIntents.ROOM, voteRoom);
             intent.putExtra(VoteIntents.SETTINGS, voteSettings);
             intent.putExtra(VoteIntents.IS_ONLINE, true);
-            intent.putExtra(VoteIntents.LIST, selectedList);
 
             Buddy.hideOnlineVoteLoadingBar(_this);
 
@@ -227,11 +240,20 @@ public class VoteWaitingActivity extends VotingParentActivity {
         });
     }
 
+    private void removeListeners() {
+        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersStateListener);
+        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersAddAndRemoveListener);
+    }
+
     /**
      * Override what happens when pressing back during voting.
      */
     @Override
     public void onBackPressed() {
-        Buddy.exitVoting(this, () -> DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile));
+        Buddy.exitVoting(this, () -> {
+            DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile);
+            removeListeners();
+            finish();
+        });
     }
 }
