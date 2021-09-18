@@ -579,20 +579,14 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         Debug.print(this, "reconnectToVoteRoom", "intent: " + intent, 1);
 
-        DatabaseHandler.getVoteRoomItems(voteRoom, (items) -> {
-            // Create temporary list of items so code does not have to be modified so much
-            ListOfItems selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, items);
+        intent.putExtra(VoteIntents.RECONNECT, true);
+        intent.putExtra(VoteIntents.IS_ONLINE, true);
+        intent.putExtra(VoteIntents.ROOM, voteRoom);
+        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
+        intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
 
-            intent.putExtra(VoteIntents.RECONNECT, true);
-            intent.putExtra(VoteIntents.IS_ONLINE, true);
-            intent.putExtra(VoteIntents.ROOM, voteRoom);
-            intent.putExtra(VoteIntents.SETTINGS, voteSettings);
-            intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-            intent.putExtra(VoteIntents.LIST, selectedList);
-            intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
-
-            startVote(intent);
-        });
+        startVote(intent);
     }
 
     private void startVote(Intent intent) {

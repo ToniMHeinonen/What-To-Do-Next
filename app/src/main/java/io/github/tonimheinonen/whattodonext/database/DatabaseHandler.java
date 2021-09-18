@@ -1067,6 +1067,80 @@ public abstract class DatabaseHandler {
     }
 
     /**
+     * Selects the correct items for last vote.
+     * @param voteRoom vote room to set the items
+     * @param items items which should be in last vote
+     */
+    public static void setVoteRoomLastVoteItems(VoteRoom voteRoom, ArrayList<ListItem> items) {
+        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_ITEMS);
+
+        dbOnlineItems.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, Object> childUpdate = new HashMap<>();
+
+                for(ListItem item : items)
+                    Debug.print("DatabaseHandler", "setVoteRoomLastVoteItems", "Items: " + item, 1);
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    ListItem item = dataSnapshot.getValue(ListItem.class);
+                    item.setDbID(dataSnapshot.getKey());
+
+                    Debug.print("DatabaseHandler", "setVoteRoomLastVoteItems", "Checking item: " + item, 1);
+
+                    if (items.contains(item)) {
+                        Debug.print("DatabaseHandler", "setVoteRoomLastVoteItems", "Items contains the item", 1);
+                        ListItem selectedItem = items.get(items.indexOf(item));
+                        Map<String, Object> values = selectedItem.toMap();
+                        childUpdate.put(item.getDbID(), values);
+                    }
+                }
+
+                // Set last vote boolean to all objects with same call
+                dbOnlineItems.updateChildren(childUpdate);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    /*
+    public static void removeVotedItemsFromProfile(VoteRoom voteRoom, OnlineProfile onlineProfile,
+                                                   DatabaseAddListener listener) {
+        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS_FIRST);
+        // TODO: Save names to somewhere, so it can be retrieved even if user leaves after first results and someone loads first results activity after that
+
+        dbOnlineItems.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getVoteRoomVotedItems",
+                        "items: " + snapshot.getChildrenCount(), 1);
+
+                ArrayList<OnlineVotedItem> items = new ArrayList<>();
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    OnlineVotedItem item = dataSnapshot.getValue(OnlineVotedItem.class);
+                    items.add(item);
+                }
+
+                listener.onDataGetVoteRoomVotedItems(items);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+     */
+
+    /**
      * Retrieves correct state for vote items.
      * @param onlineProfile current online profile
      * @return correct path for vote items

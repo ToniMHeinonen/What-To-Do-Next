@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,7 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
     private int bonus;
     private int peril;
     private boolean fallen;
+    private boolean inOnlineLastVote;
 
     @Exclude
     private String dbID;
@@ -182,6 +184,21 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
         this.dbID = dbID;
     }
 
+    public boolean isInOnlineLastVote() {
+        return inOnlineLastVote;
+    }
+
+    public void setInOnlineLastVote(boolean inOnlineLastVote) {
+        this.inOnlineLastVote = inOnlineLastVote;
+    }
+
+    public static void filterOutOnlineLastVote(ArrayList<ListItem> items) {
+        for (int i = items.size() - 1; i >= 0; i--) {
+            if (!items.get(i).isInOnlineLastVote())
+                items.remove(i);
+        }
+    }
+
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -194,6 +211,7 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
         result.put("bonus", bonus);
         result.put("peril", peril);
         result.put("fallen", fallen);
+        result.put("inOnlineLastVote", inOnlineLastVote);
 
         return result;
     }
@@ -210,8 +228,18 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
         return false;
     }
 
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof ListItem) {
+            return dbID.equals(((ListItem) object).getDbID());
+        }
+
+        return false;
+    }
+
     /**
      * Prints this instead of pointer.
+     *
      * @return string to print
      */
     @Override
@@ -221,8 +249,13 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
                 ", name='" + name + '\'' +
                 ", bonus=" + bonus +
                 ", peril=" + peril +
+                ", fallen=" + fallen +
+                ", inOnlineLastVote=" + inOnlineLastVote +
                 ", dbID='" + dbID + '\'' +
                 ", total=" + total +
+                ", votePoints=" + votePoints +
+                ", voterAmount=" + voterAmount +
+                ", selected=" + selected +
                 '}';
     }
 

@@ -73,7 +73,6 @@ public class VoteResultsActivity extends VotingParentActivity {
 
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
-        selectedList = intent.getParcelableExtra(VoteIntents.LIST);
 
         voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
 
@@ -89,6 +88,7 @@ public class VoteResultsActivity extends VotingParentActivity {
         } else {
             topAmount = intent.getIntExtra(VoteIntents.TOP_AMOUNT, -1);
             selectedProfiles = intent.getParcelableArrayListExtra(VoteIntents.PROFILES);
+            selectedList = intent.getParcelableExtra(VoteIntents.LIST);
         }
 
         isOfflineOrIsOnlineHost = !isOnline || onlineProfile.isHost();
@@ -110,17 +110,23 @@ public class VoteResultsActivity extends VotingParentActivity {
         // Generate some values when voting online
         if (isOnline) {
             DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
-                DatabaseHandler.getVoteRoomVotedItems(voteRoom, onlineProfile, (votedItems) -> {
-                    try {
-                        // Create temporary SelectedProfiles so code does not have to be modified so much
-                        selectedProfiles = Profile.generateProfilesFromOnlineProfile(
-                                onlineProfiles, selectedList.getItems(), votedItems, onlineProfile, voteSettings);
+                DatabaseHandler.getVoteRoomItems(voteRoom, (items -> {
+                    // Generate list from correct items
+                    selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, onlineProfile, items);
 
-                        startSetup(savedInstanceState);
-                    } catch (Exception e) {
-                        Debug.error("VoteResultsActivity", "getVoteRoomVotedItems", e, 1);
-                    }
-                });
+                    // Get vote room items
+                    DatabaseHandler.getVoteRoomVotedItems(voteRoom, onlineProfile, (votedItems) -> {
+                        try {
+                            // Create temporary SelectedProfiles so code does not have to be modified so much
+                            selectedProfiles = Profile.generateProfilesFromOnlineProfile(
+                                    onlineProfiles, selectedList.getItems(), votedItems, onlineProfile, voteSettings);
+
+                            startSetup(savedInstanceState);
+                        } catch (Exception e) {
+                            Debug.error("VoteResultsActivity", "getVoteRoomVotedItems", e, 1);
+                        }
+                    });
+                }));
             }));
         } else {
             startSetup(savedInstanceState);
@@ -235,6 +241,11 @@ public class VoteResultsActivity extends VotingParentActivity {
                 }
             }
 
+            // Set is in online vote to true in online vote room
+            for (ListItem item : selectedItems)
+                item.setInOnlineLastVote(true);
+
+            DatabaseHandler.setVoteRoomLastVoteItems(voteRoom, selectedItems);
             selectedList.setItems(selectedItems);
         }
     }
@@ -357,7 +368,6 @@ public class VoteResultsActivity extends VotingParentActivity {
             intent.putExtra(VoteIntents.SETTINGS, voteSettings);
             intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
             intent.putExtra(VoteIntents.TOP_AMOUNT, listVoteSizeLast);
-            intent.putExtra(VoteIntents.LIST, selectedList);
             intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
             startActivity(intent);
         });

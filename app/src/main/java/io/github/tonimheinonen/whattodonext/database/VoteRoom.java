@@ -27,13 +27,13 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     private int versionCode;
 
     public static final int
-            LOBBY = 0,
-            VOTING_FIRST = 1,
-            WAITING_FIRST = 2,
-            RESULTS_FIRST = 3,
-            VOTING_LAST = 4,
-            WAITING_LAST = 5,
-            RESULTS_LAST = 6;
+        LOBBY = 0,
+        VOTING_FIRST = 1,
+        WAITING_FIRST = 2,
+        RESULTS_FIRST = 3,
+        VOTING_LAST = 4,
+        WAITING_LAST = 5,
+        RESULTS_LAST = 6;
 
     @Exclude
     private String dbID;

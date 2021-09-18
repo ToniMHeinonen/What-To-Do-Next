@@ -242,9 +242,6 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
      * @param items voting items
      */
     private void moveToNextActivity(ArrayList<ListItem> items) {
-        // Create temporary list of items so code does not have to be modified so much
-        ListOfItems selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, items);
-
         removeListeners();
 
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
@@ -253,7 +250,6 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
             intent.putExtra(VoteIntents.ROOM, voteRoom);
             intent.putExtra(VoteIntents.SETTINGS, voteSettings);
             intent.putExtra(VoteIntents.IS_ONLINE, true);
-            intent.putExtra(VoteIntents.LIST, selectedList);
 
             startActivity(intent);
         });

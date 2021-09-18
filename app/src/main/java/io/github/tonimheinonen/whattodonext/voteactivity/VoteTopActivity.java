@@ -23,6 +23,7 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
+import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
@@ -76,21 +77,19 @@ public class VoteTopActivity extends VotingParentActivity {
 
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
-        selectedList = intent.getParcelableExtra(VoteIntents.LIST);
         voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
 
         if (isOnline) {
             onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
             voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
 
-            // Get correct vote amount
-            if (onlineProfile.getState() == VoteRoom.VOTING_FIRST)
-                topAmount = voteSettings.getFirstVote();
-            else
-                topAmount = voteSettings.getLastVote();
+            topAmount = onlineProfile.getState() == VoteRoom.VOTING_FIRST ?
+                    voteSettings.getFirstVote() : voteSettings.getLastVote();
+
         } else {
             topAmount = intent.getIntExtra(VoteIntents.TOP_AMOUNT, -1);
             selectedProfiles = intent.getParcelableArrayListExtra(VoteIntents.PROFILES);
+            selectedList = intent.getParcelableExtra(VoteIntents.LIST);
         }
 
         setOptions();
@@ -99,6 +98,20 @@ public class VoteTopActivity extends VotingParentActivity {
         infoView = findViewById(R.id.voteInfoText);
         nextButton = findViewById(R.id.nextButton);
 
+        // Retrieve correct items when online
+        if (isOnline) {
+            DatabaseHandler.getVoteRoomItems(voteRoom, (items -> {
+                // Generate list from correct items
+                selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, onlineProfile, items);
+
+                startSetup();
+            }));
+        } else {
+            startSetup();
+        }
+    }
+
+    private void startSetup() {
         // If it's the last vote and halve is selected, halve the total bonus points on item
         if (topAmount == listVoteSizeLast && halveExtra) {
             for (ListItem item : selectedList.getItems()) {
@@ -285,7 +298,6 @@ public class VoteTopActivity extends VotingParentActivity {
                 intent.putExtra(VoteIntents.ROOM, voteRoom);
                 intent.putExtra(VoteIntents.SETTINGS, voteSettings);
                 intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-                intent.putExtra(VoteIntents.LIST, selectedList);
                 startActivity(intent);
             });
         });

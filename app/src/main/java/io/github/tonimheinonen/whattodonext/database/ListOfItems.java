@@ -122,9 +122,22 @@ public class ListOfItems implements DatabaseValue, Parcelable {
         return result;
     }
 
-    public static ListOfItems generateOnlineListOfItems(VoteRoom voteRoom, ArrayList<ListItem> items) {
+    /**
+     * Generates list with correct list items in online vote.
+     * @param voteRoom connected vote room
+     * @param onlineProfile user's online profile
+     * @param items items which belong to the list
+     * @return generated list of items
+     */
+    public static ListOfItems generateOnlineListOfItems(VoteRoom voteRoom, OnlineProfile onlineProfile, ArrayList<ListItem> items) {
         ListOfItems list = new ListOfItems(voteRoom.getListName());
         list.setDbID(items.get(0).getListID());
+
+        // If at least on last vote, filter items which did not make it to last vote
+        if (onlineProfile.getState() >= VoteRoom.VOTING_LAST) {
+            ListItem.filterOutOnlineLastVote(items);
+        }
+
         list.setItems(items);
         return list;
     }
