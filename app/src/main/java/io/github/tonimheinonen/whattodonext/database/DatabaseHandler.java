@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -109,7 +110,10 @@ public abstract class DatabaseHandler {
     }
 
     public static String getUserDbID() {
-        return user.getUid();
+        if (Buddy.isRegistered)
+            return user.getUid();
+
+        return FirebaseInstanceId.getInstance().getId();
     }
 
     //region Interfaces
