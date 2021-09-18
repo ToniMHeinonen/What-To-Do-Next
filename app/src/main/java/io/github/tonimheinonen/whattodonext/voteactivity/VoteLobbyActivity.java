@@ -82,9 +82,6 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
             startBtn.setVisibility(View.GONE);
         }
 
-        // Start listening for vote room expiration
-        DatabaseHandler.listenForVoteRoomExpiration(this, voteRoom.getRoomCode());
-
         Buddy.showOnlineVoteLoadingBar(this);
         setupLobby();
     }
