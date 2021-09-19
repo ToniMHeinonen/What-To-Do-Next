@@ -1147,6 +1147,7 @@ public abstract class DatabaseHandler {
         profile.setDbID(key);
 
         Map<String, Object> values = profile.toMap();
+        values.put(ONLINE_TIMESTAMP, ServerValue.TIMESTAMP);
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(key, values);
@@ -1164,7 +1165,8 @@ public abstract class DatabaseHandler {
      */
     public static void listenForOnlineProfiles(VoteRoom voteRoom, ChildEventListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-        dbProfiles.addChildEventListener(listener);
+        Query orderedRef = dbProfiles.orderByChild(ONLINE_TIMESTAMP);
+        orderedRef.addChildEventListener(listener);
     }
 
     /**
@@ -1184,7 +1186,8 @@ public abstract class DatabaseHandler {
      */
     public static void listenForOnlineProfiles(VoteRoom voteRoom, ValueEventListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-        dbProfiles.addValueEventListener(listener);
+        Query orderedRef = dbProfiles.orderByChild(ONLINE_TIMESTAMP);
+        orderedRef.addValueEventListener(listener);
     }
 
     /**
@@ -1204,10 +1207,11 @@ public abstract class DatabaseHandler {
      */
     public static void getOnlineProfiles(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-        executeGetOnlineProfiles(dbProfiles, listener);
+        Query orderedRef = dbProfiles.orderByChild(ONLINE_TIMESTAMP);
+        executeGetOnlineProfiles(orderedRef, listener);
     }
 
-    private static void executeGetOnlineProfiles(DatabaseReference ref, VoteRoomGetOnlineProfilesListener listener) {
+    private static void executeGetOnlineProfiles(Query ref, VoteRoomGetOnlineProfilesListener listener) {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
