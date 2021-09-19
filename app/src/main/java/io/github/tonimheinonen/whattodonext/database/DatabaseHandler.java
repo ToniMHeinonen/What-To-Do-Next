@@ -64,12 +64,15 @@ public abstract class DatabaseHandler {
 
     private final static String DEFAULT_VOTE_SETTINGS = "default";
 
-    private static int MAX_SAVED_RESULTS = 7;
+    private static final int MAX_SAVED_RESULTS = 7;
     // Note: If you alter this, remember to change R.string.start_vote_expiration_note
-    private static int VOTEROOM_EXPIRE_TIME = 4; // Hours
+    private static final int VOTE_ROOM_EXPIRE_TIME = 4; // Hours
 
-    // Used to listen for vote room removal if host disconnects from the vote room
+    // listen for vote room removal if host disconnects from the vote room
     public static ChildEventListener voteRoomRemovalListener;
+    // Listen for if user leaves the room
+    public static DatabaseReference userLeftRoomRef;
+    public static ChildEventListener userLeftRoomListener;
 
     /**
      * Initializes necessary user database values.
@@ -781,7 +784,7 @@ public abstract class DatabaseHandler {
      * Removes all vote room which have surpassed the maximum time limit from creation.
      */
     public static void removeExpiredVoteRooms() {
-        long cutoff = new Date().getTime() - TimeUnit.MILLISECONDS.convert(VOTEROOM_EXPIRE_TIME, TimeUnit.HOURS);
+        long cutoff = new Date().getTime() - TimeUnit.MILLISECONDS.convert(VOTE_ROOM_EXPIRE_TIME, TimeUnit.HOURS);
         Query oldVoteRooms = dbVoteRooms.orderByChild(ONLINE_TIMESTAMP).endAt(cutoff);
         oldVoteRooms.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -877,6 +880,7 @@ public abstract class DatabaseHandler {
                     activity.startActivity(new Intent(activity, MainActivity.class));
                     Buddy.showToast(activity.getString(R.string.vote_room_expired), Toast.LENGTH_LONG);
                     stopListeningForVoteRoomExpiration();
+                    stopListeningForUserLeavingRoom();
                 }
             }
 
@@ -1234,8 +1238,9 @@ public abstract class DatabaseHandler {
      * @param profile profile to remove
      */
     public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
-        // Stop listening for vote room expiration
+        // Stop listening for vote room expiration and user leaving the room
         stopListeningForVoteRoomExpiration();
+        stopListeningForUserLeavingRoom();
 
         // If host disconnects when vote room was in lobby, remove the vote room
         if (profile.isHost() && voteRoom.getState() == VoteRoom.LOBBY) {
@@ -1332,6 +1337,43 @@ public abstract class DatabaseHandler {
     public static void getDisconnectedOnlineProfiles(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_DISCONNECTED_PROFILES);
         executeGetOnlineProfiles(dbProfiles, listener);
+    }
+
+    /**
+     * Listens for if user leaves the room before vote is finished.
+     * @param activity calling activity
+     * @param voteRoom vote room to listen to
+     */
+    public static void listenForUserLeavingRoom(Activity activity, VoteRoom voteRoom) {
+        userLeftRoomListener = new ChildEventListener() {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                OnlineProfile onlineProfile = dataSnapshot.getValue(OnlineProfile.class);
+
+                // If user was not in lobby and not in last room, inform that he left during vote
+                if (onlineProfile.getState() != VoteRoom.LOBBY &&
+                    onlineProfile.getState() != VoteRoom.RESULTS_LAST)
+                    Buddy.showToast(activity.getString(R.string.profile_left_room, onlineProfile.getNickName()), Toast.LENGTH_LONG);
+            }
+
+            // Unused
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {}
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {}
+        };
+
+        userLeftRoomRef = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        userLeftRoomRef.addChildEventListener(userLeftRoomListener);
+    }
+
+    private static void stopListeningForUserLeavingRoom() {
+        userLeftRoomRef.removeEventListener(userLeftRoomListener);
+        userLeftRoomListener = null;
     }
     //endregion
 

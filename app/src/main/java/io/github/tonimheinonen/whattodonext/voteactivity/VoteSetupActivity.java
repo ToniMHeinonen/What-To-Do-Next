@@ -594,6 +594,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         // Start listening for vote room expiration
         DatabaseHandler.listenForVoteRoomExpiration(this, voteRoom.getRoomCode());
+        DatabaseHandler.listenForUserLeavingRoom(this, voteRoom);
 
         finish();
         startActivity(intent);

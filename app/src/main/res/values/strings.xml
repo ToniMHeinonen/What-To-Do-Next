@@ -109,10 +109,11 @@
     <string name="vote_room_expired">Vote room has expired, exiting the vote…</string>
 
     <!-- VOTE WAITING -->
-    <string name="waiting_for_host">Waiting for host to start voting...</string>
-    <string name="waiting_for_users">Waiting for all users to load results...</string>
+    <string name="waiting_for_host">Waiting for host to start voting…</string>
+    <string name="waiting_for_users">Waiting for all users to load results…</string>
     <string name="voting_success">Voting successful</string>
     <string name="waiting_for">Waiting for users</string>
+    <string name="profile_left_room">User \'%1$s\' left the room</string>
 
     <!-- VOTING -->
     <string name="alert_exit_title">Exit</string>
