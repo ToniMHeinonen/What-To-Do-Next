@@ -14,13 +14,13 @@
         android:theme="@style/AppTheme">
         <activity android:name=".PreLoginActivity"/>
         <activity android:name=".voteactivity.VotingParentActivity" />
-        <activity android:name=".voteactivity.VoteWaitingActivity" />
+        <activity android:name=".voteactivity.VoteWaitingActivity" android:noHistory="true" />
         <activity android:name=".StartVoteActivity" />
-        <activity android:name=".voteactivity.VoteLobbyActivity" />
+        <activity android:name=".voteactivity.VoteLobbyActivity" android:noHistory="true" />
         <activity android:name=".ResultsActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".voteactivity.VoteResultsActivity" />
-        <activity android:name=".voteactivity.VoteTopActivity" />
+        <activity android:name=".voteactivity.VoteResultsActivity" android:noHistory="true" />
+        <activity android:name=".voteactivity.VoteTopActivity" android:noHistory="true" />
         <activity android:name=".registration.ForgotPasswordActivity" />
         <activity android:name=".registration.LoginActivity" />
         <activity android:name=".registration.SignupActivity" />
