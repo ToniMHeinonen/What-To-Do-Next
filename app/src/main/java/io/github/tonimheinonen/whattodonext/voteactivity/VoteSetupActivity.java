@@ -468,7 +468,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
                 DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
                     // Loop through all profiles and check user id
                     for (OnlineProfile pro : onlineProfiles) {
-                        if (pro.getUserDbID().equals(DatabaseHandler.getUserDbID())) {
+                        if (pro.getDbID().equals(DatabaseHandler.getUserDbID())) {
                             onlineProfile = pro;
                             break;
                         }

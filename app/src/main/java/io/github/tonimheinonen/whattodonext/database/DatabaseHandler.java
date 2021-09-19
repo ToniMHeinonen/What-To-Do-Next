@@ -54,6 +54,7 @@ public abstract class DatabaseHandler {
     // Online voting
     private static DatabaseReference dbVoteRooms;
     private static final String ONLINE_PROFILES = "profiles";
+    private static final String ONLINE_DISCONNECTED_PROFILES = "disconnected_profiles";
     private static final String ONLINE_ITEMS = "items";
     private static final String ONLINE_VOTED_ITEMS_FIRST = "voted_items_first";
     private static final String ONLINE_VOTED_ITEMS_LAST = "voted_items_last";
@@ -1112,38 +1113,6 @@ public abstract class DatabaseHandler {
         });
     }
 
-    /*
-    public static void removeVotedItemsFromProfile(VoteRoom voteRoom, OnlineProfile onlineProfile,
-                                                   DatabaseAddListener listener) {
-        DatabaseReference dbOnlineItems = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_VOTED_ITEMS_FIRST);
-        // TODO: Save names to somewhere, so it can be retrieved even if user leaves after first results and someone loads first results activity after that
-
-        dbOnlineItems.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Debug.print("DatabaseHandler", "getVoteRoomVotedItems",
-                        "items: " + snapshot.getChildrenCount(), 1);
-
-                ArrayList<OnlineVotedItem> items = new ArrayList<>();
-
-                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
-                    OnlineVotedItem item = dataSnapshot.getValue(OnlineVotedItem.class);
-                    items.add(item);
-                }
-
-                listener.onDataGetVoteRoomVotedItems(items);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Debug.print("DatabaseHandler", "onCancelled", "", 1);
-                databaseError.toException().printStackTrace();
-            }
-        });
-    }
-
-     */
-
     /**
      * Retrieves correct state for vote items.
      * @param onlineProfile current online profile
@@ -1165,8 +1134,12 @@ public abstract class DatabaseHandler {
      */
     public static void connectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        executeAddOnlineProfile(dbProfiles, profile, null);
+    }
 
-        String key = dbProfiles.push().getKey();   // Add new key to profiles
+    private static void executeAddOnlineProfile(DatabaseReference ref, OnlineProfile profile,
+                                                DatabaseAddListener listener) {
+        String key = profile.getDbID(); // Use user id as key
         profile.setDbID(key);
 
         Map<String, Object> values = profile.toMap();
@@ -1174,7 +1147,10 @@ public abstract class DatabaseHandler {
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(key, values);
 
-        dbProfiles.updateChildren(childUpdates);
+        ref.updateChildren(childUpdates).addOnCompleteListener((complete) -> {
+            if (listener != null)
+                listener.onDataAddedComplete();
+        });
     }
 
     /**
@@ -1224,11 +1200,14 @@ public abstract class DatabaseHandler {
      */
     public static void getOnlineProfiles(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
         DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        executeGetOnlineProfiles(dbProfiles, listener);
+    }
 
-        dbProfiles.addListenerForSingleValueEvent(new ValueEventListener() {
+    private static void executeGetOnlineProfiles(DatabaseReference ref, VoteRoomGetOnlineProfilesListener listener) {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Debug.print("DatabaseHandler", "getOnlineProfiles",
+                Debug.print("DatabaseHandler", "executeGetOnlineProfiles, ref: " + ref,
                         "profiles: " + snapshot.getChildrenCount(), 1);
 
                 ArrayList<OnlineProfile> onlineProfiles = new ArrayList<>();
@@ -1262,9 +1241,24 @@ public abstract class DatabaseHandler {
         if (profile.isHost() && voteRoom.getState() == VoteRoom.LOBBY) {
             removeVoteRoom(voteRoom);
         } else {
-            // Remove profile from vote room
-            DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
-            dbProfiles.child(profile.getDbID()).removeValue()
+            // Add profile to disconnected profiles if not in lobby
+            if (voteRoom.getState() != VoteRoom.LOBBY) {
+                addDisconnectedOnlineProfile(voteRoom, profile,
+                        () -> executeRemoveOnlineProfile(voteRoom, profile));
+            } else {
+                executeRemoveOnlineProfile(voteRoom, profile);
+            }
+        }
+    }
+
+    /**
+     * Removes the online profile from vote room.
+     * @param voteRoom vote room to remove from
+     * @param profile database reference path to profile
+     */
+    private static void executeRemoveOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
+        DatabaseReference ref = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_PROFILES);
+        ref.child(profile.getDbID()).removeValue()
                 .addOnCompleteListener(complete -> {
                     // Remove vote room if all users disconnect from the room
                     getOnlineProfiles(voteRoom, (onlineProfiles -> {
@@ -1272,7 +1266,6 @@ public abstract class DatabaseHandler {
                             removeVoteRoom(voteRoom);
                     }));
                 });
-        }
     }
 
     /**
@@ -1314,6 +1307,31 @@ public abstract class DatabaseHandler {
                 .addOnCompleteListener(complete ->  {
                     if(listener != null)
                         listener.onDataAddedComplete(); });
+    }
+
+    /**
+     * Add disconnected online profile to vote room.
+     *
+     * Reference to disconnected profile is required so that VoteResults
+     * can retrieve the name and vote points of profile.
+     * @param voteRoom vote room to add the profile
+     * @param onlineProfile profile to add
+     * @param listener on complete listener
+     */
+    private static void addDisconnectedOnlineProfile(VoteRoom voteRoom, OnlineProfile onlineProfile,
+                                                     DatabaseAddListener listener) {
+        DatabaseReference dbDisconnectedProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_DISCONNECTED_PROFILES);
+        executeAddOnlineProfile(dbDisconnectedProfiles, onlineProfile, listener);
+    }
+
+    /**
+     * Returns all profiles, which disconnected after vote room lobby.
+     * @param voteRoom vote room to get profiles from
+     * @param listener listener for retrieving the profiles
+     */
+    public static void getDisconnectedOnlineProfiles(VoteRoom voteRoom, VoteRoomGetOnlineProfilesListener listener) {
+        DatabaseReference dbProfiles = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_DISCONNECTED_PROFILES);
+        executeGetOnlineProfiles(dbProfiles, listener);
     }
     //endregion
 

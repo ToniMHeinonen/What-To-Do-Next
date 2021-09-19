@@ -19,7 +19,6 @@ import java.util.Map;
 @IgnoreExtraProperties
 public class OnlineProfile implements DatabaseValue, Parcelable {
 
-    private String userDbID;
     private String nickName;
     private boolean host;
     private int state;
@@ -35,7 +34,7 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     }
 
     public OnlineProfile(String userDbID, String nickName, boolean host) {
-        this.userDbID = userDbID;
+        this.dbID = userDbID;
         this.nickName = nickName;
         this.host = host;
         state = VoteRoom.LOBBY;
@@ -73,14 +72,6 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         this.state = state;
     }
 
-    public String getUserDbID() {
-        return userDbID;
-    }
-
-    public void setUserDbID(String userDbID) {
-        this.userDbID = userDbID;
-    }
-
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -88,7 +79,6 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("userDbID", userDbID);
         result.put("nickName", nickName);
         result.put("host", host);
         result.put("state", state);
@@ -124,7 +114,6 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
-        dest.writeString(userDbID);
         dest.writeString(nickName);
         dest.writeInt(host ? 1 : 0);
         dest.writeInt(state);
@@ -136,7 +125,6 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
      */
     public OnlineProfile(Parcel in) {
         dbID = in.readString();
-        userDbID = in.readString();
         nickName = in.readString();
         host = in.readInt() == 1;
         state = in.readInt();
@@ -168,7 +156,6 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
     @Override
     public String toString() {
         return "OnlineProfile{" +
-                "userDbID='" + userDbID + '\'' +
                 ", nickName='" + nickName + '\'' +
                 ", isHost=" + host +
                 ", state=" + state +

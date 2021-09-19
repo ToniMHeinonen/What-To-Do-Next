@@ -109,24 +109,34 @@ public class VoteResultsActivity extends VotingParentActivity {
 
         // Generate some values when voting online
         if (isOnline) {
+            // Retrieve all profiles
             DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
-                DatabaseHandler.getVoteRoomItems(voteRoom, (items -> {
-                    // Generate list from correct items
-                    selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, onlineProfile, items);
+                // Retrieve all disconnected profiles and add them to profiles if not duplicate
+                DatabaseHandler.getDisconnectedOnlineProfiles(voteRoom, (disconnectedProfiles) -> {
+                    for (OnlineProfile pro : disconnectedProfiles) {
+                        if (!onlineProfiles.contains(pro))
+                            onlineProfiles.add(pro);
+                    }
 
-                    // Get vote room items
-                    DatabaseHandler.getVoteRoomVotedItems(voteRoom, onlineProfile, (votedItems) -> {
-                        try {
-                            // Create temporary SelectedProfiles so code does not have to be modified so much
-                            selectedProfiles = Profile.generateProfilesFromOnlineProfile(
-                                    onlineProfiles, selectedList.getItems(), votedItems, onlineProfile, voteSettings);
+                    // Retrieve all vote room items
+                    DatabaseHandler.getVoteRoomItems(voteRoom, (items -> {
+                        // Generate list from correct items
+                        selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, onlineProfile, items);
 
-                            startSetup(savedInstanceState);
-                        } catch (Exception e) {
-                            Debug.error("VoteResultsActivity", "getVoteRoomVotedItems", e, 1);
-                        }
-                    });
-                }));
+                        // Get vote room items
+                        DatabaseHandler.getVoteRoomVotedItems(voteRoom, onlineProfile, (votedItems) -> {
+                            try {
+                                // Create temporary SelectedProfiles so code does not have to be modified so much
+                                selectedProfiles = Profile.generateProfilesFromOnlineProfile(
+                                        onlineProfiles, selectedList.getItems(), votedItems, onlineProfile, voteSettings);
+
+                                startSetup(savedInstanceState);
+                            } catch (Exception e) {
+                                Debug.error("VoteResultsActivity", "getVoteRoomVotedItems", e, 1);
+                            }
+                        });
+                    }));
+                });
             }));
         } else {
             startSetup(savedInstanceState);

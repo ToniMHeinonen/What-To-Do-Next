@@ -168,7 +168,9 @@ public class Profile implements DatabaseValue, Parcelable {
                 }
             }
 
-            selectedProfiles.add(profile);
+            // If profile had voted items, add it to the profiles
+            if (profile.getVoteItem(0) != null)
+                selectedProfiles.add(profile);
         }
 
         return selectedProfiles;
