@@ -162,14 +162,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
     public void itemsLoaded(ArrayList<ListItem> items) {
         Buddy.filterListByFallen(items, false);
 
-        if (items.size() < minimumItemCount) {
-            // If offline, show toast
-            if (!isOnlineVote) {
-                Buddy.showToast(getString(R.string.toast_not_enough_activities,
-                        minimumItemCount), Toast.LENGTH_LONG);
-            }
+        // Return if not enough items on list
+        if (items.size() < minimumItemCount)
             return;
-        }
 
         selectedList.setItems(items); // Put loaded items to selected list
         listBigEnough = true;
