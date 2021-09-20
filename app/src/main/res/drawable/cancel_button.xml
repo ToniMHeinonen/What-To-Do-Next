@@ -14,8 +14,8 @@
     <item>
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
-            <gradient android:startColor="#F00"
-                android:endColor="#900"
+            <gradient android:startColor="#D00"
+                android:endColor="#700"
                 android:type="linear"
                 android:angle="270" />
             <corners android:radius="@dimen/button_radius" />
