@@ -50,7 +50,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
     private boolean listBigEnough = false;
     private VoteSettings voteSettings;
 
-    private final int minimumItemCount = 2;
+    private final int minimumItemCount = 3;
 
     private enum LobbyJoinOptions { HOST_NEW, JOIN_NEW, JOIN_RECONNECT }
 
