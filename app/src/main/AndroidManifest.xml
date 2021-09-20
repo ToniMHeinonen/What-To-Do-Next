@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.github.tonimheinonen.whattodonext">
+    package="io.github.tonimheinonen.whattodonext"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="LockedOrientationActivity">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,23 +14,39 @@
         android:roundIcon="@mipmap/app_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PreLoginActivity"/>
-        <activity android:name=".voteactivity.VotingParentActivity" />
-        <activity android:name=".voteactivity.VoteWaitingActivity" android:noHistory="true" />
-        <activity android:name=".StartVoteActivity" />
-        <activity android:name=".voteactivity.VoteLobbyActivity" android:noHistory="true" />
-        <activity android:name=".ResultsActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".voteactivity.VoteResultsActivity" android:noHistory="true" />
-        <activity android:name=".voteactivity.VoteTopActivity" android:noHistory="true" />
-        <activity android:name=".registration.ForgotPasswordActivity" />
-        <activity android:name=".registration.LoginActivity" />
-        <activity android:name=".registration.SignupActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".voteactivity.VoteSetupActivity" />
-        <activity android:name=".ListsActivity" />
+        <activity android:name=".PreLoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".voteactivity.VotingParentActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".voteactivity.VoteWaitingActivity" android:noHistory="true"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".StartVoteActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".voteactivity.VoteLobbyActivity" android:noHistory="true"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ResultsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".voteactivity.VoteResultsActivity" android:noHistory="true"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".voteactivity.VoteTopActivity" android:noHistory="true"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".registration.ForgotPasswordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".registration.LoginActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".registration.SignupActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".voteactivity.VoteSetupActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ListsActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".InitializeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

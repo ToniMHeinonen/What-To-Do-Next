@@ -68,8 +68,6 @@ public class VoteTopActivity extends VotingParentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_top);
-        // Lock orientation during voting to prevent million different problems
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
         // If tutorial has not been confirmed yet, show it
         if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_VOTE_TOP))

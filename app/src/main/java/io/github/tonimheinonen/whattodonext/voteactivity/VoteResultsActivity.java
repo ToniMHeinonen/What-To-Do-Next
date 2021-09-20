@@ -130,7 +130,7 @@ public class VoteResultsActivity extends VotingParentActivity {
                                 selectedProfiles = Profile.generateProfilesFromOnlineProfile(
                                         onlineProfiles, selectedList.getItems(), votedItems, onlineProfile, voteSettings);
 
-                                startSetup(savedInstanceState);
+                                startSetup();
                             } catch (Exception e) {
                                 Debug.error("VoteResultsActivity", "getVoteRoomVotedItems", e, 1);
                             }
@@ -139,18 +139,12 @@ public class VoteResultsActivity extends VotingParentActivity {
                 });
             }));
         } else {
-            startSetup(savedInstanceState);
+            startSetup();
         }
     }
 
-    private void startSetup(Bundle savedInstanceState) {
-        // If activity has not been recreated (by screen rotation)
-        if (savedInstanceState == null) {
-            calculateVotePoints();
-        } else {
-            // Load items to reset before orientation change
-            itemsToReset = savedInstanceState.getParcelableArrayList(VoteIntents.ITEMS_TO_RESET);
-        }
+    private void startSetup() {
+        calculateVotePoints();
 
         setupItemList();
     }
@@ -163,19 +157,6 @@ public class VoteResultsActivity extends VotingParentActivity {
         maxPerilPoints = voteSettings.getMaxPeril();
         ignoreUnselected = voteSettings.isIgnoreUnselected();
         showVotes = voteSettings.isShowVoted();
-    }
-
-    /**
-     * Save selected items to reset.
-     *
-     * This gets called when screen rotation changes.
-     * @param outState bundle to be saved
-     */
-    @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putParcelableArrayList(VoteIntents.ITEMS_TO_RESET, itemsToReset);
     }
 
     /**

@@ -7,7 +7,6 @@ public abstract class VoteIntents {
     public final static String LIST = "selectedList";
     public final static String PROFILES = "selectedProfiles";
     public final static String IS_ONLINE = "isOnline";
-    public final static String ITEMS_TO_RESET = "itemsToReset";
 
     // Online
     public final static String ROOM = "voteRoom";
