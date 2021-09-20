@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:maxLines="1"
     android:padding="5dp"
+    android:gravity="center"
+    android:textColor="@color/buttonTextColor"
     android:textSize="22sp">
 
 </TextView>

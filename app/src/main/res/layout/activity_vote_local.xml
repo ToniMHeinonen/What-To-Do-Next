@@ -35,20 +35,11 @@
                 android:text="@string/select_list"/>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/button_selector" >
+                style="@style/spinnerLayout" >
 
                 <Spinner
                     android:id="@+id/listsSpinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:spinnerMode="dropdown"
-                    android:popupBackground="@drawable/button_selector"/>
+                    style="@style/spinnerElement"/>
             </RelativeLayout>
 
         </LinearLayout>
