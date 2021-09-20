@@ -91,9 +91,9 @@ public class OnlineProfile implements DatabaseValue, Parcelable {
         if (object instanceof OnlineProfile) {
             String otherDbID = ((OnlineProfile) object).getDbID();
 
-            // If item has not been added to database, return false
+            // If item has not been added to database, compare objects
             if (dbID == null || otherDbID == null)
-                return false;
+                return super.equals(object);
 
             return dbID.equals(otherDbID);
         }

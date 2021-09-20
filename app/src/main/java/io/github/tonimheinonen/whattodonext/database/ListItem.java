@@ -233,9 +233,9 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
         if (object instanceof ListItem) {
             String otherDbID = ((ListItem) object).getDbID();
 
-            // If item has not been added to database, return false
+            // If item has not been added to database, compare objects
             if (dbID == null || otherDbID == null)
-                return false;
+                return super.equals(object);
 
             return dbID.equals(otherDbID);
         }
