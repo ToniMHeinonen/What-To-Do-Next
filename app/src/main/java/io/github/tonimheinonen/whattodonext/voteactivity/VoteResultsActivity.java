@@ -232,11 +232,14 @@ public class VoteResultsActivity extends VotingParentActivity {
                 }
             }
 
-            // Set is in online vote to true in online vote room
-            for (ListItem item : selectedItems)
-                item.setInOnlineLastVote(true);
+            if (isOnline) {
+                // Set is in online vote to true in online vote room
+                for (ListItem item : selectedItems)
+                    item.setInOnlineLastVote(true);
 
-            DatabaseHandler.setVoteRoomLastVoteItems(voteRoom, selectedItems);
+                DatabaseHandler.setVoteRoomLastVoteItems(voteRoom, selectedItems);
+            }
+
             selectedList.setItems(selectedItems);
         }
     }
