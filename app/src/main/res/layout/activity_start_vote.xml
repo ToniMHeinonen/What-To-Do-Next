@@ -31,8 +31,7 @@
             android:gravity="center">
 
             <TextView
-                style="@style/voteTitles"
-                android:textSize="40sp"
+                style="@style/topics"
                 android:text="@string/voting" />
 
         </LinearLayout>

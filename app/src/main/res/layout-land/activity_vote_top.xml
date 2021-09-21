@@ -58,12 +58,12 @@
 
                 <TextView
                     android:id="@+id/profileName"
-                    style="@style/voteTitles"
+                    style="@style/titles"
                     android:text="{Profile}"/>
 
                 <TextView
                     android:id="@+id/voteInfoText"
-                    style="@style/voteNotes"
+                    style="@style/notes"
                     android:text="{Vote top ~ from list}"/>
 
             </LinearLayout>

@@ -40,7 +40,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/voteTitles"
+                    style="@style/titles"
                     android:text="@string/select_list"/>
 
                 <TextView
@@ -63,7 +63,7 @@
 
             <!-- EXPIRATION NOTE -->
             <TextView
-                style="@style/voteNotes"
+                style="@style/notes"
                 android:layout_height="0dp"
                 android:layout_weight="0.3"
                 android:text="@string/start_vote_expiration_note"/>
@@ -104,7 +104,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    style="@style/voteTitles"
+                    style="@style/titles"
                     android:text="@string/online_detail"/>
 
                 <EditText

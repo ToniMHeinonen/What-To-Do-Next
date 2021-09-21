@@ -31,7 +31,7 @@
             android:gravity="center">
 
             <TextView
-                style="@style/voteTitles"
+                style="@style/titles"
                 android:text="@string/voting_success"/>
 
         </LinearLayout>
@@ -44,7 +44,7 @@
             android:orientation="vertical">
 
             <TextView
-                style="@style/voteNotes"
+                style="@style/notes"
                 android:text="@string/waiting_for"/>
 
             <ListView

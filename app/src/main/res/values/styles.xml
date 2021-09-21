@@ -142,7 +142,7 @@
         <item name="android:layout_marginEnd">10dp</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_gravity">end</item>
-        <item name="android:src">@drawable/ic_close</item>
+        <item name="android:src">@drawable/close_button_selector</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
 
@@ -280,13 +280,13 @@
         <item name="android:padding">5dp</item>
     </style>
 
-    <!-- START VOTE ACTIVITY -->
-    <style name="voteTitles">
+    <!-- TOPICS, TITLES & NOTES -->
+    <style name="topics">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_margin">10dp</item>
         <item name="android:padding">5dp</item>
-        <item name="android:textSize">25sp</item>
+        <item name="android:textSize">40sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/title_bg</item>
         <item name="android:gravity">center</item>
@@ -294,7 +294,11 @@
         <item name="android:textColor">@color/defaultTextColor</item>
     </style>
 
-    <style name="voteNotes">
+    <style name="titles" parent="topics">
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="notes">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_margin">10dp</item>

@@ -30,6 +30,7 @@
         <Button
             android:id="@+id/backButton"
             style="@style/listsButtons"
+            android:background="@drawable/cancel_button"
             android:text="@string/lists_back"
             android:onClick="backClicked"/>
     </LinearLayout>
