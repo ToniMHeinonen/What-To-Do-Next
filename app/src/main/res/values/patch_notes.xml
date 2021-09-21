@@ -6,6 +6,15 @@
     <string name="patch_notes">
     &lt;h1&gt;Patch Notes&lt;/h1&gt;
 
+    &lt;h5&gt;Version 11 / v2.0.0 / September 21, 2021&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Release completed version of online vote&lt;br/&gt;
+    &#8226; Add ability to reconnect to online vote&lt;br/&gt;
+    &#8226; Make UI more uniform and beautiful&lt;br/&gt;
+    &#8226; Fix some rare bugs&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
     &lt;h5&gt;Version 10 / v1.5.0 / June 28, 2021&lt;/h5&gt;
     &lt;p&gt;
     &#8226; Add app version check when joining an online vote room&lt;br/&gt;
