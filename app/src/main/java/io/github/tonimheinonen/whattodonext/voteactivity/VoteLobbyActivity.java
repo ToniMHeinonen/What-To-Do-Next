@@ -198,9 +198,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back:
-                DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile);
-                removeListeners();
-                finish();
+                onBackPressed();
                 break;
             case R.id.start:
                 if (onlineProfile.isHost()) {
@@ -212,6 +210,16 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
             default:
                 break;
         }
+    }
+
+    /**
+     * Override what happens when pressing back during voting.
+     */
+    @Override
+    public void onBackPressed() {
+        DatabaseHandler.disconnectOnlineProfile(voteRoom, onlineProfile);
+        removeListeners();
+        finish();
     }
 
     /**
