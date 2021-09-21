@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/app_bg">
 
-    <LinearLayout
+    <TableLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_for_layouts"
         tools:context=".voteactivity.VoteSetupActivity"
-        android:background="@drawable/custom_bg"
         android:focusable="true"
         android:focusableInTouchMode="true">
 
@@ -45,12 +44,43 @@
             android:layout_height="0dp"
             android:layout_weight="0.8"
             android:orientation="vertical"
+            android:padding="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/custom_bg"
             android:gravity="center">
 
+            <!-- LOCAL -->
+            <LinearLayout
+                android:id="@+id/loginOrRegister"
+                style="@style/iconButtonLayout"
+                android:layout_weight="0.6">
+
+                <TextView
+                    style="@style/iconButtonTextSmaller"
+                    android:text="@string/login_or_register" />
+
+                <ImageView
+                    style="@style/iconButtonImage"
+                    android:src="@drawable/ic_btn_login_24" />
+            </LinearLayout>
+
+            <!-- LOCAL -->
+            <LinearLayout
+                android:id="@+id/noRegister"
+                style="@style/iconButtonLayout"
+                android:layout_weight="0.4">
+
+                <TextView
+                    style="@style/iconButtonTextSmaller"
+                    android:text="@string/continue_unregistered" />
+
+                <ImageView
+                    style="@style/iconButtonImage"
+                    android:src="@drawable/ic_btn_no" />
+            </LinearLayout>
+
+            <!--
             <Button
                 android:id="@+id/loginOrRegister"
                 style="@style/voteButtons"
@@ -74,8 +104,9 @@
                 android:padding="10dp"
                 android:textSize="20sp"
                 android:background="@drawable/button_selector" />
+                -->
 
         </LinearLayout>
 
-    </LinearLayout>
+    </TableLayout>
 </LinearLayout>

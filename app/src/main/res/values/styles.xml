@@ -128,6 +128,11 @@
         <item name="android:textColor">@color/buttonTextColor</item>
     </style>
 
+    <style name="iconButtonTextSmaller" parent="iconButtonText">
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">15dp</item>
+    </style>
+
     <style name="iconButtonImage">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">0.4</item>
