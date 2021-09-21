@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void logOutClicked(View v) {
         FirebaseAuth.getInstance().signOut();
+        DatabaseHandler.logOutOfUser();
         startActivity(new Intent(this, PreLoginActivity.class));
         finish();
     }

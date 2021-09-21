@@ -99,14 +99,24 @@ public abstract class DatabaseHandler {
         dbVoteSettings = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("vote_settings");
         dbVoteSettings.keepSynced(true);
+        // If you add something in here, remember to add it to the logOutOfUser()
+    }
 
-        // Init online voting references
-        dbVoteRooms = FirebaseDatabase.getInstance().getReference().child("vote_rooms");
-        dbVoteRooms.keepSynced(true);
+    public static void logOutOfUser() {
+        user = null;
+        dbLists = null;
+        dbItems = null;
+        dbProfiles = null;
+        dbSavedResults = null;
+        dbResultItems = null;
+        dbVoteSettings = null;
     }
 
     /**
      * Initializes necessary vote room database values.
+     *
+     * Called in InitializeActivity so vote rooms can work for unregistered
+     * folk too and vote rooms do not change even if user is changed.
      */
     public static void initializeVoteRoomDatabase() {
         dbVoteRooms = FirebaseDatabase.getInstance().getReference().child("vote_rooms");

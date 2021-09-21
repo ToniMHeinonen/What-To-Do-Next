@@ -195,6 +195,8 @@ public class HTMLDialog extends Dialog implements
         switch (htmlText) {
             case NO_REGISTRATION:
                 Buddy.isRegistered = false;
+                // Initialize default global prefs
+                GlobalPrefs.initialize(activity, "anonymous");
                 Buddy.moveToVoteSetup(activity, true);
                 break;
             case TUTORIAL_WELCOME:
