@@ -98,10 +98,12 @@ public class VoteTopActivity extends VotingParentActivity {
 
         // Retrieve correct items when online
         if (isOnline) {
+            Buddy.showOnlineVoteLoadingBar(this);
             DatabaseHandler.getVoteRoomItems(voteRoom, (items -> {
                 // Generate list from correct items
                 selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, onlineProfile, items);
 
+                Buddy.hideOnlineVoteLoadingBar(this);
                 startSetup();
             }));
         } else {
