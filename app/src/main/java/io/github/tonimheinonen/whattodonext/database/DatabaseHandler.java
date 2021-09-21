@@ -981,6 +981,7 @@ public abstract class DatabaseHandler {
         Map<String, Object> childUpdates = new HashMap<>();
 
         for (ListItem item : items) {
+            item.setInOnlineLastVote(false); // Reset in online last vote state
             dbOnlineItems.push();
             dbOnlineItems.setValue(item.getDbID());
 
