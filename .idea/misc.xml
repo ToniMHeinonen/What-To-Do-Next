@@ -8,8 +8,49 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/button_bg_clicked.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/button_selector.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/cancel_button.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/close_button_selector.xml" value="0.6020833333333333" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/confirm_button.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/custom_bg.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/drop_button.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_btn_lists_24.xml" value="0.6020833333333333" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_btn_local_24.xml" value="0.6020833333333333" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_btn_login_24.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_btn_no.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_btn_online_24.xml" value="0.6020833333333333" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_btn_results_24.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_btn_settings_24.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_btn_vote_24.xml" value="0.6020833333333333" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_close.xml" value="0.6020833333333333" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_close_pressed.xml" value="0.6020833333333333" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/ic_info_48dp.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/list_divider.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/note_bg.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/orange_button.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/spinner_bg.xml" value="0.36822916666666666" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/drawable/title_bg.xml" value="0.36822916666666666" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout-land/activity_vote_lobby.xml" value="0.2980599647266314" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout-land/activity_vote_online.xml" value="0.2980599647266314" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout-land/activity_vote_results.xml" value="0.49603174603174605" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout-land/activity_vote_top.xml" value="0.49603174603174605" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_lists.xml" value="0.35144927536231885" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_login.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_main.xml" value="0.5340136054421769" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_pre_login.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_results.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_settings.xml" value="0.35144927536231885" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_start_vote.xml" value="0.5" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_vote_lobby.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_vote_local.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_vote_online.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_vote_results.xml" value="0.5859375" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_vote_top.xml" value="0.5859375" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_vote_waiting.xml" value="0.5859375" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/custom_spinner.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/html_dialog.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/list_item_dialog.xml" value="0.35208333333333336" />
       </map>
     </option>
   </component>
