@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.view.LayoutInflater;
@@ -58,11 +59,12 @@ public abstract class Buddy {
 
     /**
      * Hides keyboard, clears focus on view and clears it's text.
-     *
+     * <p>
      * Notice that in order for this to work, you need to add android:focusable="true" &
      * android:focusableInTouchMode="true" to current view's parent layout.
+     *
      * @param editTextView view to clear focus
-     * @param clearText true if to reset text field to ""
+     * @param clearText    true if to reset text field to ""
      */
     public static void hideKeyboardAndClear(EditText editTextView, boolean clearText) {
         Context context = InitializeActivity.getAppContext();
@@ -70,26 +72,33 @@ public abstract class Buddy {
         if (clearText)
             editTextView.setText("");
 
-        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editTextView.getWindowToken(), 0);
     }
 
     /**
      * Shows long toast text.
-     * @param text message to show
+     *
+     * @param text     message to show
      * @param duration either Toast.LENGTH_LONG or Toast.LENGTH_SHORT
      */
     public static void showToast(String text, int duration) {
         Context context = InitializeActivity.getAppContext();
         Toast toast = Toast.makeText(context, text, duration);
-        View view = toast.getView();
 
-        // Gets the actual oval background of the Toast then sets the colour filter
-        view.setBackground(context.getResources().getDrawable(R.drawable.custom_bg));
+        // Customize toast if sdk version is below 30
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            View view = toast.getView();
 
-        // Gets the TextView from the Toast so it can be editted
-        TextView textView = view.findViewById(android.R.id.message);
-        textView.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
+            // Gets the actual oval background of the Toast then sets the colour filter
+            view.setBackground(context.getResources().getDrawable(R.drawable.note_bg));
+
+            // Gets the TextView from the Toast so it can be editted
+            TextView textView = view.findViewById(android.R.id.message);
+            int pad = 10;
+            textView.setPadding(pad, pad, pad, pad);
+            textView.setTextColor(context.getResources().getColor(R.color.textColorPrimary));
+        }
 
         toast.show();
     }
