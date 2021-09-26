@@ -13,6 +13,12 @@
     <item name="saved_result_name_weight" format="float" type="dimen">0.4</item>
     <item name="saved_result_points_weight" format="float" type="dimen">0.15</item>
 
+    <!-- Vert Vote Item -->
+    <item name="vert_result_total_weight" format="float" type="dimen">0.20</item>
+    <item name="vert_result_name_weight" format="float" type="dimen">0.6</item>
+    <item name="vert_result_extra_weight" format="float" type="dimen">0.20</item>
+    <item name="vert_result_user_weight" format="float" type="dimen">0.80</item>
+
     <!-- INTEGER -->
     <item name="list_name_max_length" format="integer" type="integer">30</item>
     <item name="activity_name_max_length" format="integer" type="integer">50</item>

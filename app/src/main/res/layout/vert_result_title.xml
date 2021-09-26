@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp"
+    android:paddingBottom="5dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/vert_result_title_bg">
+
+        <TextView
+            style="@style/vertResultTitlePoints"
+            android:layout_weight="@dimen/vert_result_total_weight"
+            android:textColor="@color/defaultTextColor"
+            android:text="@string/results_total">
+        </TextView>
+
+        <TextView
+            style="@style/vertResultTitleName"
+            android:layout_weight="@dimen/vert_result_name_weight"
+            android:text="@string/results_name">
+        </TextView>
+
+        <TextView
+            style="@style/vertResultTitlePoints"
+            android:layout_weight="@dimen/vert_result_extra_weight"
+            android:text="@string/results_extra">
+        </TextView>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        style="@style/scrollViewStyle">
+
+        <LinearLayout
+            android:id="@+id/resultItemsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -306,7 +306,11 @@
     <style name="notes">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_margin">10dp</item>
+        <!-- Set each margin separately so they can be overridden -->
+        <item name="android:layout_marginTop">@dimen/note_margin</item>
+        <item name="android:layout_marginStart">@dimen/note_margin</item>
+        <item name="android:layout_marginEnd">@dimen/note_margin</item>
+        <item name="android:layout_marginBottom">@dimen/note_margin</item>
         <item name="android:padding">5dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>

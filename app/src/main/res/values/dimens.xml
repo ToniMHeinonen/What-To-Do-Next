@@ -7,4 +7,7 @@
     <dimen name="results_list_padding">10dp</dimen>
     <dimen name="results_show_votes_name_width">125sp</dimen>
     <dimen name="results_show_votes_points_width">75sp</dimen>
+
+    <!-- Notes -->
+    <dimen name="note_margin">10dp</dimen>
 </resources>

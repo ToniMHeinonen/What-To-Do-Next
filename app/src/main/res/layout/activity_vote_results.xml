@@ -48,6 +48,7 @@
         <TextView
             android:id="@+id/resultsInfoText"
             style="@style/notes"
+            android:layout_marginTop="0dp"
             android:text="@string/results_info"
             android:visibility="gone"/>
 

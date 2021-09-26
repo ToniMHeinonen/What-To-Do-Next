@@ -146,7 +146,7 @@ public class VoteResultsActivity extends VotingParentActivity {
     private void startSetup() {
         calculateVotePoints();
 
-        setupItemList();
+        setupItemListVertical();
     }
 
     /**
@@ -247,7 +247,71 @@ public class VoteResultsActivity extends VotingParentActivity {
     /**
      * Shows results in list view.
      */
-    private void setupItemList() {
+    private void setupItemListVertical() {
+        // Load whether to show vote items or not
+        LinearLayout viewHolder = findViewById(R.id.listHolder);
+
+        // Add title and scrollable layout for items
+        View resultTopicView = getLayoutInflater().inflate(R.layout.vert_result_title, null);
+        viewHolder.addView(resultTopicView);
+
+        LinearLayout resultItemsLayout = resultTopicView.findViewById(R.id.resultItemsLayout);
+
+        // Add all selected items
+        for (ListItem selectedItem : selectedList.getItems()) {
+            // Add item
+            View resultItemView = getLayoutInflater().inflate(R.layout.vert_result_item, null);
+            resultItemsLayout.addView(resultItemView);
+
+            // Set name and points
+            TextView name = resultItemView.findViewById(R.id.resultName);
+            name.setText(selectedItem.getName());
+            TextView total = resultItemView.findViewById(R.id.resultTotal);
+            total.setText(String.valueOf(selectedItem.getVotePoints()));
+            TextView extra = resultItemView.findViewById(R.id.resultExtra);
+            extra.setText(String.valueOf(selectedItem.getTotal()));
+
+            // If show votes is true, add profiles and their points
+            if (showVotes) {
+                LinearLayout resultUserLayout = resultItemView.findViewById(R.id.resultUserLayout);
+
+                for (Profile profile : selectedProfiles) {
+                    View resultUserView = getLayoutInflater().inflate(R.layout.vert_result_user, null);
+
+                    int userPointsOnItem = profile.votePointsOfItem(selectedItem);
+                    TextView resultUserPoints = resultUserView.findViewById(R.id.resultUserPoints);
+                    resultUserPoints.setText(userPointsOnItem == 0 ? "" : String.valueOf(userPointsOnItem));
+
+                    TextView resultUserName = resultUserView.findViewById(R.id.resultUserName);
+                    resultUserName.setText(profile.getName());
+
+                    resultUserLayout.addView(resultUserView);
+                }
+            }
+
+            // Listen for clicks on last results
+            if (lastResults) {
+                View resultItemClickArea = resultItemView.findViewById(R.id.clickArea);
+                resultItemClickArea.setOnClickListener((clicked) -> {
+                    // Reset selected items
+                    if (itemsToReset.contains(selectedItem)) {
+                        itemsToReset.remove(selectedItem);
+                        selectedItem.setSelected(false);
+                        resultItemClickArea.setSelected(false);
+                    } else {
+                        itemsToReset.add(selectedItem);
+                        selectedItem.setSelected(true);
+                        resultItemClickArea.setSelected(true);
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Shows results in list view.
+     */
+    private void setupItemListHorizontal() {
         // Load whether to show vote items or not
         LinearLayout viewHolder = findViewById(R.id.listHolder);
         BaseAdapter adapter;

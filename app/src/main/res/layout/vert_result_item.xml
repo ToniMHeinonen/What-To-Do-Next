@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This LinearLayout is needed, since adding paddingBottom to TableLayout stretches the
+    background image and adding marginBottom does nothing -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp">
+
+    <TableLayout
+        android:id="@+id/clickArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/vert_result_item_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/resultTotal"
+                style="@style/vertResultItemPoints"
+                android:layout_weight="@dimen/vert_result_total_weight"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:text="15"
+                android:textStyle="bold">
+            </TextView>
+
+            <TextView
+                android:id="@+id/resultName"
+                style="@style/vertResultItemName"
+                android:layout_weight="@dimen/vert_result_name_weight"
+                android:text="Result name">
+            </TextView>
+
+            <TextView
+                android:id="@+id/resultExtra"
+                style="@style/vertResultItemPoints"
+                android:layout_weight="@dimen/vert_result_extra_weight"
+                android:text="7">
+            </TextView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/resultUserLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </TableLayout>
+</LinearLayout>
