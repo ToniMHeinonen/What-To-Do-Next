@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/results_list_padding"
-            android:paddingRight="@dimen/results_list_padding">
+            android:paddingRight="@dimen/results_list_padding"
+            android:background="@drawable/vert_result_title_bg">
 
             <TextView
                 style="@style/resultsTopicValues"

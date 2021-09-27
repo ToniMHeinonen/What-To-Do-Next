@@ -25,7 +25,6 @@
                 style="@style/vertResultItemPoints"
                 android:layout_weight="@dimen/vert_result_total_weight"
                 android:textColor="@color/colorPrimary"
-                android:textSize="20sp"
                 android:text="15"
                 android:textStyle="bold">
             </TextView>
