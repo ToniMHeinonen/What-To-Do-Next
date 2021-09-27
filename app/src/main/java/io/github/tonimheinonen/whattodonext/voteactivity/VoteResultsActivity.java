@@ -33,6 +33,7 @@ import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
+import io.github.tonimheinonen.whattodonext.tools.ResultStyle;
 
 /**
  * Handles showing results of voting.
@@ -147,7 +148,12 @@ public class VoteResultsActivity extends VotingParentActivity {
     private void startSetup() {
         calculateVotePoints();
 
-        setupItemListVertical();
+        int resultStyle = GlobalPrefs.loadPreference(GlobalPrefs.RESULT_STYLE, ResultStyle.DEFAULT_STYLE);
+
+        if (resultStyle == ResultStyle.VERTICAL)
+            setupItemListVertical();
+        else if (resultStyle == ResultStyle.HORIZONTAL)
+            setupItemListHorizontal();
     }
 
     /**

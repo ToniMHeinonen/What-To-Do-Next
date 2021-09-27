@@ -98,6 +98,16 @@
 
                 </LinearLayout>
 
+                <!-- RESULT STYLE -->
+                <LinearLayout style="@style/settingsButtonsLayout">
+
+                    <Button
+                        android:id="@+id/resultStyle"
+                        style="@style/settingsButtons"
+                        android:text="@string/result_style"/>
+
+                </LinearLayout>
+
                 <!-- OTHER -->
                 <TextView
                     style="@style/titles"

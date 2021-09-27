@@ -79,6 +79,9 @@ public class SettingsActivity extends AppCompatActivity {
             case R.id.showVotes:
                 dialog = new SettingDialog(this, SettingDialog.Setting.SHOW_VOTES, voteSettings);
                 break;
+            case R.id.resultStyle:
+                dialog = new SettingDialog(this, SettingDialog.Setting.RESULT_STYLE, voteSettings);
+                break;
             case R.id.resetTutorial:
                 dialog = new SettingDialog(this, SettingDialog.Setting.RESET_TUTORIAL, voteSettings);
                 break;

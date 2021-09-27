@@ -6,8 +6,10 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
+import io.github.tonimheinonen.whattodonext.tools.ResultStyle;
 
 /**
  * Handles user changing app settings.
@@ -34,12 +37,14 @@ public class SettingDialog extends Dialog {
         HALVE_EXTRA,
         SHOW_EXTRA,
         SHOW_VOTES,
-        RESET_TUTORIAL
+        RESET_TUTORIAL,
+        RESULT_STYLE
     }
 
     private VoteSettings voteSettings;
     private Setting setting;
     private EditText points, firstPoints, lastPoints;
+    private Spinner spinner;
     private SwitchCompat onOffSwitch;
     private LinearLayout inflateLayout;
 
@@ -88,9 +93,11 @@ public class SettingDialog extends Dialog {
     private void initializeViews() {
         TextView topic = findViewById(R.id.settingTopic);
         TextView text = findViewById(R.id.settingText);
+        TextView note = findViewById(R.id.note);
         LinearLayout adjustingPoints = findViewById(R.id.adjustingPoints);
         points = findViewById(R.id.points);
         onOffSwitch = findViewById(R.id.onOffSwitch);
+        spinner = findViewById(R.id.spinner);
         inflateLayout = findViewById(R.id.inflateLayout);
 
         switch (setting) {
@@ -141,11 +148,27 @@ public class SettingDialog extends Dialog {
                 onOffSwitch.setVisibility(View.VISIBLE);
                 onOffSwitch.setChecked(voteSettings.isShowVoted());
                 break;
+            case RESULT_STYLE:
+                topic.setText(activity.getString(R.string.result_style));
+                text.setText(activity.getString(R.string.result_style_text));
+                note.setVisibility(View.VISIBLE);
+                note.setText(R.string.result_style_note);
+                int spinnerPosition = GlobalPrefs.loadPreference(GlobalPrefs.RESULT_STYLE, ResultStyle.DEFAULT_STYLE);
+                setupListsSpinner(activity.getResources().getStringArray(R.array.resultStyles), spinnerPosition);
+                break;
             case RESET_TUTORIAL:
                 topic.setText(activity.getString(R.string.reset_tutorial));
                 text.setText(activity.getString(R.string.reset_tutorial_text));
                 break;
         }
+    }
+
+    private void setupListsSpinner(String[] spinnerList, int startingPosition) {
+        spinner.setVisibility(View.VISIBLE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(activity,
+                R.layout.custom_spinner, spinnerList);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(startingPosition);
     }
 
     private void plusMinusPressed(EditText points, int adjustment) {
@@ -237,6 +260,11 @@ public class SettingDialog extends Dialog {
                 break;
             case SHOW_VOTES:
                 voteSettings.setShowVoted(onOffSwitch.isChecked());
+                dismiss();
+                break;
+            case RESULT_STYLE:
+                int spinnerPos = spinner.getSelectedItemPosition();
+                GlobalPrefs.savePreference(GlobalPrefs.RESULT_STYLE, spinnerPos);
                 dismiss();
                 break;
             case RESET_TUTORIAL:

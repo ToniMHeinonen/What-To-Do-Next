@@ -199,6 +199,7 @@
     <string name="ignore_unselected">Ignore Unselected</string>
     <string name="reset_tutorial">Reset Tutorial</string>
     <string name="settings_patch_notes">Patch Notes</string>
+    <string name="result_style">Result Style</string>
 
     <string name="max_peril_text">Adjust the threshold of how many peril points activity can receive
     before it drops out of the list to the fallen category. Activities will be dropped after voting.
@@ -216,6 +217,9 @@
     <string name="show_votes_text">Enabling this will show the individual points each activity
         received from every voter.</string>
     <string name="reset_tutorial_text">Resets the whole tutorial.</string>
+    <string name="result_style_text">Determines the style in which the results are shown after
+        voting.</string>
+    <string name="result_style_note">Note: If you have performance issues, use horizontal style.</string>
 
     <string name="last_vote_same_as_first">Last Vote: Points has to be lower than in first vote!</string>
     <string name="first_vote_same_as_last">First vote: Points has to be higher than in last vote!</string>

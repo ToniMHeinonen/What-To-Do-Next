@@ -18,15 +18,7 @@ public abstract class GlobalPrefs {
 
     // Lists
     private static String keyCurrentList = "current_list";
-
-    // Settings
-    private static String keyMaxPerilPoints = "max_peril_points";
-    private static String keyListVoteSizeFirst = "list_vote_size_first";
-    private static String keyListVoteSizeSecond = "list_vote_size_second";
-    private static String keyIgnoreUnselected = "ignore_unselected";
-    private static String keyHalveExtra = "halve_extra";
-    private static String keyShowExtra = "show_extra";
-    private static String keyShowVoted = "show_voted";
+    public static final String RESULT_STYLE = "result_style";
 
     // Popup information box
     private static String keyPopup = "popup_";
@@ -123,5 +115,24 @@ public abstract class GlobalPrefs {
      */
     public static void saveOnlineRoomCode(String roomCode) {
         prefs.edit().putString(keyOnlineRoomCode, roomCode).apply();
+    }
+
+    /**
+     * Loads integer from prefs.
+     * @param key key to load
+     * @param defValue value if not found
+     * @return loaded int or default value
+     */
+    public static int loadPreference(String key, int defValue) {
+        return prefs.getInt(key, defValue);
+    }
+
+    /**
+     * Saves integer to prefs.
+     * @param key key to save
+     * @param value value to save
+     */
+    public static void savePreference(String key, int value) {
+        prefs.edit().putInt(key, value).apply();
     }
 }

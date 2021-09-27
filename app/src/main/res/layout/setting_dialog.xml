@@ -19,14 +19,8 @@
 
             <TextView
                 android:id="@+id/settingTopic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:text="{Setting}"
-                android:textColor="@color/defaultTextColor"
-                android:textSize="35sp"
-                android:textStyle="bold"/>
+                style="@style/titles"
+                android:text="{Setting}" />
 
             <TextView
                 android:id="@+id/settingText"
@@ -75,6 +69,26 @@
                 android:theme="@style/ThemeOverlay.MySwitchCompat"
                 android:scaleX="1.5"
                 android:scaleY="1.5"/>
+
+            <!-- SPINNER -->
+
+            <RelativeLayout
+                style="@style/spinnerLayout">
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    style="@style/spinnerElement"
+                    android:visibility="gone"/>
+            </RelativeLayout>
+
+            <!-- NOTE -->
+
+            <TextView
+                android:id="@+id/note"
+                style="@style/notes"
+                android:layout_marginTop="20dp"
+                android:text="@string/result_style_note"
+                android:visibility="gone"/>
 
             <!-- CONFIRM & CANCEL-->
 
