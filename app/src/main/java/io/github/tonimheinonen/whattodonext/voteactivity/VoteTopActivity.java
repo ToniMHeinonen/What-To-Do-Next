@@ -1,12 +1,10 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +21,6 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
-import io.github.tonimheinonen.whattodonext.tools.Debug;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
 import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
 
@@ -41,7 +38,7 @@ public class VoteTopActivity extends VotingParentActivity {
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
 
-    private Button nextButton;
+    private LinearLayout nextButton;
     private TextView profileView, infoView;
     private ListItemFragment itemsFragment;
 

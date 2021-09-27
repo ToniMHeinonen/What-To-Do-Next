@@ -129,6 +129,7 @@
     </style>
 
     <style name="iconButtonTextSmaller" parent="iconButtonText">
+        <item name="android:layout_weight">0.7</item>
         <item name="android:textSize">20sp</item>
         <item name="android:padding">15dp</item>
     </style>
@@ -136,6 +137,13 @@
     <style name="iconButtonImage">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">0.4</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="iconButtonImageSmaller">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.3</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>

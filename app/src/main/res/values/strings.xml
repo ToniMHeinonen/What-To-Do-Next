@@ -132,7 +132,7 @@
     <string name="results_name">Name</string>
     <string name="results_extra">Extra</string>
     <string name="results_total">Total</string>
-    <string name="save_and_exit">Save and exit</string>
+    <string name="save">Save</string>
     <string name="save_successful">Points have been calculated and the result has been saved</string>
     <string name="unregistered_vote_ended">Thank you for using this app! I hope that this experience
     has made you want to register and leave a feedback to the Google Play Store!</string>

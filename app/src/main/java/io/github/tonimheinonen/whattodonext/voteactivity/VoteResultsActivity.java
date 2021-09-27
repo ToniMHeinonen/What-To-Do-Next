@@ -104,8 +104,8 @@ public class VoteResultsActivity extends VotingParentActivity {
             if (GlobalPrefs.loadPopupInfo(GlobalPrefs.TUTORIAL_LAST_RESULTS))
                 new HTMLDialog(this, HTMLDialog.HTMLText.TUTORIAL_LAST_RESULTS).show();
 
-            Button next = findViewById(R.id.nextButton);
-            next.setText(getString(R.string.save_and_exit));
+            TextView next = findViewById(R.id.nextButton);
+            next.setText(getString(R.string.save));
             findViewById(R.id.resultsInfoText).setVisibility(View.VISIBLE);
         }
 

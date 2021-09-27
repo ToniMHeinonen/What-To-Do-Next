@@ -61,7 +61,7 @@
                     android:text="@string/login_or_register" />
 
                 <ImageView
-                    style="@style/iconButtonImage"
+                    style="@style/iconButtonImageSmaller"
                     android:src="@drawable/ic_btn_login_24" />
             </LinearLayout>
 
@@ -76,7 +76,7 @@
                     android:text="@string/continue_unregistered" />
 
                 <ImageView
-                    style="@style/iconButtonImage"
+                    style="@style/iconButtonImageSmaller"
                     android:src="@drawable/ic_btn_no" />
             </LinearLayout>
 
