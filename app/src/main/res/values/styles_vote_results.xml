@@ -1,10 +1,13 @@
 <resources>
     <!-- Vertical Vote Result Title -->
-    <style name="vertResultTitleName">
+    <style name="vertResultParent">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">0dp</item>
-        <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/defaultTextColor</item>
+    </style>
+
+    <style name="vertResultTitleName" parent="vertResultParent">
+        <item name="android:textSize">17sp</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingBottom">5dp</item>
     </style>
@@ -14,11 +17,8 @@
     </style>
 
     <!-- Vertical Vote Result Items -->
-    <style name="vertResultItemName">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">0dp</item>
+    <style name="vertResultItemName" parent="vertResultParent">
         <item name="android:textSize">17sp</item>
-        <item name="android:textColor">@color/defaultTextColor</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
@@ -27,11 +27,8 @@
     </style>
 
     <!-- Vertical Vote Result Users -->
-    <style name="vertResultUserName">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">0dp</item>
+    <style name="vertResultUserName" parent="vertResultParent">
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/defaultTextColor</item>
     </style>
 
     <style name="vertResultUserPoints" parent="vertResultUserName">
