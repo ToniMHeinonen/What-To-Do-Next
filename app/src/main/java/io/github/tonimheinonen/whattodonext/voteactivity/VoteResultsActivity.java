@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +20,7 @@ import io.github.tonimheinonen.whattodonext.VoteResultList;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
@@ -46,6 +46,7 @@ public class VoteResultsActivity extends VotingParentActivity {
 
     private boolean lastResults;
     private VoteSettings voteSettings;
+    private GlobalSettings globalSettings;
     private int topAmount;
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
@@ -76,7 +77,8 @@ public class VoteResultsActivity extends VotingParentActivity {
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
 
-        voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
+        voteSettings = intent.getParcelableExtra(VoteIntents.VOTE_SETTINGS);
+        globalSettings = intent.getParcelableExtra(VoteIntents.GLOBAL_SETTINGS);
 
         if (isOnline) {
             onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
@@ -148,7 +150,7 @@ public class VoteResultsActivity extends VotingParentActivity {
     private void startSetup() {
         calculateVotePoints();
 
-        int resultStyle = GlobalPrefs.loadPreference(GlobalPrefs.RESULT_STYLE, ResultStyle.DEFAULT_STYLE);
+        int resultStyle = globalSettings.getResultStyle();
 
         if (resultStyle == ResultStyle.VERTICAL)
             setupItemListVertical();
@@ -355,7 +357,8 @@ public class VoteResultsActivity extends VotingParentActivity {
             } else {
                 // Proceed to next voting
                 Intent intent = new Intent(this, VoteTopActivity.class);
-                intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+                intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+                intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
                 intent.putExtra(VoteIntents.TOP_AMOUNT, listVoteSizeLast);
                 intent.putExtra(VoteIntents.LIST, selectedList);
                 intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
@@ -375,7 +378,8 @@ public class VoteResultsActivity extends VotingParentActivity {
             Intent intent = new Intent(this, VoteTopActivity.class);
             intent.putExtra(VoteIntents.IS_ONLINE, true);
             intent.putExtra(VoteIntents.ROOM, voteRoom);
-            intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
             intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
             intent.putExtra(VoteIntents.TOP_AMOUNT, listVoteSizeLast);
             intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);

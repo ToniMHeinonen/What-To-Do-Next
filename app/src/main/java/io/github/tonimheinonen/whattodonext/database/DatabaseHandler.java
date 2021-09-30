@@ -50,6 +50,7 @@ public abstract class DatabaseHandler {
     private static DatabaseReference dbSavedResults;
     private static DatabaseReference dbResultItems;
     private static DatabaseReference dbVoteSettings;
+    private static DatabaseReference dbGlobalSettings;
 
     // Online voting
     private static DatabaseReference dbVoteRooms;
@@ -99,6 +100,9 @@ public abstract class DatabaseHandler {
         dbVoteSettings = FirebaseDatabase.getInstance().getReference().child("users").
                 child(user.getUid()).child("vote_settings");
         dbVoteSettings.keepSynced(true);
+        dbGlobalSettings = FirebaseDatabase.getInstance().getReference().child("users").
+                child(user.getUid()).child("global_settings");
+        dbGlobalSettings.keepSynced(true);
         // If you add something in here, remember to add it to the logOutOfUser()
     }
 
@@ -110,6 +114,7 @@ public abstract class DatabaseHandler {
         dbSavedResults = null;
         dbResultItems = null;
         dbVoteSettings = null;
+        dbGlobalSettings = null;
     }
 
     /**
@@ -179,6 +184,14 @@ public abstract class DatabaseHandler {
          * @param voteSettings loaded vote settings from database
          */
         void onDataGetVoteSettings(VoteSettings voteSettings);
+    }
+
+    public interface GlobalSettingsListener {
+        /**
+         * Gets loaded global settings from database.
+         * @param settings loaded global settings from database
+         */
+        void onDataGetGlobalSettings(GlobalSettings settings);
     }
 
     /////////////////////* VOTE ROOM INTERFACES *////////////////////
@@ -1463,5 +1476,75 @@ public abstract class DatabaseHandler {
         dbVoteSettings.updateChildren(childUpdates);
     }
 
+    //endregion
+
+    //region GlobalSettings
+    /**
+     * Adds new GlobalSettings.
+     * @param listener settings to add
+     */
+    private static void addGlobalSettings(DatabaseAddListener listener) {
+        String key = dbGlobalSettings.push().getKey();   // Add new key to path
+
+        // Create new settings with default values
+        GlobalSettings settings = new GlobalSettings();
+
+        settings.setDbID(key);
+        Map<String, Object> listValues = settings.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, listValues);
+
+        dbGlobalSettings.updateChildren(childUpdates)
+                .addOnCompleteListener((complete) -> listener.onDataAddedComplete());
+    }
+
+    /**
+     * Loads GlobalSettings which connected to user database.
+     * @param listener listener to send data to
+     */
+    public static void getGlobalSettings(final GlobalSettingsListener listener) {
+        dbGlobalSettings.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                GlobalSettings settings = null;
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    String key = dataSnapshot.getKey();
+                    GlobalSettings value = dataSnapshot.getValue(GlobalSettings.class);
+                    value.setDbID(key);
+                    settings = value;
+                    break;
+                }
+
+                // If settings found, return them
+                if (settings != null) {
+                    listener.onDataGetGlobalSettings(settings);
+                } else {
+                    // Add new settings and retrieve them
+                    addGlobalSettings(() -> getGlobalSettings(listener));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    /**
+     * Modifies global settings values.
+     * @param settings global settings to modify
+     */
+    public static void modifyGlobalSettings(GlobalSettings settings) {
+        Map<String, Object> listValues = settings.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(settings.getDbID(), listValues);
+
+        dbGlobalSettings.updateChildren(childUpdates);
+    }
     //endregion
 }

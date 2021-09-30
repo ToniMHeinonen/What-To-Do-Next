@@ -19,6 +19,7 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
@@ -37,6 +38,7 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
     private VoteWaitingActivity _this;
     private VoteRoom voteRoom;
     private VoteSettings voteSettings;
+    private GlobalSettings globalSettings;
     private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
@@ -61,7 +63,8 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
 
         Intent intent = getIntent();
         voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
-        voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
+        voteSettings = intent.getParcelableExtra(VoteIntents.VOTE_SETTINGS);
+        globalSettings = intent.getParcelableExtra(VoteIntents.GLOBAL_SETTINGS);
         onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
 
         // Listen for back button
@@ -231,7 +234,8 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
             Intent intent = new Intent(this, VoteResultsActivity.class);
             intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
             intent.putExtra(VoteIntents.ROOM, voteRoom);
-            intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
             intent.putExtra(VoteIntents.IS_ONLINE, true);
 
             Buddy.hideOnlineVoteLoadingBar(_this);

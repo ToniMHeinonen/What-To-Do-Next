@@ -13,6 +13,7 @@ import io.github.tonimheinonen.whattodonext.ListItemFragment;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
+import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
@@ -35,6 +36,7 @@ public class VoteTopActivity extends VotingParentActivity {
 
     private int topAmount;
     private VoteSettings voteSettings;
+    private GlobalSettings globalSettings;
     private ListOfItems selectedList;
     private ArrayList<Profile> selectedProfiles;
 
@@ -72,7 +74,8 @@ public class VoteTopActivity extends VotingParentActivity {
 
         Intent intent = getIntent();
         isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
-        voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
+        voteSettings = intent.getParcelableExtra(VoteIntents.VOTE_SETTINGS);
+        globalSettings = intent.getParcelableExtra(VoteIntents.GLOBAL_SETTINGS);
 
         if (isOnline) {
             onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
@@ -266,7 +269,8 @@ public class VoteTopActivity extends VotingParentActivity {
                 finish();
                 // Move to results screen
                 Intent intent = new Intent(this, VoteResultsActivity.class);
-                intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+                intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+                intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
                 intent.putExtra(VoteIntents.TOP_AMOUNT, topAmount);
                 intent.putExtra(VoteIntents.LIST, selectedList);
                 intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
@@ -293,7 +297,8 @@ public class VoteTopActivity extends VotingParentActivity {
                 // Move to waiting room when state has changed
                 Intent intent = new Intent(this, VoteWaitingActivity.class);
                 intent.putExtra(VoteIntents.ROOM, voteRoom);
-                intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+                intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+                intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
                 intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
                 startActivity(intent);
             });

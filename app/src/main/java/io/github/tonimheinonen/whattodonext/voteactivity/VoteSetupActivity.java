@@ -21,6 +21,7 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
@@ -49,6 +50,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
     private boolean listBigEnough = false;
     private VoteSettings voteSettings;
+    private GlobalSettings globalSettings;
 
     private final int minimumItemCount = 3;
 
@@ -98,9 +100,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         // Check if user has registered
         if (Buddy.isRegistered) {
-            // Load user's lists from database
             Buddy.showLoadingBar(this);
-            DatabaseHandler.getLists(this::loadLists);
+            // Load global settings from database
+            DatabaseHandler.getGlobalSettings(this::loadGlobalSettings);
         } else {
             // Initialize unregistered voting
             // Hide lists spinner
@@ -109,7 +111,20 @@ public class VoteSetupActivity extends VotingParentActivity implements
             noListsView.setVisibility(View.VISIBLE);
             noListsView.setText(getString(R.string.unregistered_lists_locked));
             initializeVotingSetupOnline();
+            // Create default settings
+            globalSettings = new GlobalSettings();
         }
+    }
+
+    /**
+     * Sets loaded global settings and starts loading lists.
+     * @param globalSettings loaded global settings
+     */
+    private void loadGlobalSettings(GlobalSettings globalSettings) {
+        this.globalSettings = globalSettings;
+
+        // Load user's lists from database
+        DatabaseHandler.getLists(this::loadLists);
     }
 
     /**
@@ -394,7 +409,8 @@ public class VoteSetupActivity extends VotingParentActivity implements
     private void startLocalVoting() {
         // Move to voting top list
         Intent intent = new Intent(this, VoteTopActivity.class);
-        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+        intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+        intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
         intent.putExtra(VoteIntents.TOP_AMOUNT, voteSettings.getFirstVote());
         intent.putExtra(VoteIntents.LIST, selectedList);
         intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
@@ -529,7 +545,8 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         Intent intent = new Intent(this, VoteLobbyActivity.class);
         intent.putExtra(VoteIntents.ROOM, voteRoom);
-        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+        intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+        intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
         intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
         intent.putExtra(VoteIntents.RECONNECT, reconnect);
 
@@ -577,7 +594,8 @@ public class VoteSetupActivity extends VotingParentActivity implements
         intent.putExtra(VoteIntents.RECONNECT, true);
         intent.putExtra(VoteIntents.IS_ONLINE, true);
         intent.putExtra(VoteIntents.ROOM, voteRoom);
-        intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+        intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+        intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
         intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
         intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
 

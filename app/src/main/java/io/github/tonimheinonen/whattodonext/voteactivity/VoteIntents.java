@@ -14,5 +14,6 @@ public abstract class VoteIntents {
     public final static String RECONNECT = "reconnect";
 
     // Offline
-    public final static String SETTINGS = "voteSettings";
+    public final static String VOTE_SETTINGS = "voteSettings";
+    public final static String GLOBAL_SETTINGS = "globalSettings";
 }

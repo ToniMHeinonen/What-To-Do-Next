@@ -14,10 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
+import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.GlobalPrefs;
-import io.github.tonimheinonen.whattodonext.tools.ResultStyle;
 
 /**
  * Handles user changing app settings.
@@ -42,6 +42,7 @@ public class SettingDialog extends Dialog {
     }
 
     private VoteSettings voteSettings;
+    private GlobalSettings globalSettings;
     private Setting setting;
     private EditText points, firstPoints, lastPoints;
     private Spinner spinner;
@@ -53,11 +54,12 @@ public class SettingDialog extends Dialog {
      * @param a current activity
      * @param setting selected setting
      */
-    public SettingDialog(SettingsActivity a, Setting setting, VoteSettings voteSettings) {
+    public SettingDialog(SettingsActivity a, Setting setting, VoteSettings voteSettings, GlobalSettings globalSettings) {
         super(a);
         this.activity = a;
         this.setting = setting;
         this.voteSettings = voteSettings;
+        this.globalSettings = globalSettings;
     }
 
     /**
@@ -153,7 +155,7 @@ public class SettingDialog extends Dialog {
                 text.setText(activity.getString(R.string.result_style_text));
                 note.setVisibility(View.VISIBLE);
                 note.setText(R.string.result_style_note);
-                int spinnerPosition = GlobalPrefs.loadPreference(GlobalPrefs.RESULT_STYLE, ResultStyle.DEFAULT_STYLE);
+                int spinnerPosition = globalSettings.getResultStyle();
                 setupListsSpinner(activity.getResources().getStringArray(R.array.resultStyles), spinnerPosition);
                 break;
             case RESET_TUTORIAL:
@@ -264,7 +266,7 @@ public class SettingDialog extends Dialog {
                 break;
             case RESULT_STYLE:
                 int spinnerPos = spinner.getSelectedItemPosition();
-                GlobalPrefs.savePreference(GlobalPrefs.RESULT_STYLE, spinnerPos);
+                globalSettings.setResultStyle(spinnerPos);
                 dismiss();
                 break;
             case RESET_TUTORIAL:

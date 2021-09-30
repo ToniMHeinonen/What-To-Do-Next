@@ -23,7 +23,6 @@ import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
-import io.github.tonimheinonen.whattodonext.database.ListOfItems;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
@@ -35,6 +34,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
     private VoteLobbyActivity _this;
     private VoteRoom voteRoom;
     private VoteSettings voteSettings;
+    private VoteSettings globalSettings;
     private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
@@ -58,7 +58,8 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
         Intent intent = getIntent();
         voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
-        voteSettings = intent.getParcelableExtra(VoteIntents.SETTINGS);
+        voteSettings = intent.getParcelableExtra(VoteIntents.VOTE_SETTINGS);
+        globalSettings = intent.getParcelableExtra(VoteIntents.GLOBAL_SETTINGS);
         onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
         reconnecting = intent.getBooleanExtra(VoteIntents.RECONNECT, false);
 
@@ -253,7 +254,8 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
             Intent intent = new Intent(this, VoteTopActivity.class);
             intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
             intent.putExtra(VoteIntents.ROOM, voteRoom);
-            intent.putExtra(VoteIntents.SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
+            intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
             intent.putExtra(VoteIntents.IS_ONLINE, true);
 
             startActivity(intent);

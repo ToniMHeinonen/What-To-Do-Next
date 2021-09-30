@@ -3,12 +3,9 @@ package io.github.tonimheinonen.whattodonext;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
 import androidx.appcompat.app.AppCompatActivity;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
-import io.github.tonimheinonen.whattodonext.database.SavedResult;
+import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
@@ -22,6 +19,7 @@ import io.github.tonimheinonen.whattodonext.tools.HTMLDialog;
  */
 public class SettingsActivity extends AppCompatActivity {
 
+    private GlobalSettings globalSettings;
     private VoteSettings voteSettings;
     private boolean addNewVoteSettings;
 
@@ -50,6 +48,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         this.voteSettings = voteSettings;
+        DatabaseHandler.getGlobalSettings(this::globalSettingsLoaded);
+    }
+
+    private void globalSettingsLoaded(GlobalSettings globalSettings) {
+        this.globalSettings = globalSettings;
+
         Buddy.hideLoadingBar(this, R.id.settingsLayout);
     }
 
@@ -62,28 +66,28 @@ public class SettingsActivity extends AppCompatActivity {
 
         switch (v.getId()) {
             case R.id.maxPeril:
-                dialog = new SettingDialog(this, SettingDialog.Setting.MAX_PERIL, voteSettings);
+                dialog = new SettingDialog(this, SettingDialog.Setting.MAX_PERIL, voteSettings, globalSettings);
                 break;
             case R.id.votePoints:
-                dialog = new SettingDialog(this, SettingDialog.Setting.VOTE_POINTS, voteSettings);
+                dialog = new SettingDialog(this, SettingDialog.Setting.VOTE_POINTS, voteSettings, globalSettings);
                 break;
             case R.id.ignoreUnselected:
-                dialog = new SettingDialog(this, SettingDialog.Setting.IGNORE_UNSELECTED, voteSettings);
+                dialog = new SettingDialog(this, SettingDialog.Setting.IGNORE_UNSELECTED, voteSettings, globalSettings);
                 break;
             case R.id.halveExtra:
-                dialog = new SettingDialog(this, SettingDialog.Setting.HALVE_EXTRA, voteSettings);
+                dialog = new SettingDialog(this, SettingDialog.Setting.HALVE_EXTRA, voteSettings, globalSettings);
                 break;
             case R.id.showExtra:
-                dialog = new SettingDialog(this, SettingDialog.Setting.SHOW_EXTRA, voteSettings);
+                dialog = new SettingDialog(this, SettingDialog.Setting.SHOW_EXTRA, voteSettings, globalSettings);
                 break;
             case R.id.showVotes:
-                dialog = new SettingDialog(this, SettingDialog.Setting.SHOW_VOTES, voteSettings);
+                dialog = new SettingDialog(this, SettingDialog.Setting.SHOW_VOTES, voteSettings, globalSettings);
                 break;
             case R.id.resultStyle:
-                dialog = new SettingDialog(this, SettingDialog.Setting.RESULT_STYLE, voteSettings);
+                dialog = new SettingDialog(this, SettingDialog.Setting.RESULT_STYLE, voteSettings, globalSettings);
                 break;
             case R.id.resetTutorial:
-                dialog = new SettingDialog(this, SettingDialog.Setting.RESET_TUTORIAL, voteSettings);
+                dialog = new SettingDialog(this, SettingDialog.Setting.RESET_TUTORIAL, voteSettings, globalSettings);
                 break;
             case R.id.patchNotes:
                 new HTMLDialog(this, HTMLDialog.HTMLText.PATCH_NOTES).show();
@@ -103,6 +107,8 @@ public class SettingsActivity extends AppCompatActivity {
             DatabaseHandler.addVoteSettings(null, voteSettings);
         else
             DatabaseHandler.modifyVoteSettings(voteSettings);
+
+        DatabaseHandler.modifyGlobalSettings(globalSettings);
 
         super.onBackPressed();
     }

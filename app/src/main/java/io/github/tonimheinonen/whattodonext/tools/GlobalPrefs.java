@@ -18,7 +18,6 @@ public abstract class GlobalPrefs {
 
     // Lists
     private static String keyCurrentList = "current_list";
-    public static final String RESULT_STYLE = "result_style";
 
     // Popup information box
     private static String keyPopup = "popup_";
