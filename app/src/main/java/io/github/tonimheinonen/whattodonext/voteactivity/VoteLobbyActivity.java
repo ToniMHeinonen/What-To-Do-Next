@@ -22,6 +22,7 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
+import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
@@ -32,9 +33,9 @@ import io.github.tonimheinonen.whattodonext.tools.Debug;
 public class VoteLobbyActivity extends VotingParentActivity implements View.OnClickListener {
 
     private VoteLobbyActivity _this;
+
+    private VoteIntentHolder intentHolder;
     private VoteRoom voteRoom;
-    private VoteSettings voteSettings;
-    private VoteSettings globalSettings;
     private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
@@ -53,15 +54,12 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         _this = this;
 
-        // Lock orientation during voting to prevent million different problems
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-
         Intent intent = getIntent();
-        voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
-        voteSettings = intent.getParcelableExtra(VoteIntents.VOTE_SETTINGS);
-        globalSettings = intent.getParcelableExtra(VoteIntents.GLOBAL_SETTINGS);
-        onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
-        reconnecting = intent.getBooleanExtra(VoteIntents.RECONNECT, false);
+        intentHolder = intent.getParcelableExtra(VoteIntentHolder.VOTE_INTENT_HOLDER);
+
+        voteRoom = intentHolder.getVoteRoom();
+        onlineProfile = intentHolder.getOnlineProfile();
+        reconnecting = intentHolder.isReconnect();
 
         Debug.print(this, "onCreate", "reconnecting: " + reconnecting, 1);
 
@@ -252,11 +250,8 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
             Intent intent = new Intent(this, VoteTopActivity.class);
-            intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-            intent.putExtra(VoteIntents.ROOM, voteRoom);
-            intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
-            intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
-            intent.putExtra(VoteIntents.IS_ONLINE, true);
+
+            intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
 
             startActivity(intent);
         });

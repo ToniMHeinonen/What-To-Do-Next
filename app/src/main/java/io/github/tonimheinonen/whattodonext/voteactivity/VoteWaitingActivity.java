@@ -1,7 +1,6 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -36,9 +35,9 @@ import io.github.tonimheinonen.whattodonext.tools.Debug;
 public class VoteWaitingActivity extends VotingParentActivity implements View.OnClickListener {
 
     private VoteWaitingActivity _this;
+
+    private VoteIntentHolder intentHolder;
     private VoteRoom voteRoom;
-    private VoteSettings voteSettings;
-    private GlobalSettings globalSettings;
     private OnlineProfile onlineProfile;
 
     private ArrayList<OnlineProfile> users = new ArrayList<>();
@@ -58,14 +57,11 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
         setContentView(R.layout.activity_vote_waiting);
         _this = this;
 
-        // Lock orientation during voting to prevent million different problems
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
-
         Intent intent = getIntent();
-        voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
-        voteSettings = intent.getParcelableExtra(VoteIntents.VOTE_SETTINGS);
-        globalSettings = intent.getParcelableExtra(VoteIntents.GLOBAL_SETTINGS);
-        onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
+        intentHolder = intent.getParcelableExtra(VoteIntentHolder.VOTE_INTENT_HOLDER);
+
+        voteRoom = intentHolder.getVoteRoom();
+        onlineProfile = intentHolder.getOnlineProfile();
 
         // Listen for back button
         findViewById(R.id.exit).setOnClickListener(this);
@@ -232,11 +228,8 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
         // Change state and move to next activity
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
             Intent intent = new Intent(this, VoteResultsActivity.class);
-            intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-            intent.putExtra(VoteIntents.ROOM, voteRoom);
-            intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
-            intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
-            intent.putExtra(VoteIntents.IS_ONLINE, true);
+
+            intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
 
             Buddy.hideOnlineVoteLoadingBar(_this);
 

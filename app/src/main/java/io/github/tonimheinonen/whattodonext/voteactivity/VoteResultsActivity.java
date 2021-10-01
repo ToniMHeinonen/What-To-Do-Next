@@ -44,6 +44,7 @@ import io.github.tonimheinonen.whattodonext.tools.ResultStyle;
  */
 public class VoteResultsActivity extends VotingParentActivity {
 
+    private VoteIntentHolder intentHolder;
     private boolean lastResults;
     private VoteSettings voteSettings;
     private GlobalSettings globalSettings;
@@ -75,14 +76,16 @@ public class VoteResultsActivity extends VotingParentActivity {
         setContentView(R.layout.activity_vote_results);
 
         Intent intent = getIntent();
-        isOnline = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
+        intentHolder = intent.getParcelableExtra(VoteIntentHolder.VOTE_INTENT_HOLDER);
 
-        voteSettings = intent.getParcelableExtra(VoteIntents.VOTE_SETTINGS);
-        globalSettings = intent.getParcelableExtra(VoteIntents.GLOBAL_SETTINGS);
+        isOnline = intentHolder.isOnline();
+
+        voteSettings = intentHolder.getVoteSettings();
+        globalSettings = intentHolder.getGlobalSettings();
 
         if (isOnline) {
-            onlineProfile = intent.getParcelableExtra(VoteIntents.ONLINE_PROFILE);
-            voteRoom = intent.getParcelableExtra(VoteIntents.ROOM);
+            onlineProfile = intentHolder.getOnlineProfile();
+            voteRoom = intentHolder.getVoteRoom();
 
             // Get correct vote amount
             if (onlineProfile.getState() == VoteRoom.RESULTS_FIRST)
@@ -90,9 +93,9 @@ public class VoteResultsActivity extends VotingParentActivity {
             else
                 topAmount = voteSettings.getLastVote();
         } else {
-            topAmount = intent.getIntExtra(VoteIntents.TOP_AMOUNT, -1);
-            selectedProfiles = intent.getParcelableArrayListExtra(VoteIntents.PROFILES);
-            selectedList = intent.getParcelableExtra(VoteIntents.LIST);
+            topAmount = intentHolder.getTopAmount();
+            selectedProfiles = intentHolder.getSelectedProfiles();
+            selectedList = intentHolder.getSelectedList();
         }
 
         isOfflineOrIsOnlineHost = !isOnline || onlineProfile.isHost();
@@ -357,11 +360,8 @@ public class VoteResultsActivity extends VotingParentActivity {
             } else {
                 // Proceed to next voting
                 Intent intent = new Intent(this, VoteTopActivity.class);
-                intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
-                intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
-                intent.putExtra(VoteIntents.TOP_AMOUNT, listVoteSizeLast);
-                intent.putExtra(VoteIntents.LIST, selectedList);
-                intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
+                intentHolder.setTopAmount(listVoteSizeLast);
+                intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
                 startActivity(intent);
             }
         }
@@ -376,13 +376,7 @@ public class VoteResultsActivity extends VotingParentActivity {
     private void moveToOnlineLastVote() {
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
             Intent intent = new Intent(this, VoteTopActivity.class);
-            intent.putExtra(VoteIntents.IS_ONLINE, true);
-            intent.putExtra(VoteIntents.ROOM, voteRoom);
-            intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
-            intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
-            intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-            intent.putExtra(VoteIntents.TOP_AMOUNT, listVoteSizeLast);
-            intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
+            intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
             startActivity(intent);
         });
     }

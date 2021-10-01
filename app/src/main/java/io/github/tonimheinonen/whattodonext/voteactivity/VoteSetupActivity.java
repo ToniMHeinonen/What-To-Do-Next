@@ -78,7 +78,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         // Get if vote is online
         Intent intent = getIntent();
-        isOnlineVote = intent.getBooleanExtra(VoteIntents.IS_ONLINE, false);
+        isOnlineVote = intent.getBooleanExtra(VoteIntentHolder.IS_ONLINE, false);
 
         if (isOnlineVote) {
             setContentView(R.layout.activity_vote_online);
@@ -409,11 +409,12 @@ public class VoteSetupActivity extends VotingParentActivity implements
     private void startLocalVoting() {
         // Move to voting top list
         Intent intent = new Intent(this, VoteTopActivity.class);
-        intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
-        intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
-        intent.putExtra(VoteIntents.TOP_AMOUNT, voteSettings.getFirstVote());
-        intent.putExtra(VoteIntents.LIST, selectedList);
-        intent.putParcelableArrayListExtra(VoteIntents.PROFILES, selectedProfiles);
+
+        VoteIntentHolder intentHolder = new VoteIntentHolder(globalSettings, voteSettings);
+        intentHolder.setupOffline(voteSettings.getFirstVote(), selectedProfiles, selectedList);
+
+        intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
+
         startActivity(intent);
     }
 
@@ -537,18 +538,13 @@ public class VoteSetupActivity extends VotingParentActivity implements
      */
     private void moveToOnlineLobby(VoteRoom voteRoom, LobbyJoinOptions lobbyJoinOptions) {
         boolean host = lobbyJoinOptions == LobbyJoinOptions.HOST_NEW;
-        boolean reconnect = lobbyJoinOptions == LobbyJoinOptions.JOIN_RECONNECT;
+        final boolean reconnect = lobbyJoinOptions == LobbyJoinOptions.JOIN_RECONNECT;
 
         // Create online profile if not reconnecting
         if (!reconnect)
             onlineProfile = new OnlineProfile(DatabaseHandler.getUserDbID(), nickname, host);
 
         Intent intent = new Intent(this, VoteLobbyActivity.class);
-        intent.putExtra(VoteIntents.ROOM, voteRoom);
-        intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
-        intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
-        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-        intent.putExtra(VoteIntents.RECONNECT, reconnect);
 
         Debug.print(this, "moveToOnlineLobby", onlineProfile.toString(), 1);
 
@@ -556,9 +552,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
         if (host) {
             // Add items to vote room and move to lobby when items are added
             DatabaseHandler.addItemsToVoteRoom(voteRoom, selectedList.getItems(),
-                    () -> startVote(voteRoom, intent));
+                    () -> startVote(voteRoom, intent, reconnect));
         } else {
-            startVote(voteRoom, intent);
+            startVote(voteRoom, intent, reconnect);
         }
     }
 
@@ -589,21 +585,18 @@ public class VoteSetupActivity extends VotingParentActivity implements
                 return;
         }
 
-        Debug.print(this, "reconnectToVoteRoom", "intent: " + intent, 1);
+        Debug.print(this, "reconnectToVoteRoom", "State: " + onlineProfile.getState(), 1);
 
-        intent.putExtra(VoteIntents.RECONNECT, true);
-        intent.putExtra(VoteIntents.IS_ONLINE, true);
-        intent.putExtra(VoteIntents.ROOM, voteRoom);
-        intent.putExtra(VoteIntents.VOTE_SETTINGS, voteSettings);
-        intent.putExtra(VoteIntents.GLOBAL_SETTINGS, globalSettings);
-        intent.putExtra(VoteIntents.ONLINE_PROFILE, onlineProfile);
-        intent.putExtra(VoteIntents.PROFILES, selectedProfiles);
-
-        startVote(voteRoom, intent);
+        startVote(voteRoom, intent, true);
     }
 
-    private void startVote(VoteRoom voteRoom, Intent intent) {
+    private void startVote(VoteRoom voteRoom, Intent intent, boolean reconnect) {
         Buddy.hideOnlineVoteLoadingBar(_this);
+
+        VoteIntentHolder intentHolder = new VoteIntentHolder(globalSettings, voteSettings);
+        intentHolder.setupOnline(reconnect, onlineProfile, voteRoom);
+
+        intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
 
         // Start listening for vote room expiration
         DatabaseHandler.listenForVoteRoomExpiration(this, voteRoom.getRoomCode());
