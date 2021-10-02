@@ -11,11 +11,10 @@ import io.github.tonimheinonen.whattodonext.database.Profile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
 import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 
-public class VoteIntentHolder implements Parcelable {
+public class VoteMaster implements Parcelable {
 
     // Static
-    public final static String VOTE_INTENT_HOLDER = "voteIntentHolder";
-    public final static String IS_ONLINE = "isOnline";
+    public final static String VOTE_MASTER = "voteMaster";
 
     // Common
     private GlobalSettings globalSettings;
@@ -32,7 +31,9 @@ public class VoteIntentHolder implements Parcelable {
     private ArrayList<Profile> selectedProfiles;
     private ListOfItems selectedList;
 
-    public VoteIntentHolder(GlobalSettings globalSettings, VoteSettings voteSettings) {
+    public VoteMaster() {}
+
+    public void setupCommon(GlobalSettings globalSettings, VoteSettings voteSettings) {
         this.globalSettings = globalSettings;
         this.voteSettings = voteSettings;
     }
@@ -174,7 +175,7 @@ public class VoteIntentHolder implements Parcelable {
      * Creates list from parcel info.
      * @param in given parcel
      */
-    public VoteIntentHolder(Parcel in) {
+    public VoteMaster(Parcel in) {
         globalSettings = in.readParcelable(GlobalSettings.class.getClassLoader());
         voteSettings = in.readParcelable(VoteSettings.class.getClassLoader());
         online = in.readInt() == 1;
@@ -189,14 +190,14 @@ public class VoteIntentHolder implements Parcelable {
     /**
      * Creator object for list.
      */
-    public static final Parcelable.Creator<VoteIntentHolder> CREATOR = new Parcelable.Creator<VoteIntentHolder>() {
+    public static final Parcelable.Creator<VoteMaster> CREATOR = new Parcelable.Creator<VoteMaster>() {
         /**
          * Creates from parcel.
          * @param in given parcel
          * @return list
          */
-        public VoteIntentHolder createFromParcel(Parcel in) {
-            return new VoteIntentHolder(in);
+        public VoteMaster createFromParcel(Parcel in) {
+            return new VoteMaster(in);
         }
 
         /**
@@ -204,8 +205,8 @@ public class VoteIntentHolder implements Parcelable {
          * @param size size of array
          * @return list array
          */
-        public VoteIntentHolder[] newArray(int size) {
-            return new VoteIntentHolder[size];
+        public VoteMaster[] newArray(int size) {
+            return new VoteMaster[size];
         }
     };
 }

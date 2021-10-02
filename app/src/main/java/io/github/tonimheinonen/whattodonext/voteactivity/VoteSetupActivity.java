@@ -76,9 +76,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get if vote is online
-        Intent intent = getIntent();
-        isOnlineVote = intent.getBooleanExtra(VoteIntentHolder.IS_ONLINE, false);
+        isOnlineVote = voteMaster.isOnline();
 
         if (isOnlineVote) {
             setContentView(R.layout.activity_vote_online);
@@ -410,12 +408,10 @@ public class VoteSetupActivity extends VotingParentActivity implements
         // Move to voting top list
         Intent intent = new Intent(this, VoteTopActivity.class);
 
-        VoteIntentHolder intentHolder = new VoteIntentHolder(globalSettings, voteSettings);
-        intentHolder.setupOffline(voteSettings.getFirstVote(), selectedProfiles, selectedList);
+        voteMaster.setupCommon(globalSettings, voteSettings);
+        voteMaster.setupOffline(voteSettings.getFirstVote(), selectedProfiles, selectedList);
 
-        intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
-
-        startActivity(intent);
+        parentStartActivity(intent);
     }
 
     /**
@@ -593,16 +589,14 @@ public class VoteSetupActivity extends VotingParentActivity implements
     private void startVote(VoteRoom voteRoom, Intent intent, boolean reconnect) {
         Buddy.hideOnlineVoteLoadingBar(_this);
 
-        VoteIntentHolder intentHolder = new VoteIntentHolder(globalSettings, voteSettings);
-        intentHolder.setupOnline(reconnect, onlineProfile, voteRoom);
-
-        intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
+        voteMaster.setupCommon(globalSettings, voteSettings);
+        voteMaster.setupOnline(reconnect, onlineProfile, voteRoom);
 
         // Start listening for vote room expiration
         DatabaseHandler.listenForVoteRoomExpiration(this, voteRoom.getRoomCode());
         DatabaseHandler.listenForUserLeavingRoom(this, voteRoom);
 
         finish();
-        startActivity(intent);
+        parentStartActivity(intent);
     }
 }

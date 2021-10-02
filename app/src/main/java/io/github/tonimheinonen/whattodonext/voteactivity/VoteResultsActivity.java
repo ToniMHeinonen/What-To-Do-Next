@@ -44,7 +44,6 @@ import io.github.tonimheinonen.whattodonext.tools.ResultStyle;
  */
 public class VoteResultsActivity extends VotingParentActivity {
 
-    private VoteIntentHolder intentHolder;
     private boolean lastResults;
     private VoteSettings voteSettings;
     private GlobalSettings globalSettings;
@@ -75,17 +74,14 @@ public class VoteResultsActivity extends VotingParentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_results);
 
-        Intent intent = getIntent();
-        intentHolder = intent.getParcelableExtra(VoteIntentHolder.VOTE_INTENT_HOLDER);
+        isOnline = voteMaster.isOnline();
 
-        isOnline = intentHolder.isOnline();
-
-        voteSettings = intentHolder.getVoteSettings();
-        globalSettings = intentHolder.getGlobalSettings();
+        voteSettings = voteMaster.getVoteSettings();
+        globalSettings = voteMaster.getGlobalSettings();
 
         if (isOnline) {
-            onlineProfile = intentHolder.getOnlineProfile();
-            voteRoom = intentHolder.getVoteRoom();
+            onlineProfile = voteMaster.getOnlineProfile();
+            voteRoom = voteMaster.getVoteRoom();
 
             // Get correct vote amount
             if (onlineProfile.getState() == VoteRoom.RESULTS_FIRST)
@@ -93,9 +89,9 @@ public class VoteResultsActivity extends VotingParentActivity {
             else
                 topAmount = voteSettings.getLastVote();
         } else {
-            topAmount = intentHolder.getTopAmount();
-            selectedProfiles = intentHolder.getSelectedProfiles();
-            selectedList = intentHolder.getSelectedList();
+            topAmount = voteMaster.getTopAmount();
+            selectedProfiles = voteMaster.getSelectedProfiles();
+            selectedList = voteMaster.getSelectedList();
         }
 
         isOfflineOrIsOnlineHost = !isOnline || onlineProfile.isHost();
@@ -359,10 +355,8 @@ public class VoteResultsActivity extends VotingParentActivity {
                 }
             } else {
                 // Proceed to next voting
-                Intent intent = new Intent(this, VoteTopActivity.class);
-                intentHolder.setTopAmount(listVoteSizeLast);
-                intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
-                startActivity(intent);
+                voteMaster.setTopAmount(listVoteSizeLast);
+                parentStartActivity(new Intent(this, VoteTopActivity.class));
             }
         }
     }
@@ -375,9 +369,7 @@ public class VoteResultsActivity extends VotingParentActivity {
 
     private void moveToOnlineLastVote() {
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
-            Intent intent = new Intent(this, VoteTopActivity.class);
-            intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
-            startActivity(intent);
+            parentStartActivity(new Intent(this, VoteTopActivity.class));
         });
     }
 

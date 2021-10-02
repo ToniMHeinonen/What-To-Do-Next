@@ -18,10 +18,8 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
-import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
-import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 
@@ -36,7 +34,6 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
 
     private VoteWaitingActivity _this;
 
-    private VoteIntentHolder intentHolder;
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
 
@@ -57,11 +54,8 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
         setContentView(R.layout.activity_vote_waiting);
         _this = this;
 
-        Intent intent = getIntent();
-        intentHolder = intent.getParcelableExtra(VoteIntentHolder.VOTE_INTENT_HOLDER);
-
-        voteRoom = intentHolder.getVoteRoom();
-        onlineProfile = intentHolder.getOnlineProfile();
+        voteRoom = voteMaster.getVoteRoom();
+        onlineProfile = voteMaster.getOnlineProfile();
 
         // Listen for back button
         findViewById(R.id.exit).setOnClickListener(this);
@@ -227,13 +221,7 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
 
         // Change state and move to next activity
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
-            Intent intent = new Intent(this, VoteResultsActivity.class);
-
-            intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
-
-            Buddy.hideOnlineVoteLoadingBar(_this);
-
-            startActivity(intent);
+            parentStartActivity(new Intent(this, VoteResultsActivity.class));
         });
     }
 

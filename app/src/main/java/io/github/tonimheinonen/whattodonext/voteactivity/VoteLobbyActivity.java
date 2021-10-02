@@ -1,7 +1,6 @@
 package io.github.tonimheinonen.whattodonext.voteactivity;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,11 +21,9 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.DatabaseValueListAdapter;
-import io.github.tonimheinonen.whattodonext.database.GlobalSettings;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.OnlineProfile;
 import io.github.tonimheinonen.whattodonext.database.VoteRoom;
-import io.github.tonimheinonen.whattodonext.database.VoteSettings;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 import io.github.tonimheinonen.whattodonext.tools.Debug;
 
@@ -34,7 +31,6 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
     private VoteLobbyActivity _this;
 
-    private VoteIntentHolder intentHolder;
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
 
@@ -54,12 +50,9 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         _this = this;
 
-        Intent intent = getIntent();
-        intentHolder = intent.getParcelableExtra(VoteIntentHolder.VOTE_INTENT_HOLDER);
-
-        voteRoom = intentHolder.getVoteRoom();
-        onlineProfile = intentHolder.getOnlineProfile();
-        reconnecting = intentHolder.isReconnect();
+        voteRoom = voteMaster.getVoteRoom();
+        onlineProfile = voteMaster.getOnlineProfile();
+        reconnecting = voteMaster.isReconnect();
 
         Debug.print(this, "onCreate", "reconnecting: " + reconnecting, 1);
 
@@ -249,11 +242,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         removeListeners();
 
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
-            Intent intent = new Intent(this, VoteTopActivity.class);
-
-            intent.putExtra(VoteIntentHolder.VOTE_INTENT_HOLDER, intentHolder);
-
-            startActivity(intent);
+            parentStartActivity(new Intent(this, VoteTopActivity.class));
         });
     }
 

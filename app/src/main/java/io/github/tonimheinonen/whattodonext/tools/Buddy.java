@@ -37,6 +37,7 @@ import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
 import io.github.tonimheinonen.whattodonext.database.ListItem;
 import io.github.tonimheinonen.whattodonext.database.ListOfItems;
+import io.github.tonimheinonen.whattodonext.voteactivity.VoteMaster;
 import io.github.tonimheinonen.whattodonext.voteactivity.VoteSetupActivity;
 
 /**
@@ -400,7 +401,9 @@ public abstract class Buddy {
 
         // Move to setting up vote
         Intent intent = new Intent(activity, VoteSetupActivity.class);
-        intent.putExtra("isOnline", online);
+        VoteMaster intentHolder = new VoteMaster();
+        intentHolder.setOnline(online);
+        intent.putExtra(VoteMaster.VOTE_MASTER, intentHolder);
         activity.startActivity(intent);
     }
 }
