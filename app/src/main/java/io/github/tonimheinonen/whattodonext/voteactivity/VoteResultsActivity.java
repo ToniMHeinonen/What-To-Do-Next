@@ -78,6 +78,7 @@ public class VoteResultsActivity extends VotingParentActivity {
 
         voteSettings = voteMaster.getVoteSettings();
         globalSettings = voteMaster.getGlobalSettings();
+        selectedList = voteMaster.getSelectedList();
 
         if (isOnline) {
             onlineProfile = voteMaster.getOnlineProfile();
@@ -91,7 +92,6 @@ public class VoteResultsActivity extends VotingParentActivity {
         } else {
             topAmount = voteMaster.getTopAmount();
             selectedProfiles = voteMaster.getSelectedProfiles();
-            selectedList = voteMaster.getSelectedList();
         }
 
         isOfflineOrIsOnlineHost = !isOnline || onlineProfile.isHost();
@@ -124,7 +124,7 @@ public class VoteResultsActivity extends VotingParentActivity {
                     // Retrieve all vote room items
                     DatabaseHandler.getVoteRoomItems(voteRoom, (items -> {
                         // Generate list from correct items
-                        selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, onlineProfile, items);
+                        ListOfItems.generateOnlineListOfItems(selectedList, onlineProfile, items);
 
                         // Get vote room items
                         DatabaseHandler.getVoteRoomVotedItems(voteRoom, onlineProfile, (votedItems) -> {
@@ -465,7 +465,14 @@ public class VoteResultsActivity extends VotingParentActivity {
                 DatabaseHandler.modifyItem(item);
         }
 
-        SavedResult result = new SavedResult(selectedList.getName(), selectedProfiles);
+        // Increase times voted by 1 and modify list in database
+        selectedList.setTimesVoted(selectedList.getTimesVoted() + 1);
+
+        if (isOfflineOrIsOnlineHost)
+            DatabaseHandler.modifyList(selectedList);
+
+        // Generate result
+        SavedResult result = new SavedResult(selectedList, selectedProfiles);
         DatabaseHandler.addResult(result);
         DatabaseHandler.addResultItems(result, resultsSaving);
 

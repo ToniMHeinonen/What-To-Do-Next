@@ -19,6 +19,7 @@ public class VoteMaster implements Parcelable {
     // Common
     private GlobalSettings globalSettings;
     private VoteSettings voteSettings;
+    private ListOfItems selectedList;
 
     // Online
     private boolean online;
@@ -29,13 +30,13 @@ public class VoteMaster implements Parcelable {
     // Offline
     private int topAmount = -1;
     private ArrayList<Profile> selectedProfiles;
-    private ListOfItems selectedList;
 
     public VoteMaster() {}
 
-    public void setupCommon(GlobalSettings globalSettings, VoteSettings voteSettings) {
+    public void setupCommon(GlobalSettings globalSettings, VoteSettings voteSettings, ListOfItems selectedList) {
         this.globalSettings = globalSettings;
         this.voteSettings = voteSettings;
+        this.selectedList = selectedList;
     }
 
     public void setupOnline(boolean reconnect, OnlineProfile onlineProfile, VoteRoom voteRoom) {
@@ -45,10 +46,9 @@ public class VoteMaster implements Parcelable {
         this.voteRoom = voteRoom;
     }
 
-    public void setupOffline(int topAmount, ArrayList<Profile> selectedProfiles, ListOfItems selectedList) {
+    public void setupOffline(int topAmount, ArrayList<Profile> selectedProfiles) {
         this.topAmount = topAmount;
         this.selectedProfiles = selectedProfiles;
-        this.selectedList = selectedList;
     }
 
     //region GetSet

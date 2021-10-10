@@ -408,8 +408,8 @@ public class VoteSetupActivity extends VotingParentActivity implements
         // Move to voting top list
         Intent intent = new Intent(this, VoteTopActivity.class);
 
-        voteMaster.setupCommon(globalSettings, voteSettings);
-        voteMaster.setupOffline(voteSettings.getFirstVote(), selectedProfiles, selectedList);
+        voteMaster.setupCommon(globalSettings, voteSettings, selectedList);
+        voteMaster.setupOffline(voteSettings.getFirstVote(), selectedProfiles);
 
         parentStartActivity(intent);
     }
@@ -448,14 +448,17 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         String roomCode = ((EditText) findViewById(R.id.roomCode)).getText().toString();
         // Create vote room
-        final VoteRoom voteRoom = new VoteRoom(roomCode, selectedList.getName());
+        final VoteRoom voteRoom = new VoteRoom(roomCode);
 
         // Add created vote room to database
         DatabaseHandler.addVoteRoom((added) -> {
             if (added) {
-                // Add settings to vote room and move to lobby
-                DatabaseHandler.addVoteRoomSettings(voteRoom, voteSettings,
-                        () -> moveToOnlineLobby(voteRoom, LobbyJoinOptions.HOST_NEW));
+                // Add settings and list to vote room and move to lobby
+                DatabaseHandler.addVoteRoomSettings(voteRoom, voteSettings, () ->  {
+                    DatabaseHandler.addVoteRoomList(voteRoom, selectedList, () -> {
+                        moveToOnlineLobby(voteRoom, LobbyJoinOptions.HOST_NEW);
+                    });
+                });
             } else {
                 Buddy.showToast(getString(R.string.online_host_duplicate), Toast.LENGTH_LONG);
                 Buddy.hideOnlineVoteLoadingBar(this);
@@ -510,13 +513,17 @@ public class VoteSetupActivity extends VotingParentActivity implements
         int ownVersionCode = BuildConfig.VERSION_CODE;
 
         if (voteRoom.getVersionCode() == ownVersionCode) {
-            // Load vote room settings and move to lobby
+            // Load vote room settings and list and move to lobby
             DatabaseHandler.getVoteRoomSettings((settings) -> {
-                voteSettings = settings;
-                if (reconnecting)
-                    reconnectToVoteRoom(voteRoom);
-                else
-                    moveToOnlineLobby(voteRoom, LobbyJoinOptions.JOIN_NEW);
+                DatabaseHandler.getVoteRoomList(voteRoom, (listOfItems) -> {
+                    voteSettings = settings;
+                    selectedList = listOfItems;
+
+                    if (reconnecting)
+                        reconnectToVoteRoom(voteRoom);
+                    else
+                        moveToOnlineLobby(voteRoom, LobbyJoinOptions.JOIN_NEW);
+                });
             }, voteRoom);
         } else if (ownVersionCode < voteRoom.getVersionCode()) {
             Buddy.showToast(getString(R.string.joiner_update_required), Toast.LENGTH_LONG);
@@ -548,9 +555,9 @@ public class VoteSetupActivity extends VotingParentActivity implements
         if (host) {
             // Add items to vote room and move to lobby when items are added
             DatabaseHandler.addItemsToVoteRoom(voteRoom, selectedList.getItems(),
-                    () -> startVote(voteRoom, intent, reconnect));
+                    () -> startOnlineVote(voteRoom, intent, reconnect));
         } else {
-            startVote(voteRoom, intent, reconnect);
+            startOnlineVote(voteRoom, intent, reconnect);
         }
     }
 
@@ -583,13 +590,13 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         Debug.print(this, "reconnectToVoteRoom", "State: " + onlineProfile.getState(), 1);
 
-        startVote(voteRoom, intent, true);
+        startOnlineVote(voteRoom, intent, true);
     }
 
-    private void startVote(VoteRoom voteRoom, Intent intent, boolean reconnect) {
+    private void startOnlineVote(VoteRoom voteRoom, Intent intent, boolean reconnect) {
         Buddy.hideOnlineVoteLoadingBar(_this);
 
-        voteMaster.setupCommon(globalSettings, voteSettings);
+        voteMaster.setupCommon(globalSettings, voteSettings, selectedList);
         voteMaster.setupOnline(reconnect, onlineProfile, voteRoom);
 
         // Start listening for vote room expiration

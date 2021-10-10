@@ -72,6 +72,7 @@ public class VoteTopActivity extends VotingParentActivity {
 
         isOnline = voteMaster.isOnline();
         voteSettings = voteMaster.getVoteSettings();
+        selectedList = voteMaster.getSelectedList();
 
         if (isOnline) {
             onlineProfile = voteMaster.getOnlineProfile();
@@ -83,7 +84,6 @@ public class VoteTopActivity extends VotingParentActivity {
         } else {
             topAmount = voteMaster.getTopAmount();
             selectedProfiles = voteMaster.getSelectedProfiles();
-            selectedList = voteMaster.getSelectedList();
         }
 
         setOptions();
@@ -97,7 +97,7 @@ public class VoteTopActivity extends VotingParentActivity {
             Buddy.showOnlineVoteLoadingBar(this);
             DatabaseHandler.getVoteRoomItems(voteRoom, (items -> {
                 // Generate list from correct items
-                selectedList = ListOfItems.generateOnlineListOfItems(voteRoom, onlineProfile, items);
+                ListOfItems.generateOnlineListOfItems(selectedList, onlineProfile, items);
 
                 Buddy.hideOnlineVoteLoadingBar(this);
                 startSetup();

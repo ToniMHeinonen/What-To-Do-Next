@@ -62,6 +62,7 @@ public abstract class DatabaseHandler {
     private static final String ONLINE_STATE = "state";
     private static final String ONLINE_TIMESTAMP = "timestamp";
     private static final String ONLINE_SETTINGS = "vote_settings";
+    private static final String ONLINE_LIST = "vote_list";
 
     private final static String DEFAULT_VOTE_SETTINGS = "default";
 
@@ -212,6 +213,14 @@ public abstract class DatabaseHandler {
          * @param voteRoom retrieved vote room
          */
         void onDataGetVoteRoom(VoteRoom voteRoom);
+    }
+
+    public interface VoteRoomGetListListener {
+        /**
+         * Gets list from vote room.
+         * @param listOfItems loaded list from database
+         */
+        void onDataGetLists(ListOfItems listOfItems);
     }
 
     public interface VoteRoomGetItemsListener {
@@ -968,6 +977,54 @@ public abstract class DatabaseHandler {
                 }
 
                 listener.onDataGetVoteSettings(settings);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Debug.print("DatabaseHandler", "onCancelled", "", 1);
+                databaseError.toException().printStackTrace();
+            }
+        });
+    }
+
+    //endregion
+
+    //region Vote Room List
+    /////////////////////* VOTE ROOM LIST *////////////////////
+
+    public static void addVoteRoomList(VoteRoom voteRoom, ListOfItems listOfItems, final DatabaseAddListener listener) {
+        DatabaseReference dbRef = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_LIST);
+
+        String key = dbRef.push().getKey();   // Add new key to online vote
+
+        Map<String, Object> values = listOfItems.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(key, values);
+
+        // Listen for completion
+        dbRef.updateChildren(childUpdates)
+                .addOnCompleteListener(task -> listener.onDataAddedComplete());
+    }
+
+    public static void getVoteRoomList(VoteRoom voteRoom, final VoteRoomGetListListener listener) {
+        DatabaseReference dbRef = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_LIST);
+
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Debug.print("DatabaseHandler", "getVoteRoomList",
+                        "list: " + snapshot.getChildrenCount(), 1);
+
+                ListOfItems listOfItems = null;
+
+                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    ListOfItems value = dataSnapshot.getValue(ListOfItems.class);
+                    listOfItems = value;
+                    break;
+                }
+
+                listener.onDataGetLists(listOfItems);
             }
 
             @Override

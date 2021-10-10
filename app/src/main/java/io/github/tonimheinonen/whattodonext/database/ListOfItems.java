@@ -14,13 +14,14 @@ import java.util.Map;
  * Represents a list of items.
  * @author Toni Heinonen
  * @author toni1.heinonen@gmail.com
- * @version 1.0
+ * @version 2.1
  * @since 1.0
  */
 @IgnoreExtraProperties
 public class ListOfItems implements DatabaseValue, Parcelable {
 
     private String name;
+    private int timesVoted;
 
     @Exclude
     private String dbID;
@@ -31,6 +32,7 @@ public class ListOfItems implements DatabaseValue, Parcelable {
     @Exclude
     private ArrayList<ListItem> items = new ArrayList<>();
 
+    //region GetSet
     /**
      * Default constructor.
      *
@@ -110,6 +112,16 @@ public class ListOfItems implements DatabaseValue, Parcelable {
         this.selected = selected;
     }
 
+    public int getTimesVoted() {
+        return timesVoted;
+    }
+
+    public void setTimesVoted(int timesVoted) {
+        this.timesVoted = timesVoted;
+    }
+
+    //endregion
+
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -118,38 +130,36 @@ public class ListOfItems implements DatabaseValue, Parcelable {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("name", name);
+        result.put("timesVoted", timesVoted);
 
         return result;
     }
 
     /**
      * Generates list with correct list items in online vote.
-     * @param voteRoom connected vote room
+     * @param list selected list
      * @param onlineProfile user's online profile
      * @param items items which belong to the list
-     * @return generated list of items
      */
-    public static ListOfItems generateOnlineListOfItems(VoteRoom voteRoom, OnlineProfile onlineProfile, ArrayList<ListItem> items) {
-        ListOfItems list = new ListOfItems(voteRoom.getListName());
-        list.setDbID(items.get(0).getListID());
-
+    public static void generateOnlineListOfItems(ListOfItems list, OnlineProfile onlineProfile, ArrayList<ListItem> items) {
         // If at least on last vote, filter items which did not make it to last vote
         if (onlineProfile.getState() >= VoteRoom.VOTING_LAST) {
             ListItem.filterOutOnlineLastVote(items);
         }
 
         list.setItems(items);
-        return list;
     }
 
     /**
      * Prints this instead of pointer.
+     *
      * @return string to print
      */
     @Override
     public String toString() {
         return "ListOfItems{" +
                 "name='" + name + '\'' +
+                ", timesVoted=" + timesVoted +
                 ", dbID='" + dbID + '\'' +
                 '}';
     }
@@ -174,6 +184,7 @@ public class ListOfItems implements DatabaseValue, Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(dbID);
         dest.writeString(name);
+        dest.writeInt(timesVoted);
         dest.writeList(items);
     }
 
@@ -184,6 +195,7 @@ public class ListOfItems implements DatabaseValue, Parcelable {
     public ListOfItems(Parcel in) {
         dbID = in.readString();
         name = in.readString();
+        timesVoted = in.readInt();
         items = in.readArrayList(ListItem.class.getClassLoader());
     }
 

@@ -23,6 +23,7 @@ public class SavedResult implements DatabaseValue {
 
     private String date;
     private String listName;
+    private int listTimesVoted;
     private String voters;
 
     @Exclude
@@ -37,14 +38,15 @@ public class SavedResult implements DatabaseValue {
 
     /**
      * Initializes saved result with required fields.
-     * @param listName name of the voted list
+     * @param list voted list
      * @param voters list of voters
      */
-    public SavedResult(String listName, ArrayList<Profile> voters) {
+    public SavedResult(ListOfItems list, ArrayList<Profile> voters) {
         SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat(Buddy.FIREBASE_DATE_FORMAT);
 
         this.date = ISO_8601_FORMAT.format(new Date());
-        this.listName = listName;
+        this.listName = list.getName();
+        this.listTimesVoted = list.getTimesVoted();
 
         // Create string from voters (example: "Jack, Phil & Rose")
         StringBuilder voterNames = new StringBuilder();
@@ -75,6 +77,14 @@ public class SavedResult implements DatabaseValue {
 
     public void setVoters(String voters) { this.voters = voters; }
 
+    public int getListTimesVoted() {
+        return listTimesVoted;
+    }
+
+    public void setListTimesVoted(int listTimesVoted) {
+        this.listTimesVoted = listTimesVoted;
+    }
+
     /**
      * Maps values for database handling.
      * @return mapped values
@@ -84,6 +94,7 @@ public class SavedResult implements DatabaseValue {
         HashMap<String, Object> result = new HashMap<>();
         result.put("date", date);
         result.put("listName", listName);
+        result.put("listTimesVoted", listTimesVoted);
         result.put("voters", voters);
 
         return result;

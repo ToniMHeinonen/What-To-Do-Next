@@ -262,8 +262,17 @@ public class DatabaseValueListAdapter extends BaseAdapter {
     private void savedResults() {
         SavedResult item = (SavedResult) getItem(position);
 
+        String resultText;
+
+        // If using old system, show time and date of vote
+        // Else show list name and times voted
+        if (item.getListTimesVoted() == 0)
+            resultText = Buddy.formatResultDate(item.getDate());
+        else
+            resultText = item.getListName() + " #" + item.getListTimesVoted();
+
         Button itemName = view.findViewById(R.id.savedResult);
-        itemName.setText(Buddy.formatResultDate(item.getDate()));
+        itemName.setText(resultText);
 
         itemName.setOnClickListener(listener);
         itemName.setTag(position);

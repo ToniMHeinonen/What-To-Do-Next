@@ -22,7 +22,6 @@ import io.github.tonimheinonen.whattodonext.BuildConfig;
 public class VoteRoom implements DatabaseValue, Parcelable {
 
     private String roomCode;
-    private String listName;
     private int state;
     private int versionCode;
 
@@ -51,11 +50,9 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     /**
      * Initializes vote room with necessary values.
      * @param roomCode room code
-     * @param listName name of the list
      */
-    public VoteRoom(String roomCode, String listName) {
+    public VoteRoom(String roomCode) {
         this.roomCode = roomCode;
-        this.listName = listName;
         this.state = LOBBY;
 
         versionCode = BuildConfig.VERSION_CODE;
@@ -75,22 +72,6 @@ public class VoteRoom implements DatabaseValue, Parcelable {
      */
     public void setRoomCode(String roomCode) {
         this.roomCode = roomCode;
-    }
-
-    /**
-     * Returns the name of the voted list.
-     * @return name of the voted list
-     */
-    public String getListName() {
-        return listName;
-    }
-
-    /**
-     * Sets the name of the voted list.
-     * @param listName name of the voted list
-     */
-    public void setListName(String listName) {
-        this.listName = listName;
     }
 
     /**
@@ -145,7 +126,6 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("roomCode", roomCode);
-        result.put("listName", listName);
         result.put("state", state);
         result.put("versionCode", versionCode);
 
@@ -173,7 +153,6 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         dest.writeString(dbID);
         dest.writeInt(state);
         dest.writeString(roomCode);
-        dest.writeString(listName);
         dest.writeInt(versionCode);
     }
 
@@ -185,7 +164,6 @@ public class VoteRoom implements DatabaseValue, Parcelable {
         dbID = in.readString();
         state = in.readInt();
         roomCode = in.readString();
-        listName = in.readString();
         versionCode = in.readInt();
     }
 
@@ -216,7 +194,6 @@ public class VoteRoom implements DatabaseValue, Parcelable {
     public String toString() {
         return "VoteRoom{" +
                 "roomCode='" + roomCode + '\'' +
-                ", listName='" + listName + '\'' +
                 ", state=" + state +
                 ", versionCode=" + versionCode +
                 ", dbID='" + dbID + '\'' +
