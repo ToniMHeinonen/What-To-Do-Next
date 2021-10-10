@@ -6,14 +6,16 @@
 
     <Button
         android:id="@+id/savedName"
-        android:layout_weight="0.7"
-        style="@style/listAndProfile"
-        android:textSize="20sp" />
+        style="@style/BasicButtons"
+        android:layout_width="0dp"
+        android:layout_weight="0.7"/>
 
     <Button
         android:id="@+id/savedDelete"
+        style="@style/BasicButtons"
+        android:layout_width="0dp"
         android:layout_weight="0.3"
         android:text="@string/delete"
-        style="@style/listAndProfile"/>
+        android:background="@drawable/cancel_button"/>
 
 </LinearLayout>
