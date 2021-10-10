@@ -13,6 +13,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_bg"
-            android:textSize="20sp" />
+            android:fontFamily="sans-serif-smallcaps"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
     </LinearLayout>
 </LinearLayout>

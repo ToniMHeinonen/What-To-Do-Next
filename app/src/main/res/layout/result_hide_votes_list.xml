@@ -5,11 +5,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/results_list_padding"
-        android:paddingRight="@dimen/results_list_padding"
+        style="@style/resultsListAndItemLayout"
         android:background="@drawable/vert_result_title_bg">
 
         <TextView
@@ -30,9 +26,11 @@
     </LinearLayout>
 
     <ListView
-        style="@style/resultListViewStyle"
+        style="@style/listViewStyle"
         android:id = "@+id/resultItems"
         android:layout_width = "match_parent"
-        android:layout_height = "match_parent"/>
+        android:layout_height = "match_parent"
+        android:layout_marginStart="@dimen/results_list_margin"
+        android:layout_marginEnd="@dimen/results_list_margin"/>
 
 </LinearLayout>

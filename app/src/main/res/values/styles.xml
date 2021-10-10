@@ -311,6 +311,12 @@
         <item name="android:textSize">25sp</item>
     </style>
 
+    <style name="subtitles" parent="topics">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">left</item>
+    </style>
+
     <style name="notes">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
@@ -386,6 +392,15 @@
 
     <style name="resultsTopicPoints" parent="resultsTopicValues">
         <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="resultsListAndItemLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_marginStart">@dimen/results_list_margin</item>
+        <item name="android:layout_marginEnd">@dimen/results_list_margin</item>
+        <item name="android:padding">@dimen/results_list_padding</item>
     </style>
 
     <!-- SETTINGS ACTIVITY -->

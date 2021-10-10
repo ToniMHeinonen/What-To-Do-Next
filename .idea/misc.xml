@@ -44,7 +44,8 @@
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout-land/activity_vote_top.xml" value="0.49603174603174605" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_lists.xml" value="0.35144927536231885" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_login.xml" value="0.35208333333333336" />
-        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_main.xml" value="0.5340136054421769" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_main.xml" value="0.35144927536231885" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_main2.xml" value="0.5859375" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_pre_login.xml" value="0.35208333333333336" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_results.xml" value="0.35208333333333336" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/activity_settings.xml" value="0.35144927536231885" />
@@ -62,6 +63,10 @@
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/result_hide_votes_list.xml" value="0.35208333333333336" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/result_show_votes_item.xml" value="0.35208333333333336" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/result_show_votes_list.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/saved_profile.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/saved_result.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/saved_result_dialog.xml" value="0.35208333333333336" />
+        <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/saved_result_item.xml" value="0.35208333333333336" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/setting_dialog.xml" value="0.35144927536231885" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/vert_result_item.xml" value="0.35208333333333336" />
         <entry key="..\:/Work/Github/WhatToDoNext/app/src/main/res/layout/vert_result_title.xml" value="0.35208333333333336" />
