@@ -6,6 +6,15 @@
     <string name="patch_notes">
     &lt;h1&gt;Patch Notes&lt;/h1&gt;
 
+    &lt;h5&gt;Version 12 / v2.1.0 / October 10, 2021&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Add ability to change vote results style&lt;br/&gt;
+    &#8226; Make the style of saved results more uniform&lt;br/&gt;
+    &#8226; Show the number of times voted on list in saved results&lt;br/&gt;
+    &#8226; Add full support to API 30&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
     &lt;h5&gt;Version 11 / v2.0.0 / September 21, 2021&lt;/h5&gt;
     &lt;p&gt;
     &#8226; Release completed version of online vote&lt;br/&gt;

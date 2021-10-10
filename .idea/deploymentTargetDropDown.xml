@@ -31,15 +31,6 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\Loni_\.android\avd\Pixel_3_API_24.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-      <Target>
-        <type value="QUICK_BOOT_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
             <value value="C:\Users\Loni_\.android\avd\Pixel_4_API_30.avd" />
           </Key>
         </deviceKey>
