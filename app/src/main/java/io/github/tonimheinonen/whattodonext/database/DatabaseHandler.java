@@ -549,7 +549,8 @@ public abstract class DatabaseHandler {
      * Adds new result.
      * @param result result to add
      */
-    public static void addResult(SavedResult result) {
+    public static void addResult(final SavedResult result, final ArrayList<SavedResultItem> items,
+                                    DatabaseAddListener onCompleteListener) {
         String key = dbSavedResults.push().getKey();   // Add new key to results
 
         result.setDbID(key);
@@ -558,9 +559,8 @@ public abstract class DatabaseHandler {
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put(key, values);
 
-        dbSavedResults.updateChildren(childUpdates);
-
-        getResults(DatabaseHandler::checkResultsAmount);
+        dbSavedResults.updateChildren(childUpdates)
+                .addOnCompleteListener(complete -> addResultItems(result, items, onCompleteListener));
     }
 
     /**
@@ -642,7 +642,8 @@ public abstract class DatabaseHandler {
      * Adds result items from saved result to database.
      * @param result result which holds result items
      */
-    public static void addResultItems(SavedResult result, ArrayList<SavedResultItem> items) {
+    private static void addResultItems(SavedResult result, ArrayList<SavedResultItem> items,
+                                      DatabaseAddListener onCompleteListener) {
         Map<String, Object> childUpdates = new HashMap<>();
 
         for (SavedResultItem item : items) {
@@ -656,7 +657,11 @@ public abstract class DatabaseHandler {
             childUpdates.put(key, listValues);
         }
 
-        dbResultItems.updateChildren(childUpdates);
+        dbResultItems.updateChildren(childUpdates)
+                .addOnCompleteListener(complete -> {
+                    getResults(DatabaseHandler::checkResultsAmount);
+                    onCompleteListener.onDataAddedComplete();
+                });
     }
 
     /**

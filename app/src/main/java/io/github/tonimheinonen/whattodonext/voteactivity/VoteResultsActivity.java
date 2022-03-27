@@ -473,10 +473,8 @@ public class VoteResultsActivity extends VotingParentActivity {
 
         // Generate result
         SavedResult result = new SavedResult(selectedList, selectedProfiles);
-        DatabaseHandler.addResult(result);
-        DatabaseHandler.addResultItems(result, resultsSaving);
-
-        endVoting(getString(R.string.save_successful));
+        DatabaseHandler.addResult(result, resultsSaving,
+                () -> endVoting(getString(R.string.save_successful)));
     }
 
     private void endVoting(String toastToShow) {
