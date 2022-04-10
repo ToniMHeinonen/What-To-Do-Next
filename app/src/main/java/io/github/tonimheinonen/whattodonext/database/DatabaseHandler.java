@@ -276,6 +276,17 @@ public abstract class DatabaseHandler {
     }
     //endregion
 
+    //region Listener control
+
+    /**
+     * Removes all online vote room listeners.
+     */
+    public static void removeOnlineListeners() {
+        stopListeningForVoteRoomExpiration();
+        stopListeningForUserLeavingRoom();
+    }
+    //endregion
+
     //region Lists
     /////////////////////* LISTS *////////////////////
 
@@ -916,8 +927,7 @@ public abstract class DatabaseHandler {
                 if (room.getRoomCode().equals(roomCode)) {
                     activity.startActivity(new Intent(activity, MainActivity.class));
                     Buddy.showToast(activity.getString(R.string.vote_room_expired), Toast.LENGTH_LONG);
-                    stopListeningForVoteRoomExpiration();
-                    stopListeningForUserLeavingRoom();
+                    removeOnlineListeners();
                 }
             }
 
@@ -936,6 +946,12 @@ public abstract class DatabaseHandler {
     }
 
     private static void stopListeningForVoteRoomExpiration() {
+        if (voteRoomRemovalListener == null)
+            return;
+
+        Debug.print("DatabaseHandler", "stopListeningForVoteRoomExpiration",
+                "", 1);
+
         dbVoteRooms.removeEventListener(voteRoomRemovalListener);
         voteRoomRemovalListener = null;
     }
@@ -1000,12 +1016,13 @@ public abstract class DatabaseHandler {
     public static void addVoteRoomList(VoteRoom voteRoom, ListOfItems listOfItems, final DatabaseAddListener listener) {
         DatabaseReference dbRef = dbVoteRooms.child(voteRoom.getDbID()).child(ONLINE_LIST);
 
-        String key = dbRef.push().getKey();   // Add new key to online vote
+        dbRef.push();   // Add new key to online vote
+        dbRef.setValue(listOfItems.getDbID());
 
         Map<String, Object> values = listOfItems.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put(key, values);
+        childUpdates.put(listOfItems.getDbID(), values);
 
         // Listen for completion
         dbRef.updateChildren(childUpdates)
@@ -1026,6 +1043,7 @@ public abstract class DatabaseHandler {
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     ListOfItems value = dataSnapshot.getValue(ListOfItems.class);
                     listOfItems = value;
+                    listOfItems.setDbID(snapshot.getKey());
                     break;
                 }
 
@@ -1329,8 +1347,7 @@ public abstract class DatabaseHandler {
      */
     public static void disconnectOnlineProfile(VoteRoom voteRoom, OnlineProfile profile) {
         // Stop listening for vote room expiration and user leaving the room
-        stopListeningForVoteRoomExpiration();
-        stopListeningForUserLeavingRoom();
+        removeOnlineListeners();
 
         // If host disconnects when vote room was in lobby, remove the vote room
         if (profile.isHost() && voteRoom.getState() == VoteRoom.LOBBY) {
@@ -1462,6 +1479,12 @@ public abstract class DatabaseHandler {
     }
 
     private static void stopListeningForUserLeavingRoom() {
+        if (userLeftRoomListener == null)
+            return;
+
+        Debug.print("DatabaseHandler", "stopListeningForUserLeavingRoom",
+                "", 1);
+
         userLeftRoomRef.removeEventListener(userLeftRoomListener);
         userLeftRoomListener = null;
     }

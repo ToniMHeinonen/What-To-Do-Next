@@ -4,6 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
+import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.tools.Buddy;
 
 /**
@@ -13,13 +18,15 @@ import io.github.tonimheinonen.whattodonext.tools.Buddy;
  * @version 1.31
  * @since 1.31
  */
-public class VotingParentActivity extends AppCompatActivity {
+public class VotingParentActivity extends AppCompatActivity implements LifecycleObserver {
 
     protected VoteMaster voteMaster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
         Intent intent = getIntent();
         voteMaster = intent.getParcelableExtra(VoteMaster.VOTE_MASTER);
@@ -35,5 +42,17 @@ public class VotingParentActivity extends AppCompatActivity {
     protected void onStop() {
         Buddy.hideOnlineVoteLoadingBar(this);
         super.onStop();
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    public void onAppBackgrounded() {
+        // Disconnect all listeners, so they do not get duplicated
+        if (voteMaster.isOnline())
+            DatabaseHandler.removeOnlineListeners();
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void onAppForegrounded() {
+        // App returns to foreground
     }
 }

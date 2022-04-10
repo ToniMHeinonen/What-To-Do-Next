@@ -7,7 +7,7 @@ android {
     compileSdkVersion 30
     defaultConfig {
         applicationId "io.github.tonimheinonen.whattodonext"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 12
         versionName "2.1.0"
@@ -39,6 +39,9 @@ dependencies {
 
     // Kotlin Firebase
     implementation 'com.google.firebase:firebase-database-ktx:20.0.0'
+
+    // App background listener
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.3.0'

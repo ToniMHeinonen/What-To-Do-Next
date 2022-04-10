@@ -161,6 +161,8 @@ public class ListOfItems implements DatabaseValue, Parcelable {
                 "name='" + name + '\'' +
                 ", timesVoted=" + timesVoted +
                 ", dbID='" + dbID + '\'' +
+                ", selected=" + selected +
+                ", items=" + items +
                 '}';
     }
 
