@@ -10,12 +10,12 @@
 
         <Button
             android:id="@+id/savedResult"
+            style="@style/ButtonBaseStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_bg"
-            android:fontFamily="sans-serif-smallcaps"
             android:textAllCaps="false"
-            android:textStyle="bold"
+            android:text="Name"
             android:textSize="20sp"/>
     </LinearLayout>
 </LinearLayout>

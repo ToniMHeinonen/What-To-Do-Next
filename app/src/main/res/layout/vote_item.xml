@@ -7,7 +7,8 @@
     <TextView
         android:id="@+id/voteName"
         style="@style/listItemValues"
-        android:layout_weight="@dimen/vote_hide_extra_name_weight">
+        android:layout_weight="@dimen/vote_hide_extra_name_weight"
+        android:text="Test activity">
     </TextView>
 
     <TextView
@@ -15,7 +16,8 @@
         style="@style/listItemPoints"
         android:layout_weight="@dimen/vote_hide_extra_voteAmount_weight"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold">
+        android:textStyle="bold"
+        android:text="10">
     </TextView>
 
 </LinearLayout>

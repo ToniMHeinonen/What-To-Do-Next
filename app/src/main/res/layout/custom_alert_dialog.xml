@@ -13,15 +13,18 @@
         android:textColor="@color/defaultTextColor"
         android:gravity="center"
         android:textStyle="bold"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:text="Title"/>
 
     <TextView
         android:id="@+id/text"
+        style="@style/RegularText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="@color/defaultTextColor"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:text="Description for the dialog\nwith multiline text test" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,10 +33,12 @@
 
         <Button
             android:id="@+id/negativeButton"
+            android:text="Negative"
             style="@style/alertDialogButtons"/>
 
         <Button
             android:id="@+id/positiveButton"
+            android:text="Positive"
             style="@style/alertDialogButtons"/>
 
     </LinearLayout>

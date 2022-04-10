@@ -17,7 +17,8 @@
         android:text="{Setting}"
         android:textColor="@color/defaultTextColor"
         android:textSize="25sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:fontFamily="@font/small_caps_font"/>
 
     <TextView
         android:id="@+id/settingText"
@@ -30,7 +31,8 @@
         android:text="@string/list_setting_info"
         android:textSize="13sp"
         android:textStyle="italic"
-        android:textColor="@color/defaultTextColor"/>
+        android:textColor="@color/defaultTextColor"
+        android:fontFamily="@font/regular_font"/>
 
     <!-- LOADING BAR -->
     <RelativeLayout

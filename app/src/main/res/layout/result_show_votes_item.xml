@@ -7,18 +7,21 @@
     <TextView
         android:id="@+id/resultsName"
         style="@style/resultsItemValues"
+        android:text="Name"
         android:layout_width="@dimen/results_show_votes_name_width">
     </TextView>
 
     <TextView
         android:id="@+id/resultsVotePoints"
         style="@style/resultsItemPoints"
+        android:text="12"
         android:layout_width="@dimen/results_show_votes_points_width">
     </TextView>
 
     <TextView
         android:id="@+id/resultsBonus"
         style="@style/resultsItemPoints"
+        android:text="4"
         android:layout_width="@dimen/results_show_votes_points_width">
     </TextView>
 

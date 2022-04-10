@@ -7,6 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:dropDownListViewStyle">@style/SpinnerStyle</item>
+        <item name="android:textViewStyle">@style/regularFontFamily</item>
         <item name="editTextStyle">@style/App_EditTextStyle</item>
         <item name="android:listViewStyle">@style/listViewStyle</item>
     </style>
@@ -21,6 +22,10 @@
         <item name="android:scrollbarThumbVertical">@drawable/custom_scroll_bar</item>
         <item name="android:divider">@null</item>
         <item name="android:dividerHeight">0dp</item>
+    </style>
+
+    <style name="regularFontFamily" parent="@android:style/Widget.TextView">
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <style name="resultListViewStyle" parent="listViewStyle">
@@ -58,6 +63,18 @@
         <item name="android:imeOptions">actionDone</item>
         <item name="android:textColor">@color/defaultTextColor</item>
         <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
+        <item name="android:fontFamily">@font/regular_font</item>
+    </style>
+
+    <style name="ButtonBaseStyle">
+        <item name="fontFamily">@font/small_caps_font</item>
+        <item name="android:textSize">18sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="RegularText">
+        <item name="fontFamily">@font/regular_font</item>
+        <item name="android:lineSpacingExtra">-5dp</item>
     </style>
 
     <style name="menuButtons"> <!-- MODIFIED IN LANDSCAPE -->
@@ -96,6 +113,7 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:spinnerMode">dropdown</item>
         <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
         <item name="android:popupBackground">@drawable/button_selector</item>
     </style>
 
@@ -123,9 +141,8 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/buttonTextColor</item>
-        <item name="android:fontFamily">sans-serif-smallcaps</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <style name="iconButtonTextSmaller" parent="iconButtonText">
@@ -173,7 +190,7 @@
         <item name="android:background">@drawable/custom_bg</item>
     </style>
 
-    <style name="registrationButtons">
+    <style name="registrationButtons" parent="ButtonBaseStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_margin">16dp</item>
@@ -198,6 +215,7 @@
         <item name="android:textColor">@color/defaultTextColor</item>
         <item name="android:text">@string/show_password</item>
         <item name="android:onClick">showPassword</item>
+        <item name="android:fontFamily">@font/regular_font</item>
     </style>
 
     <style name="emailView">
@@ -219,11 +237,10 @@
     </style>
 
     <!-- LIST AND PROFILE -->
-    <style name="listAndProfile">
+    <style name="listAndProfile" parent="ButtonBaseStyle">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:gravity">center</item>
-        <item name="android:textStyle">bold</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:background">@drawable/button_selector</item>
     </style>
@@ -242,22 +259,20 @@
     </style>
 
     <!-- Custom alert dialog -->
-    <style name="alertDialogButtons">
+    <style name="alertDialogButtons" parent="ButtonBaseStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">0.5</item>
         <item name="android:layout_margin">10dp</item>
-        <item name="android:textSize">15sp</item>
         <item name="android:background">@drawable/button_selector</item>
     </style>
 
     <!-- LISTS ACTIVITY -->
-    <style name="listsButtons">
+    <style name="listsButtons" parent="ButtonBaseStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">100dp</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:layout_weight">0.33</item>
-        <item name="android:textSize">15sp</item>
         <item name="android:background">@drawable/button_selector</item>
     </style>
 
@@ -271,15 +286,14 @@
         <item name="android:textSize">25sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
-    <style name="listModifyButtons">
+    <style name="listModifyButtons" parent="ButtonBaseStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">250dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_marginTop">20dp</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <!-- LIST VIEW FRAGMENT -->
@@ -291,6 +305,7 @@
         <item name="android:textColor">@color/defaultTextColor</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">5dp</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <!-- LIST VIEW FRAGMENT -->
@@ -300,8 +315,7 @@
         <item name="android:layout_marginStart">5dp</item>
         <item name="android:layout_marginEnd">5dp</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">sans-serif-smallcaps</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
         <item name="android:textSize">20sp</item>
         <item name="android:background">@drawable/button_selector</item>
     </style>
@@ -315,8 +329,8 @@
         <item name="android:textSize">40sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/title_bg</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">sans-serif-smallcaps</item>
         <item name="android:textColor">@color/defaultTextColor</item>
     </style>
 
@@ -343,17 +357,15 @@
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/note_bg</item>
         <item name="android:gravity">center</item>
-        <item name="android:fontFamily">sans-serif-smallcaps</item>
+        <item name="android:fontFamily">@font/regular_font</item>
         <item name="android:textColor">@color/defaultTextColor</item>
     </style>
 
     <!-- VOTE ACTIVITY -->
-    <style name="voteButtons">
+    <style name="voteButtons" parent="ButtonBaseStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_margin">10dp</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="voteButtonsOnTop">
@@ -389,11 +401,13 @@
         <item name="android:layout_width">0dp</item>
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:fontFamily">@font/regular_font</item>
     </style>
 
     <style name="resultsItemPoints" parent="resultsItemValues">
         <item name="android:textAlignment">center</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <style name="resultsTopicValues">
@@ -401,6 +415,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/defaultTextColor</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <style name="resultsTopicPoints" parent="resultsTopicValues">
@@ -433,7 +448,7 @@
         <item name="android:orientation">horizontal</item>
     </style>
 
-    <style name="settingsButtons">
+    <style name="settingsButtons" parent="ButtonBaseStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_weight">0.5</item>
@@ -462,6 +477,7 @@
         <item name="android:textColor">@color/defaultTextColor</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <style name="intValueLayoutNumbers">
@@ -473,9 +489,10 @@
         <item name="android:textAlignment">center</item>
         <item name="android:inputType">number</item>
         <item name="android:background">@drawable/custom_bg</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
-    <style name="intValueLayoutSign">
+    <style name="intValueLayoutSign" parent="ButtonBaseStyle">
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_marginLeft">5dp</item>

@@ -6,24 +6,28 @@
     <TextView
         android:id="@+id/resultsPosition"
         style="@style/resultsItemPoints"
+        android:text="2"
         android:layout_weight="@dimen/saved_result_points_weight">
     </TextView>
 
     <TextView
         android:id="@+id/resultsName"
         style="@style/resultsItemValues"
+        android:text="Name"
         android:layout_weight="@dimen/saved_result_name_weight">
     </TextView>
 
     <TextView
         android:id="@+id/resultsBonus"
         style="@style/resultsItemPoints"
+        android:text="3"
         android:layout_weight="@dimen/saved_result_points_weight">
     </TextView>
 
     <TextView
         android:id="@+id/resultsPeril"
         style="@style/resultsItemPoints"
+        android:text="4"
         android:layout_weight="@dimen/saved_result_points_weight">
     </TextView>
 

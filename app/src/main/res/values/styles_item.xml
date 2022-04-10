@@ -6,10 +6,12 @@
         <item name="android:textSize">17sp</item>
         <item name="android:textColor">@color/defaultTextColor</item>
         <item name="android:padding">10dp</item>
+        <item name="android:fontFamily">@font/regular_font</item>
     </style>
 
     <style name="listItemPoints" parent="listItemValues">
         <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <!-- List item dialog -->
@@ -22,6 +24,7 @@
         <item name="android:textColor">@color/defaultTextColor</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <style name="listItemNumbers">
@@ -33,9 +36,10 @@
         <item name="android:textAlignment">center</item>
         <item name="android:inputType">number</item>
         <item name="android:background">@drawable/custom_bg</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
-    <style name="listItemSigns">
+    <style name="listItemSigns" parent="ButtonBaseStyle">
         <item name="android:layout_width">50dp</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:layout_marginLeft">5dp</item>
@@ -45,13 +49,12 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="listItemButtons">
+    <style name="listItemButtons" parent="ButtonBaseStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_weight">0.5</item>
         <item name="android:layout_marginLeft">5dp</item>
         <item name="android:layout_marginRight">5dp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">17sp</item>
     </style>
 </resources>

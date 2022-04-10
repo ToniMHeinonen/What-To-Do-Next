@@ -10,6 +10,7 @@
         <item name="android:textSize">17sp</item>
         <item name="android:paddingTop">5dp</item>
         <item name="android:paddingBottom">5dp</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <style name="vertResultTitlePoints" parent="vertResultTitleName">
@@ -20,18 +21,22 @@
     <style name="vertResultItemName" parent="vertResultParent">
         <item name="android:textSize">17sp</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/regular_font</item>
     </style>
 
     <style name="vertResultItemPoints" parent="vertResultItemName">
         <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 
     <!-- Vertical Vote Result Users -->
     <style name="vertResultUserName" parent="vertResultParent">
         <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/regular_font</item>
     </style>
 
     <style name="vertResultUserPoints" parent="vertResultUserName">
         <item name="android:textAlignment">center</item>
+        <item name="android:fontFamily">@font/small_caps_font</item>
     </style>
 </resources>

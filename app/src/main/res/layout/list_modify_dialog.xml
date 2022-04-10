@@ -19,6 +19,7 @@
             android:textSize="25sp"
             android:textStyle="bold"
             android:textColor="@color/defaultTextColor"
+            android:fontFamily="@font/small_caps_font"
             android:text="List name placeholder"/>
 
         <!-- BUTTONS -->

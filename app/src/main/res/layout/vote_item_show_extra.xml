@@ -9,30 +9,35 @@
         style="@style/listItemPoints"
         android:layout_weight="@dimen/vote_show_extra_voteAmount_weight"
         android:textColor="@color/colorPrimary"
+        android:text="7"
         android:textStyle="bold">
     </TextView>
 
     <TextView
         android:id="@+id/voteName"
         style="@style/listItemValues"
+        android:text="Name"
         android:layout_weight="@dimen/vote_show_extra_name_weight">
     </TextView>
 
     <TextView
         android:id="@+id/voteTotal"
         style="@style/listItemPoints"
+        android:text="3"
         android:layout_weight="@dimen/vote_show_extra_points_weight">
     </TextView>
 
     <TextView
         android:id="@+id/voteBonus"
         style="@style/listItemPoints"
+        android:text="2"
         android:layout_weight="@dimen/vote_show_extra_points_weight">
     </TextView>
 
     <TextView
         android:id="@+id/votePeril"
         style="@style/listItemPoints"
+        android:text="1"
         android:layout_weight="@dimen/vote_show_extra_points_weight">
     </TextView>
 

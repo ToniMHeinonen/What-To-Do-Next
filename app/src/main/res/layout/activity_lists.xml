@@ -55,11 +55,11 @@
 
         <Button
             android:id="@+id/fallenButton"
+            style="@style/ButtonBaseStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
             android:text="@string/lists_fallen"
-            android:textSize="15sp"
             android:background="@drawable/button_selector"
             android:onClick="fallenClicked"/>
 

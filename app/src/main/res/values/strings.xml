@@ -128,7 +128,7 @@
 
     <!-- VOTE_RESULTS_ACTIVITY -->
     <string name="results">Results</string>
-    <string name="results_info">Select which activities you are going to do (optional):</string>
+    <string name="results_info">Select which activities to do:</string>
     <string name="results_name">Name</string>
     <string name="results_extra">Extra</string>
     <string name="results_total">Total</string>

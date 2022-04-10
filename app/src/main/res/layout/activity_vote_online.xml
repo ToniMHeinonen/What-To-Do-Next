@@ -45,7 +45,7 @@
 
                 <Spinner
                     android:id="@+id/listsSpinner"
-                    style="@style/spinnerElement"/>
+                    style="@style/spinnerElement" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -74,6 +74,7 @@
                 android:hint="@string/online_room_code"
                 android:singleLine="true"
                 android:textSize="25sp"
+                android:fontFamily="@font/small_caps_font"
                 android:maxLength="@integer/room_code_length"/>
 
             <EditText
@@ -88,6 +89,7 @@
                 android:singleLine="true"
                 android:hint="@string/online_nickname"
                 android:textSize="25sp"
+                android:fontFamily="@font/small_caps_font"
                 android:maxLength="@integer/profile_name_max_length"/>
 
         </LinearLayout>

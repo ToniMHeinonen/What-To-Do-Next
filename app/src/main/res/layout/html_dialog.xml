@@ -23,12 +23,16 @@
 
                 <TextView
                     android:id="@+id/tutorialText"
+                    style="@style/RegularText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
                     android:text="{Info text}"
-                    android:textSize="20sp"
-                    android:textColor="@color/defaultTextColor"/>
+                    android:textColor="@color/defaultTextColor"
+                    android:textSize="20sp" />
 
                 <ImageButton
                     android:id="@+id/close"
@@ -47,36 +51,33 @@
 
                 <Button
                     android:id="@+id/skipTutorial"
+                    style="@style/ButtonBaseStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
                     android:text="@string/skip_tutorial"
                     android:background="@drawable/orange_button" />
 
                 <Button
                     android:id="@+id/cancel"
+                    style="@style/ButtonBaseStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
                     android:text="@string/back"
                     android:background="@drawable/cancel_button" />
 
                 <Button
                     android:id="@+id/confirm"
+                    style="@style/ButtonBaseStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
                     android:text="@string/htmlDialogOk"
                     android:background="@drawable/confirm_button" />
 
