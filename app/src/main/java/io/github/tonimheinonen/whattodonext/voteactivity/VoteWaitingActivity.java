@@ -14,9 +14,6 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ProcessLifecycleOwner;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
@@ -40,8 +37,8 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
 
-    private ArrayList<OnlineProfile> users = new ArrayList<>();
-    private ArrayList<OnlineProfile> notReadyUsers = new ArrayList();
+    private ArrayList<OnlineProfile> users;
+    private ArrayList<OnlineProfile> notReadyUsers;
     private DatabaseValueListAdapter usersAdapter;
 
     // Firebase listeners
@@ -64,13 +61,9 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
         findViewById(R.id.exit).setOnClickListener(this);
 
         Buddy.showOnlineVoteLoadingBar(this);
-        setupLobby();
-
-        // Listen for app going to background
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
     }
 
-    private void setupLobby() {
+    private void setupActivity() {
         // Setup list before adding and retrieving users
         setupUsersList();
 
@@ -81,7 +74,26 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
         createUsersStateListener();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Create necessary objects after onCreate and if app resumes from background
+        setupActivity();
+    }
+
+    @Override
+    protected void onPause() {
+        // Remove listeners when app goes to background
+        removeListeners();
+
+        super.onPause();
+    }
+
     private void setupUsersList() {
+        users = new ArrayList<>();
+        notReadyUsers = new ArrayList<>();
+
         // Add users to ListView
         final ListView listView = findViewById(R.id.usersList);
         // Show not ready users in waiting room
@@ -229,12 +241,6 @@ public class VoteWaitingActivity extends VotingParentActivity implements View.On
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
             parentStartActivity(new Intent(this, VoteResultsActivity.class));
         });
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    public void onAppBackgrounded() {
-        // Disconnect all listeners, so they are not called when app is backgrounded
-        removeListeners();
     }
 
     private void removeListeners() {

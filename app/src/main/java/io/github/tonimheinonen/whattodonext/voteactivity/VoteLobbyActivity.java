@@ -17,9 +17,6 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ProcessLifecycleOwner;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
@@ -37,7 +34,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
     private VoteRoom voteRoom;
     private OnlineProfile onlineProfile;
 
-    private ArrayList<OnlineProfile> users = new ArrayList<>();
+    private ArrayList<OnlineProfile> users;
     private DatabaseValueListAdapter usersAdapter;
 
     // Listeners
@@ -45,6 +42,7 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
     private ValueEventListener voteRoomListener;
 
     private boolean reconnecting;
+    private boolean setupOnce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +76,22 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         }
 
         Buddy.showOnlineVoteLoadingBar(this);
-        setupLobby();
+    }
 
-        // Listen for app going to background
-        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Create necessary objects after onCreate and when app returns from background
+        setupLobby();
+    }
+
+    @Override
+    protected void onPause() {
+        // Disconnect all listeners, so they are not called when app is backgrounded
+        removeListeners();
+
+        super.onPause();
     }
 
     /**
@@ -91,12 +101,28 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         // Setup list before adding and retrieving users
         setupUsersList();
 
-        // Add user's profile to the vote room if not reconnecting
-        if (!reconnecting)
+        // Add user's profile to the vote room if not reconnecting or recreating lobby
+        if (!reconnecting && !setupOnce)
             DatabaseHandler.connectOnlineProfile(voteRoom, onlineProfile);
 
         createUsersListener();
         createRoomStateListener();
+
+        setupOnce = true;
+    }
+
+    /**
+     * Sets up list of users which are visible on screen.
+     */
+    private void setupUsersList() {
+        users = new ArrayList<>();
+
+        // Add users to ListView
+        final ListView listView = findViewById(R.id.usersList);
+        // Show all users in lobby
+        usersAdapter = new DatabaseValueListAdapter(this, users, null,
+                DatabaseType.ONLINE_PROFILE);
+        listView.setAdapter(usersAdapter);
     }
 
     /**
@@ -177,18 +203,6 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
     }
 
     /**
-     * Sets up list of users which are visible on screen.
-     */
-    private void setupUsersList() {
-        // Add users to ListView
-        final ListView listView = findViewById(R.id.usersList);
-        // Show all users in lobby
-        usersAdapter = new DatabaseValueListAdapter(this, users, null,
-                DatabaseType.ONLINE_PROFILE);
-        listView.setAdapter(usersAdapter);
-    }
-
-    /**
      * Listens for clicks of views.
      * @param v view
      */
@@ -250,12 +264,6 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         DatabaseHandler.changeOnlineProfileState(voteRoom, onlineProfile, () -> {
             parentStartActivity(new Intent(this, VoteTopActivity.class));
         });
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    public void onAppBackgrounded() {
-        // Disconnect all listeners, so they are not called when app is backgrounded
-        removeListeners();
     }
 
     private void removeListeners() {

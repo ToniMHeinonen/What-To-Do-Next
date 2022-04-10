@@ -18,19 +18,19 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".voteactivity.VotingParentActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".voteactivity.VoteWaitingActivity" android:noHistory="true"
+        <activity android:name=".voteactivity.VoteWaitingActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".StartVoteActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".voteactivity.VoteLobbyActivity" android:noHistory="true"
+        <activity android:name=".voteactivity.VoteLobbyActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".ResultsActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".voteactivity.VoteResultsActivity" android:noHistory="true"
+        <activity android:name=".voteactivity.VoteResultsActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".voteactivity.VoteTopActivity" android:noHistory="true"
+        <activity android:name=".voteactivity.VoteTopActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".registration.ForgotPasswordActivity"
             android:screenOrientation="portrait"/>
