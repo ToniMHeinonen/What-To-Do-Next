@@ -17,6 +17,9 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 import io.github.tonimheinonen.whattodonext.R;
 import io.github.tonimheinonen.whattodonext.database.DatabaseHandler;
 import io.github.tonimheinonen.whattodonext.database.DatabaseType;
@@ -76,6 +79,9 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
 
         Buddy.showOnlineVoteLoadingBar(this);
         setupLobby();
+
+        // Listen for app going to background
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
     }
 
     /**
@@ -246,8 +252,17 @@ public class VoteLobbyActivity extends VotingParentActivity implements View.OnCl
         });
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+    public void onAppBackgrounded() {
+        // Disconnect all listeners, so they are not called when app is backgrounded
+        removeListeners();
+    }
+
     private void removeListeners() {
-        DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersListener);
-        DatabaseHandler.stopListeningForVoteRoomState(voteRoom, voteRoomListener);
+        if (usersListener != null)
+            DatabaseHandler.stopListeningForOnlineProfiles(voteRoom, usersListener);
+
+        if (voteRoomListener != null)
+            DatabaseHandler.stopListeningForVoteRoomState(voteRoom, voteRoomListener);
     }
 }
