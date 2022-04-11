@@ -6,6 +6,15 @@
     <string name="patch_notes">
     &lt;h1&gt;Patch Notes&lt;/h1&gt;
 
+    &lt;h5&gt;Version 13 / v2.2.0 / April 11, 2022&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Change app fonts&lt;br/&gt;
+    &#8226; Fix local vote resetting if app goes to background&lt;br/&gt;
+    &#8226; Fix host crashing when saving results if host rejoined vote&lt;br/&gt;
+    &#8226; Fix "check internet connection" toasts if app is on background&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
     &lt;h5&gt;Version 12 / v2.1.0 / October 10, 2021&lt;/h5&gt;
     &lt;p&gt;
     &#8226; Add ability to change vote results style&lt;br/&gt;
