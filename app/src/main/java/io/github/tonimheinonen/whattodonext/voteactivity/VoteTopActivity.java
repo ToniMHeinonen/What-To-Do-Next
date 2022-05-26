@@ -110,9 +110,7 @@ public class VoteTopActivity extends VotingParentActivity {
     private void startSetup() {
         // If it's the last vote and halve is selected, halve the total bonus points on item
         if (topAmount == listVoteSizeLast && halveExtra) {
-            for (ListItem item : selectedList.getItems()) {
-                item.setTotal((int) Math.ceil((double) item.getTotal() / 2));
-            }
+            Buddy.halveTotalBonusPoints(selectedList);
         }
 
         // Setup voting items

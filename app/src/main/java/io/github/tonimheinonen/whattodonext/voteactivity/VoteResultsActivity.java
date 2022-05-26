@@ -64,6 +64,7 @@ public class VoteResultsActivity extends VotingParentActivity {
     private int maxPerilPoints;
     private boolean ignoreUnselected;
     private boolean showVotes;
+    private boolean halveExtra;
 
     /**
      * Initializes VoteResultsActivity.
@@ -147,6 +148,13 @@ public class VoteResultsActivity extends VotingParentActivity {
     }
 
     private void startSetup() {
+        if (isOnline) {
+            // If it's the last results and halve is selected, halve the total bonus points on item
+            if (lastResults && halveExtra) {
+                Buddy.halveTotalBonusPoints(selectedList);
+            }
+        }
+
         calculateVotePoints();
 
         int resultStyle = globalSettings.getResultStyle();
@@ -165,6 +173,7 @@ public class VoteResultsActivity extends VotingParentActivity {
         maxPerilPoints = voteSettings.getMaxPeril();
         ignoreUnselected = voteSettings.isIgnoreUnselected();
         showVotes = voteSettings.isShowVoted();
+        halveExtra = voteSettings.isHalveExtra();
     }
 
     /**

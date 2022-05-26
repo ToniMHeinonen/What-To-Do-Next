@@ -406,4 +406,14 @@ public abstract class Buddy {
         intent.putExtra(VoteMaster.VOTE_MASTER, intentHolder);
         activity.startActivity(intent);
     }
+
+    /**
+     * Halves total bonus and peril points in list.
+     * @param list list holding the items
+     */
+    public static void halveTotalBonusPoints(ListOfItems list) {
+        for (ListItem item : list.getItems()) {
+            item.setTotal((int) Math.ceil((double) item.getTotal() / 2));
+        }
+    }
 }
