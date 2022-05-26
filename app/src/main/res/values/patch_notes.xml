@@ -6,6 +6,13 @@
     <string name="patch_notes">
     &lt;h1&gt;Patch Notes&lt;/h1&gt;
 
+    &lt;h5&gt;Version 14 / v2.2.1 / May 26, 2022&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Fix total points not halved in online last results&lt;br/&gt;
+    &#8226; Minor UI changes&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
     &lt;h5&gt;Version 13 / v2.2.0 / April 11, 2022&lt;/h5&gt;
     &lt;p&gt;
     &#8226; Change app fonts&lt;br/&gt;

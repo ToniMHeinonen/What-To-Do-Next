@@ -9,8 +9,8 @@ android {
         applicationId "io.github.tonimheinonen.whattodonext"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 13
-        versionName "2.2.0"
+        versionCode 14
+        versionName "2.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
