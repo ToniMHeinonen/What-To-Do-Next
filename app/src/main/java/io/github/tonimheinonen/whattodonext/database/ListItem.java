@@ -8,7 +8,10 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import io.github.tonimheinonen.whattodonext.tools.Debug;
 
 /**
  * Represents an list item activity.
@@ -39,6 +42,8 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
     private int voterAmount = 0;
     @Exclude
     private boolean selected;
+    @Exclude
+    private ArrayList<Integer> votePointsArray = new ArrayList<>();
 
     /**
      * Default constructor.
@@ -200,6 +205,31 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
     }
 
     /**
+     * Calculates standard deviation in an int list.
+     *
+     * Credits:
+     * Programiz https://www.programiz.com/java-programming/examples/standard-deviation
+     * @param list list of int values
+     * @return standard deviation between int values
+     */
+    public static double calculateStandardDeviation(List<Integer> list) {
+        double sum = 0.0, standardDeviation = 0.0;
+        int length = list.size();
+
+        for(double num : list) {
+            sum += num;
+        }
+
+        double mean = sum/length;
+
+        for(double num: list) {
+            standardDeviation += Math.pow(num - mean, 2);
+        }
+        Debug.print("ListItem", "calc", "dev: " + Math.sqrt(standardDeviation/length), 1);
+        return Math.sqrt(standardDeviation/length);
+    }
+
+    /**
      * Maps values for database handling.
      * @return mapped values
      */
@@ -272,9 +302,12 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
      *
      * Used when calculating overall vote points in VoteResultsActivity.
      * @param amount vote points
+     * @param isVoter if voter and not bonus points
      */
-    public void addVotePoints(int amount) {
+    public void addVotePoints(int amount, boolean isVoter) {
         votePoints += amount;
+        if (isVoter)
+            votePointsArray.add(amount);
     }
 
     /**
@@ -288,7 +321,7 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
     }
 
     /**
-     * Returns vote points and resets value.
+     * Returns vote points and resets values.
      *
      * Used in VoteTopActivity.
      * @return vote points
@@ -296,6 +329,7 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
     public int retrieveVotePoints() {
         int points = votePoints;
         votePoints = 0;
+        votePointsArray.clear();
 
         return points;
     }
@@ -340,7 +374,16 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
         this.selected = selected;
     }
 
-    ////////////////////////// PARCELABLE //////////////////////////
+    /**
+     * Returns all the vote points in an array.
+     *
+     * Used when comparing ListItems.
+     * @return all the vote points in an array
+     */
+    public ArrayList<Integer> getVotePointsArray() {
+        return votePointsArray;
+    }
+////////////////////////// PARCELABLE //////////////////////////
 
     /**
      * Describes contents
@@ -408,6 +451,7 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
      * 1. Check which one has the most vote points, including bonus points.
      * 2. If equal, check which one has the most number of players voted.
      * 3. If equal, check which one has the most vote points, excluding bonus points.
+     * 4. If equal, check which one has the most points distributed between voters.
      * @param other other list item
      * @return -1 if less than, 0 if equal, 1 if greater than
      */
@@ -415,7 +459,17 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
     public int compareTo(ListItem other) {
         if (this.votePoints == other.getVotePoints()) {
             if (this.voterAmount == other.getVoterAmount()) {
-                return Integer.compare(this.votePoints - this.total, other.getVotePoints() - other.getTotal());
+                int thisPointsWithoutBonus = this.votePoints - this.total;
+                int otherPointsWithoutBonus = other.getVotePoints() - other.getTotal();
+
+                if (thisPointsWithoutBonus == otherPointsWithoutBonus) {
+                    double thisSD = calculateStandardDeviation(votePointsArray);
+                    double otherSD = calculateStandardDeviation(other.getVotePointsArray());
+                    // Smaller SD should be ranked higher, that's why compare values are reversed
+                    return Double.compare(otherSD, thisSD);
+                } else {
+                    return Integer.compare(thisPointsWithoutBonus, otherPointsWithoutBonus);
+                }
             } else {
                 return Integer.compare(this.voterAmount, other.getVoterAmount());
             }

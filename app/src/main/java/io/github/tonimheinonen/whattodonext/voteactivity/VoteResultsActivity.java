@@ -192,7 +192,7 @@ public class VoteResultsActivity extends VotingParentActivity {
                 // Loop through all the items to give votePoints to correct item
                 for (ListItem item : items) {
                     if (item.equalsTo(votedItem)) {
-                        item.addVotePoints(votePoints);
+                        item.addVotePoints(votePoints, true);
                         item.addVoterAmount();
                         break;
                     }
@@ -206,7 +206,7 @@ public class VoteResultsActivity extends VotingParentActivity {
             if (!lastResults && ignoreUnselected && item.getVotePoints() == 0)
                 continue;
 
-            item.addVotePoints(item.getTotal());
+            item.addVotePoints(item.getTotal(), false);
             Debug.print(this, "item", "name: " + item.getName(), 1);
             Debug.print(this, "item", "points: " + item.getVotePoints(), 1);
         }
