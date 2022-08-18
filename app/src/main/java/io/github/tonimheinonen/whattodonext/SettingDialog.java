@@ -197,7 +197,7 @@ public class SettingDialog extends Dialog {
             case VOTE_POINTS:
                 if (pointsEdit == firstPoints) {
                     // If first vote is the same size as last vote
-                    int lastP = Integer.parseInt(lastPoints.getText().toString());
+                    int lastP = Buddy.getIntFromEditText(lastPoints, VoteSettings.LAST_VOTE_DEFAULT_POINTS);
                     if (p <= lastP) {
                         Buddy.showToast(activity.getString(R.string.first_vote_same_as_last), Toast.LENGTH_LONG);
                         firstPoints.setText(String.valueOf(lastP + 1));
@@ -207,7 +207,7 @@ public class SettingDialog extends Dialog {
                     firstPoints.setText(String.valueOf(p));
                 } else if (pointsEdit == lastPoints) {
                     // If last vote is the same size as first vote
-                    int firstP = Integer.parseInt(firstPoints.getText().toString());
+                    int firstP = Buddy.getIntFromEditText(firstPoints, VoteSettings.FIRST_VOTE_DEFAULT_POINTS);
                     if (p >= firstP) {
                         Buddy.showToast(activity.getString(R.string.last_vote_same_as_first), Toast.LENGTH_LONG);
                         lastPoints.setText(String.valueOf(firstP - 1));
@@ -233,15 +233,15 @@ public class SettingDialog extends Dialog {
     private void confirm() {
         switch (setting) {
             case MAX_PERIL:
-                int p = Integer.parseInt(points.getText().toString());
+                int p = Buddy.getIntFromEditText(points, VoteSettings.MAX_PERIL_DEFAULT_POINTS);
                 if (checkPoints(points, p)) {
                     voteSettings.setMaxPeril(p);
                     dismiss();
                 }
                 break;
             case VOTE_POINTS:
-                int firstP = Integer.parseInt(firstPoints.getText().toString());
-                int lastP = Integer.parseInt(lastPoints.getText().toString());
+                int firstP = Buddy.getIntFromEditText(firstPoints, VoteSettings.FIRST_VOTE_DEFAULT_POINTS);
+                int lastP = Buddy.getIntFromEditText(lastPoints, VoteSettings.LAST_VOTE_DEFAULT_POINTS);
                 if (checkPoints(firstPoints, firstP) && checkPoints(lastPoints, lastP)) {
                     voteSettings.setFirstVote(firstP);
                     voteSettings.setLastVote(lastP);

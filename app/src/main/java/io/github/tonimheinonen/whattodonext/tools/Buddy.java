@@ -78,6 +78,22 @@ public abstract class Buddy {
     }
 
     /**
+     * Retrieves int value from edit text.
+     *
+     * Should only be used with fields, which only accepts digits.
+     * @param edit EditText field
+     * @param defaultValue default value, if field is empty
+     * @return parsed value if found, default value if empty
+     */
+    public static int getIntFromEditText(EditText edit, int defaultValue) {
+        String value = edit.getText().toString();
+        if (value.isEmpty())
+            return defaultValue;
+
+        return Integer.parseInt(value);
+    }
+
+    /**
      * Shows long toast text.
      *
      * @param text     message to show

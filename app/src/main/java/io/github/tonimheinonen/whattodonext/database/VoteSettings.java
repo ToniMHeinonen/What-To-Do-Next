@@ -10,6 +10,10 @@ import java.util.Map;
 
 public class VoteSettings implements DatabaseValue, Parcelable {
 
+    public static final int FIRST_VOTE_DEFAULT_POINTS = 7;
+    public static final int LAST_VOTE_DEFAULT_POINTS = 5;
+    public static final int MAX_PERIL_DEFAULT_POINTS = 5;
+
     private String listID;
     private int firstVote = 7;
     private int lastVote = 5;
