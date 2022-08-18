@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.installations.FirebaseInstallations;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -129,15 +129,25 @@ public abstract class DatabaseHandler {
         dbVoteRooms.keepSynced(true);
     }
 
-    public static String getUserDbID() {
-        if (Buddy.isRegistered)
-            return user.getUid();
+    public static void getUserDbID(UserDatabaseIDListener listener) {
+        if (Buddy.isRegistered) {
+            listener.onUserIDRetrieved(user.getUid());
+            return;
+        }
 
-        return FirebaseInstanceId.getInstance().getId();
+        FirebaseInstallations.getInstance().getId().addOnSuccessListener(listener::onUserIDRetrieved);
     }
 
     //region Interfaces
     /////////////////////* LISTENER INTERFACES *////////////////////
+
+    public interface UserDatabaseIDListener {
+        /**
+         * Gets user database id from database.
+         * @param id loaded id from database
+         */
+        void onUserIDRetrieved(String id);
+    }
 
     public interface ListsListener {
         /**

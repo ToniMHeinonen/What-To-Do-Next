@@ -65,7 +65,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
     private OnlineProfile onlineProfile;
 
     // Online values
-    private String roomCode, nickname;
+    private String roomCode, nickname, userDatabaseID;
     private EditText roomCodeView, nicknameView;
 
     /**
@@ -95,13 +95,20 @@ public class VoteSetupActivity extends VotingParentActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        Buddy.showLoadingBar(this);
+        DatabaseHandler.getUserDbID(this::userDBIDLoaded);
+    }
+
+    private void userDBIDLoaded(String dbID) {
+        userDatabaseID = dbID;
 
         // Check if user has registered
         if (Buddy.isRegistered) {
-            Buddy.showLoadingBar(this);
             // Load global settings from database
             DatabaseHandler.getGlobalSettings(this::loadGlobalSettings);
         } else {
+            // Hide loading bar, since there is nothing else to load
+            Buddy.hideLoadingBar(this);
             // Initialize unregistered voting
             // Hide lists spinner
             findViewById(R.id.listsSpinner).setVisibility(View.GONE);
@@ -479,7 +486,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
                 DatabaseHandler.getOnlineProfiles(voteRoom, (onlineProfiles -> {
                     // Loop through all profiles and check user id
                     for (OnlineProfile pro : onlineProfiles) {
-                        if (pro.getDbID().equals(DatabaseHandler.getUserDbID())) {
+                        if (pro.getDbID().equals(userDatabaseID)) {
                             onlineProfile = pro;
                             break;
                         }
@@ -545,7 +552,7 @@ public class VoteSetupActivity extends VotingParentActivity implements
 
         // Create online profile if not reconnecting
         if (!reconnect)
-            onlineProfile = new OnlineProfile(DatabaseHandler.getUserDbID(), nickname, host);
+            onlineProfile = new OnlineProfile(userDatabaseID, nickname, host);
 
         Intent intent = new Intent(this, VoteLobbyActivity.class);
 
