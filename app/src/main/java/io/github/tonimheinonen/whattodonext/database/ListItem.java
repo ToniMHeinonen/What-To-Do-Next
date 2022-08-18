@@ -225,7 +225,7 @@ public class ListItem implements DatabaseValue, Parcelable, Comparable<ListItem>
         for(double num: list) {
             standardDeviation += Math.pow(num - mean, 2);
         }
-        Debug.print("ListItem", "calc", "dev: " + Math.sqrt(standardDeviation/length), 1);
+
         return Math.sqrt(standardDeviation/length);
     }
 
