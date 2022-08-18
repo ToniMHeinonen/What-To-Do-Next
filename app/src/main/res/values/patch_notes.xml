@@ -6,6 +6,15 @@
     <string name="patch_notes">
     &lt;h1&gt;Patch Notes&lt;/h1&gt;
 
+    &lt;h5&gt;Version 15 / v2.2.2 / August 18, 2022&lt;/h5&gt;
+    &lt;p&gt;
+    &#8226; Sort vote items by using standard deviation if vote points and amount of voters are the same&lt;br/&gt;
+    &#8226; Adjust padding and margin in multiple views&lt;br/&gt;
+    &#8226; Fix app crashing when leaving vote point fields empty in settings&lt;br/&gt;
+    &#8226; Remove background element from button on top of lists view&lt;br/&gt;
+    &lt;/p&gt;
+    &lt;br/&gt;
+
     &lt;h5&gt;Version 14 / v2.2.1 / May 26, 2022&lt;/h5&gt;
     &lt;p&gt;
     &#8226; Fix total points not halved in online last results&lt;br/&gt;
